@@ -29,22 +29,22 @@ app.controller('MainController', ['$scope', '$http', '$timeout', 'hotkeys', '_',
       callback: function() { $scope.newIssue(); }
     })
 
-  $http.get('http://localhost:3000/users').then(function(response) {
+  $http.get(config['api-url'] + '/users').then(function(response) {
     $scope.users = _.sortBy(response.data.data, 'name');
     $scope.usersNames = _.pluck($scope.users, 'name');
   });
 
-  $http.get('http://localhost:3000/projects').then(function(response) {
+  $http.get(config['api-url'] + '/projects').then(function(response) {
     $scope.projects = _.sortBy(response.data.data, 'name');
     $scope.projectsNames = _.pluck($scope.projects, 'name');
   });
 
-  $http.get('http://localhost:3000/states').then(function(response) {
+  $http.get(config['api-url'] + '/states').then(function(response) {
     $scope.states = _.sortBy(response.data.data, 'title');
     $scope.statesTitles = _.pluck($scope.states, 'title');
   });
 
-  $http.get('http://localhost:3000/items').then(function(response) {
+  $http.get(config['api-url'] + '/items').then(function(response) {
     var items = response.data.data;
 
     $scope.issues = _.filter(items, function(item) {

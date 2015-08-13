@@ -5,7 +5,8 @@ block head
   link(rel='stylesheet', href='/assets/skeleton/skeleton.css')
   link(rel='stylesheet', href='/assets/hotkeys/hotkeys.min.css')
   link(rel='stylesheet', href='/app/css/main.css')
-  link(rel='stylesheet', href='/app/css/rtl.css')
+  if (config.rtl)
+    link(rel='stylesheet', href='/app/css/rtl.css')
   script(src='/assets/jquery/jquery-2.1.1.min.js')
   script(src='/assets/jquery/jquery-ui.min.js')
   script(src='/assets/angular/angular.min.js')
@@ -13,7 +14,12 @@ block head
   script(src='/assets/hotkeys/hotkeys.min.js')
   script(src='/assets/underscore/underscore-min.js')
   script(src='/app/main.js')
+  title Odin
 
 block content
+  script.
+    var config = {
+      'api-url': '#{ config["api-url"] }'
+    };
   div(ng-app='app')
     div(ng-view='')
