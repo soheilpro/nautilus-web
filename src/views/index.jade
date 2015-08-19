@@ -1,22 +1,16 @@
-extends layout
+extends page
 
-block head
-  link(rel='stylesheet', href='/assets/skeleton/normalize.css')
-  link(rel='stylesheet', href='/assets/skeleton/skeleton.css')
+block append head
   link(rel='stylesheet', href='/assets/hotkeys/hotkeys.min.css')
   link(rel='stylesheet', href='/app/css/main.css')
-  if (config.rtl)
-    link(rel='stylesheet', href='/app/css/rtl.css')
-  script(src='/assets/jquery/jquery-2.1.1.min.js')
   script(src='/assets/jquery/jquery-ui.min.js')
   script(src='/assets/angular/angular.min.js')
   script(src='/assets/angular/angular-route.min.js')
   script(src='/assets/hotkeys/hotkeys.min.js')
   script(src='/assets/underscore/underscore-min.js')
   script(src='/app/main.js')
-  title Odin
 
-block content
+block append content
   script.
     var config = {
       'api-url': '#{ config["api-url"] }'
