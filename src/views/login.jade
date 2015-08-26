@@ -1,0 +1,20 @@
+extends page
+
+block append content
+  .container
+    .row
+      .four.columns
+        | &nbsp;
+      .four.columns(style='margin-top: 20vh')
+        h1(style='text-align: center') Odin
+        br
+        form(method='post')
+          if failed
+            .row
+              p.error Invalid username and/or password.
+          .row
+            input(name='username' type='text' placeholder='Username' class='u-full-width')
+          .row
+            input(name='password' type='password' placeholder='Password' class='u-full-width')
+          .row
+            input(type='submit' value='Log In' class='button-primary u-full-width')
