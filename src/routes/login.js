@@ -9,21 +9,15 @@ router.get('/login', function(request, response) {
 
 router.post('/login', function(request, response, next) {
   passport.authenticate('local', function(error, user, info) {
-    if (error) {
-      next(error);
-      return;
-    }
+    if (error)
+      return next(error);
 
-    if (!user) {
-      response.render('login', { failed: true });
-      return;
-    }
+    if (!user)
+      return response.render('login', { failed: true });
 
     request.logIn(user, function(error) {
-      if (error) {
-        next(error);
-        return;
-      }
+      if (error)
+        return next(error);
 
       return response.redirect('/');
     });

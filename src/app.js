@@ -21,15 +21,11 @@ passport.use(new passportLocal.Strategy(
     };
 
     request.post(data, function(error, response, body) {
-      if (error) {
-        callback(error);
-        return;
-      }
+      if (error)
+        return callback(error);
 
-      if (response.statusCode !== 201) {
-        callback(null, false);
-        return;
-      }
+      if (response.statusCode !== 201)
+        return callback(null, false);
 
       var body = JSON.parse(body);
 
@@ -55,10 +51,8 @@ passport.deserializeUser(function(id, callback) {
   };
 
   request.get(data, function(error, response, body) {
-    if (error) {
-      callback(error);
-      return;
-    }
+    if (error)
+      return callback(error);
 
     var body = JSON.parse(body);
 
@@ -91,10 +85,8 @@ app.use('/', express.static(path.join(__dirname, 'static')));
 app.use(require('./routes/login'));
 
 app.use(function(request, response, next) {
-  if (!request.user) {
-    response.redirect('/login');
-    return;
-  }
+  if (!request.user)
+    return response.redirect('/login');
 
   response.locals.user = request.user;
   next();
