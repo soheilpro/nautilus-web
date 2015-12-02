@@ -29,6 +29,8 @@ app.controller('MainController', ['$scope', '$http', '$timeout', 'hotkeys', '_',
       callback: function() { $scope.newIssue(); }
     })
 
+  $http.defaults.headers.common.Authorization = 'Basic ' + window.btoa(session.id + ':-');
+
   $http.get(config['api-url'] + '/users').then(function(response) {
     $scope.users = _.sortBy(response.data.data, 'name');
     $scope.usersNames = _.pluck($scope.users, 'name');

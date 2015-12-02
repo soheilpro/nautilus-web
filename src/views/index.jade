@@ -15,5 +15,7 @@ block append content
     var config = {
       'api-url': '#{ config["api-url"] }'
     };
+
+    var session = !{ JSON.stringify(session) };
   div(ng-app='app')
     div(ng-view='')
