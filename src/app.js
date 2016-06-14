@@ -81,7 +81,7 @@ app.use(session({ name: 'auth', secret: 'e0018575e0744d33ba5cc7c8bc288d74', resa
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', express.static(path.join(__dirname, 'static')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(require('./routes/login'));
 
 app.use(function(request, response, next) {
@@ -92,7 +92,6 @@ app.use(function(request, response, next) {
   next();
 });
 
-app.use('/templates', require('./routes/templates'));
 app.use('/', require('./routes/index'));
 
 app.use(function(request, response, next) {
