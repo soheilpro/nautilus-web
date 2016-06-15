@@ -1,3 +1,7 @@
+* {
+  outline: none;
+}
+
 body {
   font-size: 1.3em;
   padding: 20px 20px 20px 50px;
@@ -23,7 +27,7 @@ body {
 }
 
 .sidebar .filter input {
-  margin: 0 2px 0 0;
+  margin: 0 5px 0 0;
   visibility: hidden;
 }
 
@@ -43,13 +47,29 @@ table.issues {
   width: 100%;
 }
 
-table.issues th,
+table.issues th {
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
 table.issues td {
   padding: 4px 6px;
+  white-space: nowrap;
+}
+
+table.issues tr.selected td {
+  background-color: #f6f6f6;
+}
+
+table.issues tr.selected td.selected {
+  background-color: #e9e9e9;
+}
+
+table.issues td.title {
+  width: 100%;
 }
 
 table.issues tr:hover td {
-  background-color: #f6f6f6;
 }
 
 table.issues td span {
@@ -73,7 +93,7 @@ table.issues td.assigned-user span {
   text-transform: lowercase;
 }
 
-editable {
+.editable {
   cursor: default;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -83,25 +103,25 @@ editable {
   user-select: none;
 }
 
-editable input {
+.editable input {
   display: none;
   text-transform: lowercase;
   padding-left: 2px;
 }
 
-td.title editable input {
+td.title .editable input {
   text-transform: none;
 }
 
-editable input:focus {
+.editable input:focus {
   outline: 0;
 }
 
-editable.editing span {
+.editable.editing span {
   display: none;
 }
 
-editable.editing input {
+.editable.editing input {
   display: table-cell;
   width: 100%;
 }

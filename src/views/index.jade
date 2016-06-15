@@ -2,109 +2,24 @@ extends page
 
 block append head
   link(rel='stylesheet', href='/assets/app/css/main.css')
-  script(src='/assets/vendor/underscore/underscore-min.js')
   script(src='/assets/vendor/jquery/jquery-ui.min.js')
-  script(src='/assets/vendor/handlebars/handlebars-v4.0.5.js')
+  script(src='/assets/vendor/react/react.js')
+  script(src='/assets/vendor/react/react-dom.js')
+  script(src='/assets/vendor/babel-core/browser.min.js')
+  script(src='/assets/vendor/underscore/underscore-min.js')
+  script(src='/assets/vendor/async/async.min.js')
+  script(src='/assets/vendor/event-emitter/eventemitter-4.0.3.min.js')
+  script(src='/assets/app/scripts/nautilus-sdk.js')
+  script(src='/assets/app/scripts/nautilus.js')
+  script(src='/assets/app/scripts/filter.js')
 
 block append content
-  .row
-    .column
-      br
+  div#app
+  script(type='text/javascript').
+    var client = new NautilusClient();
+    client.address = '#{ config["api-url"] }';
+    client.accessToken = '#{ session.id }'
 
-  .row
-    .two.columns.sidebar
-      div
-        a(href='') All Items
-      br
+    var nautilus = new Nautilus(client);
 
-      label Milestone
-      div#milestone-filter-container
-      br
-
-      label State
-      div#state-filter-container
-      br
-
-      label User
-      div#user-filter-container
-      br
-
-      label Project
-      div#project-filter-container
-      br
-
-    .ten.columns
-      div(style='margin-top: 35px')#issues-container
-
-  script(id='filter-template' type='text/x-handlebars-template').
-    {{#each items}}
-      <div class="filter">
-        <input type="checkbox" ng-class="{visible: $parent.filter.milestones.exclude.has(milestone)}" ng-model="checked_exclude" ng-checked="$parent.filter.milestones.exclude.has(milestone)" ng-click="$parent.filter.milestones.exclude.toggle(milestone, checked_exclude)"/>
-        <input type="checkbox" ng-class="{visible: $parent.filter.milestones.include.has(milestone)}" ng-model="checked_include" ng-checked="$parent.filter.milestones.include.has(milestone)" ng-click="$parent.filter.milestones.include.toggle(milestone, checked_include)"/>
-        <a href="" ng-click="filter.clear(); $parent.filter.milestones.include.set(milestone)">{{ lookup this ../label }}</a>
-      </div>
-    {{/each}}
-
-  script(id='issues-template' type='text/x-handlebars-template').
-    <table class='issues'>
-      <tr>
-        <th>Milestone</th>
-        <th>Project</th>
-        <th>Title</th>
-        <th>State</th>
-        <th>Assignee</th>
-      </tr>
-      {{#each this}}
-        <tr>
-          <td nowrap>
-            <span>
-              {{#if milestone}}
-                {{milestone.title}}
-              {{/if}}
-            </span>
-          </td>
-          <td nowrap>
-            <span>
-              {{#if project}}
-                {{project.name}}
-              {{/if}}
-            </span>
-          </td>
-          <td style='width: 100%;'>
-            <span style='background-color: {{state.color}}'>
-              {{title}}
-            </span>
-          </td>
-          <td nowrap>
-            <span>
-              {{#if state}}
-                {{state.title}}
-              {{/if}}
-            </span>
-          </td>
-          <td nowrap>
-            <span>
-              {{#if assignedUser}}
-                {{assignedUser.name}}
-              {{/if}}
-            </span>
-          </td>
-        </tr>
-      {{/each}}
-    </table>
-
-  script.
-    var users = !{JSON.stringify(users)};
-    var projects = !{JSON.stringify(projects)};
-    var states = !{JSON.stringify(states)};
-    var milestones = !{JSON.stringify(milestones)};
-    var issues = !{JSON.stringify(issues)};
-
-    var issuesTemplate = Handlebars.compile($('#issues-template').html());
-    $('#issues-container').html(issuesTemplate(issues));
-
-    var filterTemplate = Handlebars.compile($('#filter-template').html());
-    $('#milestone-filter-container').html(filterTemplate({ items: milestones, label: 'title' }));
-    $('#state-filter-container').html(filterTemplate({ items: states, label: 'title' }));
-    $('#user-filter-container').html(filterTemplate({ items: users, label: 'name' }));
-    $('#project-filter-container').html(filterTemplate({ items: projects, label: 'name' }));
+  script(src='/assets/app/scripts/app.jsx' type='text/babel')
