@@ -156,6 +156,8 @@ export class NautilusClient {
       .done((data) => {
         callback(null, data.data);
       })
-      .fail(callback);
+      .fail((jqXHR, textStatus, error) => {
+        callback(error);
+      });
   }
 }

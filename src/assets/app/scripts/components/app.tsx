@@ -6,6 +6,7 @@ import { FilteredIssueList } from './filtered-issue-list';
 
 interface AppState {
   isInitialized?;
+  error?;
   filters?;
 }
 
@@ -28,7 +29,9 @@ export class App extends React.Component<{}, AppState> {
     }, false);
 
     Nautilus.Instance.on('error', (error) => {
-      console.log(error); // TODO
+      this.setState({
+        error: error
+      });
     });
 
     Nautilus.Instance.on('init', () => {
@@ -51,6 +54,15 @@ export class App extends React.Component<{}, AppState> {
   render() {
     if (!this.state.isInitialized)
       return <span>Loading...</span>;
+
+    if (this.state.error)
+      return (
+        <div>
+          <div>Error!</div>
+          <div>{this.state.error.toString()}</div>
+          <div>{this.state.error.stack}</div>
+        </div>
+      );
 
     return (
       <div>
