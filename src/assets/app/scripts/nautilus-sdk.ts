@@ -64,6 +64,15 @@ class ItemsService {
     this.client.invoke(options, callback);
   };
 
+  insert(item, callback) {
+    var options = {
+      method: 'POST',
+      path: '/items/',
+    };
+
+    this.client.invoke(options, callback);
+  };
+
   update(item, changes, callback) {
     function getParam(obj) {
       if (obj === undefined)

@@ -75,6 +75,18 @@ export class Nautilus extends EventEmitter {
     return this.state.issues;
   };
 
+  addIssue(issue) {
+    this.client.items.insert(issue, (error, issue) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      issue = this.toItem(issue);
+
+      this.state.issues.push(issue);
+      this.emitEvent('issueAdded', [issue]);
+    });
+  }
+
   updateIssue(issue, newValues) {
     this.client.items.update(issue, newValues, (error, issue) => {
       if (error)

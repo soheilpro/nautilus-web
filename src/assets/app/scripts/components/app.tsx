@@ -20,6 +20,13 @@ export class App extends React.Component<{}, AppState> {
   }
 
   componentDidMount() {
+    document.addEventListener("keydown", (event) => {
+      if (event.which === 78 && event.getModifierState('Control')) { // Ctrl+N
+        this.addIssue();
+        event.preventDefault();
+      }
+    }, false);
+
     Nautilus.Instance.on('error', (error) => {
       console.log(error); // TODO
     });
@@ -30,15 +37,15 @@ export class App extends React.Component<{}, AppState> {
       });
     });
 
-    Nautilus.Instance.on('issueChanged', () => {
-      this.forceUpdate();
-    });
-
     Nautilus.Instance.init();
   }
 
   onFiltersChanged() {
     this.forceUpdate();
+  }
+
+  addIssue() {
+    Nautilus.Instance.addIssue({});
   }
 
   render() {
@@ -47,9 +54,12 @@ export class App extends React.Component<{}, AppState> {
 
     return (
       <div>
-        <div className='row'>
-          <div className='column'>
-            <br />
+        <div style={{marginBottom: '20px'}} className='row'>
+          <div className='two columns'>
+            &nbsp;
+          </div>
+          <div className='ten columns'>
+            <button title='Ctrl+N' className="button-primary" onClick={this.addIssue.bind(this)}>Add Issue</button>
           </div>
         </div>
         <div className='row'>
@@ -60,7 +70,7 @@ export class App extends React.Component<{}, AppState> {
             <FilterBox name='Project' items={Nautilus.Instance.getProjects()} displayAttribute='name' filter={this.state.filters.projects} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
           </div>
           <div className='ten columns'>
-            <FilteredIssueList issues={Nautilus.Instance.getIssues()} filters={this.state.filters} />
+            <FilteredIssueList filters={this.state.filters} />
           </div>
         </div>
       </div>

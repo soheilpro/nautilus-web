@@ -1,12 +1,22 @@
 import * as React from 'react';
+import { Nautilus } from '../nautilus';
 import { IssueList } from './issue-list';
 
 interface FilteredIssueListProps {
-  issues;
   filters;
 }
 
 export class FilteredIssueList extends React.Component<FilteredIssueListProps, {}> {
+  componentDidMount() {
+    Nautilus.Instance.on('issueAdded', () => {
+      this.forceUpdate();
+    });
+
+    Nautilus.Instance.on('issueChanged', () => {
+      this.forceUpdate();
+    });
+  }
+
   filterIssues(issues) {
      function filter(issues, filterItems, valueGetter, include) {
       if (filterItems.length == 0)
@@ -35,7 +45,7 @@ export class FilteredIssueList extends React.Component<FilteredIssueListProps, {
 
   render() {
     return (
-      <IssueList issues={this.filterIssues(this.props.issues)} />
+      <IssueList issues={this.filterIssues(Nautilus.Instance.getIssues())} />
     );
   }
 };
