@@ -24,6 +24,6 @@ export class AssignedUserIssueField extends IssueField {
   }
 
   onChanged(value) {
-    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: value });
+    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: value || null });
   }
 };

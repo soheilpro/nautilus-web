@@ -24,6 +24,6 @@ export class ProjectIssueField extends IssueField {
   }
 
   onChanged(value) {
-    Nautilus.Instance.updateIssue(this.props.issue, { project: value });
+    Nautilus.Instance.updateIssue(this.props.issue, { project: value || null });
   }
 };

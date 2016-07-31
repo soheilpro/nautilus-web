@@ -24,6 +24,6 @@ export class MilestoneIssueField extends IssueField {
   }
 
   onChanged(value) {
-    Nautilus.Instance.updateIssueMilestone(this.props.issue, value);
+    Nautilus.Instance.updateIssueMilestone(this.props.issue, value || null);
   }
 };
