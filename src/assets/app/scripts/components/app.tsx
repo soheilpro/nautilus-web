@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Nautilus } from '../nautilus';
 import { FilterSet } from '../filter';
 import { FilterBox } from './filter-box';
-import { FilteredIssueList } from './filtered-issue-list';
+import { FilterableIssueList } from './filterable-issue-list';
 
 interface AppState {
   isInitialized?;
@@ -82,7 +82,7 @@ export class App extends React.Component<{}, AppState> {
             <FilterBox name='Project' items={Nautilus.Instance.getProjects()} displayAttribute='name' filter={this.state.filters.projects} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
           </div>
           <div className='ten columns'>
-            <FilteredIssueList filters={this.state.filters} />
+            <FilterableIssueList filters={this.state.filters} />
           </div>
         </div>
       </div>

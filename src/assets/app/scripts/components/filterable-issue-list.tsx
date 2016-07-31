@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Nautilus } from '../nautilus';
 import { IssueList } from './issue-list';
 
-interface FilteredIssueListProps {
+interface FilterableIssueListProps {
   filters;
 }
 
-export class FilteredIssueList extends React.Component<FilteredIssueListProps, {}> {
+export class FilterableIssueList extends React.Component<FilterableIssueListProps, {}> {
   componentDidMount() {
     Nautilus.Instance.on('issueAdded', () => {
       this.forceUpdate();
