@@ -16,7 +16,7 @@ export class ProjectIssueField extends IssueField {
   }
 
   itemFromString(value, items) {
-    return _.find(items, { name: value });
+    return _.find(items, (item : any) => item.name.toLowerCase() === value.toLowerCase());
   }
 
   itemComparer(item1, item2) {

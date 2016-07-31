@@ -16,7 +16,7 @@ export class MilestoneIssueField extends IssueField {
   }
 
   itemFromString(value, items) {
-    return _.find(items, { title: value });
+    return _.find(items, (item : any) => item.title.toLowerCase() === value.toLowerCase());
   }
 
   itemComparer(item1, item2) {
