@@ -15,6 +15,10 @@ export class FilteredIssueList extends React.Component<FilteredIssueListProps, {
     Nautilus.Instance.on('issueChanged', () => {
       this.forceUpdate();
     });
+
+    Nautilus.Instance.on('issueDeleted', () => {
+      this.forceUpdate();
+    });
   }
 
   filterIssues(issues) {

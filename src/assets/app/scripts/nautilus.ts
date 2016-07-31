@@ -99,6 +99,16 @@ export class Nautilus extends EventEmitter {
     });
   };
 
+  deleteIssue(issue, newValues) {
+    this.client.items.delete(issue, (error) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.state.issues.splice(this.state.issues.findIndex(idComparer.bind(this, issue)), 1);
+      this.emitEvent('issueDeleted', [issue]);
+    });
+  };
+
   updateIssueMilestone(issue, newMilestone) {
     var oldMilestone = issue.getMilestone();
 

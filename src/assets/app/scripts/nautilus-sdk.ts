@@ -98,6 +98,15 @@ class ItemsService {
     this.client.invoke(options, callback);
   };
 
+  delete(item, callback) {
+    var options = {
+      method: 'DELETE',
+      path: '/items/' + item.id
+    };
+
+    this.client.invoke(options, callback);
+  };
+
   addSubItem(item, subItem, callback) {
     var options = {
       method: 'PATCH',

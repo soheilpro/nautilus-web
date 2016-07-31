@@ -94,6 +94,16 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
         event.preventDefault();
         break;
+
+      case 8: // Delete
+        if (!window.confirm("Delete issue?"))
+          return;
+
+        var issue = this.props.issues[this.state.selectedRowIndex];
+        Nautilus.Instance.deleteIssue(issue);
+
+        event.preventDefault();
+        break;
     }
   }
 
