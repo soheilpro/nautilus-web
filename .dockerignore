@@ -1,0 +1,4 @@
+src/node_modules
+src/config.json
+src/assets/app/scripts/main.bundle.js
+src/assets/app/scripts/main.bundle.js.map
