@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+DEBUG=nautilus-web nodemon -i src/assets ./src/www.js
