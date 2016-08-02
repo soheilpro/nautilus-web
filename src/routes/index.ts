@@ -1,9 +1,11 @@
+/// <reference path="../typings/index.d.ts" />
+
 var express = require('express');
 
 var router = express.Router();
 
-router.get('/', function(request, response) {
+router.get('/', (request, response) => {
   response.render('index', { session: request.user });
 });
 
-module.exports = router;
+export = router;

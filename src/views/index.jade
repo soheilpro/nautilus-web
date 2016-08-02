@@ -5,21 +5,17 @@ block append head
   script(src='/assets/vendor/jquery/jquery-ui.min.js')
   script(src='/assets/vendor/react/react.js')
   script(src='/assets/vendor/react/react-dom.js')
-  script(src='/assets/vendor/babel-core/browser.min.js')
   script(src='/assets/vendor/underscore/underscore-min.js')
   script(src='/assets/vendor/async/async.min.js')
   script(src='/assets/vendor/event-emitter/eventemitter-4.0.3.min.js')
-  script(src='/assets/app/scripts/nautilus-sdk.js')
-  script(src='/assets/app/scripts/nautilus.js')
-  script(src='/assets/app/scripts/filter.js')
 
 block append content
   div#app
   script(type='text/javascript').
-    var client = new NautilusClient();
-    client.address = '#{ config["api-url"] }';
-    client.accessToken = '#{ session.id }'
-
-    var nautilus = new Nautilus(client);
-
-  script(src='/assets/app/scripts/app.jsx' type='text/babel')
+    var config = {
+      api: {
+        address: '#{ config["api-url"] }',
+        accessToken: '#{ session.id }'
+      }
+    };
+  script(src='/assets/app/scripts/main.bundle.js')

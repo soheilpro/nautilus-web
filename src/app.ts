@@ -1,3 +1,7 @@
+/// <reference path="./typings/index.d.ts" />
+
+import config from './config';
+
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
@@ -8,7 +12,6 @@ var passport = require('passport');
 var passportLocal = require('passport-local');
 var session = require('express-session')
 var request = require('request');
-var config = require('./config');
 
 passport.use(new passportLocal.Strategy(
   function(username, password, callback) {
@@ -95,7 +98,7 @@ app.use(function(request, response, next) {
 app.use('/', require('./routes/index'));
 
 app.use(function(request, response, next) {
-  var error = new Error('Not Found');
+  var error : any = new Error('Not Found');
   error.status = 404;
   next(error);
 });
@@ -109,4 +112,4 @@ app.use(function(error, request, response, next) {
   });
 });
 
-module.exports = app;
+export default app;

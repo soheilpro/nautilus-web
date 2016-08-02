@@ -1,21 +1,23 @@
+/// <reference path="../typings/index.d.ts" />
+
 var express = require('express');
 var passport = require('passport');
 
 var router = express.Router();
 
-router.get('/login', function(request, response) {
+router.get('/login', (request, response) => {
   response.render('login');
 });
 
-router.post('/login', function(request, response, next) {
-  passport.authenticate('local', function(error, user, info) {
+router.post('/login', (request, response, next) => {
+  passport.authenticate('local', (error, user, info) => {
     if (error)
       return next(error);
 
     if (!user)
       return response.render('login', { failed: true });
 
-    request.logIn(user, function(error) {
+    request.logIn(user, (error) => {
       if (error)
         return next(error);
 
@@ -24,4 +26,4 @@ router.post('/login', function(request, response, next) {
   })(request, response, next);
 });
 
-module.exports = router;
+export = router;
