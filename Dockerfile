@@ -9,8 +9,7 @@ WORKDIR /usr/app/src
 
 RUN npm install
 RUN npm link typescript
-RUN tsc
-RUN webpack --config assets/app/scripts/webpack.config.js --context assets/app/scripts
+RUN ./build
 
 EXPOSE 3000
 

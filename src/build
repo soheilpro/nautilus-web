@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+tsc
+webpack --config assets/app/scripts/webpack.config.js --context assets/app/scripts
