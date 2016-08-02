@@ -1,7 +1,7 @@
 module.exports = {
-  entry: "./assets/app/scripts/main.tsx",
+  entry: __dirname + "/main.tsx",
   output: {
-    filename: "./assets/app/scripts/main.bundle.js",
+    filename: __dirname + "/main.bundle.js",
   },
   devtool: "source-map",
   resolve: {

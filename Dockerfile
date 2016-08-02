@@ -10,8 +10,8 @@ WORKDIR /usr/app/src
 RUN npm install
 RUN npm link typescript
 RUN tsc
-RUN webpack
+RUN webpack --config assets/app/scripts/webpack.config.js --context assets/app/scripts
 
 EXPOSE 3000
 
-ENTRYPOINT [ "node", "www.js" ]
+ENTRYPOINT [ "node", "./out/www.js" ]

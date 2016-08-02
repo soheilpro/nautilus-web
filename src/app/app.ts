@@ -73,7 +73,7 @@ passport.deserializeUser(function(id, callback) {
 var app = express();
 app.locals.config = config.get();
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
@@ -84,7 +84,7 @@ app.use(session({ name: 'auth', secret: 'e0018575e0744d33ba5cc7c8bc288d74', resa
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(require('./routes/login'));
 
 app.use(function(request, response, next) {
