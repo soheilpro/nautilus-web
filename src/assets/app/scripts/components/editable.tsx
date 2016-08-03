@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 interface EditableProps {
-  item;
-  items?;
+  value;
+  values?;
   spanStyle?;
   inputStyle?;
-  itemFromString?(value, items);
-  itemToString?(item);
-  itemComparer?(item1, item2);
-  onItemChanged(item);
+  valueFromString?(value, values);
+  valueToString?(value);
+  valueComparer?(value1, value2);
+  onValueChanged(value);
 }
 
 export class Editable extends React.Component<EditableProps, {}> {
@@ -31,12 +31,12 @@ export class Editable extends React.Component<EditableProps, {}> {
     //- if (this.focused)
     //-   return;
 
-    var item = $(this.inputElement).val();
+    var value = $(this.inputElement).val();
 
-    if (this.props.items)
-      item = this.props.itemFromString(item, this.props.items);
+    if (this.props.values)
+      value = this.props.valueFromString(value, this.props.values);
 
-    this.onItemChanged(item);
+    this.onValueChanged(value);
     this.endEditing();
   }
 
@@ -47,22 +47,22 @@ export class Editable extends React.Component<EditableProps, {}> {
 
     $(this.inputElement)
       .css({'min-width': $(this.spanElement).width()})
-      .val(this.props.itemToString(this.props.item))
+      .val(this.props.valueToString(this.props.value))
       .select()
       .focus();
 
-    if (this.props.items) {
+    if (this.props.values) {
       $(this.inputElement)
         .autocomplete({
-          source: _.map(this.props.items, this.props.itemToString),
+          source: _.map(this.props.values, this.props.valueToString),
           delay: 0,
           minLength: 0,
           focus(event, ui) {
             this.focused = true;
           },
           select: (event, ui) => {
-            var item = this.props.itemFromString(ui.item.value, this.props.items);
-            this.onItemChanged(item);
+            var value = this.props.valueFromString(ui.item.value, this.props.values);
+            this.onValueChanged(value);
             this.endEditing();
           }
         })
@@ -75,17 +75,17 @@ export class Editable extends React.Component<EditableProps, {}> {
     $(this.containerElement).removeClass('editing');
   }
 
-  onItemChanged(item) {
-    if (this.props.itemComparer(item, this.props.item))
+  onValueChanged(value) {
+    if (this.props.valueComparer(value, this.props.value))
       return;
 
-    this.props.onItemChanged(item);
+    this.props.onValueChanged(value);
   }
 
   render() {
     return (
       <div className='editable' onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
-        <span style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.itemToString(this.props.item)}</span>
+        <span style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(this.props.value)}</span>
         <input style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.endEditing.bind(this)} ref={(ref) => this.inputElement = ref} />
       </div>
     );

@@ -132,7 +132,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
         var thisField = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
         var aboveField = this.refs['field-' + (this.state.selectedRowIndex - 1) + '-' + this.state.selectedColumnIndex] as any;
-        thisField.setItem(aboveField.getItem());
+        thisField.setValue(aboveField.getValue());
 
         event.preventDefault();
         break;

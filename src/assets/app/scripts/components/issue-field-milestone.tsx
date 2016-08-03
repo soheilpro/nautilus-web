@@ -3,27 +3,27 @@ import { Nautilus } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class MilestoneIssueField extends IssueField {
-  getItem() {
+  getValue() {
     return this.props.issue.getMilestone();
   }
 
-  getItems() {
+  getValues() {
     return Nautilus.Instance.getMilestones();
   }
 
-  itemToString(item) {
-    return item ? item.title : '';
+  valueToString(value) {
+    return value ? value.title : '';
   }
 
-  itemFromString(item, items) {
-    return _.find(items, (item : any) => item.title.toLowerCase() === item.toLowerCase());
+  valueFromString(value, values) {
+    return _.find(values, (x : any) => x.title.toLowerCase() === value.toLowerCase());
   }
 
-  itemComparer(item1, item2) {
-    return item1 && item2 && item1.id === item2.id;
+  valueComparer(value1, value2) {
+    return value1 && value2 && value1.id === value2.id;
   }
 
-  setItem(item) {
-    Nautilus.Instance.updateIssueMilestone(this.props.issue, item || null);
+  setValue(value) {
+    Nautilus.Instance.updateIssueMilestone(this.props.issue, value || null);
   }
 };

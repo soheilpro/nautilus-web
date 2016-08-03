@@ -3,27 +3,27 @@ import { Nautilus } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class AssignedUserIssueField extends IssueField {
-  getItem() {
+  getValue() {
     return this.props.issue.getAssignedUser();
   }
 
-  getItems() {
+  getValues() {
     return Nautilus.Instance.getUsers();
   }
 
-  itemToString(item) {
-    return item ? item.name : '';
+  valueToString(value) {
+    return value ? value.name : '';
   }
 
-  itemFromString(item, items) {
-    return _.find(items, (item : any) => item.name.toLowerCase() === item.toLowerCase());
+  valueFromString(value, values) {
+    return _.find(values, (x : any) => x.name.toLowerCase() === value.toLowerCase());
   }
 
-  itemComparer(item1, item2) {
-    return item1 && item2 && item1.id === item2.id;
+  valueComparer(value1, value2) {
+    return value1 && value2 && value1.id === value2.id;
   }
 
-  setItem(item) {
-    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: item || null });
+  setValue(value) {
+    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: value || null });
   }
 };

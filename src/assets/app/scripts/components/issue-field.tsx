@@ -8,24 +8,24 @@ interface IssueFieldProps {
 export class IssueField extends React.Component<IssueFieldProps, {}> {
   private editable;
 
-  getItem() {
+  getValue() {
     return null;
   }
 
-  getItems() {
+  getValues() {
     return null;
   }
 
-  itemToString(item) {
-    return item;
+  valueToString(value) {
+    return value;
   }
 
-  itemFromString(item, items) {
-    return item;
+  valueFromString(value, values) {
+    return value;
   }
 
-  itemComparer(item1, item2) {
-    return item1 === item2;
+  valueComparer(value1, value2) {
+    return value1 === value2;
   }
 
   getEditableSpanStyle() {
@@ -36,12 +36,12 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
     this.editable.startEditing();
   }
 
-  setItem(item) {
+  setValue(value) {
   }
 
   render() {
     return (
-      <Editable item={this.getItem()} items={this.getItems()} itemToString={this.itemToString} itemFromString={this.itemFromString} itemComparer={this.itemComparer.bind(this)} spanStyle={this.getEditableSpanStyle()} onItemChanged={this.setItem.bind(this)} ref={(e) => this.editable = e} />
+      <Editable value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanStyle={this.getEditableSpanStyle()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
     );
   }
 };

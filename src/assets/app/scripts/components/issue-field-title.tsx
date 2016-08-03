@@ -3,7 +3,7 @@ import { Nautilus } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class TitleIssueField extends IssueField {
-  getItem() {
+  getValue() {
     return this.props.issue.getTitle();
   }
 
@@ -18,7 +18,7 @@ export class TitleIssueField extends IssueField {
     };
   }
 
-  setItem(item) {
-    Nautilus.Instance.updateIssue(this.props.issue, { title: item });
+  setValue(value) {
+    Nautilus.Instance.updateIssue(this.props.issue, { title: value });
   }
 };
