@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build:ts": "tsc",
-    "build:webpack": "webpack --config assets/app/scripts/webpack.config.js",
+    "build:ts": "$(npm bin)/tsc",
+    "build:webpack": "$(npm bin)/webpack --config assets/app/scripts/webpack.config.js",
     "build": "npm run build:ts && npm run build:webpack",
     "clean:ts": "rm -rf ./out",
     "clean:webpack": "rm -f ./assets/app/scripts/main.bundle.js ./assets/app/scripts/main.bundle.js.map",
@@ -26,10 +26,10 @@
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",
     "request": "^2.72.0",
-    "underscore": "~1.8.2"
-  },
-  "devDependencies": {
     "source-map-loader": "^0.1.5",
-    "ts-loader": "^0.8.2"
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
+    "underscore": "~1.8.2",
+    "webpack": "^1.13.1"
   }
 }
