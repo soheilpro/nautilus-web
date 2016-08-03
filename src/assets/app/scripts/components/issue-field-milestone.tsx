@@ -15,15 +15,15 @@ export class MilestoneIssueField extends IssueField {
     return item ? item.title : '';
   }
 
-  itemFromString(value, items) {
-    return _.find(items, (item : any) => item.title.toLowerCase() === value.toLowerCase());
+  itemFromString(item, items) {
+    return _.find(items, (item : any) => item.title.toLowerCase() === item.toLowerCase());
   }
 
   itemComparer(item1, item2) {
     return item1 && item2 && item1.id === item2.id;
   }
 
-  onChanged(value) {
-    Nautilus.Instance.updateIssueMilestone(this.props.issue, value || null);
+  setItem(item) {
+    Nautilus.Instance.updateIssueMilestone(this.props.issue, item || null);
   }
 };

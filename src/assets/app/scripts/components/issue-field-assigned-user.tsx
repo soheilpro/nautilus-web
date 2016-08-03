@@ -15,15 +15,15 @@ export class AssignedUserIssueField extends IssueField {
     return item ? item.name : '';
   }
 
-  itemFromString(value, items) {
-    return _.find(items, (item : any) => item.name.toLowerCase() === value.toLowerCase());
+  itemFromString(item, items) {
+    return _.find(items, (item : any) => item.name.toLowerCase() === item.toLowerCase());
   }
 
   itemComparer(item1, item2) {
     return item1 && item2 && item1.id === item2.id;
   }
 
-  onChanged(value) {
-    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: value || null });
+  setItem(item) {
+    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: item || null });
   }
 };

@@ -125,6 +125,17 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
         event.preventDefault();
         break;
+
+      case 222: // '
+        if (this.state.selectedRowIndex === 0)
+          return;
+
+        var thisField = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
+        var aboveField = this.refs['field-' + (this.state.selectedRowIndex - 1) + '-' + this.state.selectedColumnIndex] as any;
+        thisField.setItem(aboveField.getItem());
+
+        event.preventDefault();
+        break;
     }
   }
 

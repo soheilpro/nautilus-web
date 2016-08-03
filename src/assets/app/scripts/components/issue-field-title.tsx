@@ -18,7 +18,7 @@ export class TitleIssueField extends IssueField {
     };
   }
 
-  onChanged(value) {
-    Nautilus.Instance.updateIssue(this.props.issue, { title: value });
+  setItem(item) {
+    Nautilus.Instance.updateIssue(this.props.issue, { title: item });
   }
 };
