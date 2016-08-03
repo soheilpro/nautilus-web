@@ -13,4 +13,4 @@ RUN ./build
 
 EXPOSE 3000
 
-ENTRYPOINT [ "node", "./out/www.js" ]
+ENTRYPOINT [ "npm", "start" ]

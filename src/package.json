@@ -3,7 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "build:ts": "tsc",
+    "build:webpack": "webpack --config assets/app/scripts/webpack.config.js",
+    "build": "npm run build:ts && npm run build:webpack",
+    "clean:ts": "rm -rf ./out",
+    "clean:webpack": "rm -f ./assets/app/scripts/main.bundle.js ./assets/app/scripts/main.bundle.js.map",
+    "clean": "npm run clean:ts && npm run clean:webpack",
+    "start": "node ./out/www.js"
   },
   "dependencies": {
     "async": "^1.4.2",
