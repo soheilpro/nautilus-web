@@ -5,6 +5,7 @@ import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
 import { ProjectIssueField } from './issue-field-project';
 import { TitleIssueField } from './issue-field-title';
+import config from '../config';
 
 interface IssueListProps {
   issues;
@@ -68,23 +69,43 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
         break;
 
       case 37: // Left
-        if (this.state.selectedColumnIndex === 0)
-          return;
+        if (!config.rtl) {
+          if (this.state.selectedColumnIndex === 0)
+            return;
 
-        this.setState({
-          selectedColumnIndex: this.state.selectedColumnIndex - 1
-        });
+          this.setState({
+            selectedColumnIndex: this.state.selectedColumnIndex - 1
+          });
+        }
+        else {
+          if (this.state.selectedColumnIndex === 5 - 1)
+            return;
+
+          this.setState({
+            selectedColumnIndex: this.state.selectedColumnIndex + 1
+          });
+        }
 
         event.preventDefault();
         break;
 
       case 39: // Right
-        if (this.state.selectedColumnIndex === 5 - 1)
-          return;
+        if (!config.rtl) {
+          if (this.state.selectedColumnIndex === 5 - 1)
+            return;
 
-        this.setState({
-          selectedColumnIndex: this.state.selectedColumnIndex + 1
-        });
+          this.setState({
+            selectedColumnIndex: this.state.selectedColumnIndex + 1
+          });
+        }
+        else {
+          if (this.state.selectedColumnIndex === 0)
+            return;
+
+          this.setState({
+            selectedColumnIndex: this.state.selectedColumnIndex - 1
+          });
+        }
 
         event.preventDefault();
         break;

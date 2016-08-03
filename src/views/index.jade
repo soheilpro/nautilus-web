@@ -16,6 +16,7 @@ block append content
       api: {
         address: '#{ config["client-api-url"] || config["api-url"] }',
         accessToken: '#{ session.id }'
-      }
+      },
+      rtl: '#{ config["rtl"] === true }'
     };
   script(src='/assets/app/scripts/main.bundle.js')
