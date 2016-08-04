@@ -1,5 +1,3 @@
-/// <reference path="../typings/index.d.ts" />
-
 var express = require('express');
 
 var router = express.Router();
