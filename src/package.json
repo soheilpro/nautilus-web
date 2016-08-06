@@ -9,7 +9,8 @@
     "clean:ts": "rm -rf ./out",
     "clean:webpack": "rm -f ./assets/app/scripts/main.bundle.js ./assets/app/scripts/main.bundle.js.map",
     "clean": "npm run clean:ts && npm run clean:webpack",
-    "start": "node ./out/www.js"
+    "start": "node ./out/www.js",
+    "watch": "nodemon -i assets ./out/www.js"
   },
   "dependencies": {
     "async": "^1.4.2",
