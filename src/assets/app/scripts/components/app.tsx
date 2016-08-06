@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Nautilus } from '../nautilus';
+import { Login } from './login';
 import { Issues } from './issues';
 
 interface AppState {
-  isInitialized?;
   error?;
 }
 
@@ -11,29 +11,55 @@ export class App extends React.Component<{}, AppState> {
   constructor() {
     super();
 
-    this.state = {
-      isInitialized: false,
-    };
+    this.state = {};
   }
 
-  componentDidMount() {
+  componentWillMount() {
     Nautilus.Instance.on('error', (error) => {
       this.setState({
         error: error
       });
     });
 
-    Nautilus.Instance.on('init', () => {
-      this.setState({
-        isInitialized: true
-      });
+    Nautilus.Instance.on('login', (session) => {
+      Nautilus.Instance.setSession(session);
+      Nautilus.Instance.init();
+      this.saveSession(session);
+      this.forceUpdate();
     });
 
-    Nautilus.Instance.init();
+    Nautilus.Instance.on('init', () => {
+      this.forceUpdate();
+    });
+
+    var session = this.loadSession();
+
+    if (session) {
+      Nautilus.Instance.setSession(session);
+      Nautilus.Instance.init();
+    }
+  }
+
+  loadSession() {
+    var item = localStorage.getItem('session');
+
+    if (!item)
+      return item;
+
+    return JSON.parse(item);
+  }
+
+  saveSession(session) {
+    localStorage.setItem('session', JSON.stringify(session));
   }
 
   render() {
-    if (!this.state.isInitialized)
+    if (!Nautilus.Instance.getSession())
+      return (
+        <Login />
+      );
+
+    if (!Nautilus.Instance.isInitialized())
       return <span>Loading...</span>;
 
     if (this.state.error)

@@ -1,1 +1,1 @@
-docker run --name nautilus-web --link nautilus-api -p 3001:3000 -d soheilpro/nautilus-web:latest -- --port=3000 --api-url=http://nautilus-api:3000 --client-api-url=http://localhost:3000
+docker run --name nautilus-web --link nautilus-api -p 3001:3000 -d soheilpro/nautilus-web:latest -- --port=3000 --api-url=http://nautilus-api:3000

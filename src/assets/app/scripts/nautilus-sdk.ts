@@ -14,6 +14,27 @@ class UsersService {
   };
 }
 
+class SessionsService {
+  private client;
+
+  constructor(client) {
+    this.client = client;
+  };
+
+  insert(username, password, callback) {
+    var options = {
+      method: 'POST',
+      path: '/sessions',
+      params: {
+        username: username,
+        password: password
+      }
+    };
+
+    this.client.invoke(options, callback);
+  };
+}
+
 class ProjectsService {
   private client;
 
@@ -133,17 +154,17 @@ class ItemsService {
 }
 
 export class NautilusClient {
-  private address;
-  private accessToken;
+  public address;
+  public session;
   private users;
+  private sessions;
   private projects;
   private states;
   private items;
 
-  constructor(address, accessToken) {
-    this.address = address;
-    this.accessToken = accessToken;
+  constructor() {
     this.users = new UsersService(this);
+    this.sessions = new SessionsService(this);
     this.projects = new ProjectsService(this);
     this.states = new StatesService(this);
     this.items = new ItemsService(this);
@@ -155,7 +176,7 @@ export class NautilusClient {
       url: this.address + options.path,
       data: options.params,
       headers: {
-        Authorization: 'Basic ' + window.btoa(this.accessToken + ':-')
+        Authorization: this.session ? 'Basic ' + window.btoa(this.session.id + ':-') : undefined
       }
     };
 

@@ -15,6 +15,20 @@ export class Nautilus extends EventEmitter {
     this.state = {};
   }
 
+  login(username, password) {
+    this.client.sessions.insert(username, password, (error, session) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.emitEvent('login', [session]);
+    });
+  }
+
+  setSession(session) {
+    this.client.session = session;
+    this.state.session = session;
+  }
+
   init() {
     async.parallel([
       this.client.states.getAll.bind(this, null),
@@ -32,10 +46,19 @@ export class Nautilus extends EventEmitter {
       this.state.users = results[2];
       this.state.milestones = results[3];
       this.state.issues = (results[4] as any).map(this.toItem.bind(this));
+      this.state.isInitialized = true;
 
       this.emitEvent('init');
     });
   };
+
+  isInitialized() {
+    return this.state.isInitialized;
+  }
+
+  getSession() {
+    return this.state.session;
+  }
 
   getStates() {
     return this.state.states;

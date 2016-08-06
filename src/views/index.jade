@@ -14,8 +14,7 @@ block append content
   script(type='text/javascript').
     var config = {
       api: {
-        address: '#{ config["client-api-url"] || config["api-url"] }',
-        accessToken: '#{ session.id }'
+        address: '#{ config["api-url"] }'
       },
       rtl: '#{ config["rtl"] === true }'
     };
