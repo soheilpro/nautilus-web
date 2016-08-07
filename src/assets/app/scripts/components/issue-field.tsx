@@ -9,6 +9,10 @@ interface IssueFieldProps {
 export class IssueField extends React.Component<IssueFieldProps, {}> {
   private editable: Editable;
 
+  isEditable(): boolean {
+    return true;
+  }
+
   getValue(): any {
     return null;
   }
@@ -42,7 +46,7 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
 
   render() {
     return (
-      <Editable value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanStyle={this.getEditableSpanStyle()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
+      <Editable isEditable={this.isEditable()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanStyle={this.getEditableSpanStyle()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
     );
   }
 };

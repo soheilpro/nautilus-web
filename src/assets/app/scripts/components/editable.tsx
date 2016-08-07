@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 interface EditableProps {
+  isEditable: boolean;
   value: any;
   values?: any[];
   spanStyle?: Object;
@@ -41,6 +42,9 @@ export class Editable extends React.Component<EditableProps, {}> {
   }
 
   startEditing() {
+    if (!this.props.isEditable)
+      return;
+
     this.focused = false;
 
     $(this.containerElement).addClass('editing');

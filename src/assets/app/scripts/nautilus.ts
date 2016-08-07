@@ -11,6 +11,7 @@ interface IExtendedItem extends IItem {
   getProject(): IProject;
   getMilestone(): IMilestone;
   getAssignedUser(): IUser;
+  getCreator(): IUser;
 }
 
 export interface IMilestone extends IExtendedItem {
@@ -251,6 +252,7 @@ class Item implements IExtendedItem {
   project: IProject;
   subItems: IItem[];
   assignedUsers: IUser[];
+  creator: IUser;
 
   getTitle() {
     return this.title;
@@ -281,6 +283,10 @@ class Item implements IExtendedItem {
       return;
 
     return _.find(this.context.getUsers(), entityComparer.bind(this, this.assignedUsers[0]));
+  };
+
+  getCreator() {
+    return _.find(this.context.getUsers(), entityComparer.bind(this, this.creator));
   };
 }
 

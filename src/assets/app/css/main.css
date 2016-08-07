@@ -97,6 +97,10 @@ table.issues td.assigned-user span {
   text-transform: lowercase;
 }
 
+table.issues td.creator span {
+  text-transform: lowercase;
+}
+
 .editable {
   cursor: default;
   -webkit-touch-callout: none;

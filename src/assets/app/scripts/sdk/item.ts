@@ -9,6 +9,7 @@ export interface IItem extends IEntity {
   subItems?: IEntity[];
   prerequisiteItems?: IEntity[];
   assignedUsers?: IEntity[];
+  creator?: IEntity;
 }
 
 export interface IItemFilter extends IFilter {

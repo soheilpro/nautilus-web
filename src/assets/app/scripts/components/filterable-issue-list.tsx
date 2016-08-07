@@ -42,6 +42,8 @@ export class FilterableIssueList extends React.Component<FilterableIssueListProp
     issues = filter(issues, this.props.filters['states'].exclude.items, 'getState', false);
     issues = filter(issues, this.props.filters['assignedUsers'].include.items, 'getAssignedUser', true);
     issues = filter(issues, this.props.filters['assignedUsers'].exclude.items, 'getAssignedUser', false);
+    issues = filter(issues, this.props.filters['creators'].include.items, 'getCreator', true);
+    issues = filter(issues, this.props.filters['creators'].exclude.items, 'getCreator', false);
     issues = filter(issues, this.props.filters['projects'].include.items, 'getProject', true);
     issues = filter(issues, this.props.filters['projects'].exclude.items, 'getProject', false);
 
