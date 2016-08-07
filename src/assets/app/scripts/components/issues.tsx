@@ -13,7 +13,7 @@ export class Issues extends React.Component<{}, IssuesState> {
     super();
 
     this.state = {
-      filters: new FilterSet(['milestones', 'states', 'assignedUsers', 'creators', 'projects'], entityComparer)
+      filters: new FilterSet(['milestones', 'states', 'types', 'priorities', 'assignedUsers', 'creators', 'projects'], entityComparer)
     };
   }
 
@@ -49,6 +49,8 @@ export class Issues extends React.Component<{}, IssuesState> {
           <div className='two columns sidebar'>
             <FilterBox name='Milestone' items={Nautilus.Instance.getMilestones()} displayAttribute='title' filter={this.state.filters['milestones']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
             <FilterBox name='State' items={Nautilus.Instance.getItemStates()} displayAttribute='title' filter={this.state.filters['states']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
+            <FilterBox name='Type' items={Nautilus.Instance.getIssueTypes()} displayAttribute='title' filter={this.state.filters['types']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
+            <FilterBox name='Priority' items={Nautilus.Instance.getItemPriorities()} displayAttribute='title' filter={this.state.filters['priorities']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
             <FilterBox name='Assignee' items={Nautilus.Instance.getUsers()} displayAttribute='name' filter={this.state.filters['assignedUsers']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
             <FilterBox name='Creator' items={Nautilus.Instance.getUsers()} displayAttribute='name' filter={this.state.filters['creators']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
             <FilterBox name='Project' items={Nautilus.Instance.getProjects()} displayAttribute='name' filter={this.state.filters['projects']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />

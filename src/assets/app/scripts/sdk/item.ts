@@ -1,10 +1,11 @@
 import { IEntity, IFilter, IChange, IService, BaseService } from './base';
 
 export interface IItem extends IEntity {
-  type?: string;
+  type?: IEntity;
   title?: string;
   description?: string;
   state?: IEntity;
+  priority?: IEntity;
   project?: IEntity;
   subItems?: IEntity[];
   prerequisiteItems?: IEntity[];
@@ -17,9 +18,11 @@ export interface IItemFilter extends IFilter {
 }
 
 export interface IItemChange extends IChange {
+  type?: IEntity;
   title?: string;
   description?: string;
   state?: IEntity;
+  priority?: IEntity;
   project?: IEntity;
   subItems?: IEntity[];
   subItems_add?: IEntity[];
@@ -48,10 +51,11 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
 
   entityToParams(entity: IItem): Object {
     return {
-      type: entity.type,
+      type: this.toId(entity.type),
       title: entity.title,
       description: entity.description,
       state_id: this.toId(entity.state),
+      priority_id: this.toId(entity.priority),
       project_id: this.toId(entity.project),
       sub_item_ids: this.toIdArray(entity.subItems),
       prerequisite_item_ids: this.toIdArray(entity.prerequisiteItems),
@@ -61,9 +65,11 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
 
   changeToParams(change: IItemChange): Object {
     return {
+      type_id: this.toId(change.type),
       title: change.title,
       description: change.description,
       state_id: this.toId(change.state),
+      priority_id: this.toId(change.priority),
       project_id: this.toId(change.project),
       sub_item_ids: this.toIdArray(change.subItems),
       add_sub_item_ids: this.toIdArray(change.subItems_add),

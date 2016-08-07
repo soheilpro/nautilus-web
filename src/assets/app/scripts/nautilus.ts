@@ -1,4 +1,4 @@
-import { INautilusClient, IEntity, IUser, ISession, IProject, IItemState, IItem, IItemChange } from './sdk/nautilus'
+import { INautilusClient, IEntity, IUser, ISession, IProject, IItemState, IItemType, IItemPriority, IItem, IItemChange } from './sdk/nautilus'
 
 declare class EventEmitter {
   emitEvent(evt: string, args?: any[]): void;
@@ -6,8 +6,10 @@ declare class EventEmitter {
 }
 
 interface IExtendedItem extends IItem {
+  getType(): IItemType;
   getTitle(): string;
   getState(): IItemState;
+  getPriority(): IItemPriority;
   getProject(): IProject;
   getMilestone(): IMilestone;
   getAssignedUser(): IUser;
@@ -25,6 +27,10 @@ interface INautilusState {
   isInitialized?: boolean;
   session?: ISession;
   itemStates?: IItemState[];
+  itemTypes?: IItemType[];
+  milestoneType?: IItemType;
+  issueTypes?: IItemType[];
+  itemPriorities?: IItemPriority[];
   projects?: IProject[];
   users?: IUser[];
   milestones?: IMilestone[];
@@ -38,6 +44,8 @@ export interface INautilus extends EventEmitter {
   getSession(): ISession;
   setSession(session: ISession): void;
   getItemStates(): IItemState[];
+  getIssueTypes(): IItemType[];
+  getItemPriorities(): IItemPriority[];
   getProjects(): IProject[];
   getUsers(): IUser[];
   getMilestones(): IMilestone[];
@@ -78,23 +86,36 @@ export class Nautilus extends EventEmitter implements INautilus {
   init() {
     async.parallel([
       this.client.itemStates.getAll.bind(this.client.itemStates, {}),
+      this.client.itemTypes.getAll.bind(this.client.itemTypes, {}),
+      this.client.itemPriorities.getAll.bind(this.client.itemPriorities, {}),
       this.client.projects.getAll.bind(this.client.projects, {}),
       this.client.users.getAll.bind(this.client.users, {}),
-      this.client.items.getAll.bind(this.client.items, { type: 'milestone' }),
-      this.client.items.getAll.bind(this.client.items, { type: 'issue' })
     ],
     (error, results) => {
       if (error)
         return this.emitEvent('error', [error]);
 
       this.state.itemStates = results[0] as IItemState[];
-      this.state.projects = results[1] as IProject[];
-      this.state.users = results[2] as IUser[];
-      this.state.milestones = (results[3] as []).map(this.toMilestone.bind(this)) as IIssue[];
-      this.state.issues = (results[4] as []).map(this.toIssue.bind(this)) as IIssue[];
-      this.state.isInitialized = true;
+      this.state.itemTypes = results[1] as IItemType[];
+      this.state.milestoneType = _.find(this.state.itemTypes, itemType => itemType.key === 'milestone');
+      this.state.issueTypes = this.state.itemTypes.filter(itemType => /issue\:/.test(itemType.key));
+      this.state.itemPriorities = results[2] as IItemPriority[];
+      this.state.projects = results[3] as IProject[];
+      this.state.users = results[4] as IUser[];
 
-      this.emitEvent('init');
+      this.client.items.getAll({}, (error, items) => {
+        if (error)
+          return this.emitEvent('error', [error]);
+
+        var milestones = items.filter(item => entityComparer(item.type, this.state.milestoneType));
+        var issues = items.filter(item => !item.type || this.state.issueTypes.some(issueType => entityComparer(item.type, issueType)));
+
+        this.state.milestones = milestones.map(this.toMilestone.bind(this)) as IMilestone[];
+        this.state.issues = issues.map(this.toIssue.bind(this)) as IIssue[];
+        this.state.isInitialized = true;
+
+        this.emitEvent('init');
+      });
     });
   };
 
@@ -108,6 +129,14 @@ export class Nautilus extends EventEmitter implements INautilus {
 
   getItemStates() {
     return this.state.itemStates;
+  };
+
+  getIssueTypes() {
+    return this.state.issueTypes;
+  };
+
+  getItemPriorities() {
+    return this.state.itemPriorities;
   };
 
   getProjects() {
@@ -246,13 +275,21 @@ export class Nautilus extends EventEmitter implements INautilus {
 
 class Item implements IExtendedItem {
   context: INautilus;
-  type: string;
+  type: IItemType;
   title: string;
   state: IItemState;
+  priority: IItemPriority;
   project: IProject;
   subItems: IItem[];
   assignedUsers: IUser[];
   creator: IUser;
+
+  getType() {
+    if (!this.type)
+      return;
+
+    return _.find(this.context.getIssueTypes(), entityComparer.bind(this, this.type));
+  };
 
   getTitle() {
     return this.title;
@@ -263,6 +300,13 @@ class Item implements IExtendedItem {
       return;
 
     return _.find(this.context.getItemStates(), entityComparer.bind(this, this.state));
+  };
+
+  getPriority() {
+    if (!this.priority)
+      return;
+
+    return _.find(this.context.getItemPriorities(), entityComparer.bind(this, this.priority));
   };
 
   getProject() {
