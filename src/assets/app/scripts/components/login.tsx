@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Nautilus } from '../nautilus';
 
 export class Login extends React.Component<{}, {}> {
-  private usernameElement;
-  private passwordElement;
+  private usernameElement: HTMLElement;
+  private passwordElement: HTMLElement;
 
-  onSubmit(e) {
+  onSubmit(e: Event) {
     e.preventDefault()
 
     var username = $(this.usernameElement).val();

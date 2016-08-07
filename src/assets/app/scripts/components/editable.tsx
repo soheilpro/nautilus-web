@@ -1,30 +1,30 @@
 import * as React from 'react';
 
 interface EditableProps {
-  value;
-  values?;
-  spanStyle?;
-  inputStyle?;
-  valueFromString?(value, values);
-  valueToString?(value);
-  valueComparer?(value1, value2);
-  onValueChanged(value);
+  value: any;
+  values?: any[];
+  spanStyle?: Object;
+  inputStyle?: Object;
+  valueFromString?(value: string, values: any[]): any;
+  valueToString?(value: any): string;
+  valueComparer?(value1: any, value2: any): boolean;
+  onValueChanged(value: any): void;
 }
 
 export class Editable extends React.Component<EditableProps, {}> {
-  private containerElement;
-  private spanElement;
-  private inputElement;
-  private focused;
+  private containerElement: Element;
+  private spanElement: Element;
+  private inputElement: Element;
+  private focused: boolean;
 
-  onKeyDown(event) {
+  onKeyDown(event: KeyboardEvent) {
     if (event.which !== 27)
       return;
 
     this.endEditing();
   }
 
-  onKeyPress(event) {
+  onKeyPress(event: KeyboardEvent) {
     if (event.which !== 13)
       return;
 
@@ -75,7 +75,7 @@ export class Editable extends React.Component<EditableProps, {}> {
     $(this.containerElement).removeClass('editing');
   }
 
-  onValueChanged(value) {
+  onValueChanged(value: any) {
     if (this.props.valueComparer(value, this.props.value))
       return;
 

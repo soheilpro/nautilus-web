@@ -2,7 +2,7 @@ var express = require('express');
 
 var router = express.Router();
 
-router.get('/', (request, response) => {
+router.get('/', (request: any, response: any) => {
   response.render('index', { session: request.user });
 });
 

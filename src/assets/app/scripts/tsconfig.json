@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
         "sourceMap": true,
         "jsx": "react"
     }

@@ -1,29 +1,29 @@
 import * as React from 'react';
-import { Nautilus } from '../nautilus';
+import { Nautilus, IUser } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class AssignedUserIssueField extends IssueField {
-  getValue() {
+  getValue(): IUser {
     return this.props.issue.getAssignedUser();
   }
 
-  getValues() {
+  getValues(): IUser[] {
     return Nautilus.Instance.getUsers();
   }
 
-  valueToString(value) {
+  valueToString(value: IUser) {
     return value ? value.name : '';
   }
 
-  valueFromString(value, values) {
-    return _.find(values, (x : any) => x.name.toLowerCase() === value.toLowerCase());
+  valueFromString(value: string, values: IUser[]): IUser {
+    return _.find(values, (x: any) => x.name.toLowerCase() === value.toLowerCase());
   }
 
-  valueComparer(value1, value2) {
+  valueComparer(value1: IUser, value2: IUser): boolean {
     return value1 && value2 && value1.id === value2.id;
   }
 
-  setValue(value) {
-    Nautilus.Instance.updateIssue(this.props.issue, { assignedUser: value || null });
+  setValue(value: IUser): void {
+    Nautilus.Instance.updateIssue(this.props.issue, { assignedUsers: [value] || null });
   }
 };

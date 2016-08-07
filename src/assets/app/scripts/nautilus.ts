@@ -1,22 +1,67 @@
+import { INautilusClient, IEntity, IUser, ISession, IProject, IState, IItem, IItemChange } from './sdk/nautilus'
+
 declare class EventEmitter {
-  emitEvent(evt, args?);
-  on(evt, listener);
+  emitEvent(evt: string, args?: any[]): void;
+  on(evt: string, listener: (...args: any[]) => void): void;
 }
 
-export class Nautilus extends EventEmitter {
-  public static Instance;
-  private client;
-  private state;
+interface IExtendedItem extends IItem {
+  getTitle(): string;
+  getState(): IState;
+  getProject(): IProject;
+  getMilestone(): IMilestone;
+  getAssignedUser(): IUser;
+}
 
-  constructor(client) {
+export interface IMilestone extends IExtendedItem {
+}
+
+export interface IIssue extends IExtendedItem {
+  getMilestone(): IMilestone;
+}
+
+interface INautilusState {
+  isInitialized?: boolean;
+  session?: ISession;
+  states?: IState[];
+  projects?: IProject[];
+  users?: IUser[];
+  milestones?: IMilestone[];
+  issues?: IIssue[];
+}
+
+export interface INautilus extends EventEmitter {
+  login(username: string, password: string): void;
+  init(): void;
+  isInitialized(): void;
+  getSession(): ISession;
+  setSession(session: ISession): void;
+  getStates(): IState[];
+  getProjects(): IProject[];
+  getUsers(): IUser[];
+  getMilestones(): IMilestone[];
+  addMilestone(milestone: IMilestone): void;
+  getIssues(): IIssue[];
+  addIssue(issue: IIssue): void;
+  updateIssue(issue: IIssue, change: IItemChange): void;
+  deleteIssue(issue: IIssue): void;
+  updateIssueMilestone(issue: IIssue, newMilestone: IMilestone): void;
+}
+
+export class Nautilus extends EventEmitter implements INautilus {
+  public static Instance: INautilus;
+  private client: INautilusClient;
+  private state: INautilusState;
+
+  constructor(client: INautilusClient) {
     super();
 
     this.client = client;
     this.state = {};
   }
 
-  login(username, password) {
-    this.client.sessions.insert(username, password, (error, session) => {
+  login(username: string, password: string) {
+    this.client.sessions.login(username, password, (error, session) => {
       if (error)
         return this.emitEvent('error', [error]);
 
@@ -24,28 +69,28 @@ export class Nautilus extends EventEmitter {
     });
   }
 
-  setSession(session) {
+  setSession(session: ISession) {
     this.client.session = session;
     this.state.session = session;
   }
 
   init() {
     async.parallel([
-      this.client.states.getAll.bind(this, null),
-      this.client.projects.getAll.bind(this, null),
-      this.client.users.getAll.bind(this, null),
-      this.client.items.getAll.bind(this, { type: 'milestone' }),
-      this.client.items.getAll.bind(this, { type: 'issue' })
+      this.client.states.getAll.bind(this.client.states, {}),
+      this.client.projects.getAll.bind(this.client.projects, {}),
+      this.client.users.getAll.bind(this.client.users, {}),
+      this.client.items.getAll.bind(this.client.items, { type: 'milestone' }),
+      this.client.items.getAll.bind(this.client.items, { type: 'issue' })
     ],
     (error, results) => {
       if (error)
         return this.emitEvent('error', [error]);
 
-      this.state.states = results[0];
-      this.state.projects = results[1];
-      this.state.users = results[2];
-      this.state.milestones = results[3];
-      this.state.issues = (results[4] as any).map(this.toItem.bind(this));
+      this.state.states = results[0] as IState[];
+      this.state.projects = results[1] as IProject[];
+      this.state.users = results[2] as IUser[];
+      this.state.milestones = (results[3] as []).map(this.toMilestone.bind(this)) as IIssue[];
+      this.state.issues = (results[4] as []).map(this.toIssue.bind(this)) as IIssue[];
       this.state.isInitialized = true;
 
       this.emitEvent('init');
@@ -76,21 +121,17 @@ export class Nautilus extends EventEmitter {
     return this.state.milestones;
   };
 
-  addMilestone(milestone, callback) {
+  addMilestone(milestone: IMilestone) {
     milestone.type = 'milestone';
 
-    this.client.items.insert(milestone, (error, milestone) => {
-      if (error) {
-        this.emitEvent('error', [error]);
-        return callback(error);
-      }
+    this.client.items.insert(milestone, (error, item) => {
+      if (error)
+        return this.emitEvent('error', [error]);
 
-      milestone = this.toItem(milestone);
+      var milestone = this.toMilestone(item);
 
       this.state.milestones.push(milestone);
       this.emitEvent('milestoneAdded', [milestone]);
-
-      callback(null, milestone);
     });
   };
 
@@ -98,41 +139,41 @@ export class Nautilus extends EventEmitter {
     return this.state.issues;
   };
 
-  addIssue(issue) {
-    this.client.items.insert(issue, (error, issue) => {
+  addIssue(issue: IIssue) {
+    this.client.items.insert(issue, (error, item) => {
       if (error)
         return this.emitEvent('error', [error]);
 
-      issue = this.toItem(issue);
+      var issue = this.toIssue(item);
 
       this.state.issues.push(issue);
       this.emitEvent('issueAdded', [issue]);
     });
   }
 
-  updateIssue(issue, newValues) {
-    this.client.items.update(issue, newValues, (error, issue) => {
+  updateIssue(issue: IIssue, change: IItemChange) {
+    this.client.items.update(issue.id, change, (error, item) => {
       if (error)
         return this.emitEvent('error', [error]);
 
-      issue = this.toItem(issue);
+      var issue = this.toIssue(item);
 
-      this.state.issues[this.state.issues.findIndex(idComparer.bind(this, issue))] = issue;
+      this.state.issues[_.findIndex(this.state.issues, entityComparer.bind(this, issue))] = issue;
       this.emitEvent('issueChanged', [issue]);
     });
   };
 
-  deleteIssue(issue, newValues) {
-    this.client.items.delete(issue, (error) => {
+  deleteIssue(issue: IIssue) {
+    this.client.items.delete(issue.id, (error) => {
       if (error)
         return this.emitEvent('error', [error]);
 
-      this.state.issues.splice(this.state.issues.findIndex(idComparer.bind(this, issue)), 1);
+      this.state.issues.splice(_.findIndex(this.state.issues, entityComparer.bind(this, issue)), 1);
       this.emitEvent('issueDeleted', [issue]);
     });
   };
 
-  updateIssueMilestone(issue, newMilestone) {
+  updateIssueMilestone(issue: IIssue, newMilestone: IMilestone) {
     var oldMilestone = issue.getMilestone();
 
     async.parallel([
@@ -140,13 +181,17 @@ export class Nautilus extends EventEmitter {
         if (!oldMilestone)
           return callback();
 
-        this.client.items.removeSubItem(oldMilestone, issue, (error, milestone) => {
+        var change: IItemChange = {
+          subItems_remove: [issue]
+        };
+
+        this.client.items.update(oldMilestone.id, change, (error, item) => {
           if (error)
             return callback(error);
 
-          milestone = this.toItem(milestone);
+          var milestone = this.toMilestone(item);
 
-          this.state.milestones[this.state.milestones.findIndex(idComparer.bind(this, milestone))] = milestone;
+          this.state.milestones[_.findIndex(this.state.milestones, entityComparer.bind(this, milestone))] = milestone;
           this.emitEvent('milestoneChanged', [milestone]);
 
           callback();
@@ -156,13 +201,17 @@ export class Nautilus extends EventEmitter {
         if (!newMilestone)
           return callback();
 
-        this.client.items.addSubItem(newMilestone, issue, (error, milestone) => {
+        var change: IItemChange = {
+          subItems_add: [issue]
+        };
+
+        this.client.items.update(newMilestone.id, change, (error, item) => {
           if (error)
             return callback(error);
 
-          milestone = this.toItem(milestone);
+          var milestone = this.toMilestone(item);
 
-          this.state.milestones[this.state.milestones.findIndex(idComparer.bind(this, milestone))] = milestone;
+          this.state.milestones[_.findIndex(this.state.milestones, entityComparer.bind(this, milestone))] = milestone;
           this.emitEvent('milestoneChanged', [milestone]);
 
           callback();
@@ -177,20 +226,31 @@ export class Nautilus extends EventEmitter {
     });
   };
 
-  toItem(item) {
-    item.context = this;
-    item.__proto__ = Item.prototype;
+  private toMilestone(item: IItem): IMilestone {
+    var milestone = item as any;
+    milestone.context = this;
+    milestone.__proto__ = Milestone.prototype;
 
-    return item;
+    return milestone;
+  };
+
+  private toIssue(item: IItem): IIssue {
+    var issue = item as any;
+    issue.context = this;
+    issue.__proto__ = Issue.prototype;
+
+    return issue;
   };
 }
 
-class Item {
-  private context;
-  private title;
-  private state;
-  private project;
-  private assignedUsers;
+class Item implements IExtendedItem {
+  context: INautilus;
+  type: string;
+  title: string;
+  state: IState;
+  project: IProject;
+  subItems: IItem[];
+  assignedUsers: IUser[];
 
   getTitle() {
     return this.title;
@@ -200,19 +260,19 @@ class Item {
     if (!this.state)
       return;
 
-    return this.context.getStates().find(idComparer.bind(this, this.state));
+    return _.find(this.context.getStates(), entityComparer.bind(this, this.state));
   };
 
   getProject() {
     if (!this.project)
       return;
 
-    return this.context.getProjects().find(idComparer.bind(this, this.project));
+    return _.find(this.context.getProjects(), entityComparer.bind(this, this.project));
   };
 
   getMilestone() {
-    return this.context.getMilestones().find((milestone) => {
-      return _.any(milestone.subItems, idComparer.bind(this, this));
+    return _.find(this.context.getMilestones(), (milestone: IMilestone) => {
+      return _.any(milestone.subItems, entityComparer.bind(this, this));
     });
   };
 
@@ -220,13 +280,21 @@ class Item {
     if (!this.assignedUsers || this.assignedUsers.length <= 0)
       return;
 
-    return this.context.getUsers().find(idComparer.bind(this, this.assignedUsers[0]));
+    return _.find(this.context.getUsers(), entityComparer.bind(this, this.assignedUsers[0]));
   };
 }
 
-function idComparer(item1, item2) {
-  if (!item1 || !item2)
+class Milestone extends Item {
+}
+
+class Issue extends Item {
+}
+
+export function entityComparer(entity1: IEntity, entity2: IEntity) {
+  if (!entity1 || !entity2)
     return false;
 
-  return item1.id === item2.id;
+  return entity1.id === entity2.id;
 }
+
+export * from './sdk/nautilus';

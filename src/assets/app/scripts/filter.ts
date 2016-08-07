@@ -1,30 +1,33 @@
-export class FilterSet {
-  items;
+import { IEntity } from './sdk/nautilus';
 
-  constructor(items) {
+export interface IComparer {
+  (item1: any, item2: any): boolean;
+}
+
+export class FilterSet {
+  private items: string[];
+  [key: string]: any; // Should be DualSet[]
+
+  constructor(items: string[], comparer: IComparer) {
     this.items = items;
 
-    var idComparer = (item1, item2) => {
-      return item1.id === item2.id;
-    };
-
     items.forEach((item) => {
-      this[item] = new DualSet(idComparer);
+      (this as any)[item] = new DualSet(comparer);
     });
   }
 
   clear() {
     this.items.forEach((item) => {
-      this[item].clear();
+      (this as any)[item].clear();
     });
   };
 }
 
-class DualSet {
-  include;
-  exclude;
+export class DualSet {
+  include: Set;
+  exclude: Set;
 
-  constructor(comparer) {
+  constructor(comparer: IComparer) {
     this.include = new Set(comparer);
     this.exclude = new Set(comparer);
 
@@ -45,11 +48,11 @@ class DualSet {
   };
 }
 
-class Set {
-  items;
-  comparer;
+export class Set {
+  items: any[];
+  comparer: IComparer;
 
-  constructor(comparer) {
+  constructor(comparer: IComparer) {
     this.items = [];
     this.comparer = comparer;
   }
@@ -58,33 +61,33 @@ class Set {
     this.items = [];
   };
 
-  set(item) {
+  set(item: any) {
     this.items = [item];
   };
 
-  setAll(items) {
+  setAll(items: any[]) {
     this.items = items;
   };
 
-  add(item) {
+  add(item: any) {
     if (!this.has(item))
       this.items.push(item);
   };
 
-  remove(item) {
+  remove(item: any) {
     this.items = _.reject(this.items, (_item) => {
       return this.comparer(_item, item);
     });
   };
 
-  toggle(item, state) {
+  toggle(item: any, state: boolean) {
     if (state)
       this.add(item);
     else
       this.remove(item);
   };
 
-  has(item) {
+  has(item: any) {
     return _.some(this.items, (_item) => {
       return this.comparer(_item, item);
     });

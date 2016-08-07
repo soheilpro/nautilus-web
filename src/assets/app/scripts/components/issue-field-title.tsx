@@ -3,11 +3,11 @@ import { Nautilus } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class TitleIssueField extends IssueField {
-  getValue() {
+  getValue(): string {
     return this.props.issue.getTitle();
   }
 
-  getEditableSpanStyle() {
+  getEditableSpanStyle(): Object {
     var state = this.props.issue.getState();
 
     if (!state)
@@ -18,7 +18,7 @@ export class TitleIssueField extends IssueField {
     };
   }
 
-  setValue(value) {
+  setValue(value: string): void {
     Nautilus.Instance.updateIssue(this.props.issue, { title: value });
   }
 };

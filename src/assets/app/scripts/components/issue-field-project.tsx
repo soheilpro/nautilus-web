@@ -1,29 +1,29 @@
 import * as React from 'react';
-import { Nautilus } from '../nautilus';
+import { Nautilus, IProject } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class ProjectIssueField extends IssueField {
-  getValue() {
+  getValue(): IProject {
     return this.props.issue.getProject();
   }
 
-  getValues() {
+  getValues(): IProject[] {
     return Nautilus.Instance.getProjects();
   }
 
-  valueToString(value) {
+  valueToString(value: IProject): string {
     return value ? value.name : '';
   }
 
-  valueFromString(value, values) {
-    return _.find(values, (x : any) => x.name.toLowerCase() === value.toLowerCase());
+  valueFromString(value: string, values: IProject[]): IProject {
+    return _.find(values, (x: IProject) => x.name.toLowerCase() === value.toLowerCase());
   }
 
-  valueComparer(value1, value2) {
+  valueComparer(value1: IProject, value2: IProject): boolean {
     return value1 && value2 && value1.id === value2.id;
   }
 
-  setValue(value) {
+  setValue(value: IProject): void {
     Nautilus.Instance.updateIssue(this.props.issue, { project: value || null });
   }
 };

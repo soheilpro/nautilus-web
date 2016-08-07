@@ -1,28 +1,29 @@
 import * as React from 'react';
+import { FilterSet, DualSet } from '../filter';
 
 interface FilterBoxProps {
-  filters;
-  filter;
-  name;
-  items;
-  displayAttribute;
-  onChanged();
+  filters: FilterSet;
+  filter: DualSet;
+  name: string;
+  items: any[];
+  displayAttribute: string;
+  onChanged(): () => void;
 }
 
 export class FilterBox extends React.Component<FilterBoxProps, {}> {
-  onItemSelected(item) {
+  onItemSelected(item: any) {
     this.props.filters.clear();
     this.props.filter.include.set(item);
     this.props.onChanged();
   }
 
-  onItemIncluded(item, event) {
-    this.props.filter.include.toggle(item, event.target.checked);
+  onItemIncluded(item: any, event: Event) {
+    this.props.filter.include.toggle(item, (event.target as HTMLInputElement).checked);
     this.props.onChanged();
   }
 
-  onItemExcluded(item, event) {
-    this.props.filter.exclude.toggle(item, event.target.checked);
+  onItemExcluded(item: any, event: Event) {
+    this.props.filter.exclude.toggle(item, (event.target as HTMLInputElement).checked);
     this.props.onChanged();
   }
 

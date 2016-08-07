@@ -1,9 +1,8 @@
 declare var config : {
   api : {
-    address;
-    accessToken;
+    address: string;
   };
-  rtl;
+  rtl: boolean;
 };
 
 export default config;

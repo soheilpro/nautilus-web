@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Nautilus } from '../nautilus';
+import { Nautilus, ISession } from '../nautilus';
 import { Login } from './login';
 import { Issues } from './issues';
 
 interface AppState {
-  error?;
+  error?: any;
 }
 
 export class App extends React.Component<{}, AppState> {
@@ -15,13 +15,13 @@ export class App extends React.Component<{}, AppState> {
   }
 
   componentWillMount() {
-    Nautilus.Instance.on('error', (error) => {
+    Nautilus.Instance.on('error', (error: Error) => {
       this.setState({
         error: error
       });
     });
 
-    Nautilus.Instance.on('login', (session) => {
+    Nautilus.Instance.on('login', (session: ISession) => {
       Nautilus.Instance.setSession(session);
       Nautilus.Instance.init();
       this.saveSession(session);
@@ -40,7 +40,7 @@ export class App extends React.Component<{}, AppState> {
     }
   }
 
-  loadSession() {
+  loadSession(): ISession {
     var item = localStorage.getItem('session');
 
     if (!item)
@@ -49,7 +49,7 @@ export class App extends React.Component<{}, AppState> {
     return JSON.parse(item);
   }
 
-  saveSession(session) {
+  saveSession(session: ISession) {
     localStorage.setItem('session', JSON.stringify(session));
   }
 

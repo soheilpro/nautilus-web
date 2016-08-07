@@ -1,42 +1,43 @@
 import * as React from 'react';
 import { Editable } from './editable';
+import { IIssue } from '../nautilus';
 
 interface IssueFieldProps {
-  issue;
+  issue: IIssue;
 }
 
 export class IssueField extends React.Component<IssueFieldProps, {}> {
-  private editable;
+  private editable: Editable;
 
-  getValue() {
+  getValue(): any {
     return null;
   }
 
-  getValues() {
+  getValues(): any[] {
     return null;
   }
 
-  valueToString(value) {
+  valueToString(value: any): string {
     return value;
   }
 
-  valueFromString(value, values) {
+  valueFromString(value: string, values: any[]): any {
     return value;
   }
 
-  valueComparer(value1, value2) {
+  valueComparer(value1: any, value2: any): boolean {
     return value1 === value2;
   }
 
-  getEditableSpanStyle() {
+  getEditableSpanStyle(): Object {
     return {};
   }
 
-  edit() {
+  edit(): void {
     this.editable.startEditing();
   }
 
-  setValue(value) {
+  setValue(value: any): void {
   }
 
   render() {

@@ -15,13 +15,13 @@ app.use(logger('dev'));
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use('/', require('./routes/index'));
 
-app.use(function(request, response, next) {
-  var error : any = new Error('Not Found');
+app.use(function(request: any, response: any, next: any) {
+  var error: any = new Error('Not Found');
   error.status = 404;
   next(error);
 });
 
-app.use(function(error, request, response, next) {
+app.use(function(error: any, request: any, response: any, next: any) {
   debug(error.stack);
   response.status(error.status || 500);
   response.render('error', {

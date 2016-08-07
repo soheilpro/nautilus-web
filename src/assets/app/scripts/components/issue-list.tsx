@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Nautilus } from '../nautilus';
+import { Nautilus, IIssue } from '../nautilus';
 import { AssignedUserIssueField } from './issue-field-assigned-user';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
@@ -8,12 +8,12 @@ import { TitleIssueField } from './issue-field-title';
 import config from '../config';
 
 interface IssueListProps {
-  issues;
+  issues: IIssue[];
 }
 
 interface IssueListState {
-  selectedRowIndex?;
-  selectedColumnIndex?;
+  selectedRowIndex?: number;
+  selectedColumnIndex?: number;
 }
 
 export class IssueList extends React.Component<IssueListProps, IssueListState> {
@@ -29,7 +29,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
   componentDidMount() {
     Nautilus.Instance.on('issueAdded', (issue) => {
       this.setState({
-        selectedRowIndex: this.props.issues.findIndex(i => i.id === issue.id),
+        selectedRowIndex: _.findIndex(this.props.issues, (i => i.id === issue.id)),
         selectedColumnIndex: 2
       });
 
@@ -41,7 +41,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
     });
   }
 
-  onKeyDown(event) {
+  onKeyDown(event: KeyboardEvent) {
     if (event.target !== event.currentTarget)
       return;
 
@@ -139,7 +139,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
     }
   }
 
-  onSelected(rowIndex, columnIndex) {
+  onSelected(rowIndex: number, columnIndex: number) {
     this.setState({
       selectedRowIndex: rowIndex,
       selectedColumnIndex: columnIndex

@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Nautilus } from '../nautilus';
+import { Nautilus, IIssue } from '../nautilus';
 import { IssueList } from './issue-list';
+import { FilterSet } from '../filter';
 
 interface FilterableIssueListProps {
-  filters;
+  filters: FilterSet;
 }
 
 export class FilterableIssueList extends React.Component<FilterableIssueListProps, {}> {
@@ -21,13 +22,13 @@ export class FilterableIssueList extends React.Component<FilterableIssueListProp
     });
   }
 
-  filterIssues(issues) {
-     function filter(issues, filterItems, valueGetter, include) {
+  filterIssues(issues: IIssue[]) {
+     function filter(issues: IIssue[], filterItems: any[], valueGetter: string, include: boolean) {
       if (filterItems.length == 0)
         return issues;
 
       return _.filter(issues, (issue) => {
-        var value = issue[valueGetter]();
+        var value = (issue as any)[valueGetter]();
 
         return _.some(filterItems, (filterItem) => {
           return value && value.id === (filterItem as any).id;
@@ -35,14 +36,14 @@ export class FilterableIssueList extends React.Component<FilterableIssueListProp
       });
     }
 
-    issues = filter(issues, this.props.filters.milestones.include.items, 'getMilestone', true);
-    issues = filter(issues, this.props.filters.milestones.exclude.items, 'getMilestone', false);
-    issues = filter(issues, this.props.filters.states.include.items, 'getState', true);
-    issues = filter(issues, this.props.filters.states.exclude.items, 'getState', false);
-    issues = filter(issues, this.props.filters.assignedUsers.include.items, 'getAssignedUser', true);
-    issues = filter(issues, this.props.filters.assignedUsers.exclude.items, 'getAssignedUser', false);
-    issues = filter(issues, this.props.filters.projects.include.items, 'getProject', true);
-    issues = filter(issues, this.props.filters.projects.exclude.items, 'getProject', false);
+    issues = filter(issues, this.props.filters['milestones'].include.items, 'getMilestone', true);
+    issues = filter(issues, this.props.filters['milestones'].exclude.items, 'getMilestone', false);
+    issues = filter(issues, this.props.filters['states'].include.items, 'getState', true);
+    issues = filter(issues, this.props.filters['states'].exclude.items, 'getState', false);
+    issues = filter(issues, this.props.filters['assignedUsers'].include.items, 'getAssignedUser', true);
+    issues = filter(issues, this.props.filters['assignedUsers'].exclude.items, 'getAssignedUser', false);
+    issues = filter(issues, this.props.filters['projects'].include.items, 'getProject', true);
+    issues = filter(issues, this.props.filters['projects'].exclude.items, 'getProject', false);
 
     return issues;
   }
