@@ -1,7 +1,7 @@
 import { IUserService, UserService } from './user';
 import { ISession, ISessionService, SessionService } from './session';
 import { IProjectService, ProjectService } from './project';
-import { IStateService, StateService } from './state';
+import { IItemStateService, ItemStateService } from './item_state';
 import { IItemService, ItemService } from './item';
 
 export interface INautilusClient {
@@ -10,7 +10,7 @@ export interface INautilusClient {
   users: IUserService;
   sessions: ISessionService;
   projects: IProjectService;
-  states: IStateService;
+  itemStates: IItemStateService;
   items: IItemService;
 }
 
@@ -20,14 +20,14 @@ export class NautilusClient implements INautilusClient {
   users: IUserService;
   sessions: ISessionService;
   projects: IProjectService;
-  states: IStateService;
+  itemStates: IItemStateService;
   items: IItemService;
 
   constructor() {
     this.users = new UserService(this);
     this.sessions = new SessionService(this);
     this.projects = new ProjectService(this);
-    this.states = new StateService(this);
+    this.itemStates = new ItemStateService(this);
     this.items = new ItemService(this);
   }
 }

@@ -1,4 +1,4 @@
-import { INautilusClient, IEntity, IUser, ISession, IProject, IState, IItem, IItemChange } from './sdk/nautilus'
+import { INautilusClient, IEntity, IUser, ISession, IProject, IItemState, IItem, IItemChange } from './sdk/nautilus'
 
 declare class EventEmitter {
   emitEvent(evt: string, args?: any[]): void;
@@ -7,7 +7,7 @@ declare class EventEmitter {
 
 interface IExtendedItem extends IItem {
   getTitle(): string;
-  getState(): IState;
+  getState(): IItemState;
   getProject(): IProject;
   getMilestone(): IMilestone;
   getAssignedUser(): IUser;
@@ -24,7 +24,7 @@ export interface IIssue extends IExtendedItem {
 interface INautilusState {
   isInitialized?: boolean;
   session?: ISession;
-  states?: IState[];
+  itemStates?: IItemState[];
   projects?: IProject[];
   users?: IUser[];
   milestones?: IMilestone[];
@@ -37,7 +37,7 @@ export interface INautilus extends EventEmitter {
   isInitialized(): void;
   getSession(): ISession;
   setSession(session: ISession): void;
-  getStates(): IState[];
+  getItemStates(): IItemState[];
   getProjects(): IProject[];
   getUsers(): IUser[];
   getMilestones(): IMilestone[];
@@ -77,7 +77,7 @@ export class Nautilus extends EventEmitter implements INautilus {
 
   init() {
     async.parallel([
-      this.client.states.getAll.bind(this.client.states, {}),
+      this.client.itemStates.getAll.bind(this.client.itemStates, {}),
       this.client.projects.getAll.bind(this.client.projects, {}),
       this.client.users.getAll.bind(this.client.users, {}),
       this.client.items.getAll.bind(this.client.items, { type: 'milestone' }),
@@ -87,7 +87,7 @@ export class Nautilus extends EventEmitter implements INautilus {
       if (error)
         return this.emitEvent('error', [error]);
 
-      this.state.states = results[0] as IState[];
+      this.state.itemStates = results[0] as IItemState[];
       this.state.projects = results[1] as IProject[];
       this.state.users = results[2] as IUser[];
       this.state.milestones = (results[3] as []).map(this.toMilestone.bind(this)) as IIssue[];
@@ -106,8 +106,8 @@ export class Nautilus extends EventEmitter implements INautilus {
     return this.state.session;
   }
 
-  getStates() {
-    return this.state.states;
+  getItemStates() {
+    return this.state.itemStates;
   };
 
   getProjects() {
@@ -248,7 +248,7 @@ class Item implements IExtendedItem {
   context: INautilus;
   type: string;
   title: string;
-  state: IState;
+  state: IItemState;
   project: IProject;
   subItems: IItem[];
   assignedUsers: IUser[];
@@ -262,7 +262,7 @@ class Item implements IExtendedItem {
     if (!this.state)
       return;
 
-    return _.find(this.context.getStates(), entityComparer.bind(this, this.state));
+    return _.find(this.context.getItemStates(), entityComparer.bind(this, this.state));
   };
 
   getProject() {
