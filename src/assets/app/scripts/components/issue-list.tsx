@@ -155,15 +155,15 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
       <table className='issues'>
         <thead>
           <tr>
-            <th>Id</th>
-            <th>Project</th>
-            <th>Milestone</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Priority</th>
-            <th>State</th>
-            <th>Assignee</th>
-            <th>Creator</th>
+            <th className="sid">Id</th>
+            <th className="project">Project</th>
+            <th className="milestone">Milestone</th>
+            <th className="title">Title</th>
+            <th className="type">Type</th>
+            <th className="priority">Priority</th>
+            <th className="state">State</th>
+            <th className="assignee">Assignee</th>
+            <th className="creator">Creator</th>
           </tr>
         </thead>
         <tbody>
@@ -192,7 +192,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
                   <td className={'state ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
                     <StateIssueField issue={issue} ref={'field-' + index + '-6'} />
                   </td>
-                  <td className={'assigned-user ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
+                  <td className={'assignee ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
                     <AssignedUserIssueField issue={issue} ref={'field-' + index + '-7'} />
                   </td>
                   <td className={'creator ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>

@@ -7,6 +7,11 @@ table.issues td {
   text-align: left;
 }
 
+table.issues th.title {
+  direction: rtl;
+  text-align: right;
+}
+
 table.issues td.title {
   direction: rtl;
   text-align: right;
