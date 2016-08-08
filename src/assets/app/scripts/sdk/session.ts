@@ -2,6 +2,7 @@ import { IEntity, IFilter, IChange, IService, IInsertCallback, BaseService } fro
 import { IUser } from './user';
 
 export interface ISession extends IEntity {
+  accessToken: string;
   user: IUser;
 }
 

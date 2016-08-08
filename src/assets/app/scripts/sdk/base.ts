@@ -106,7 +106,7 @@ export abstract class BaseService<TEntity extends IEntity, TFilter extends IFilt
       url: this.client.address + options.path,
       data: options.params,
       headers: {
-        Authorization: this.client.session ? 'Basic ' + window.btoa(this.client.session.id + ':-') : undefined
+        Authorization: this.client.session ? 'Basic ' + window.btoa(this.client.session.accessToken + ':-') : undefined
       }
     };
 
