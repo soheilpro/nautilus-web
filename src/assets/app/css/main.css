@@ -43,10 +43,6 @@ body {
   visibility: visible;
 }
 
-.sidebar a {
-  text-transform: lowercase;
-}
-
 table.issues {
   width: 100%;
 }
@@ -85,22 +81,6 @@ table.issues td input {
   margin: 0 1px 0 0;
 }
 
-table.issues td.project span {
-  text-transform: lowercase;
-}
-
-table.issues td.state span {
-  text-transform: lowercase;
-}
-
-table.issues td.assigned-user span {
-  text-transform: lowercase;
-}
-
-table.issues td.creator span {
-  text-transform: lowercase;
-}
-
 .editable {
   cursor: default;
   -webkit-touch-callout: none;
@@ -113,7 +93,6 @@ table.issues td.creator span {
 
 .editable input {
   display: none;
-  text-transform: lowercase;
   padding-left: 2px;
 }
 
@@ -152,7 +131,6 @@ td.title .editable input {
   margin: 0;
   padding: 1px 2px;
   cursor: default;
-  text-transform: lowercase;
 }
 
 .ui-autocomplete .ui-menu-item.ui-state-focus {
