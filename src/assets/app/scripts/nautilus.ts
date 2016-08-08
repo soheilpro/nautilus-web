@@ -274,6 +274,7 @@ export class Nautilus extends EventEmitter implements INautilus {
 }
 
 class Item implements IExtendedItem {
+  sid: string;
   context: INautilus;
   type: IItemType;
   title: string;

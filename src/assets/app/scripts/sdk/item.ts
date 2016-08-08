@@ -1,6 +1,7 @@
 import { IEntity, IFilter, IChange, IService, BaseService } from './base';
 
 export interface IItem extends IEntity {
+  sid: string;
   type?: IEntity;
   title?: string;
   description?: string;
