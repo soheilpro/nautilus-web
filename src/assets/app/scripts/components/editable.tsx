@@ -6,6 +6,8 @@ interface EditableProps {
   values?: any[];
   spanStyle?: Object;
   inputStyle?: Object;
+  spanClassName?: string;
+  inputClassName?: string;
   valueFromString?(value: string, values: any[]): any;
   valueToString?(value: any): string;
   valueComparer?(value1: any, value2: any): boolean;
@@ -89,8 +91,8 @@ export class Editable extends React.Component<EditableProps, {}> {
   render() {
     return (
       <div className='editable' onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
-        <span style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(this.props.value)}</span>
-        <input style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.endEditing.bind(this)} ref={(ref) => this.inputElement = ref} />
+        <span className={this.props.spanClassName} style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(this.props.value)}</span>
+        <input className={this.props.inputClassName} style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.endEditing.bind(this)} ref={(ref) => this.inputElement = ref} />
       </div>
     );
   }

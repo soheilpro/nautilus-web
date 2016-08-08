@@ -33,8 +33,8 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
     return value1 === value2;
   }
 
-  getEditableSpanStyle(): Object {
-    return {};
+  getEditableSpanClassName() {
+    return "";
   }
 
   edit(): void {
@@ -46,7 +46,7 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
 
   render() {
     return (
-      <Editable isEditable={this.isEditable()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanStyle={this.getEditableSpanStyle()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
+      <Editable isEditable={this.isEditable()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanClassName={this.getEditableSpanClassName()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
     );
   }
 };
