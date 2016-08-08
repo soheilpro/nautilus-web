@@ -7,6 +7,7 @@ import { StateIssueField } from './issue-field-state';
 import { TypeIssueField } from './issue-field-type';
 import { PriorityIssueField } from './issue-field-priority';
 import { ProjectIssueField } from './issue-field-project';
+import { AreaIssueField } from './issue-field-area';
 import { TitleIssueField } from './issue-field-title';
 import { SidIssueField } from './issue-field-sid';
 import config from '../config';
@@ -34,7 +35,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
     Nautilus.Instance.on('issueAdded', (issue) => {
       this.setState({
         selectedRowIndex: _.findIndex(this.props.issues, (i => i.id === issue.id)),
-        selectedColumnIndex: 3
+        selectedColumnIndex: 1
       });
 
       var cell = this.refs['cell-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
@@ -82,7 +83,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
           });
         }
         else {
-          if (this.state.selectedColumnIndex === 8)
+          if (this.state.selectedColumnIndex === 9)
             return;
 
           this.setState({
@@ -95,7 +96,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
       case 39: // Right
         if (!config.rtl) {
-          if (this.state.selectedColumnIndex === 8)
+          if (this.state.selectedColumnIndex === 9)
             return;
 
           this.setState({
@@ -158,6 +159,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
             <th className="sid">Id</th>
             <th className="milestone">Milestone</th>
             <th className="project">Project</th>
+            <th className="area">Area</th>
             <th className="title">Title</th>
             <th className="type">Type</th>
             <th className="priority">Priority</th>
@@ -180,23 +182,26 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
                   <td className={'project ' + (this.state.selectedColumnIndex === 2 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 2)} ref={'cell-' + index + '-2'}>
                     <ProjectIssueField issue={issue} ref={'field-' + index + '-2'} />
                   </td>
-                  <td className={'title ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
-                    <TitleIssueField issue={issue} ref={'field-' + index + '-3'} />
+                  <td className={'area ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
+                    <AreaIssueField issue={issue} ref={'field-' + index + '-3'} />
                   </td>
-                  <td className={'type ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
-                    <TypeIssueField issue={issue} ref={'field-' + index + '-4'} />
+                  <td className={'title ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
+                    <TitleIssueField issue={issue} ref={'field-' + index + '-4'} />
                   </td>
-                  <td className={'priority ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
-                    <PriorityIssueField issue={issue} ref={'field-' + index + '-5'} />
+                  <td className={'type ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
+                    <TypeIssueField issue={issue} ref={'field-' + index + '-5'} />
                   </td>
-                  <td className={'state ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
-                    <StateIssueField issue={issue} ref={'field-' + index + '-6'} />
+                  <td className={'priority ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
+                    <PriorityIssueField issue={issue} ref={'field-' + index + '-6'} />
                   </td>
-                  <td className={'assignee ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
-                    <AssignedUserIssueField issue={issue} ref={'field-' + index + '-7'} />
+                  <td className={'state ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
+                    <StateIssueField issue={issue} ref={'field-' + index + '-7'} />
                   </td>
-                  <td className={'creator ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
-                    <CreatorIssueField issue={issue} ref={'field-' + index + '-8'} />
+                  <td className={'assignee ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
+                    <AssignedUserIssueField issue={issue} ref={'field-' + index + '-8'} />
+                  </td>
+                  <td className={'creator ' + (this.state.selectedColumnIndex === 9 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 9)} ref={'cell-' + index + '-9'}>
+                    <CreatorIssueField issue={issue} ref={'field-' + index + '-9'} />
                   </td>
                 </tr>
               );

@@ -42,6 +42,8 @@ export class FilterableIssueList extends React.Component<FilterableIssueListProp
     issues = filter(issues, this.props.filters['states'].exclude.items, 'getState', false);
     issues = filter(issues, this.props.filters['types'].include.items, 'getType', true);
     issues = filter(issues, this.props.filters['types'].exclude.items, 'getType', false);
+    issues = filter(issues, this.props.filters['areas'].include.items, 'getArea', true);
+    issues = filter(issues, this.props.filters['areas'].exclude.items, 'getArea', false);
     issues = filter(issues, this.props.filters['priorities'].include.items, 'getPriority', true);
     issues = filter(issues, this.props.filters['priorities'].exclude.items, 'getPriority', false);
     issues = filter(issues, this.props.filters['assignedUsers'].include.items, 'getAssignedUser', true);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Nautilus, IProject } from '../nautilus';
+import { Nautilus, IProject, IItemArea, entityComparer } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class ProjectIssueField extends IssueField {
@@ -24,6 +24,12 @@ export class ProjectIssueField extends IssueField {
   }
 
   setValue(value: IProject): void {
-    Nautilus.Instance.updateIssue(this.props.issue, { project: value || null });
+    var currentArea = this.props.issue.getArea();
+    var newArea: IItemArea = undefined;
+
+    if (currentArea && currentArea.project && !entityComparer(currentArea.project, value))
+      newArea = null;
+
+    Nautilus.Instance.updateIssue(this.props.issue, { project: value || null, area: newArea });
   }
 };

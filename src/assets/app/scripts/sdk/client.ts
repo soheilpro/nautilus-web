@@ -3,6 +3,7 @@ import { ISession, ISessionService, SessionService } from './session';
 import { IProjectService, ProjectService } from './project';
 import { IItemStateService, ItemStateService } from './item_state';
 import { IItemTypeService, ItemTypeService } from './item_type';
+import { IItemAreaService, ItemAreaService } from './item_area';
 import { IItemPriorityService, ItemPriorityService } from './item_priority';
 import { IItemService, ItemService } from './item';
 
@@ -14,6 +15,7 @@ export interface INautilusClient {
   projects: IProjectService;
   itemStates: IItemStateService;
   itemTypes: IItemTypeService;
+  itemAreas: IItemAreaService;
   itemPriorities: IItemPriorityService;
   items: IItemService;
 }
@@ -26,6 +28,7 @@ export class NautilusClient implements INautilusClient {
   projects: IProjectService;
   itemStates: IItemStateService;
   itemTypes: IItemTypeService;
+  itemAreas: IItemAreaService;
   itemPriorities: IItemPriorityService;
   items: IItemService;
 
@@ -35,6 +38,7 @@ export class NautilusClient implements INautilusClient {
     this.projects = new ProjectService(this);
     this.itemStates = new ItemStateService(this);
     this.itemTypes = new ItemTypeService(this);
+    this.itemAreas = new ItemAreaService(this);
     this.itemPriorities = new ItemPriorityService(this);
     this.items = new ItemService(this);
   }

@@ -13,7 +13,7 @@ export class Issues extends React.Component<{}, IssuesState> {
     super();
 
     this.state = {
-      filters: new FilterSet(['milestones', 'states', 'types', 'priorities', 'assignedUsers', 'creators', 'projects'], entityComparer)
+      filters: new FilterSet(['milestones', 'states', 'types', 'areas', 'priorities', 'assignedUsers', 'creators', 'projects'], entityComparer)
     };
   }
 
@@ -54,6 +54,7 @@ export class Issues extends React.Component<{}, IssuesState> {
             <FilterBox name='Creator' items={Nautilus.Instance.getUsers()} displayAttribute='name' filter={this.state.filters['creators']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
             <FilterBox name='Milestone' items={Nautilus.Instance.getMilestones()} displayAttribute='title' filter={this.state.filters['milestones']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
             <FilterBox name='Project' items={Nautilus.Instance.getProjects()} displayAttribute='name' filter={this.state.filters['projects']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
+            <FilterBox name='Area' items={Nautilus.Instance.getItemAreas()} displayAttribute='title' filter={this.state.filters['areas']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
           </div>
           <div className='ten columns'>
             <FilterableIssueList filters={this.state.filters} />
