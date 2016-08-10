@@ -134,6 +134,15 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
       event.preventDefault();
     }
+    else if (event.which >= 65 && event.which <= 90) { // A-Z a-z
+      if (event.target !== event.currentTarget)
+        return;
+
+      if (event.ctrlKey || event.altKey || event.metaKey)
+        return;
+
+      (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
+    }
   }
 
   moveToCell(rowIndex: number, columnIndex: number) {
