@@ -46,71 +46,74 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
       var field = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
       field.edit();
     });
-  }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (event.which === 9) { // Tab
-      if (event.shiftKey) {
-        if (this.state.selectedColumnIndex === 0) {
-          if (this.state.selectedRowIndex > 0)
-            this.moveToCell(this.state.selectedRowIndex - 1, this.columnCount - 1);
-        }
-        else {
-          this.moveToPreviousCell();
-        }
+    Mousetrap.bind('tab', () => {
+      if (this.state.selectedColumnIndex === this.columnCount - 1) {
+        if (this.state.selectedRowIndex < this.props.issues.length - 1)
+          this.moveToCell(this.state.selectedRowIndex + 1, 0);
       }
       else {
-        if (this.state.selectedColumnIndex === this.columnCount - 1) {
-          if (this.state.selectedRowIndex < this.props.issues.length - 1)
-            this.moveToCell(this.state.selectedRowIndex + 1, 0);
-        }
-        else {
-          this.moveToNextCell();
-        }
+        this.moveToNextCell();
       }
-    }
-    else if (event.which === 38) { // Up
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('shift+tab', () => {
+      if (this.state.selectedColumnIndex === 0) {
+        if (this.state.selectedRowIndex > 0)
+          this.moveToCell(this.state.selectedRowIndex - 1, this.columnCount - 1);
+      }
+      else {
+        this.moveToPreviousCell();
+      }
+    });
+
+    Mousetrap.bind('up', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       this.moveToAboveCell();
 
       event.preventDefault();
-    }
-    else if (event.which === 40) { // Down
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('down', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       this.moveToBelowCell();
 
       event.preventDefault();
-    }
-    else if (event.which === 37) { // Left
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('left', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       this.moveLeft();
 
       event.preventDefault();
-    }
-    else if (event.which === 39) { // Right
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('right', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       this.moveRight();
 
       event.preventDefault();
-    }
-    else if (event.which === 13) { // Enter
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('enter', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
 
       event.preventDefault();
-    }
-    else if (event.which === 8) { // Delete
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('del', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       if (!window.confirm("Delete issue?"))
@@ -120,9 +123,10 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
       Nautilus.Instance.deleteIssue(issue);
 
       event.preventDefault();
-    }
-    else if (event.which === 222) { // '
-      if (event.target !== event.currentTarget)
+    });
+
+    Mousetrap.bind('\'', (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       if (this.state.selectedRowIndex === 0)
@@ -133,16 +137,16 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
       thisField.setValue(aboveField.getValue());
 
       event.preventDefault();
-    }
-    else if (event.which >= 65 && event.which <= 90) { // A-Z a-z
-      if (event.target !== event.currentTarget)
-        return;
+    });
 
-      if (event.ctrlKey || event.altKey || event.metaKey)
+    var alphabet = _.flatten(Array.apply(null, {length: 26}).map(Function.call, Number).map((x: number) => [x + 65, x + 97])).map((x: number) => String.fromCharCode(x));
+
+    Mousetrap.bind(alphabet, (event: KeyboardEvent) => {
+      if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
       (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
-    }
+    });
   }
 
   moveToCell(rowIndex: number, columnIndex: number) {
@@ -220,34 +224,34 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
             this.props.issues.map((issue, index) => {
               return (
                 <tr key={issue.id} className={this.state.selectedRowIndex === index ? 'selected' : ''}>
-                  <td className={'sid ' + (this.state.selectedColumnIndex === 0 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 0)} ref={'cell-' + index + '-0'}>
+                  <td className={'sid ' + (this.state.selectedColumnIndex === 0 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 0)} ref={'cell-' + index + '-0'}>
                     <SidIssueField issue={issue} ref={'field-' + index + '-0'} />
                   </td>
-                  <td className={'milestone ' + (this.state.selectedColumnIndex === 1 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 1)} ref={'cell-' + index + '-1'}>
+                  <td className={'milestone ' + (this.state.selectedColumnIndex === 1 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 1)} ref={'cell-' + index + '-1'}>
                     <MilestoneIssueField issue={issue} ref={'field-' + index + '-1'} />
                   </td>
-                  <td className={'project ' + (this.state.selectedColumnIndex === 2 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 2)} ref={'cell-' + index + '-2'}>
+                  <td className={'project ' + (this.state.selectedColumnIndex === 2 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 2)} ref={'cell-' + index + '-2'}>
                     <ProjectIssueField issue={issue} ref={'field-' + index + '-2'} />
                   </td>
-                  <td className={'area ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
+                  <td className={'area ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
                     <AreaIssueField issue={issue} ref={'field-' + index + '-3'} />
                   </td>
-                  <td className={'title ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
+                  <td className={'title ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
                     <TitleIssueField issue={issue} ref={'field-' + index + '-4'} />
                   </td>
-                  <td className={'type ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
+                  <td className={'type ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
                     <TypeIssueField issue={issue} ref={'field-' + index + '-5'} />
                   </td>
-                  <td className={'priority ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
+                  <td className={'priority ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
                     <PriorityIssueField issue={issue} ref={'field-' + index + '-6'} />
                   </td>
-                  <td className={'state ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
+                  <td className={'state ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
                     <StateIssueField issue={issue} ref={'field-' + index + '-7'} />
                   </td>
-                  <td className={'assignee ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
+                  <td className={'assignee ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
                     <AssignedUserIssueField issue={issue} ref={'field-' + index + '-8'} />
                   </td>
-                  <td className={'creator ' + (this.state.selectedColumnIndex === 9 ? 'selected' : '')} tabIndex="0" onKeyDown={this.onKeyDown.bind(this)} onClick={this.onSelected.bind(this, index, 9)} ref={'cell-' + index + '-9'}>
+                  <td className={'creator ' + (this.state.selectedColumnIndex === 9 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 9)} ref={'cell-' + index + '-9'}>
                     <CreatorIssueField issue={issue} ref={'field-' + index + '-9'} />
                   </td>
                 </tr>

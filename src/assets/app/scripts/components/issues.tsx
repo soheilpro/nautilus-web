@@ -18,12 +18,10 @@ export class Issues extends React.Component<{}, IssuesState> {
   }
 
   componentDidMount() {
-    document.addEventListener("keydown", (event) => {
-      if (event.which === 78 && event.getModifierState('Control')) { // Ctrl+N
-        this.addIssue();
-        event.preventDefault();
-      }
-    }, false);
+    Mousetrap.bind('ctrl+n', (event: KeyboardEvent) => {
+      this.addIssue();
+      event.preventDefault();
+    });
   }
 
   onFiltersChanged() {
