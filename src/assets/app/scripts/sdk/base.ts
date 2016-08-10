@@ -110,7 +110,7 @@ export abstract class BaseService<TEntity extends IEntity, TFilter extends IFilt
       }
     };
 
-    console.log(settings);
+    log.debug('Nautilus SDK:', settings.method, settings.url, settings.data);
 
     $.ajax(settings)
       .done((data) => {

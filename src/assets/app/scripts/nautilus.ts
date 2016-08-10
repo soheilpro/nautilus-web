@@ -72,6 +72,11 @@ export class Nautilus extends EventEmitter implements INautilus {
     this.state = {};
   }
 
+  emitEvent(evt: string, args?: any[]) {
+    log.debug('Nautilus:', evt, args);
+    super.emitEvent(evt, args);
+  }
+
   login(username: string, password: string) {
     this.client.sessions.login(username, password, (error, session) => {
       if (error)
