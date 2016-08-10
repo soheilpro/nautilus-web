@@ -104,7 +104,7 @@ export abstract class BaseService<TEntity extends IEntity, TFilter extends IFilt
     var settings = {
       method: options.method,
       url: this.client.address + options.path,
-      data: options.params,
+      data: _.pick(options.params, (value: any) => value !== undefined),
       headers: {
         Authorization: this.client.session ? 'Basic ' + window.btoa(this.client.session.accessToken + ':-') : undefined
       }
