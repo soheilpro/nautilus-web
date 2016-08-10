@@ -22,6 +22,8 @@ interface IssueListState {
 }
 
 export class IssueList extends React.Component<IssueListProps, IssueListState> {
+  private columnCount = 10;
+
   constructor() {
     super();
 
@@ -47,108 +49,144 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (event.target !== event.currentTarget)
-      return;
-
-    switch (event.which) {
-      case 38: // Up
-        if (this.state.selectedRowIndex === 0)
-          return;
-
-        this.setState({
-          selectedRowIndex: this.state.selectedRowIndex - 1
-        });
-
-        event.preventDefault();
-        break;
-
-      case 40: // Down
-        if (this.state.selectedRowIndex === this.props.issues.length - 1)
-          return;
-
-        this.setState({
-          selectedRowIndex: this.state.selectedRowIndex + 1
-        });
-
-        event.preventDefault();
-        break;
-
-      case 37: // Left
-        if (!config.rtl) {
-          if (this.state.selectedColumnIndex === 0)
-            return;
-
-          this.setState({
-            selectedColumnIndex: this.state.selectedColumnIndex - 1
-          });
+    if (event.which === 9) { // Tab
+      if (event.shiftKey) {
+        if (this.state.selectedColumnIndex === 0) {
+          if (this.state.selectedRowIndex > 0)
+            this.moveToCell(this.state.selectedRowIndex - 1, this.columnCount - 1);
         }
         else {
-          if (this.state.selectedColumnIndex === 9)
-            return;
-
-          this.setState({
-            selectedColumnIndex: this.state.selectedColumnIndex + 1
-          });
+          this.moveToPreviousCell();
         }
-
-        event.preventDefault();
-        break;
-
-      case 39: // Right
-        if (!config.rtl) {
-          if (this.state.selectedColumnIndex === 9)
-            return;
-
-          this.setState({
-            selectedColumnIndex: this.state.selectedColumnIndex + 1
-          });
+      }
+      else {
+        if (this.state.selectedColumnIndex === this.columnCount - 1) {
+          if (this.state.selectedRowIndex < this.props.issues.length - 1)
+            this.moveToCell(this.state.selectedRowIndex + 1, 0);
         }
         else {
-          if (this.state.selectedColumnIndex === 0)
-            return;
-
-          this.setState({
-            selectedColumnIndex: this.state.selectedColumnIndex - 1
-          });
+          this.moveToNextCell();
         }
+      }
+    }
+    else if (event.which === 38) { // Up
+      if (event.target !== event.currentTarget)
+        return;
 
-        event.preventDefault();
-        break;
+      this.moveToAboveCell();
 
-      case 13: // Enter
-        (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
+      event.preventDefault();
+    }
+    else if (event.which === 40) { // Down
+      if (event.target !== event.currentTarget)
+        return;
 
-        event.preventDefault();
-        break;
+      this.moveToBelowCell();
 
-      case 8: // Delete
-        if (!window.confirm("Delete issue?"))
-          return;
+      event.preventDefault();
+    }
+    else if (event.which === 37) { // Left
+      if (event.target !== event.currentTarget)
+        return;
 
-        var issue = this.props.issues[this.state.selectedRowIndex];
-        Nautilus.Instance.deleteIssue(issue);
+      this.moveLeft();
 
-        event.preventDefault();
-        break;
+      event.preventDefault();
+    }
+    else if (event.which === 39) { // Right
+      if (event.target !== event.currentTarget)
+        return;
 
-      case 222: // '
-        if (this.state.selectedRowIndex === 0)
-          return;
+      this.moveRight();
 
-        var thisField = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
-        var aboveField = this.refs['field-' + (this.state.selectedRowIndex - 1) + '-' + this.state.selectedColumnIndex] as any;
-        thisField.setValue(aboveField.getValue());
+      event.preventDefault();
+    }
+    else if (event.which === 13) { // Enter
+      if (event.target !== event.currentTarget)
+        return;
 
-        event.preventDefault();
-        break;
+      (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
+
+      event.preventDefault();
+    }
+    else if (event.which === 8) { // Delete
+      if (event.target !== event.currentTarget)
+        return;
+
+      if (!window.confirm("Delete issue?"))
+        return;
+
+      var issue = this.props.issues[this.state.selectedRowIndex];
+      Nautilus.Instance.deleteIssue(issue);
+
+      event.preventDefault();
+    }
+    else if (event.which === 222) { // '
+      if (event.target !== event.currentTarget)
+        return;
+
+      if (this.state.selectedRowIndex === 0)
+        return;
+
+      var thisField = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
+      var aboveField = this.refs['field-' + (this.state.selectedRowIndex - 1) + '-' + this.state.selectedColumnIndex] as any;
+      thisField.setValue(aboveField.getValue());
+
+      event.preventDefault();
     }
   }
 
-  onSelected(rowIndex: number, columnIndex: number) {
+  moveToCell(rowIndex: number, columnIndex: number) {
     this.setState({
       selectedRowIndex: rowIndex,
       selectedColumnIndex: columnIndex
     });
+  }
+
+  moveToAboveCell() {
+    if (this.state.selectedRowIndex === 0)
+      return;
+
+    this.moveToCell(this.state.selectedRowIndex - 1, this.state.selectedColumnIndex);
+  }
+
+  moveToBelowCell() {
+    if (this.state.selectedRowIndex === this.props.issues.length - 1)
+      return;
+
+    this.moveToCell(this.state.selectedRowIndex + 1, this.state.selectedColumnIndex);
+  }
+
+  moveToNextCell() {
+    if (this.state.selectedColumnIndex === this.columnCount - 1)
+      return;
+
+    this.moveToCell(this.state.selectedRowIndex, this.state.selectedColumnIndex + 1);
+  }
+
+  moveToPreviousCell() {
+    if (this.state.selectedColumnIndex === 0)
+      return;
+
+    this.moveToCell(this.state.selectedRowIndex, this.state.selectedColumnIndex - 1);
+  }
+
+  moveLeft() {
+    if (!config.rtl)
+      this.moveToPreviousCell();
+    else
+      this.moveToNextCell();
+  }
+
+  moveRight() {
+    if (!config.rtl)
+      this.moveToNextCell();
+    else
+      this.moveToPreviousCell();
+  }
+
+  onSelected(rowIndex: number, columnIndex: number) {
+    this.moveToCell(rowIndex, columnIndex);
   }
 
   render() {
