@@ -77,6 +77,9 @@ export class Nautilus extends EventEmitter implements INautilus {
       if (error)
         return this.emitEvent('error', [error]);
 
+      if (!session)
+        return;
+
       this.emitEvent('login', [session]);
     });
   }
