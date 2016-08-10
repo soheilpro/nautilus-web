@@ -16,6 +16,6 @@ block append content
       api: {
         address: '#{ config["api-url"] }'
       },
-      rtl: '#{ config["rtl"] === true }'
+      rtl: #{ config["rtl"] === true }
     };
   script(src='/assets/app/scripts/main.bundle.js')
