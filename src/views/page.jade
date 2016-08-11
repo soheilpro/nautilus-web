@@ -3,7 +3,7 @@ extends layout
 block head
   link(rel='stylesheet', href='/assets/vendor/skeleton/normalize.css')
   link(rel='stylesheet', href='/assets/vendor/skeleton/skeleton.css')
-  if (config.rtl)
+  if (config["NAUTILUS_WEB_RTL"])
     link(rel='stylesheet', href='/assets/app/css/rtl.css')
   script(src='/assets/vendor/jquery/jquery-2.1.1.min.js')
   title Nautilus

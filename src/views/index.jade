@@ -18,8 +18,8 @@ block append content
 
     var config = {
       api: {
-        address: '#{ config["api-url"] }'
+        address: '#{ config["NAUTILUS_WEB_API_ADDRESS"] }'
       },
-      rtl: #{ config["rtl"] === true }
+      rtl: #{ config["NAUTILUS_WEB_RTL"] === true }
     };
   script(src='/assets/app/scripts/main.bundle.js')

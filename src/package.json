@@ -3,14 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build:ts": "$(npm bin)/tsc",
-    "build:webpack": "$(npm bin)/webpack --config assets/app/scripts/webpack.config.js",
-    "build": "npm run build:ts && npm run build:webpack",
-    "clean:ts": "rm -rf ./out",
-    "clean:webpack": "rm -f ./assets/app/scripts/main.bundle.js ./assets/app/scripts/main.bundle.js.map",
-    "clean": "npm run clean:ts && npm run clean:webpack",
-    "start": "node ./out/www.js",
-    "watch": "nodemon -i assets ./out/www.js"
+    "build:server": "$(npm bin)/tsc",
+    "build:client": "$(npm bin)/webpack",
+    "build": "npm run build:server && npm run build:client",
+    "clean:server": "rm -rf ./out",
+    "clean:client": "rm -f ./assets/app/scripts/main.bundle.js ./assets/app/scripts/main.bundle.js.map",
+    "clean": "npm run clean:server && npm run clean:client",
+    "start:server": "node ./out/www.js",
+    "start": "npm run start:server",
+    "watch:server": "nodemon -e ts -i ./assets/app -x 'npm run build:server && npm run start:server'",
+    "watch:client": "nodemon -e ts,tsx -w ./assets/app -x 'npm run build:client'"
   },
   "dependencies": {
     "async": "^1.4.2",
