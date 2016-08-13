@@ -5,22 +5,13 @@ export interface IComparer {
 }
 
 export class FilterSet {
-  private items: string[];
-  [key: string]: any; // Should be DualSet[]
+  [key: string]: DualSet;
 
   constructor(items: string[], comparer: IComparer) {
-    this.items = items;
-
     items.forEach((item) => {
-      (this as any)[item] = new DualSet(comparer);
+      this[item] = new DualSet(comparer);
     });
   }
-
-  clear() {
-    this.items.forEach((item) => {
-      (this as any)[item].clear();
-    });
-  };
 }
 
 export class DualSet {
@@ -55,6 +46,10 @@ export class Set {
   constructor(comparer: IComparer) {
     this.items = [];
     this.comparer = comparer;
+  }
+
+  length() {
+    return this.items.length;
   }
 
   clear() {

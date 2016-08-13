@@ -11,35 +11,68 @@ body {
   margin-bottom: 8px;
 }
 
-.sidebar {
-  padding-left: 30px;
+.filters {
+  border: 1px solid #e1e1e1;
+  margin-bottom: 30px;
 }
 
-.sidebar label {
+.filters .header {
+  padding: 5px 10px;
+}
+
+.filters .header .title {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.filters .body {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  border: 1px solid #e1e1e1;
+  padding: 10px 10px;
+  display: none;
+  background-color: #fff;
+}
+
+.filters:hover .body {
   display: block;
-  padding-bottom: 4px;
-  border-bottom: 1px solid #e1e1e1;
 }
 
-.sidebar .filter {
-  padding: 2px 4px;
-  margin-left: -38px;
+.filters .filter-box {
+  float: left;
+  margin-right: 20px;
 }
 
-.sidebar .filter:hover {
+.filters label {
+  display: block;
+  padding: 4px 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.filters .filter {
+  padding: 2px 6px;
+}
+
+.filters .filter:hover {
   background-color: #f6f6f6;
 }
 
-.sidebar .filter input {
-  margin: 0 5px 0 0;
+.filters .filter a {
+  margin-right: 10px;
+}
+
+.filters .filter input {
+  float: right;
+  margin: 4px 0px 0 5px;
   visibility: hidden;
 }
 
-.sidebar .filter:hover input {
+.filters .filter:hover input {
   visibility: visible;
 }
 
-.sidebar .filter input.visible {
+.filters .filter input.visible {
   visibility: visible;
 }
 
@@ -156,4 +189,8 @@ td.title .editable input {
 
 .ui-helper-hidden-accessible {
   display:none;
+}
+
+.clear {
+  clear: both;
 }
