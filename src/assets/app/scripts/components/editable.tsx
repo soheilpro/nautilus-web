@@ -120,7 +120,7 @@ export class Editable extends React.Component<EditableProps, {}> {
       inputElement = <textarea className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.endEditing.bind(this)} ref={(ref) => this.inputElement = ref} />
 
     return (
-      <div className='editable' onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
+      <div className={'editable ' + (this.props.isMultiline ? 'multiline' : '')} onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
         { spanElement }
         { inputElement }
       </div>

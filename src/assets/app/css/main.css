@@ -100,9 +100,7 @@ table.issues tr.selected td.selected {
 
 table.issues td.title {
   width: 100%;
-}
-
-table.issues tr:hover td {
+  white-space: normal;
 }
 
 table.issues td span {
@@ -135,7 +133,7 @@ div.issue-detail .header {
   color: #ccc;
 }
 
-.editable span {
+.editable.multiline span {
   white-space: pre-wrap;
 }
 
