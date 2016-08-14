@@ -76,6 +76,7 @@ export class Editable extends React.Component<EditableProps, {}> {
       $(this.inputElement)
         .autocomplete({
           source: _.map(this.props.values, this.props.valueToString),
+          position: { collision: "flip" },
           delay: 0,
           minLength: 0,
           focus(event, ui) {
