@@ -3,6 +3,10 @@ import { Nautilus } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class DescriptionIssueField extends IssueField {
+  isMultiline() {
+    return true;
+  }
+
   getPlaceholder(): string {
     return "Enter description";
   }

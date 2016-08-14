@@ -13,6 +13,10 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
     return true;
   }
 
+  isMultiline(): boolean {
+    return false;
+  }
+
   getPlaceholder(): string {
     return null;
   }
@@ -50,7 +54,7 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
 
   render() {
     return (
-      <Editable isEditable={this.isEditable()} placeholder={this.getPlaceholder()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanClassName={this.getEditableSpanClassName()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
+      <Editable isEditable={this.isEditable()} isMultiline={this.isMultiline()} placeholder={this.getPlaceholder()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanClassName={this.getEditableSpanClassName()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
     );
   }
 };

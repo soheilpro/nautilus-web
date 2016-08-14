@@ -135,9 +135,25 @@ div.issue-detail .header {
   color: #ccc;
 }
 
-.editable input {
+.editable span {
+  white-space: pre-wrap;
+}
+
+.editable .input {
   display: none;
   padding-left: 2px;
+}
+
+.editable textarea.input {
+  border: 1px solid #ccc;
+  border-radius: 0;
+  padding: 2px 4px;
+  margin: -3px -5px -1px -5px;
+
+  /* Requried for textarea-autosize */
+  box-sizing: border-box;
+  min-height: 25px;
+  overflow-x: hidden; /* for Firefox (issue #5) */
 }
 
 td.title .editable span.state-ready {
@@ -156,11 +172,11 @@ td.title .editable span.state-blocked {
   background-color: #ffcdd2;
 }
 
-td.title .editable input {
+td.title .editable .input {
   text-transform: none;
 }
 
-.editable input:focus {
+.editable .input:focus {
   outline: 0;
 }
 
@@ -168,7 +184,7 @@ td.title .editable input {
   display: none;
 }
 
-.editable.editing input {
+.editable.editing .input {
   display: table-cell;
   width: 100%;
 }
