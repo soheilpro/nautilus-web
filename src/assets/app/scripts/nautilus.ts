@@ -8,6 +8,7 @@ declare class EventEmitter {
 interface IExtendedItem extends IItem {
   getType(): IItemType;
   getTitle(): string;
+  getDescription(): string;
   getState(): IItemState;
   getPriority(): IItemPriority;
   getProject(): IProject;
@@ -296,6 +297,7 @@ class Item implements IExtendedItem {
   context: INautilus;
   type: IItemType;
   title: string;
+  description: string;
   state: IItemState;
   priority: IItemPriority;
   project: IProject;
@@ -313,6 +315,10 @@ class Item implements IExtendedItem {
 
   getTitle() {
     return this.title;
+  }
+
+  getDescription() {
+    return this.description;
   }
 
   getState() {

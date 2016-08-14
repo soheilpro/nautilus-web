@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Nautilus, IIssue } from '../nautilus';
 import { AssignedUserIssueField } from './issue-field-assigned-user';
-import { CreatorIssueField } from './issue-field-creator';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
 import { TypeIssueField } from './issue-field-type';
@@ -10,6 +9,7 @@ import { ProjectIssueField } from './issue-field-project';
 import { AreaIssueField } from './issue-field-area';
 import { TitleIssueField } from './issue-field-title';
 import { SidIssueField } from './issue-field-sid';
+import { IssueDetail } from './issue-detail';
 import config from '../config';
 
 interface IssueListProps {
@@ -22,7 +22,7 @@ interface IssueListState {
 }
 
 export class IssueList extends React.Component<IssueListProps, IssueListState> {
-  private columnCount = 10;
+  private columnCount = 9;
 
   constructor() {
     super();
@@ -147,6 +147,8 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
       (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
     });
+
+    ($(".issue-detail-container") as any).sticky();
   }
 
   moveToCell(rowIndex: number, columnIndex: number) {
@@ -204,62 +206,72 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
   render() {
     return (
-      <table className='issues'>
-        <thead>
-          <tr>
-            <th className="sid">Id</th>
-            <th className="milestone">Milestone</th>
-            <th className="project">Project</th>
-            <th className="area">Area</th>
-            <th className="title">Title</th>
-            <th className="type">Type</th>
-            <th className="priority">Priority</th>
-            <th className="state">State</th>
-            <th className="assignee">Assignee</th>
-            <th className="creator">Creator</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            this.props.issues.map((issue, index) => {
-              return (
-                <tr key={issue.id} className={this.state.selectedRowIndex === index ? 'selected' : ''}>
-                  <td className={'sid ' + (this.state.selectedColumnIndex === 0 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 0)} ref={'cell-' + index + '-0'}>
-                    <SidIssueField issue={issue} ref={'field-' + index + '-0'} />
-                  </td>
-                  <td className={'milestone ' + (this.state.selectedColumnIndex === 1 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 1)} ref={'cell-' + index + '-1'}>
-                    <MilestoneIssueField issue={issue} ref={'field-' + index + '-1'} />
-                  </td>
-                  <td className={'project ' + (this.state.selectedColumnIndex === 2 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 2)} ref={'cell-' + index + '-2'}>
-                    <ProjectIssueField issue={issue} ref={'field-' + index + '-2'} />
-                  </td>
-                  <td className={'area ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
-                    <AreaIssueField issue={issue} ref={'field-' + index + '-3'} />
-                  </td>
-                  <td className={'title ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
-                    <TitleIssueField issue={issue} ref={'field-' + index + '-4'} />
-                  </td>
-                  <td className={'type ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
-                    <TypeIssueField issue={issue} ref={'field-' + index + '-5'} />
-                  </td>
-                  <td className={'priority ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
-                    <PriorityIssueField issue={issue} ref={'field-' + index + '-6'} />
-                  </td>
-                  <td className={'state ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
-                    <StateIssueField issue={issue} ref={'field-' + index + '-7'} />
-                  </td>
-                  <td className={'assignee ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
-                    <AssignedUserIssueField issue={issue} ref={'field-' + index + '-8'} />
-                  </td>
-                  <td className={'creator ' + (this.state.selectedColumnIndex === 9 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 9)} ref={'cell-' + index + '-9'}>
-                    <CreatorIssueField issue={issue} ref={'field-' + index + '-9'} />
-                  </td>
+      <div className='issue-list'>
+        <div className='row'>
+          <div className='three columns' style={{minHeight: '1px'}}>
+            <div className='issue-detail-container'>
+              {
+                this.props.issues[this.state.selectedRowIndex] ?
+                  <IssueDetail issue={this.props.issues[this.state.selectedRowIndex]} /> : null
+              }
+            </div>
+          </div>
+          <div className='nine columns'>
+            <table className='issues'>
+              <thead>
+                <tr>
+                  <th className="sid">Id</th>
+                  <th className="milestone">Milestone</th>
+                  <th className="project">Project</th>
+                  <th className="area">Area</th>
+                  <th className="title">Title</th>
+                  <th className="type">Type</th>
+                  <th className="priority">Priority</th>
+                  <th className="state">State</th>
+                  <th className="assignee">Assignee</th>
                 </tr>
-              );
-            }, this)
-          }
-        </tbody>
-      </table>
+              </thead>
+              <tbody>
+                {
+                  this.props.issues.map((issue, index) => {
+                    return (
+                      <tr key={issue.id} className={this.state.selectedRowIndex === index ? 'selected' : ''}>
+                        <td className={'sid ' + (this.state.selectedColumnIndex === 0 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 0)} ref={'cell-' + index + '-0'}>
+                          <SidIssueField issue={issue} ref={'field-' + index + '-0'} />
+                        </td>
+                        <td className={'milestone ' + (this.state.selectedColumnIndex === 1 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 1)} ref={'cell-' + index + '-1'}>
+                          <MilestoneIssueField issue={issue} ref={'field-' + index + '-1'} />
+                        </td>
+                        <td className={'project ' + (this.state.selectedColumnIndex === 2 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 2)} ref={'cell-' + index + '-2'}>
+                          <ProjectIssueField issue={issue} ref={'field-' + index + '-2'} />
+                        </td>
+                        <td className={'area ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
+                          <AreaIssueField issue={issue} ref={'field-' + index + '-3'} />
+                        </td>
+                        <td className={'title ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
+                          <TitleIssueField issue={issue} ref={'field-' + index + '-4'} />
+                        </td>
+                        <td className={'type ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
+                          <TypeIssueField issue={issue} ref={'field-' + index + '-5'} />
+                        </td>
+                        <td className={'priority ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
+                          <PriorityIssueField issue={issue} ref={'field-' + index + '-6'} />
+                        </td>
+                        <td className={'state ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
+                          <StateIssueField issue={issue} ref={'field-' + index + '-7'} />
+                        </td>
+                        <td className={'assignee ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
+                          <AssignedUserIssueField issue={issue} ref={'field-' + index + '-8'} />
+                        </td>
+                      </tr>
+                    );
+                  }, this)
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     );
   }
 };

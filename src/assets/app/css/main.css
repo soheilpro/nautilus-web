@@ -114,6 +114,13 @@ table.issues td input {
   margin: 0 1px 0 0;
 }
 
+div.issue-detail .header {
+  font-weight: bold;
+  border-bottom: 1px solid #e1e1e1;
+  margin-bottom: 10px;
+  padding: 4px 0;
+}
+
 .editable {
   cursor: default;
   -webkit-touch-callout: none;
@@ -122,6 +129,10 @@ table.issues td input {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.editable .placeholder {
+  color: #ccc;
 }
 
 .editable input {
