@@ -20,43 +20,13 @@ export class Editable extends React.Component<EditableProps, {}> {
   private containerElement: Element;
   private spanElement: Element;
   private inputElement: Element;
-  private focused: boolean;
-
-  onKeyDown(event: KeyboardEvent) {
-    if (event.which !== 27)
-      return;
-
-    this.endEditing();
-  }
-
-  onKeyPress(event: KeyboardEvent) {
-    if (!this.props.isMultiline) {
-      if (event.which !== 13)
-        return;
-    }
-    else {
-      if (event.which !== 13 || !event.ctrlKey)
-        return;
-    }
-
-    //- if (this.focused)
-    //-   return;
-
-    var value = $(this.inputElement).val();
-
-    if (this.props.values)
-      value = this.props.valueFromString(value, this.props.values);
-
-    this.onValueChanged(value);
-    this.endEditing();
-  }
+  isEditing: boolean;
 
   startEditing() {
     if (!this.props.isEditable)
       return;
 
-    this.focused = false;
-
+    this.isEditing = true;
     $(this.containerElement).addClass('editing');
 
     if (!this.props.isMultiline)
@@ -83,9 +53,8 @@ export class Editable extends React.Component<EditableProps, {}> {
             this.focused = true;
           },
           select: (event, ui) => {
-            var value = this.props.valueFromString(ui.item.value, this.props.values);
-            this.onValueChanged(value);
-            this.endEditing();
+            $(this.inputElement).val(ui.item.value);
+            this.save();
           }
         })
         .autocomplete('search', '');
@@ -93,15 +62,42 @@ export class Editable extends React.Component<EditableProps, {}> {
   }
 
   endEditing() {
+    this.isEditing = false;
+
     $(this.containerElement).parent().focus();
     $(this.containerElement).removeClass('editing');
   }
 
-  onValueChanged(value: any) {
-    if (this.props.valueComparer(value, this.props.value))
-      return;
+  save() {
+    var value = $(this.inputElement).val();
 
-    this.props.onValueChanged(value);
+    if (this.props.values)
+      value = this.props.valueFromString(value, this.props.values);
+
+    if (!this.props.valueComparer(value, this.props.value))
+      this.props.onValueChanged(value);
+
+    this.endEditing();
+  }
+
+  onKeyDown(event: KeyboardEvent) {
+    if (event.which === 27)
+      this.endEditing();
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.which === 13) {
+      if (!this.props.isMultiline)
+        this.save();
+      else
+        if (event.ctrlKey)
+          this.save();
+    }
+  }
+
+  onBlur() {
+    if (this.isEditing)
+      this.save();
   }
 
   render() {
@@ -115,9 +111,9 @@ export class Editable extends React.Component<EditableProps, {}> {
       spanElement = <span className='placeholder' style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.placeholder}</span>
 
     if (!this.props.isMultiline)
-      inputElement = <input className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.endEditing.bind(this)} ref={(ref) => this.inputElement = ref} />
+      inputElement = <input className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.onBlur.bind(this)} ref={(ref) => this.inputElement = ref} />
     else
-      inputElement = <textarea className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.endEditing.bind(this)} ref={(ref) => this.inputElement = ref} />
+      inputElement = <textarea className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.onBlur.bind(this)} ref={(ref) => this.inputElement = ref} />
 
     return (
       <div className={'editable ' + (this.props.isMultiline ? 'multiline' : '')} onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
