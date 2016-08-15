@@ -170,6 +170,11 @@ td.title .editable span.state-blocked {
   background-color: #ffcdd2;
 }
 
+td.title .editable span.state-closed {
+  color: #aaa;
+  text-decoration: line-through;
+}
+
 td.title .editable .input {
   text-transform: none;
 }
