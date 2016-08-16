@@ -18,6 +18,7 @@ body {
 
 .filters .header {
   padding: 5px 10px;
+  cursor: pointer;
 }
 
 .filters .header .title {
@@ -26,17 +27,14 @@ body {
 }
 
 .filters .body {
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  border: 1px solid #e1e1e1;
+  border-top: 1px solid #e1e1e1;
   padding: 10px 10px;
-  display: none;
   background-color: #fff;
+  display: none;
 }
 
-.filters:hover .body {
-  display: block;
+.filters .body a.clear {
+  float: right;
 }
 
 .filters .filter-box {

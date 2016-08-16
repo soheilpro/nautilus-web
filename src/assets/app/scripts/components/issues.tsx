@@ -22,6 +22,10 @@ export class Issues extends React.Component<{}, IssuesState> {
       this.addIssue();
       event.preventDefault();
     });
+
+    Mousetrap.bind('ctrl+f', (event: KeyboardEvent) => {
+      this.toggleFilters();
+    });
   }
 
   onFiltersChanged() {
@@ -36,6 +40,12 @@ export class Issues extends React.Component<{}, IssuesState> {
     return _.filter(this.state.filters, filter =>
       filter.include.length() > 0 || filter.exclude.length() > 0
     );
+  }
+
+  toggleFilters() {
+    $('.filters .body').slideToggle({
+      duration: 300
+    });
   }
 
   clearFilters() {
@@ -58,11 +68,11 @@ export class Issues extends React.Component<{}, IssuesState> {
         </div>
         <div className='row'>
           <div className='columns filters'>
-            <div className='header'>
+            <div className='header' onClick={this.toggleFilters.bind(this)} title='Ctrl+F'>
               <span className='title'>Filters</span>
-              <a href='#' style={{display: this.getEnabledFilters().length === 0 ? 'none' : 'inline'}} onClick={this.clearFilters.bind(this)}>Clear</a>
             </div>
             <div className='body'>
+              <a href='#' style={{display: this.getEnabledFilters().length === 0 ? 'none' : 'inline'}} className='clear' onClick={this.clearFilters.bind(this)}>Clear</a>
               <FilterBox name='Milestone' items={Nautilus.Instance.getMilestones()} displayAttribute='title' filter={this.state.filters['milestones']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
               <FilterBox name='Project' items={Nautilus.Instance.getProjects()} displayAttribute='name' filter={this.state.filters['projects']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
               <FilterBox name='Area' items={Nautilus.Instance.getItemAreas()} displayAttribute='title' filter={this.state.filters['areas']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
