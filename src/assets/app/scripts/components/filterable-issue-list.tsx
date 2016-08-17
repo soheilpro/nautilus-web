@@ -28,6 +28,9 @@ export class FilterableIssueList extends React.Component<FilterableIssueListProp
         return issues;
 
       return _.filter(issues, (issue) => {
+        if (issue.isNew || issue.isUpdated)
+          return true;
+
         var value = (issue as any)[valueGetter]();
 
         return _.some(filterItems, (filterItem) => {

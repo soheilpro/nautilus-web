@@ -16,6 +16,8 @@ interface IExtendedItem extends IItem {
   getMilestone(): IMilestone;
   getAssignedUser(): IUser;
   getCreator(): IUser;
+  isNew: boolean;
+  isUpdated: boolean;
 }
 
 export interface IMilestone extends IExtendedItem {
@@ -194,6 +196,7 @@ export class Nautilus extends EventEmitter implements INautilus {
         return this.emitEvent('error', [error]);
 
       var issue = this.toIssue(item);
+      issue.isNew = true;
 
       this.state.issues.push(issue);
       this.emitEvent('issueAdded', [issue]);
@@ -206,6 +209,7 @@ export class Nautilus extends EventEmitter implements INautilus {
         return this.emitEvent('error', [error]);
 
       var issue = this.toIssue(item);
+      issue.isUpdated = true;
 
       this.state.issues[_.findIndex(this.state.issues, entityComparer.bind(this, issue))] = issue;
       this.emitEvent('issueChanged', [issue]);
@@ -305,6 +309,8 @@ class Item implements IExtendedItem {
   subItems: IItem[];
   assignedUsers: IUser[];
   creator: IUser;
+  isNew: boolean;
+  isUpdated: boolean;
 
   getType() {
     if (!this.type)

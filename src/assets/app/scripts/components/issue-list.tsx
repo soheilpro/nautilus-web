@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Nautilus, IIssue } from '../nautilus';
+import { Nautilus, IIssue, entityComparer } from '../nautilus';
 import { AssignedUserIssueField } from './issue-field-assigned-user';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
@@ -42,12 +42,18 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
   componentDidMount() {
     Nautilus.Instance.on('issueAdded', (issue) => {
+      var issueIndex = _.findIndex(this.getIssues(), entityComparer.bind(this, issue));
+
+      if (issueIndex === -1)
+        return;
+
       this.setState({
-        selectedRowIndex: _.findIndex(this.getIssues(), (i => i.id === issue.id)),
+        selectedRowIndex: issueIndex,
         selectedColumnIndex: 2
       });
 
       var cell = this.refs['cell-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
+
       cell.focus();
 
       var field = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
