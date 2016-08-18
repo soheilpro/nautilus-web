@@ -13,7 +13,12 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
-app.use('/', require('./routes/index'));
+app.use('/assets', () => {
+  var error: any = new Error('Not Found');
+  error.status = 404;
+  throw error;
+});
+app.use('*', require('./routes/index'));
 
 app.use(function(request: any, response: any, next: any) {
   var error: any = new Error('Not Found');

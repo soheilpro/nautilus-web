@@ -3,6 +3,10 @@ import { Nautilus, ISession } from '../nautilus';
 import { Login } from './login';
 import { Issues } from './issues';
 
+var Route = ReactRouter.Route;
+var Router = ReactRouter.Router;
+var browserHistory = ReactRouter.browserHistory;
+
 interface AppState {
   error?: any;
 }
@@ -76,7 +80,9 @@ export class App extends React.Component<{}, AppState> {
       );
 
     return (
-      <Issues />
+      <ReactRouter.Router history={browserHistory}>
+          <Route path="/" component={Issues}/>
+      </ReactRouter.Router>
     );
   }
 };
