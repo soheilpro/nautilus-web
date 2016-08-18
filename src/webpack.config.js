@@ -1,3 +1,5 @@
+var failPlugin = require('webpack-fail-plugin');
+
 module.exports = {
   entry: "./assets/app/scripts/main.tsx",
   output: {
@@ -15,6 +17,9 @@ module.exports = {
       { test: /\.js$/, loader: "source-map-loader" }
     ]
   },
+  plugins: [
+      failPlugin
+  ],
   externals: {
     "react": "React",
     "react-dom": "ReactDOM"
