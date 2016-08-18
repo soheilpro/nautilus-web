@@ -23,6 +23,8 @@ export interface IMilestone extends IExtendedItem {
 
 export interface IIssue extends IExtendedItem {
   getMilestone(): IMilestone;
+  getParent(): IIssue;
+  getParents(): IIssue[];
 }
 
 interface INautilusState {
@@ -76,6 +78,7 @@ export interface INautilus extends EventEmitter {
   deleteMilestone(milestone: IMilestone): void;
   getIssues(): IIssue[];
   addIssue(issue: IIssue): void;
+  addSubIssue(issue: IIssue, parentIssue: IIssue): void;
   updateIssue(issue: IIssue, change: IItemChange): void;
   deleteIssue(issue: IIssue): void;
   updateIssueMilestone(issue: IIssue, newMilestone: IMilestone): void;
@@ -346,6 +349,33 @@ export class Nautilus extends EventEmitter implements INautilus {
     });
   }
 
+  addSubIssue(issue: IIssue, parentIssue: IIssue) {
+    issue.project = parentIssue.project;
+
+    this.client.items.insert(issue, (error, item) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      var issue = this.toIssue(item);
+
+      this.state.issues.push(issue);
+
+      var change: IItemChange = {
+        subItems_add: [issue]
+      };
+
+      this.client.items.update(parentIssue.id, change, (error, item) => {
+        if (error)
+          return this.emitEvent('error', [error]);
+
+        var parentIssue = this.toIssue(item);
+
+        this.state.issues[_.findIndex(this.state.issues, entityComparer.bind(this, parentIssue))] = parentIssue;
+        this.emitEvent('subIssueAdded', [issue, parentIssue]);
+      });
+    });
+  }
+
   updateIssue(issue: IIssue, change: IItemChange) {
     this.client.items.update(issue.id, change, (error, item) => {
       if (error)
@@ -433,6 +463,7 @@ export class Nautilus extends EventEmitter implements INautilus {
     var issue = item as any;
     issue.context = this;
     issue.__proto__ = Issue.prototype;
+    issue.getParent = _.memoize(issue.getParent.bind(issue));
 
     return issue;
   };
@@ -525,6 +556,23 @@ class Milestone extends Item {
 }
 
 class Issue extends Item {
+  getParent(): IIssue {
+    return _.find(this.context.getIssues(), (issue: IIssue) => {
+      return _.any(issue.subItems, entityComparer.bind(this, this));
+    });
+  }
+
+  getParents() {
+    var parents: IIssue[] = [];
+    var parent = this.getParent();
+
+    while (parent) {
+      parents.push(parent);
+      parent = parent.getParent();
+    }
+
+    return parents;
+  }
 }
 
 export function entityComparer(entity1: IEntity, entity2: IEntity) {

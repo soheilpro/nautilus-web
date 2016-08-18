@@ -29,6 +29,10 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
     return null;
   }
 
+  getStyle(): Object {
+    return null;
+  }
+
   valueToString(value: any, full: boolean): string {
     return value;
   }
@@ -50,7 +54,7 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
 
   render() {
     return (
-      <Editable isEditable={this.isEditable()} isMultiline={this.isMultiline()} placeholder={this.getPlaceholder()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
+      <Editable isEditable={this.isEditable()} isMultiline={this.isMultiline()} placeholder={this.getPlaceholder()} value={this.getValue()} values={this.getValues()} style={this.getStyle()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
     );
   }
 };

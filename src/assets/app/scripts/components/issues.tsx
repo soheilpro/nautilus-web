@@ -39,6 +39,15 @@ export class Issues extends React.Component<{}, IIssuesState> {
       })
     });
 
+    Nautilus.Instance.on('subIssueAdded', (issue) => {
+      this.newAndUpdatedIssues.push(issue);
+      var issues = this.getFilteredIssues();
+      this.setState({
+        issues: issues,
+        selectedIssueIndex: issues.indexOf(issue)
+      })
+    });
+
     Nautilus.Instance.on('issueChanged', (issue) => {
       this.newAndUpdatedIssues.push(issue);
       this.setState({
@@ -64,6 +73,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
     });
 
     document.addEventListener('keydown', (event: KeyboardEvent) => {
+      KeyMaster.handle(event, { which: Key.S }, isNotInInput.bind(this), this.addSubIssue.bind(this));
+    });
+
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
       KeyMaster.handle(event, { which: Key.R }, isNotInInput.bind(this), this.refresh.bind(this));
     });
 
@@ -72,6 +85,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
 
   addIssue() {
     Nautilus.Instance.addIssue({} as IIssue);
+  }
+
+  addSubIssue() {
+    Nautilus.Instance.addSubIssue({} as IIssue, this.state.issues[this.state.selectedIssueIndex]);
   }
 
   refresh() {
@@ -87,7 +104,34 @@ export class Issues extends React.Component<{}, IIssuesState> {
       issues = issues.filter(issue => this.newAndUpdatedIssues.some(entityComparer.bind(this, issue)) || Query.evaluate(filterQuery, issue));
 
     issues = issues.slice();
-    issues.reverse();
+    issues.sort((x: IIssue, y: IIssue) => {
+      var xNodes = x.getParents();
+      xNodes.reverse();
+      xNodes.push(x);
+
+      var yNodes = y.getParents();
+      yNodes.reverse();
+      yNodes.push(y);
+
+      for (var i = 0; ; i++) {
+        var xNode = xNodes[i];
+        var yNode = yNodes[i];
+
+        if (!xNode && !yNode)
+          return 0;
+
+        if (!xNode)
+          return -1;
+
+        if (!yNode)
+          return 1;
+
+        var result = xNode.sid.localeCompare(yNode.sid) * -1;
+
+        if (result !== 0)
+          return result;
+      }
+    });
 
     return issues;
   }
@@ -148,6 +192,7 @@ export class Issues extends React.Component<{}, IIssuesState> {
         <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}>Add Issue</button>
+            <button title='Shortcut: S' className="button" onClick={this.addSubIssue.bind(this)}>Add Sub Issue</button>
             <button title='Shortcut: R' className="button" onClick={this.refresh.bind(this)}><i className='fa fa-refresh' aria-hidden='true'></i></button>
           </div>
         </div>

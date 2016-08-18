@@ -7,6 +7,7 @@ interface EditableProps {
   placeholder: string;
   value: any;
   values?: any[];
+  style?: Object;
   spanStyle?: Object;
   inputStyle?: Object;
   valueFromString?(value: string, values: any[]): any;
@@ -19,12 +20,14 @@ export class Editable extends React.Component<EditableProps, {}> {
   private containerElement: Element;
   private spanElement: Element;
   private inputElement: Element;
+  private focusElement: Element;
   isEditing: boolean;
 
   startEditing() {
     if (!this.props.isEditable)
       return;
 
+    this.focusElement = document.activeElement;
     this.isEditing = true;
     $(this.containerElement).addClass('editing');
 
@@ -76,7 +79,7 @@ export class Editable extends React.Component<EditableProps, {}> {
   endEditing() {
     this.isEditing = false;
 
-    $(this.containerElement).parent().focus();
+    $(this.focusElement).focus();
     $(this.containerElement).removeClass('editing');
   }
 
@@ -116,9 +119,9 @@ export class Editable extends React.Component<EditableProps, {}> {
     });
 
     if (value)
-      spanElement = <span style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(value, false)}</span>
+      spanElement = <span className='span' style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(value, false)}</span>
     else
-      spanElement = <span className='placeholder' style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.placeholder}</span>
+      spanElement = <span className='span placeholder' style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.placeholder}</span>
 
     if (!this.props.isMultiline)
       inputElement = <input className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.onBlur.bind(this)} ref={(ref) => this.inputElement = ref} />
@@ -126,7 +129,7 @@ export class Editable extends React.Component<EditableProps, {}> {
       inputElement = <textarea className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.onBlur.bind(this)} ref={(ref) => this.inputElement = ref} />
 
     return (
-      <div className={className} onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
+      <div style={this.props.style} className={className} onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
         { spanElement }
         { inputElement }
       </div>
