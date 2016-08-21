@@ -19,7 +19,17 @@ interface IFilterGroup {
   queryItem: string;
 }
 
+interface IFilterState {
+  type: string;
+  groups: {
+    key: string;
+    include: string[];
+    exclude: string[];
+  }[]
+}
+
 interface FilterBoxProps {
+  filterState: IFilterState;
   onChanged(): void;
 }
 
@@ -164,10 +174,26 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     });
   }
 
-  private componentDidMount() {
+  private componentWillMount() {
     Mousetrap.bind('ctrl+f', (event: KeyboardEvent) => {
       this.toggleFilters();
     });
+
+    if (this.props.filterState) {
+      this.state.groups.forEach(group => {
+        group.items.forEach(item => {
+          var groupState = this.props.filterState.groups.filter(x => x.key === group.key)[0];
+
+          if (!groupState)
+            return;
+
+          item.isIncluded = groupState.include.some(x => x === item.key);
+          item.isExcluded = groupState.exclude.some(x => x === item.key);
+        });
+      });
+
+      this.props.onChanged();
+    }
   }
 
   private areAnyItemsSelected() {
@@ -228,6 +254,19 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     $('.filter-box .body').slideToggle({
       duration: 300
     });
+  }
+
+  getFilterState(): IFilterState {
+    return {
+      type: 'simple',
+      groups: this.state.groups.map(group => {
+        return {
+          key: group.key,
+          include: group.items.filter(item => item.isIncluded).map(item => item.key),
+          exclude: group.items.filter(item => item.isExcluded).map(item => item.key)
+        };
+      })
+    };
   }
 
   getQuery(): NQL.IExpression {
