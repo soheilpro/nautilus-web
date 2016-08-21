@@ -1,61 +1,48 @@
 import * as React from 'react';
-import { Nautilus, IIssue, entityComparer } from '../nautilus';
-import { FilterSet } from '../filter';
+import { Nautilus, IIssue } from '../nautilus';
 import { FilterBox } from './filter-box';
-import { FilterableIssueList } from './filterable-issue-list';
+import { IssueList } from './issue-list';
+import * as NQL from '../nql/nql'
+import { Query } from '../query'
 
-interface IssuesState {
-  filters?: FilterSet;
-}
-
-export class Issues extends React.Component<{}, IssuesState> {
-  constructor() {
-    super();
-
-    this.state = {
-      filters: new FilterSet(['milestones', 'states', 'types', 'areas', 'priorities', 'assignedUsers', 'creators', 'projects'], entityComparer)
-    };
-  }
+export class Issues extends React.Component<{}, {}> {
+  private filterBox: FilterBox;
 
   componentDidMount() {
+    Nautilus.Instance.on('issueAdded', () => {
+      this.forceUpdate();
+    });
+
+    Nautilus.Instance.on('issueChanged', () => {
+      this.forceUpdate();
+    });
+
+    Nautilus.Instance.on('issueDeleted', () => {
+      this.forceUpdate();
+    });
+
     Mousetrap.bind('ctrl+n', (event: KeyboardEvent) => {
       this.addIssue();
       event.preventDefault();
     });
-
-    Mousetrap.bind('ctrl+f', (event: KeyboardEvent) => {
-      this.toggleFilters();
-    });
-  }
-
-  onFiltersChanged() {
-    this.forceUpdate();
   }
 
   addIssue() {
     Nautilus.Instance.addIssue({} as IIssue);
   }
 
-  getEnabledFilters() {
-    return _.filter(this.state.filters, filter =>
-      filter.include.length() > 0 || filter.exclude.length() > 0
-    );
+  getIssues() {
+    var issues = Nautilus.Instance.getIssues();
+    var query = this.filterBox ? this.filterBox.getQuery() : null;
+
+    if (!query)
+      return issues;
+
+    return issues.filter(issue => Query.evaluate(query, issue));
   }
 
-  toggleFilters() {
-    $('.filters .body').slideToggle({
-      duration: 300
-    });
-  }
-
-  clearFilters() {
-    _.each(this.state.filters, filter => {
-      filter.clear();
-    });
-
+  onFiltersChanged(): void {
     this.forceUpdate();
-
-    return false;
   }
 
   render() {
@@ -67,27 +54,11 @@ export class Issues extends React.Component<{}, IssuesState> {
           </div>
         </div>
         <div className='row'>
-          <div className='columns filters'>
-            <div className='header' onClick={this.toggleFilters.bind(this)} title='Ctrl+F'>
-              <span className='title'>Filters</span>
-            </div>
-            <div className='body'>
-              <a href='#' style={{display: this.getEnabledFilters().length === 0 ? 'none' : 'inline'}} className='clear' onClick={this.clearFilters.bind(this)}>Clear</a>
-              <FilterBox name='Milestone' items={Nautilus.Instance.getMilestones()} displayAttribute='title' filter={this.state.filters['milestones']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='Project' items={Nautilus.Instance.getProjects()} displayAttribute='name' filter={this.state.filters['projects']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='Area' items={Nautilus.Instance.getItemAreas()} displayAttribute='title' filter={this.state.filters['areas']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='Type' items={Nautilus.Instance.getIssueTypes()} displayAttribute='title' filter={this.state.filters['types']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='Priority' items={Nautilus.Instance.getItemPriorities()} displayAttribute='title' filter={this.state.filters['priorities']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='State' items={Nautilus.Instance.getItemStates()} displayAttribute='title' filter={this.state.filters['states']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='Assignee' items={Nautilus.Instance.getUsers()} displayAttribute='name' filter={this.state.filters['assignedUsers']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <FilterBox name='Creator' items={Nautilus.Instance.getUsers()} displayAttribute='name' filter={this.state.filters['creators']} filters={this.state.filters} onChanged={this.onFiltersChanged.bind(this)} />
-              <div className='clear'></div>
-            </div>
-          </div>
+          <FilterBox onChanged={this.onFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
         </div>
         <div className='row'>
           <div className='columns'>
-            <FilterableIssueList filters={this.state.filters} />
+            <IssueList issues={this.getIssues()} />
           </div>
         </div>
       </div>

@@ -1,50 +1,321 @@
-import * as React from 'react';
-import { FilterSet, DualSet } from '../filter';
+import * as React from 'react'
+import { Nautilus, entityComparer, asEntity } from '../nautilus'
+import * as NQL from '../nql/nql'
+import { HTMLExpressionFormatter } from '../expressions/htmlexpressionformatter'
 
-interface FilterBoxProps {
-  filters: FilterSet;
-  filter: DualSet;
-  name: string;
-  items: any[];
-  displayAttribute: string;
-  onChanged(): () => void;
+interface IFilterItem {
+  key: string;
+  title: string;
+  isIncluded: boolean;
+  isExcluded: boolean;
+  queryItem: Object;
+  queryReturnType: string;
 }
 
-export class FilterBox extends React.Component<FilterBoxProps, {}> {
-  onItemSelected(item: any) {
-    _.each(this.props.filters, filter => {
-      filter.clear();
+interface IFilterGroup {
+  key: string;
+  title: string;
+  items: IFilterItem[];
+  queryItem: string;
+}
+
+interface FilterBoxProps {
+  onChanged(): void;
+}
+
+interface FilterBoxState {
+  groups: IFilterGroup[];
+}
+
+export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
+  constructor() {
+    super();
+
+    this.state = {
+      groups: []
+    };
+
+    this.state.groups.push({
+      key: 'milestone',
+      title: 'Milestone',
+      items: Nautilus.Instance.getMilestones().map(milestone => {
+        return {
+          key: milestone.id,
+          title: milestone.title,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(milestone),
+          queryReturnType: 'Milestone'
+        };
+      }),
+      queryItem: 'milestone'
     });
 
-    this.props.filter.include.set(item);
+    this.state.groups.push({
+      key: 'project',
+      title: 'Project',
+      items: Nautilus.Instance.getProjects().map(project => {
+        return {
+          key: project.id,
+          title: project.name,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(project),
+          queryReturnType: 'Project'
+        };
+      }),
+      queryItem: 'project'
+    });
+
+    this.state.groups.push({
+      key: 'area',
+      title: 'Area',
+      items: Nautilus.Instance.getItemAreas().map(itemArea => {
+        return {
+          key: itemArea.id,
+          title: itemArea.title,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(itemArea),
+          queryReturnType: 'ItemArea'
+        };
+      }),
+      queryItem: 'area'
+    });
+
+    this.state.groups.push({
+      key: 'type',
+      title: 'Type',
+      items: Nautilus.Instance.getIssueTypes().map(itemType => {
+        return {
+          key: itemType.id,
+          title: itemType.title,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(itemType),
+          queryReturnType: 'ItemType'
+        };
+      }),
+      queryItem: 'type'
+    });
+
+    this.state.groups.push({
+      key: 'priority',
+      title: 'Priority',
+      items: Nautilus.Instance.getItemPriorities().map(itemPriority => {
+        return {
+          key: itemPriority.id,
+          title: itemPriority.title,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(itemPriority),
+          queryReturnType: 'ItemPriority'
+        };
+      }),
+      queryItem: 'priority'
+    });
+
+    this.state.groups.push({
+      key: 'state',
+      title: 'State',
+      items: Nautilus.Instance.getItemStates().map(itemState => {
+        return {
+          key: itemState.id,
+          title: itemState.title,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(itemState),
+          queryReturnType: 'ItemState'
+        };
+      }),
+      queryItem: 'state'
+    });
+
+    this.state.groups.push({
+      key: 'assignee',
+      title: 'Assignee',
+      items: Nautilus.Instance.getUsers().map(user => {
+        return {
+          key: user.id,
+          title: user.name,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(user),
+          queryReturnType: 'User'
+        };
+      }),
+      queryItem: 'assignee'
+    });
+
+    this.state.groups.push({
+      key: 'creator',
+      title: 'Creator',
+      items: Nautilus.Instance.getUsers().map(user => {
+        return {
+          key: user.id,
+          title: user.name,
+          isIncluded: false,
+          isExcluded: false,
+          queryItem: asEntity(user),
+          queryReturnType: 'User'
+        };
+      }),
+      queryItem: 'creator'
+    });
+  }
+
+  private componentDidMount() {
+    Mousetrap.bind('ctrl+f', (event: KeyboardEvent) => {
+      this.toggleFilters();
+    });
+  }
+
+  private areAnyItemsSelected() {
+    return this.state.groups.some(group => {
+      return group.items.some(item => {
+        return item.isIncluded || item.isExcluded;
+      });
+    });
+  }
+
+  private clearFilters() {
+    this.state.groups.forEach(group => {
+      group.items.forEach(item => {
+        item.isIncluded = false;
+        item.isExcluded = false;
+      });
+    });
+
+    this.forceUpdate();
     this.props.onChanged();
   }
 
-  onItemIncluded(item: any, event: Event) {
-    this.props.filter.include.toggle(item, (event.target as HTMLInputElement).checked);
+  private onItemSelected(item: IFilterItem, group: IFilterGroup) {
+    this.state.groups.forEach(group2 => {
+      group2.items.forEach(item2 => {
+        item2.isIncluded = (group2.key === group.key && item2.key === item.key);
+        item2.isExcluded = false;
+      });
+    });
+
+    this.forceUpdate();
     this.props.onChanged();
   }
 
-  onItemExcluded(item: any, event: Event) {
-    this.props.filter.exclude.toggle(item, (event.target as HTMLInputElement).checked);
+  private onItemIncluded(item: IFilterItem, group: IFilterGroup) {
+    item.isIncluded = !item.isIncluded;
+
+    group.items.forEach(i => {
+      i.isExcluded = false;
+    });
+
+    this.forceUpdate();
     this.props.onChanged();
+  }
+
+  private onItemExcluded(item: IFilterItem, group: IFilterGroup) {
+    group.items.forEach(i => {
+      i.isIncluded = false;
+    });
+
+    item.isExcluded = !item.isExcluded;
+
+    this.forceUpdate();
+    this.props.onChanged();
+  }
+
+  private toggleFilters() {
+    $('.filter-box .body').slideToggle({
+      duration: 300
+    });
+  }
+
+  getQuery(): NQL.IExpression {
+    var expressions: NQL.IExpression[] = [];
+
+    this.state.groups.forEach(group => {
+      var includedItems = group.items.filter(item => item.isIncluded);
+      var excludedItems = group.items.filter(item => item.isExcluded);
+
+      if (includedItems.length === 0) {
+        // noop
+      }
+      else if (includedItems.length === 1) {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ConstantExpression(includedItems[0].queryItem, includedItems[0].queryReturnType),
+          '=='));
+      }
+      else {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ListExpression(includedItems.map(item => new NQL.ConstantExpression(item.queryItem, item.queryReturnType))),
+          'IN'));
+      }
+
+      if (excludedItems.length === 0) {
+        // noop
+      }
+      else if (excludedItems.length === 1) {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ConstantExpression(excludedItems[0].queryItem, excludedItems[0].queryReturnType),
+          '!='));
+      }
+      else {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ListExpression(excludedItems.map(item => new NQL.ConstantExpression(item.queryItem, item.queryReturnType))),
+          'NOT IN'));
+      }
+    });
+
+    if (expressions.length === 0)
+      return null;
+
+    return new NQL.AndExpression(expressions);
+  }
+
+  renderQuery(query: NQL.IExpression) {
+    if (!query)
+      return <span>All</span>;
+
+    return (
+      <span dangerouslySetInnerHTML={{ __html: new HTMLExpressionFormatter().format(query, null) }} />
+    );
   }
 
   render() {
     return (
-      <div className='filter-box'>
-        <label>{this.props.name}</label>
-        {
-          this.props.items.map((item) => {
-            return (
-              <div className='filter' key={item.id}>
-                <a href='#' onClick={this.onItemSelected.bind(this, item)}>{item[this.props.displayAttribute]}</a>
-                <input type='checkbox' checked={this.props.filter.exclude.has(item)} onChange={this.onItemExcluded.bind(this, item)} className={this.props.filter.exclude.has(item) ? 'visible' : ''} title='Exclude' />
-                <input type='checkbox' checked={this.props.filter.include.has(item)} onChange={this.onItemIncluded.bind(this, item)} className={this.props.filter.include.has(item) ? 'visible' : ''} title='Include' />
-              </div>
-            )
-          }, this)
-        }
+      <div className='columns filter-box'>
+        <div className='header' onClick={this.toggleFilters.bind(this)} title='Ctrl+F'>
+          <span className='title'>Filter:</span>
+          <span className='query'>{this.renderQuery(this.getQuery())}</span>
+        </div>
+        <div className='body'>
+          <a href='#' style={{display: this.areAnyItemsSelected() ? 'inline' : 'none'}} className='clear' onClick={this.clearFilters.bind(this)}>Clear</a>
+          {
+            this.state.groups.map((group) => {
+              return (
+                <div className='filter-group' key={group.key}>
+                  <span className='title'>{group.title}</span>
+                  {
+                    group.items.map((item) => {
+                      return (
+                        <div className='filter-item' key={item.key}>
+                          <a href='#' onClick={this.onItemSelected.bind(this, item, group)}>{item.title}</a>
+                          <input type='checkbox' checked={item.isExcluded} onChange={this.onItemExcluded.bind(this, item, group)} className={item.isExcluded ? 'visible' : ''} title='Exclude' />
+                          <input type='checkbox' checked={item.isIncluded} onChange={this.onItemIncluded.bind(this, item, group)} className={item.isIncluded ? 'visible' : ''} title='Include' />
+                        </div>
+                      )
+                    }, this)
+                  }
+                </div>
+              )
+            }, this)
+          }
+          <div className='clear'></div>
+        </div>
       </div>
     );
   }

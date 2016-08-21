@@ -49,12 +49,26 @@ export interface INautilus extends EventEmitter {
   getSession(): ISession;
   setSession(session: ISession): void;
   getItemStates(): IItemState[];
+  getItemStateById(id: string): IItemState;
+  getItemStateByTitle(title: string): IItemState;
   getIssueTypes(): IItemType[];
+  getIssueTypeById(id: string): IItemType;
+  getIssueTypeByTitle(title: string): IItemType;
   getItemAreas(): IItemArea[];
+  getItemAreaById(id: string): IItemArea;
+  getItemAreaByTitle(title: string): IItemArea;
   getItemPriorities(): IItemPriority[];
+  getItemPriorityById(id: string): IItemPriority;
+  getItemPriorityByTitle(title: string): IItemPriority;
   getProjects(): IProject[];
+  getProjectById(id: string): IProject;
+  getProjectByName(name: string): IProject;
   getUsers(): IUser[];
+  getUserById(id: string): IUser;
+  getUserByName(name: string): IUser;
   getMilestones(): IMilestone[];
+  getMilestoneById(id: string): IMilestone;
+  getMilestoneByTitle(title: string): IMilestone;
   addMilestone(milestone: IMilestone): void;
   getIssues(): IIssue[];
   addIssue(issue: IIssue): void;
@@ -148,29 +162,85 @@ export class Nautilus extends EventEmitter implements INautilus {
     return this.state.itemStates;
   };
 
+  getItemStateById(id: string) {
+    return this.state.itemStates.filter(x => x.id === id)[0];
+  }
+
+  getItemStateByTitle(title: string) {
+    return this.state.itemStates.filter(x => x.title === title)[0];
+  }
+
   getIssueTypes() {
     return this.state.issueTypes;
   };
+
+  getIssueTypeById(id: string): IItemType {
+    return this.state.issueTypes.filter(x => x.id === id)[0];
+  }
+
+  getIssueTypeByTitle(title: string): IItemType {
+    return this.state.issueTypes.filter(x => x.title === title)[0];
+  }
 
   getItemAreas() {
     return this.state.itemAreas;
   };
 
+  getItemAreaById(id: string) {
+    return this.state.itemAreas.filter(x => x.id === id)[0];
+  }
+
+  getItemAreaByTitle(title: string) {
+    return this.state.itemAreas.filter(x => x.title === title)[0];
+  }
+
   getItemPriorities() {
     return this.state.itemPriorities;
   };
+
+  getItemPriorityById(id: string) {
+    return this.state.itemPriorities.filter(x => x.id === id)[0];
+  }
+
+  getItemPriorityByTitle(title: string) {
+    return this.state.itemPriorities.filter(x => x.title === title)[0];
+  }
 
   getProjects() {
     return this.state.projects;
   };
 
+  getProjectById(id: string): IProject {
+    return this.state.projects.filter(x => x.id === id)[0];
+  }
+
+  getProjectByName(name: string): IProject {
+    return this.state.projects.filter(x => x.name === name)[0];
+  }
+
   getUsers() {
     return this.state.users;
   };
 
+  getUserById(id: string) {
+    return this.state.users.filter(x => x.id === id)[0];
+  }
+
+  getUserByName(name: string) {
+    return this.state.users.filter(x => x.name === name)[0];
+  }
+
   getMilestones() {
     return this.state.milestones;
   };
+
+  getMilestoneById(id: string): IMilestone {
+    return this.state.milestones.filter(x => x.id === id)[0];
+  }
+
+  getMilestoneByTitle(title: string): IMilestone {
+    return this.state.milestones.filter(x => x.title === title)[0];
+  }
 
   addMilestone(milestone: IMilestone) {
     milestone.type = 'milestone';
@@ -384,6 +454,15 @@ export function entityComparer(entity1: IEntity, entity2: IEntity) {
     return false;
 
   return entity1.id === entity2.id;
+}
+
+export function asEntity(entity: IEntity) {
+  if (!entity)
+    return;
+
+  return {
+    id: entity.id
+  };
 }
 
 export * from './sdk/nautilus';

@@ -11,66 +11,71 @@ body {
   margin-bottom: 8px;
 }
 
-.filters {
+.filter-box {
   border: 1px solid #e1e1e1;
   margin-bottom: 30px;
 }
 
-.filters .header {
+.filter-box .header {
   padding: 5px 10px;
   cursor: pointer;
 }
 
-.filters .header .title {
+.filter-box .header .title {
   font-weight: bold;
   margin-right: 10px;
 }
 
-.filters .body {
+.filter-box .header .query {
+  color: #444;
+}
+
+.filter-box .body {
   border-top: 1px solid #e1e1e1;
   padding: 10px 10px;
   background-color: #fff;
   display: none;
 }
 
-.filters .body a.clear {
+.filter-box .body a.clear {
   float: right;
 }
 
-.filters .filter-box {
+.filter-box .body .filter-group {
   float: left;
   margin-right: 20px;
 }
 
-.filters label {
+.filter-box .body .filter-group .title {
   display: block;
+  font-weight: bold;
   padding: 4px 5px;
   border-bottom: 1px solid #eee;
 }
 
-.filters .filter {
+.filter-box .body .filter-group .filter-item {
   padding: 2px 6px;
 }
 
-.filters .filter:hover {
+.filter-box .body .filter-group .filter-item:hover {
   background-color: #f6f6f6;
 }
 
-.filters .filter a {
+.filter-box .body .filter-group .filter-item a {
   margin-right: 10px;
 }
 
-.filters .filter input {
+.filter-box .body .filter-group .filter-item input {
   float: right;
   margin: 4px 0px 0 5px;
   visibility: hidden;
 }
 
-.filters .filter:hover input {
+.filter-box .body .filter-group .filter-item:hover input {
   visibility: visible;
 }
 
-.filters .filter input.visible {
+.filter-box .body .filter-group .filter-item input.visible {
   visibility: visible;
 }
 
@@ -221,4 +226,16 @@ td.title .editable .input {
 
 .clear {
   clear: both;
+}
+
+.expression-and .expression-and-operator {
+  color: #ccc;
+  font-weight: bold;
+  font-size: 11px;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.expression-constant {
+  font-weight: bold;
 }
