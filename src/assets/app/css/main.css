@@ -5,6 +5,7 @@
 body {
   font-size: 1.3em;
   padding: 20px;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .actionbar {
@@ -108,7 +109,7 @@ table.issues td.title {
 
 table.issues td span {
   padding: 2px 4px;
-  line-height: 1.8em;
+  line-height: 1.9em;
 }
 
 table.issues td input {
