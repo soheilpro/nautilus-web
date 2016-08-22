@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Nautilus, IIssue } from '../nautilus';
+import { Nautilus, IIssue, entityComparer } from '../nautilus';
 import { FilterBox } from './filter-box';
 import { IssueList } from './issue-list';
 import * as NQL from '../nql/nql'
@@ -7,13 +7,16 @@ import { Query } from '../query'
 
 export class Issues extends React.Component<{}, {}> {
   private filterBox: FilterBox;
+  private newAndUpdatedIssues: IIssue[] = [];
 
   componentDidMount() {
-    Nautilus.Instance.on('issueAdded', () => {
+    Nautilus.Instance.on('issueAdded', (issue) => {
+      this.newAndUpdatedIssues.push(issue);
       this.forceUpdate();
     });
 
-    Nautilus.Instance.on('issueChanged', () => {
+    Nautilus.Instance.on('issueChanged', (issue) => {
+      this.newAndUpdatedIssues.push(issue);
       this.forceUpdate();
     });
 
@@ -38,10 +41,11 @@ export class Issues extends React.Component<{}, {}> {
     if (!filterQuery)
       return issues;
 
-    return issues.filter(issue => Query.evaluate(filterQuery, issue));
+    return issues.filter(issue => this.newAndUpdatedIssues.some(entityComparer.bind(this, issue)) || Query.evaluate(filterQuery, issue));
   }
 
   onFiltersChanged(): void {
+    this.newAndUpdatedIssues = [];
     this.forceUpdate();
 
     if (this.filterBox)
