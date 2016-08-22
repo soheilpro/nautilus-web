@@ -36,12 +36,16 @@ export class Issues extends React.Component<{}, {}> {
 
   getIssues() {
     var issues = Nautilus.Instance.getIssues();
+
     var filterQuery = this.filterBox ? this.filterBox.getQuery() : null;
 
-    if (!filterQuery)
-      return issues;
+    if (filterQuery)
+      issues = issues.filter(issue => this.newAndUpdatedIssues.some(entityComparer.bind(this, issue)) || Query.evaluate(filterQuery, issue));
 
-    return issues.filter(issue => this.newAndUpdatedIssues.some(entityComparer.bind(this, issue)) || Query.evaluate(filterQuery, issue));
+    issues = issues.slice();
+    issues.reverse();
+
+    return issues;
   }
 
   onFiltersChanged(): void {

@@ -24,13 +24,6 @@ interface IssueListState {
 export class IssueList extends React.Component<IssueListProps, IssueListState> {
   private columnCount = 9;
 
-  getIssues() {
-    var issues = this.props.issues.slice();
-    issues.reverse();
-
-    return issues;
-  }
-
   constructor() {
     super();
 
@@ -42,7 +35,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
   componentDidMount() {
     Nautilus.Instance.on('issueAdded', (issue) => {
-      var issueIndex = _.findIndex(this.getIssues(), entityComparer.bind(this, issue));
+      var issueIndex = _.findIndex(this.props.issues, entityComparer.bind(this, issue));
 
       if (issueIndex === -1)
         return;
@@ -62,7 +55,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
 
     Mousetrap.bind('tab', () => {
       if (this.state.selectedColumnIndex === this.columnCount - 1) {
-        if (this.state.selectedRowIndex < this.getIssues().length - 1)
+        if (this.state.selectedRowIndex < this.props.issues.length - 1)
           this.moveToCell(this.state.selectedRowIndex + 1, 0);
       }
       else {
@@ -132,7 +125,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
       if (!window.confirm("Delete issue?"))
         return;
 
-      var issue = this.getIssues()[this.state.selectedRowIndex];
+      var issue = this.props.issues[this.state.selectedRowIndex];
       Nautilus.Instance.deleteIssue(issue);
 
       event.preventDefault();
@@ -142,7 +135,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
       if (!$.contains($('table.issues')[0], event.target as any))
         return;
 
-      if (this.state.selectedRowIndex === this.getIssues().length - 1)
+      if (this.state.selectedRowIndex === this.props.issues.length - 1)
         return;
 
       var thisField = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
@@ -179,7 +172,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
   }
 
   moveToBelowCell() {
-    if (this.state.selectedRowIndex === this.getIssues().length - 1)
+    if (this.state.selectedRowIndex === this.props.issues.length - 1)
       return;
 
     this.moveToCell(this.state.selectedRowIndex + 1, this.state.selectedColumnIndex);
@@ -224,8 +217,8 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
           <div className='three columns' style={{minHeight: '1px'}}>
             <div className='issue-detail-container'>
               {
-                this.getIssues()[this.state.selectedRowIndex] ?
-                  <IssueDetail issue={this.getIssues()[this.state.selectedRowIndex]} /> : null
+                this.props.issues[this.state.selectedRowIndex] ?
+                  <IssueDetail issue={this.props.issues[this.state.selectedRowIndex]} /> : null
               }
             </div>
           </div>
@@ -246,7 +239,7 @@ export class IssueList extends React.Component<IssueListProps, IssueListState> {
               </thead>
               <tbody>
                 {
-                  this.getIssues().map((issue, index) => {
+                  this.props.issues.map((issue, index) => {
                     return (
                       <tr key={issue.id} className={this.state.selectedRowIndex === index ? 'selected' : ''}>
                         <td className={'sid ' + (this.state.selectedColumnIndex === 0 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 0)} ref={'cell-' + index + '-0'}>
