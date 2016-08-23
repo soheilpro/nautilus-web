@@ -2,6 +2,11 @@
   outline: none;
 }
 
+::selection {
+  background: #0091EA;
+  color: #fff;
+}
+
 body {
   font-size: 1.3em;
   padding: 20px;
@@ -55,7 +60,7 @@ body {
 }
 
 .filter-box .body .filter-group .filter-item {
-  padding: 2px 6px;
+  padding: 1px 5px;
 }
 
 .filter-box .body .filter-group .filter-item:hover {
@@ -64,6 +69,7 @@ body {
 
 .filter-box .body .filter-group .filter-item a {
   margin-right: 10px;
+  text-decoration: none;
 }
 
 .filter-box .body .filter-group .filter-item input {
@@ -218,7 +224,7 @@ td.title .editable .input {
 
 .ui-autocomplete .ui-menu-item.ui-state-focus {
   color: #ffffff;
-  background-color: #0fa0ce;
+  background-color: #0091EA;
 }
 
 .ui-helper-hidden-accessible {
@@ -239,4 +245,54 @@ td.title .editable .input {
 
 .expression-constant {
   font-weight: bold;
+}
+
+/* Skeleton */
+
+a {
+  color: #0091EA;
+}
+
+a:hover {
+  color: #0091EA;
+}
+
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+  color: #FFF;
+  background-color: #0091EA;
+  border-color: #0091EA;
+}
+
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
+  color: #FFF;
+  background-color: #0091EA;
+  border-color: #0091EA;
+}
+
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
+  color: #FFF;
+  background-color: #0091EA;
+  border-color: #0091EA;
 }
