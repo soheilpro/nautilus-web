@@ -78,7 +78,9 @@ export class Issues extends React.Component<{}, {}> {
           </div>
         </div>
         <div className='row'>
-          <FilterBox filterState={this.loadFilterState()} onChanged={this.onFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
+          <div className='columns'>
+            <FilterBox filterState={this.loadFilterState()} onChanged={this.onFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
+          </div>
         </div>
         <div className='row'>
           <div className='columns'>

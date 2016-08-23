@@ -326,7 +326,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
 
   render() {
     return (
-      <div className='columns filter-box'>
+      <div className='filter-box'>
         <div className='header' onClick={this.toggleFilters.bind(this)} title='Ctrl+F'>
           <span className='title'>Filter:</span>
           <span className='query'>{this.renderQuery(this.getQuery())}</span>
