@@ -11,7 +11,7 @@ export class IssueDetail extends React.Component<IssueDetailProps, {}> {
   render() {
     return (
       <div className='issue-detail'>
-        <div className='header'>Issue</div>
+        <div className='header'>Issue #{this.props.issue.sid}</div>
         <DescriptionIssueField issue={this.props.issue} />
         <br />
 
