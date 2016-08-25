@@ -1,5 +1,8 @@
 import * as React from 'react';
+import { KeyMaster, Key } from '../keymaster'
 import { Nautilus, IIssue, entityComparer } from '../nautilus';
+import { Grid, GridHeaderRow, GridRow, GridHeaderCell, GridCell, IGridColumn } from './grid';
+import { IssueField } from './issue-field';
 import { AssignedUserIssueField } from './issue-field-assigned-user';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
@@ -9,274 +12,166 @@ import { ProjectIssueField } from './issue-field-project';
 import { AreaIssueField } from './issue-field-area';
 import { TitleIssueField } from './issue-field-title';
 import { SidIssueField } from './issue-field-sid';
-import { IssueDetail } from './issue-detail';
 import config from '../config';
 
+abstract class IssueFieldGridCell extends GridCell {
+  private fieldElement: IssueField;
+  protected Field: any;
+
+  handleKeyDown(event: KeyboardEvent) {
+    KeyMaster.handle(event, { which: Key.Enter }, null, this.handleKeyEnter.bind(this), true);
+  }
+
+  copyFrom(sourceCell: IssueFieldGridCell) {
+    this.fieldElement.setValue(sourceCell.fieldElement.getValue());
+  }
+
+  private handleKeyEnter() {
+    this.fieldElement.edit();
+  }
+
+  render() {
+    var Field = this.Field;
+
+    return <Field issue={this.props.item} ref={(e: IssueField) => this.fieldElement = e} />;
+  }
+}
+
+var SidGridColumn: IGridColumn = {
+  key: 'sid',
+  HeaderCell: class SidHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>#</span>;
+    }
+  },
+  Cell: class SidFieldGridCell extends IssueFieldGridCell {
+    protected Field = SidIssueField;
+  }
+}
+
+var MilestoneGridColumn: IGridColumn = {
+  key: 'milestone',
+  HeaderCell: class MilestoneHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Milestone</span>;
+    }
+  },
+  Cell: class MilestoneGridCell extends IssueFieldGridCell {
+    protected Field = MilestoneIssueField;
+  }
+}
+
+var TitleGridColumn: IGridColumn = {
+  key: 'title',
+  HeaderCell: class TitleHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Title</span>;
+    }
+  },
+  Cell: class TitleGridCell extends IssueFieldGridCell {
+    protected Field = TitleIssueField;
+  }
+}
+
+var ProjectGridColumn: IGridColumn = {
+  key: 'project',
+  HeaderCell: class PropertyHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Project</span>;
+    }
+  },
+  Cell: class ProjectGridCell extends IssueFieldGridCell {
+    protected Field = ProjectIssueField;
+  }
+}
+
+var AreaGridColumn: IGridColumn = {
+  key: 'area',
+  HeaderCell: class AreaHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Area</span>;
+    }
+  },
+  Cell: class AreaGridCell extends IssueFieldGridCell {
+    protected Field = AreaIssueField;
+  }
+}
+
+var TypeGridColumn: IGridColumn = {
+  key: 'type',
+  HeaderCell: class TypeHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Type</span>;
+    }
+  },
+  Cell: class TypeGridCell extends IssueFieldGridCell {
+    protected Field = TypeIssueField;
+  }
+}
+
+var PriorityGridColumn: IGridColumn = {
+  key: 'priority',
+  HeaderCell: class PriorityHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Priority</span>;
+    }
+  },
+  Cell: class PriorityGridCell extends IssueFieldGridCell {
+    protected Field = PriorityIssueField;
+  }
+}
+
+var StateGridColumn: IGridColumn = {
+  key: 'state',
+  HeaderCell: class StateHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>State</span>;
+    }
+  },
+  Cell: class StateGridCell extends IssueFieldGridCell {
+    protected Field = StateIssueField;
+  }
+}
+
+var AssignedUserGridColumn: IGridColumn = {
+  key: 'assignee',
+  HeaderCell: class AssignedUserHeaderGridCell extends GridHeaderCell {
+    render() {
+      return <span>Assignee</span>;
+    }
+  },
+  Cell: class AssignedUserGridCell extends IssueFieldGridCell {
+    protected Field = AssignedUserIssueField;
+  }
+}
+
+class IssueGridHeaderRow extends GridHeaderRow {
+}
+
+class IssueGridRow extends GridRow {
+  static keyForItem(issue: IIssue) {
+    return issue.id;
+  }
+}
+
 interface IssueListProps {
-  issues: IIssue[];
+  issues?: IIssue[];
+  selectedIssueIndex?: number;
+  onSelectionChange?(index: number): void;
 }
 
-interface IssueListState {
-  selectedRowIndex?: number;
-  selectedColumnIndex?: number;
-}
-
-export class IssueList extends React.Component<IssueListProps, IssueListState> {
-  private columnCount = 9;
-
-  constructor() {
-    super();
-
-    this.state = {
-      selectedRowIndex: 0,
-      selectedColumnIndex: 0
-    };
-  }
-
-  componentDidMount() {
-    Nautilus.Instance.on('issueAdded', (issue) => {
-      var issueIndex = _.findIndex(this.props.issues, entityComparer.bind(this, issue));
-
-      if (issueIndex === -1)
-        return;
-
-      this.setState({
-        selectedRowIndex: issueIndex,
-        selectedColumnIndex: 2
-      });
-
-      var cell = this.refs['cell-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
-
-      cell.focus();
-
-      var field = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
-      field.edit();
-    });
-
-    Mousetrap.bind('tab', () => {
-      if (this.state.selectedColumnIndex === this.columnCount - 1) {
-        if (this.state.selectedRowIndex < this.props.issues.length - 1)
-          this.moveToCell(this.state.selectedRowIndex + 1, 0);
-      }
-      else {
-        this.moveToNextCell();
-      }
-    });
-
-    Mousetrap.bind('shift+tab', () => {
-      if (this.state.selectedColumnIndex === 0) {
-        if (this.state.selectedRowIndex > 0)
-          this.moveToCell(this.state.selectedRowIndex - 1, this.columnCount - 1);
-      }
-      else {
-        this.moveToPreviousCell();
-      }
-    });
-
-    Mousetrap.bind('up', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      this.moveToAboveCell();
-
-      event.preventDefault();
-    });
-
-    Mousetrap.bind('down', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      this.moveToBelowCell();
-
-      event.preventDefault();
-    });
-
-    Mousetrap.bind('left', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      this.moveLeft();
-
-      event.preventDefault();
-    });
-
-    Mousetrap.bind('right', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      this.moveRight();
-
-      event.preventDefault();
-    });
-
-    Mousetrap.bind('enter', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
-
-      event.preventDefault();
-    });
-
-    Mousetrap.bind('del', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      if (!window.confirm("Delete issue?"))
-        return;
-
-      var issue = this.props.issues[this.state.selectedRowIndex];
-      Nautilus.Instance.deleteIssue(issue);
-
-      event.preventDefault();
-    });
-
-    Mousetrap.bind('\'', (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      if (this.state.selectedRowIndex === this.props.issues.length - 1)
-        return;
-
-      var thisField = this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any;
-      var belowField = this.refs['field-' + (this.state.selectedRowIndex + 1) + '-' + this.state.selectedColumnIndex] as any;
-      thisField.setValue(belowField.getValue());
-
-      event.preventDefault();
-    });
-
-    var alphabet = _.flatten(Array.apply(null, {length: 26}).map(Function.call, Number).map((x: number) => [x + 65, x + 97])).map((x: number) => String.fromCharCode(x));
-
-    Mousetrap.bind(alphabet, (event: KeyboardEvent) => {
-      if (!$.contains($('table.issues')[0], event.target as any))
-        return;
-
-      (this.refs['field-' + this.state.selectedRowIndex + '-' + this.state.selectedColumnIndex] as any).edit();
-    });
-
-    ($(".issue-detail-container") as any).sticky();
-  }
-
-  moveToCell(rowIndex: number, columnIndex: number) {
-    this.setState({
-      selectedRowIndex: rowIndex,
-      selectedColumnIndex: columnIndex
-    });
-  }
-
-  moveToAboveCell() {
-    if (this.state.selectedRowIndex === 0)
+export class IssueList extends React.Component<IssueListProps, {}> {
+  handleRowDeletionRequest(issue: IIssue) {
+    if (!window.confirm(`Delete issue #${issue.sid}?`))
       return;
 
-    this.moveToCell(this.state.selectedRowIndex - 1, this.state.selectedColumnIndex);
-  }
-
-  moveToBelowCell() {
-    if (this.state.selectedRowIndex === this.props.issues.length - 1)
-      return;
-
-    this.moveToCell(this.state.selectedRowIndex + 1, this.state.selectedColumnIndex);
-  }
-
-  moveToNextCell() {
-    if (this.state.selectedColumnIndex === this.columnCount - 1)
-      return;
-
-    this.moveToCell(this.state.selectedRowIndex, this.state.selectedColumnIndex + 1);
-  }
-
-  moveToPreviousCell() {
-    if (this.state.selectedColumnIndex === 0)
-      return;
-
-    this.moveToCell(this.state.selectedRowIndex, this.state.selectedColumnIndex - 1);
-  }
-
-  moveLeft() {
-    if (!config.rtl)
-      this.moveToPreviousCell();
-    else
-      this.moveToNextCell();
-  }
-
-  moveRight() {
-    if (!config.rtl)
-      this.moveToNextCell();
-    else
-      this.moveToPreviousCell();
-  }
-
-  onSelected(rowIndex: number, columnIndex: number) {
-    this.moveToCell(rowIndex, columnIndex);
+    Nautilus.Instance.deleteIssue(issue);
   }
 
   render() {
     return (
       <div className='issue-list'>
-        <div className='row'>
-          <div className='three columns' style={{minHeight: '1px'}}>
-            <div className='issue-detail-container'>
-              {
-                this.props.issues[this.state.selectedRowIndex] ?
-                  <IssueDetail issue={this.props.issues[this.state.selectedRowIndex]} /> : null
-              }
-            </div>
-          </div>
-          <div className='nine columns'>
-            <table className='issues'>
-              <thead>
-                <tr>
-                  <th className="sid">Id</th>
-                  <th className="milestone">Milestone</th>
-                  <th className="title">Title</th>
-                  <th className="project">Project</th>
-                  <th className="area">Area</th>
-                  <th className="type">Type</th>
-                  <th className="priority">Priority</th>
-                  <th className="state">State</th>
-                  <th className="assignee">Assignee</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  this.props.issues.map((issue, index) => {
-                    return (
-                      <tr key={issue.id} className={this.state.selectedRowIndex === index ? 'selected' : ''}>
-                        <td className={'sid ' + (this.state.selectedColumnIndex === 0 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 0)} ref={'cell-' + index + '-0'}>
-                          <SidIssueField issue={issue} ref={'field-' + index + '-0'} />
-                        </td>
-                        <td className={'milestone ' + (this.state.selectedColumnIndex === 1 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 1)} ref={'cell-' + index + '-1'}>
-                          <MilestoneIssueField issue={issue} ref={'field-' + index + '-1'} />
-                        </td>
-                        <td className={'title ' + (this.state.selectedColumnIndex === 2 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 2)} ref={'cell-' + index + '-2'}>
-                          <TitleIssueField issue={issue} ref={'field-' + index + '-2'} />
-                        </td>
-                        <td className={'project ' + (this.state.selectedColumnIndex === 3 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 3)} ref={'cell-' + index + '-3'}>
-                          <ProjectIssueField issue={issue} ref={'field-' + index + '-3'} />
-                        </td>
-                        <td className={'area ' + (this.state.selectedColumnIndex === 4 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 4)} ref={'cell-' + index + '-4'}>
-                          <AreaIssueField issue={issue} ref={'field-' + index + '-4'} />
-                        </td>
-                        <td className={'type ' + (this.state.selectedColumnIndex === 5 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 5)} ref={'cell-' + index + '-5'}>
-                          <TypeIssueField issue={issue} ref={'field-' + index + '-5'} />
-                        </td>
-                        <td className={'priority ' + (this.state.selectedColumnIndex === 6 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 6)} ref={'cell-' + index + '-6'}>
-                          <PriorityIssueField issue={issue} ref={'field-' + index + '-6'} />
-                        </td>
-                        <td className={'state ' + (this.state.selectedColumnIndex === 7 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 7)} ref={'cell-' + index + '-7'}>
-                          <StateIssueField issue={issue} ref={'field-' + index + '-7'} />
-                        </td>
-                        <td className={'assignee ' + (this.state.selectedColumnIndex === 8 ? 'selected' : '')} tabIndex="0" onClick={this.onSelected.bind(this, index, 8)} ref={'cell-' + index + '-8'}>
-                          <AssignedUserIssueField issue={issue} ref={'field-' + index + '-8'} />
-                        </td>
-                      </tr>
-                    );
-                  }, this)
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, MilestoneGridColumn, TitleGridColumn, ProjectGridColumn, AreaGridColumn, TypeGridColumn, PriorityGridColumn, StateGridColumn, AssignedUserGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
       </div>
     );
   }

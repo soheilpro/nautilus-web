@@ -13,6 +13,14 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+.grid tr.selected {
+  background-color: #f6f6f6;
+}
+
+.grid.focus tr.selected td.selected {
+  background-color: #e9e9e9;
+}
+
 .actionbar {
   margin-bottom: 8px;
 }
@@ -86,39 +94,31 @@ body {
   visibility: visible;
 }
 
-table.issues {
+.issue-list .grid {
   width: 100%;
 }
 
-table.issues th {
+.issue-list .grid th {
   padding: 4px 6px;
   white-space: nowrap;
 }
 
-table.issues td {
+.issue-list .grid td {
   padding: 4px 6px;
   white-space: nowrap;
 }
 
-table.issues tr.selected td {
-  background-color: #f6f6f6;
-}
-
-table.issues tr.selected td.selected {
-  background-color: #e9e9e9;
-}
-
-table.issues td.title {
+.issue-list .grid td.title {
   width: 100%;
   white-space: normal;
 }
 
-table.issues td span {
+.issue-list .grid td span {
   padding: 2px 4px;
   line-height: 1.9em;
 }
 
-table.issues td input {
+.issue-list .grid td input {
   margin: 0 1px 0 0;
 }
 

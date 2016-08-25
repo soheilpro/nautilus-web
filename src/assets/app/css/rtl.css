@@ -1,18 +1,18 @@
-table.issues {
+.issue-list .grid {
 	direction: rtl;
 }
 
-table.issues td {
+.issue-list .grid td {
   direction: ltr;
   text-align: left;
 }
 
-table.issues th.title {
+.issue-list .grid th.title {
   direction: rtl;
   text-align: right;
 }
 
-table.issues td.title {
+.issue-list .grid td.title {
   direction: rtl;
   text-align: right;
 }

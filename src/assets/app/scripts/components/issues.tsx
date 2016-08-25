@@ -2,39 +2,68 @@ import * as React from 'react';
 import { Nautilus, IIssue, entityComparer } from '../nautilus';
 import { FilterBox } from './filter-box';
 import { IssueList } from './issue-list';
+import { IssueDetail } from './issue-detail';
 import * as NQL from '../nql/nql'
 import { Query } from '../query'
 
-export class Issues extends React.Component<{}, {}> {
+interface IIssuesState {
+  issues?: IIssue[];
+  selectedIssueIndex?: number;
+}
+
+export class Issues extends React.Component<{}, IIssuesState> {
   private filterBox: FilterBox;
   private newAndUpdatedIssues: IIssue[] = [];
 
+  constructor() {
+    super();
+
+    this.state = {
+      issues: [],
+      selectedIssueIndex: 0
+    };
+  }
+
   componentDidMount() {
+    this.setState({
+      issues: this.getFilteredIssues(),
+      selectedIssueIndex: 0
+    });
+
     Nautilus.Instance.on('issueAdded', (issue) => {
       this.newAndUpdatedIssues.push(issue);
-      this.forceUpdate();
+      this.setState({
+        issues: this.getFilteredIssues(),
+        selectedIssueIndex: 0
+      })
     });
 
     Nautilus.Instance.on('issueChanged', (issue) => {
       this.newAndUpdatedIssues.push(issue);
-      this.forceUpdate();
+      this.setState({
+        issues: this.getFilteredIssues()
+      })
     });
 
     Nautilus.Instance.on('issueDeleted', () => {
-      this.forceUpdate();
+      this.setState({
+        issues: this.getFilteredIssues()
+      })
     });
 
     Mousetrap.bind('ctrl+n', (event: KeyboardEvent) => {
       this.addIssue();
       event.preventDefault();
     });
+
+    ($(".issue-detail-container") as any).sticky();
   }
 
   addIssue() {
     Nautilus.Instance.addIssue({} as IIssue);
   }
 
-  getIssues() {
+  getFilteredIssues() {
     var issues = Nautilus.Instance.getIssues();
 
     var filterQuery = this.filterBox ? this.filterBox.getQuery() : null;
@@ -50,10 +79,20 @@ export class Issues extends React.Component<{}, {}> {
 
   onFiltersChanged(): void {
     this.newAndUpdatedIssues = [];
-    this.forceUpdate();
+
+    this.setState({
+      issues: this.getFilteredIssues(),
+      selectedIssueIndex: 0
+    })
 
     if (this.filterBox)
       this.saveFilterState(this.filterBox.getFilterState());
+  }
+
+  handleSelectionChange(index: number): void {
+    this.setState({
+      selectedIssueIndex: index
+    });
   }
 
   loadFilterState(): any {
@@ -70,6 +109,8 @@ export class Issues extends React.Component<{}, {}> {
   }
 
   render() {
+    var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
+
     return (
       <div>
         <div style={{marginBottom: '20px'}} className='row'>
@@ -83,8 +124,15 @@ export class Issues extends React.Component<{}, {}> {
           </div>
         </div>
         <div className='row'>
-          <div className='columns'>
-            <IssueList issues={this.getIssues()} />
+          <div className='two columns' style={{minHeight: '1px'}}>
+            <div className='issue-detail-container'>
+              {
+                selectedIssue ? <IssueDetail issue={selectedIssue} /> : null
+              }
+            </div>
+          </div>
+          <div className='ten columns'>
+            <IssueList issues={this.state.issues} selectedIssueIndex={this.state.selectedIssueIndex} onSelectionChange={this.handleSelectionChange.bind(this)} />
           </div>
         </div>
       </div>
