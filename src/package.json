@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build:server": "$(npm bin)/tsc",
-    "build:client": "$(npm bin)/webpack",
+    "build:server": "buno tsc",
+    "build:client": "buno webpack",
     "build": "npm run build:server && npm run build:client",
     "clean:server": "rm -rf ./out",
     "clean:client": "rm -f ./assets/app/scripts/main.bundle.js ./assets/app/scripts/main.bundle.js.map",
@@ -31,5 +31,8 @@
     "underscore": "~1.8.2",
     "webpack": "^1.13.1",
     "webpack-fail-plugin": "^1.0.5"
+  },
+  "devDependencies": {
+    "buno": "^1.0.0"
   }
 }
