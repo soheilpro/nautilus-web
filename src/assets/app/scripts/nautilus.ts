@@ -123,11 +123,11 @@ export class Nautilus extends EventEmitter implements INautilus {
         return this.emitEvent('error', [error]);
 
       this.state.itemStates = results[0] as IItemState[];
-      this.state.itemTypes = results[1] as IItemType[];
-      this.state.itemAreas = results[2] as IItemArea[];
+      this.state.itemTypes = _.sortBy(results[1] as IItemType[], x => x.title);
+      this.state.itemAreas = _.sortBy(results[2] as IItemArea[], x => x.title);
       this.state.itemPriorities = results[3] as IItemPriority[];
-      this.state.projects = results[4] as IProject[];
-      this.state.users = results[5] as IUser[];
+      this.state.projects = _.sortBy(results[4] as IProject[], x => x.name);
+      this.state.users = _.sortBy(results[5] as IUser[], x => x.name);
 
       this.state.milestoneType = _.find(this.state.itemTypes, itemType => itemType.key === 'milestone');
       this.state.issueTypes = this.state.itemTypes.filter(itemType => /issue\:/.test(itemType.key));
