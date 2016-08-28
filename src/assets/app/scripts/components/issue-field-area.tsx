@@ -3,6 +3,10 @@ import { Nautilus, IItemArea, entityComparer } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class AreaIssueField extends IssueField {
+  getPlaceholder(): string {
+    return "Select area";
+  }
+
   getValue(): IItemArea {
     return this.props.issue.getArea();
   }
