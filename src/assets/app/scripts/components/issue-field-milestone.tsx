@@ -11,8 +11,14 @@ export class MilestoneIssueField extends IssueField {
     return Nautilus.Instance.getMilestones();
   }
 
-  valueToString(value: IMilestone) {
-    return value ? value.title : '';
+  valueToString(value: IMilestone, full: boolean) {
+    if (!value)
+      return '';
+
+    if (full)
+      return value.getFullTitle();
+
+    return value.title;
   }
 
   valueFromString(value: string, values: IMilestone[]): IMilestone {

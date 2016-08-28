@@ -51,7 +51,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       items: Nautilus.Instance.getMilestones().map(milestone => {
         return {
           key: milestone.id,
-          title: milestone.title,
+          title: milestone.getFullTitle(),
           isIncluded: false,
           isExcluded: false,
           queryItem: asEntity(milestone),

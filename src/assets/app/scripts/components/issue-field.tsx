@@ -29,7 +29,7 @@ export class IssueField extends React.Component<IssueFieldProps, {}> {
     return null;
   }
 
-  valueToString(value: any): string {
+  valueToString(value: any, full: boolean): string {
     return value;
   }
 

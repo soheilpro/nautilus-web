@@ -13,12 +13,12 @@ interface IExtendedItem extends IItem {
   getPriority(): IItemPriority;
   getProject(): IProject;
   getArea(): IItemArea;
-  getMilestone(): IMilestone;
   getAssignedUser(): IUser;
   getCreator(): IUser;
 }
 
 export interface IMilestone extends IExtendedItem {
+  getFullTitle(): string;
 }
 
 export interface IIssue extends IExtendedItem {
@@ -139,7 +139,7 @@ export class Nautilus extends EventEmitter implements INautilus {
         var milestones = items.filter(item => entityComparer(item.type, this.state.milestoneType));
         var issues = items.filter(item => !item.type || this.state.issueTypes.some(issueType => entityComparer(item.type, issueType)));
 
-        this.state.milestones = milestones.map(this.toMilestone.bind(this)) as IMilestone[];
+        this.state.milestones = _.sortBy(milestones.map(this.toMilestone.bind(this)) as IMilestone[], x => x.getFullTitle());
         this.state.issues = issues.map(this.toIssue.bind(this)) as IIssue[];
         this.state.isInitialized = true;
 
@@ -438,6 +438,14 @@ class Item implements IExtendedItem {
 }
 
 class Milestone extends Item {
+  getFullTitle() {
+    var project = this.getProject();
+
+    if (!project)
+      return this.title;
+
+    return `${project.name}:‌ ${this.title}`;
+  }
 }
 
 class Issue extends Item {

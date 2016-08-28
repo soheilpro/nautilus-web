@@ -27,7 +27,7 @@ export class HTMLExpressionFormatter extends NQL.ExpressionVisitor<string, {}> {
     var title: string;
 
     if (expression.type === 'Milestone')
-      title = Nautilus.Instance.getMilestoneById((expression.value as IEntity).id).title;
+      title = Nautilus.Instance.getMilestoneById((expression.value as IEntity).id).getFullTitle();
 
     if (expression.type === 'Project')
       title = Nautilus.Instance.getProjectById((expression.value as IEntity).id).name;

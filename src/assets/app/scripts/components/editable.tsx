@@ -11,7 +11,7 @@ interface EditableProps {
   spanClassName?: string;
   inputClassName?: string;
   valueFromString?(value: string, values: any[]): any;
-  valueToString?(value: any): string;
+  valueToString?(value: any, full: boolean): string;
   valueComparer?(value1: any, value2: any): boolean;
   onValueChanged(value: any): void;
 }
@@ -35,7 +35,7 @@ export class Editable extends React.Component<EditableProps, {}> {
       ($(this.inputElement) as any).textareaAutoSize();
 
     $(this.inputElement)
-      .val(this.props.valueToString(this.props.value))
+      .val(this.props.valueToString(this.props.value, false))
       .select()
       .focus();
 
@@ -46,16 +46,26 @@ export class Editable extends React.Component<EditableProps, {}> {
       if (!$(this.inputElement).autocomplete('instance')) {
         $(this.inputElement)
           .autocomplete({
-            source: _.map(this.props.values, this.props.valueToString),
+            source: _.map(this.props.values, value => {
+              return {
+                value: value,
+                label: this.props.valueToString(value, true),
+              };
+            }),
             position: { collision: "flip" },
             delay: 0,
             minLength: 0,
-            focus(event, ui) {
-              this.focused = true;
+            focus: (event, ui) => {
+              $(this.inputElement).val(ui.item.label).select();
+              return false;
             },
             select: (event, ui) => {
-              $(this.inputElement).val(ui.item.value);
-              this.save();
+              var value = ui.item.value;
+
+              if (!this.props.valueComparer(value, this.props.value))
+                this.props.onValueChanged(value);
+
+              this.endEditing();
             }
           })
       }
@@ -109,7 +119,7 @@ export class Editable extends React.Component<EditableProps, {}> {
     var inputElement: any;
 
     if (value)
-      spanElement = <span className={this.props.spanClassName} style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(value)}</span>
+      spanElement = <span className={this.props.spanClassName} style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(value, false)}</span>
     else
       spanElement = <span className='placeholder' style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.placeholder}</span>
 
