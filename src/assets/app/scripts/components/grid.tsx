@@ -110,6 +110,14 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
     return this.cellElements[columnIndex];
   }
 
+  handleClick(event: MouseEvent) {
+    if ((event.target as HTMLElement).nodeName === 'INPUT')
+      return;
+
+    var columnIndex = parseInt((event.currentTarget as HTMLElement).dataset['columnIndex'], 10);
+    this.props.onCellClick(this.props.rowIndex, columnIndex);
+  }
+
   handleKeyDown(event: KeyboardEvent) {
     this.cellElements[this.props.selectedColumnIndex].handleKeyDown(event);
   }
@@ -119,7 +127,7 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
       <tr className={this.props.isSelected ? 'selected' : ''} ref={e => this.trElement = e}>
         {
           this.props.columns.map((column: IGridColumn, columnIndex: number) =>
-            <td tabIndex='0' className={column.key + ' ' + (this.props.isSelected && this.props.selectedColumnIndex == columnIndex ? 'selected' : '')} onClick={() => this.props.onCellClick(this.props.rowIndex, columnIndex)} key={column.key}>
+            <td tabIndex='0' className={column.key + ' ' + (this.props.isSelected && this.props.selectedColumnIndex == columnIndex ? 'selected' : '')} onClick={this.handleClick.bind(this)} data-column-index={columnIndex} key={column.key}>
               <column.Cell item={this.props.item} rowIndex={this.props.rowIndex} columnIndex={columnIndex} isSelected={this.props.isSelected && this.props.selectedColumnIndex === columnIndex} ref={(e: GridCell) => this.cellElements[columnIndex] = e} />
             </td>
           )
