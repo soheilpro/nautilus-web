@@ -68,6 +68,8 @@ export interface INautilus extends EventEmitter {
   getMilestoneById(id: string): IMilestone;
   getMilestoneByTitle(title: string): IMilestone;
   addMilestone(milestone: IMilestone): void;
+  updateMilestone(milestone: IMilestone, change: IItemChange): void;
+  deleteMilestone(milestone: IMilestone): void;
   getIssues(): IIssue[];
   addIssue(issue: IIssue): void;
   updateIssue(issue: IIssue, change: IItemChange): void;
@@ -241,7 +243,7 @@ export class Nautilus extends EventEmitter implements INautilus {
   }
 
   addMilestone(milestone: IMilestone) {
-    milestone.type = 'milestone';
+    milestone.type = this.state.milestoneType;
 
     this.client.items.insert(milestone, (error, item) => {
       if (error)
@@ -251,6 +253,28 @@ export class Nautilus extends EventEmitter implements INautilus {
 
       this.state.milestones.push(milestone);
       this.emitEvent('milestoneAdded', [milestone]);
+    });
+  };
+
+  updateMilestone(milestone: IMilestone, change: IItemChange) {
+    this.client.items.update(milestone.id, change, (error, item) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      var milestone = this.toMilestone(item);
+
+      this.state.milestones[_.findIndex(this.state.milestones, entityComparer.bind(this, milestone))] = milestone;
+      this.emitEvent('milestoneChanged', [milestone]);
+    });
+  };
+
+  deleteMilestone(milestone: IMilestone) {
+    this.client.items.delete(milestone.id, (error) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.state.milestones.splice(_.findIndex(this.state.milestones, entityComparer.bind(this, milestone)), 1);
+      this.emitEvent('milestoneDeleted', [milestone]);
     });
   };
 

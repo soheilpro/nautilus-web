@@ -54,7 +54,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
 
   entityToParams(entity: IItem): Object {
     return {
-      type: this.toId(entity.type),
+      type_id: this.toId(entity.type),
       title: entity.title,
       description: entity.description,
       state_id: this.toId(entity.state),

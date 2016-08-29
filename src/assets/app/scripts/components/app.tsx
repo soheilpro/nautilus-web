@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Nautilus, ISession } from '../nautilus';
 import { Login } from './login';
 import { Issues } from './issues';
+import { Milestones } from './milestones';
 
 var Route = ReactRouter.Route;
 var Router = ReactRouter.Router;
@@ -82,6 +83,7 @@ export class App extends React.Component<{}, AppState> {
     return (
       <ReactRouter.Router history={browserHistory}>
           <Route path="/" component={Issues}/>
+          <Route path="/milestones" component={Milestones}/>
       </ReactRouter.Router>
     );
   }
