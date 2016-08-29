@@ -1,4 +1,5 @@
 /// <reference path="globals/async/index.d.ts" />
+/// <reference path="globals/classnames/index.d.ts" />
 /// <reference path="globals/jquery/index.d.ts" />
 /// <reference path="globals/jqueryui/index.d.ts" />
 /// <reference path="globals/loglevel/index.d.ts" />
