@@ -1,0 +1,52 @@
+.issue-list .grid {
+  width: 100%;
+}
+
+.issue-list .grid th {
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+.issue-list .grid td {
+  padding: 4px 6px;
+  white-space: nowrap;
+}
+
+.issue-list .grid td.title {
+  width: 100%;
+  white-space: normal;
+}
+
+.issue-list .grid td span {
+  padding: 2px 4px;
+  line-height: 1.9em;
+}
+
+.issue-list .grid td input {
+  margin: 0 1px 0 0;
+}
+
+.issue-list .grid td.title .editable span.state-ready {
+  background-color: #ffe0b2;
+}
+
+.issue-list .grid td.title .editable span.state-inprogress {
+  background-color: #b3e5fc;
+}
+
+.issue-list .grid td.title .editable span.state-finished {
+  background-color: #c5e1a5;
+}
+
+.issue-list .grid td.title .editable span.state-blocked {
+  background-color: #ffcdd2;
+}
+
+.issue-list .grid td.title .editable span.state-closed {
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+td.title .editable .input {
+  text-transform: none;
+}

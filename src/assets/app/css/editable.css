@@ -1,0 +1,76 @@
+.editable {
+  cursor: default;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.editable .placeholder {
+  color: #ccc;
+}
+
+.editable.multiline span {
+  white-space: pre-wrap;
+}
+
+.editable .input {
+  display: none;
+  padding-left: 2px;
+}
+
+.editable textarea.input {
+  border: 1px solid #ccc;
+  border-radius: 0;
+  padding: 2px 4px;
+  margin: -3px -5px -1px -5px;
+
+  /* Requried for textarea-autosize */
+  box-sizing: border-box;
+  min-height: 25px;
+  overflow-x: hidden; /* for Firefox (issue #5) */
+}
+
+.editable .input:focus {
+  outline: 0;
+}
+
+.editable.editing span {
+  display: none;
+}
+
+.editable.editing .input {
+  display: table-cell;
+  width: 100%;
+}
+
+.ui-autocomplete {
+  position: absolute;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  list-style: none;
+  background-color: #ffffff;
+  border-color: #ccc;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+}
+
+.ui-autocomplete .ui-menu-item {
+  margin: 0;
+  padding: 1px 2px;
+  cursor: default;
+}
+
+.ui-autocomplete .ui-menu-item.ui-state-focus {
+  color: #ffffff;
+  background-color: #0091EA;
+}
+
+.ui-helper-hidden-accessible {
+  display: none;
+}

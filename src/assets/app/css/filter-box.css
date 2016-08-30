@@ -1,0 +1,68 @@
+.filter-box {
+  border: 1px solid #e1e1e1;
+  margin-bottom: 30px;
+}
+
+.filter-box .header {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.filter-box .header .title {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.filter-box .header .query {
+  color: #444;
+}
+
+.filter-box .body {
+  border-top: 1px solid #e1e1e1;
+  padding: 10px 10px;
+  background-color: #fff;
+  display: none;
+}
+
+.filter-box .body a.clear {
+  float: right;
+}
+
+.filter-box .body .filter-group {
+  float: left;
+  margin-right: 20px;
+}
+
+.filter-box .body .filter-group .title {
+  display: block;
+  font-weight: bold;
+  padding: 4px 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.filter-box .body .filter-group .filter-item {
+  padding: 1px 5px;
+}
+
+.filter-box .body .filter-group .filter-item:hover {
+  background-color: #f6f6f6;
+}
+
+.filter-box .body .filter-group .filter-item a {
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+.filter-box .body .filter-group .filter-item input {
+  float: right;
+  margin: 4px 0px 0 5px;
+  visibility: hidden;
+}
+
+.filter-box .body .filter-group .filter-item:hover input {
+  visibility: visible;
+}
+
+.filter-box .body .filter-group .filter-item input.visible {
+  visibility: visible;
+}
