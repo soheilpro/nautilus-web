@@ -60,7 +60,11 @@ export class App extends React.Component<{}, AppState> {
       );
 
     if (!Nautilus.Instance.isInitialized())
-      return <span>Loading...</span>;
+      return (
+        <div style={{ position: 'absolute', left: '50%', top: '40%', transform: 'translateX(-50%) translateY(-40%)' }}>
+          <img src='/assets/app/images/logo.svg' width='200' />
+        </div>
+      );
 
     if (this.state.error)
       return (
