@@ -23,7 +23,11 @@ abstract class IssueFieldGridCell extends GridCell {
   }
 
   copyFrom(sourceCell: IssueFieldGridCell) {
-    this.fieldElement.setValue(sourceCell.fieldElement.getValue());
+    var sourceCellValue = sourceCell.fieldElement.getValue();
+    var destinationCellValue = this.fieldElement.getValue();
+
+    if (sourceCellValue !== undefined && destinationCellValue === undefined)
+      this.fieldElement.setValue(sourceCell.fieldElement.getValue());
   }
 
   private handleKeyEnter() {
