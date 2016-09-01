@@ -341,10 +341,10 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
                   {
                     group.items.map((item) => {
                       return (
-                        <div className='filter-item' key={item.key}>
+                        <div className={classNames('filter-item', {'selected': item.isIncluded || item.isExcluded})} key={item.key}>
                           <a href='#' onClick={this.onItemSelected.bind(this, item, group)}>{item.title}</a>
-                          <input type='checkbox' checked={item.isExcluded} onChange={this.onItemExcluded.bind(this, item, group)} className={item.isExcluded ? 'visible' : ''} title='Exclude' />
-                          <input type='checkbox' checked={item.isIncluded} onChange={this.onItemIncluded.bind(this, item, group)} className={item.isIncluded ? 'visible' : ''} title='Include' />
+                          <i className={classNames('checkbox exclude fa fa-minus-square', {'selected': item.isExcluded})} title='Exclude' aria-hidden='true' onClick={this.onItemExcluded.bind(this, item, group)}></i>
+                          <i className={classNames('checkbox include fa fa-plus-square', {'selected': item.isIncluded})} title='Include' aria-hidden='true' onClick={this.onItemIncluded.bind(this, item, group)}></i>
                         </div>
                       )
                     }, this)

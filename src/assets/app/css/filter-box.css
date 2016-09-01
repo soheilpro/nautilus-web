@@ -53,16 +53,25 @@
   text-decoration: none;
 }
 
-.filter-box .body .filter-group .filter-item input {
+.filter-box .body .filter-group .filter-item .checkbox {
   float: right;
   margin: 4px 0px 0 5px;
   visibility: hidden;
+  color: #bbb;
+  cursor: pointer;
 }
 
-.filter-box .body .filter-group .filter-item:hover input {
-  visibility: visible;
+.filter-box .body .filter-group .filter-item .checkbox.include.selected,
+.filter-box .body .filter-group .filter-item .checkbox.include:hover {
+  color: #0091EA;
 }
 
-.filter-box .body .filter-group .filter-item input.visible {
+.filter-box .body .filter-group .filter-item .checkbox.exclude.selected,
+.filter-box .body .filter-group .filter-item .checkbox.exclude:hover {
+  color: #D50000;
+}
+
+.filter-box .body .filter-group .filter-item:hover .checkbox,
+.filter-box .body .filter-group .filter-item .checkbox.selected {
   visibility: visible;
 }
