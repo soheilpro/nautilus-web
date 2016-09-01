@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Nautilus, entityComparer, asEntity } from '../nautilus'
 import * as NQL from '../nql/nql'
 import { HTMLExpressionFormatter } from '../expressions/htmlexpressionformatter'
+import { KeyMaster, Key, isNotInInput } from '../keymaster'
 
 interface IFilterItem {
   key: string;
@@ -175,8 +176,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   private componentWillMount() {
-    Mousetrap.bind('ctrl+f', (event: KeyboardEvent) => {
-      this.toggleFilters();
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      KeyMaster.handle(event, { which: Key.F }, isNotInInput.bind(this), this.toggleFilters.bind(this));
     });
 
     if (this.props.filterState) {
@@ -327,7 +328,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   render() {
     return (
       <div className='filter-box'>
-        <div className='header' onClick={this.toggleFilters.bind(this)} title='Ctrl+F'>
+        <div className='header' onClick={this.toggleFilters.bind(this)} title='Shortcut: F'>
           <span className='title'>Filter:</span>
           <span className='query'>{this.renderQuery(this.getQuery())}</span>
         </div>

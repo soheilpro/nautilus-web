@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { KeyMaster, Key } from '../keymaster';
 
 interface EditableProps {
   isEditable: boolean;
@@ -92,18 +93,12 @@ export class Editable extends React.Component<EditableProps, {}> {
   }
 
   onKeyDown(event: KeyboardEvent) {
-    if (event.which === 27)
-      this.endEditing();
+    KeyMaster.handle(event, { which: Key.Escape }, null, this.endEditing.bind(this));
   }
 
   onKeyPress(event: KeyboardEvent) {
-    if (event.which === 13) {
-      if (!this.props.isMultiline)
-        this.save();
-      else
-        if (event.ctrlKey)
-          this.save();
-    }
+    KeyMaster.handle(event, { which: Key.Enter }, !this.props.isMultiline, this.save.bind(this));
+    KeyMaster.handle(event, { which: Key.Enter, ctrlKey: true }, this.props.isMultiline, this.save.bind(this));
   }
 
   onBlur() {

@@ -5,6 +5,7 @@ import { IssueList } from './issue-list';
 import { IssueDetail } from './issue-detail';
 import * as NQL from '../nql/nql'
 import { Query } from '../query'
+import { KeyMaster, Key, isNotInInput } from '../keymaster'
 
 interface IIssuesState {
   issues?: IIssue[];
@@ -51,9 +52,8 @@ export class Issues extends React.Component<{}, IIssuesState> {
       })
     });
 
-    Mousetrap.bind('ctrl+n', (event: KeyboardEvent) => {
-      this.addIssue();
-      event.preventDefault();
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      KeyMaster.handle(event, { which: Key.N }, isNotInInput.bind(this), this.addIssue.bind(this));
     });
 
     ($(".issue-detail-container") as any).sticky();
@@ -115,7 +115,7 @@ export class Issues extends React.Component<{}, IIssuesState> {
       <div>
         <div style={{marginBottom: '20px'}} className='row'>
           <div className='columns'>
-            <button title='Ctrl+N' className="button-primary" onClick={this.addIssue.bind(this)}>Add Issue</button>
+            <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}>Add Issue</button>
           </div>
         </div>
         <div className='row'>

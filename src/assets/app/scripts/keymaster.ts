@@ -1,5 +1,6 @@
 interface IKeyCombination {
   which: number;
+  ctrlKey?: boolean;
   shiftKey?: boolean;
 }
 
@@ -12,21 +13,40 @@ interface IHandler {
 }
 
 export class KeyMaster {
-  static handle(event: KeyboardEvent, keyCombination: IKeyCombination, condition: ICondition, handler: IHandler, preventDefault?: boolean) {
+  static handle(event: KeyboardEvent, keyCombination: IKeyCombination, condition: boolean | ICondition, handler: IHandler, preventDefault?: boolean) {
     if (keyCombination.which != event.which)
       return;
 
-    if (keyCombination.shiftKey !== undefined && keyCombination.shiftKey != event.shiftKey)
+    if (keyCombination.ctrlKey !== undefined && keyCombination.ctrlKey !== event.ctrlKey)
       return;
 
-    if (condition && !condition(event))
+    if (keyCombination.shiftKey !== undefined && keyCombination.shiftKey !== event.shiftKey)
       return;
+
+    if (condition !== null) {
+      if (typeof condition === 'boolean') {
+        if (!condition)
+          return;
+      }
+      else if (!condition(event)) {
+        return;
+      }
+    }
 
     var result = handler(event);
 
     if (preventDefault !== undefined ? preventDefault : result)
       event.preventDefault();
   }
+}
+
+export function isInInput(event: KeyboardEvent) {
+  return (event.target as HTMLElement).nodeName === 'INPUT' ||
+         (event.target as HTMLElement).nodeName === 'TEXTAREA';
+}
+
+export function isNotInInput(event: KeyboardEvent) {
+  return !isInInput(event);
 }
 
 export enum Key {

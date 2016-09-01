@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Nautilus, IMilestone, entityComparer } from '../nautilus';
 import { MilestoneList } from './milestone-list';
+import { KeyMaster, Key, isNotInInput } from '../keymaster'
 
 interface IMilestonesState {
   milestones?: IMilestone[];
@@ -38,9 +39,8 @@ export class Milestones extends React.Component<{}, IMilestonesState> {
       })
     });
 
-    Mousetrap.bind('ctrl+n', (event: KeyboardEvent) => {
-      this.addMilestone();
-      event.preventDefault();
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      KeyMaster.handle(event, { which: Key.N }, isNotInInput.bind(this), this.addMilestone.bind(this));
     });
   }
 
@@ -57,7 +57,7 @@ export class Milestones extends React.Component<{}, IMilestonesState> {
       <div>
         <div style={{marginBottom: '20px'}} className='row'>
           <div className='columns'>
-            <button title='Ctrl+N' className="button-primary" onClick={this.addMilestone.bind(this)}>Add Milestone</button>
+            <button title='Shortcut: N' className="button-primary" onClick={this.addMilestone.bind(this)}>Add Milestone</button>
           </div>
         </div>
         <div className='row'>
