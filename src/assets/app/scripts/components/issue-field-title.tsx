@@ -7,15 +7,6 @@ export class TitleIssueField extends IssueField {
     return this.props.issue.getTitle();
   }
 
-  getEditableSpanClassName(): string {
-    var state = this.props.issue.getState();
-
-    if (!state)
-      return "";
-
-    return "state-" + state.type;
-  }
-
   setValue(value: string): void {
     Nautilus.Instance.updateIssue(this.props.issue, { title: value });
   }

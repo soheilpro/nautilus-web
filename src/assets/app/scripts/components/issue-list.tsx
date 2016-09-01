@@ -156,6 +156,25 @@ class IssueGridRow extends GridRow {
   static keyForItem(issue: IIssue) {
     return issue.id;
   }
+
+  getTRClassName() {
+    var issue = this.props.item as IIssue;
+    var className: string[] = [];
+
+    var type = issue.getType();
+    if (type)
+      className.push("type-" + type.key.replace(':', '-'));
+
+    var priority = issue.getPriority();
+    if (priority)
+      className.push("priority-" + priority.key.replace(':', '-'));
+
+    var state = issue.getState();
+    if (state)
+      className.push("state-" + state.type);
+
+    return classNames(super.getTRClassName(), className.join(' '));
+  }
 }
 
 interface IssueListProps {

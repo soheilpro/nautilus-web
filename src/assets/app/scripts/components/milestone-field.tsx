@@ -41,10 +41,6 @@ export class MilestoneField extends React.Component<MilestoneFieldProps, {}> {
     return value1 === value2;
   }
 
-  getEditableSpanClassName() {
-    return "";
-  }
-
   edit(): void {
     this.editable.startEditing();
   }
@@ -54,7 +50,7 @@ export class MilestoneField extends React.Component<MilestoneFieldProps, {}> {
 
   render() {
     return (
-      <Editable isEditable={this.isEditable()} isMultiline={this.isMultiline()} placeholder={this.getPlaceholder()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} spanClassName={this.getEditableSpanClassName()} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
+      <Editable isEditable={this.isEditable()} isMultiline={this.isMultiline()} placeholder={this.getPlaceholder()} value={this.getValue()} values={this.getValues()} valueToString={this.valueToString} valueFromString={this.valueFromString} valueComparer={this.valueComparer.bind(this)} onValueChanged={this.setValue.bind(this)} ref={(e) => this.editable = e} />
     );
   }
 };

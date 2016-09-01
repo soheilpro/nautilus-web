@@ -8,8 +8,6 @@ interface EditableProps {
   values?: any[];
   spanStyle?: Object;
   inputStyle?: Object;
-  spanClassName?: string;
-  inputClassName?: string;
   valueFromString?(value: string, values: any[]): any;
   valueToString?(value: any, full: boolean): string;
   valueComparer?(value1: any, value2: any): boolean;
@@ -117,9 +115,13 @@ export class Editable extends React.Component<EditableProps, {}> {
     var value = this.props.value;
     var spanElement: any;
     var inputElement: any;
+    var className = classNames({
+      'editable': true,
+      'multiline': this.props.isMultiline,
+    });
 
     if (value)
-      spanElement = <span className={this.props.spanClassName} style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(value, false)}</span>
+      spanElement = <span style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.valueToString(value, false)}</span>
     else
       spanElement = <span className='placeholder' style={this.props.spanStyle} ref={(ref) => this.spanElement = ref}>{this.props.placeholder}</span>
 
@@ -129,7 +131,7 @@ export class Editable extends React.Component<EditableProps, {}> {
       inputElement = <textarea className='input' style={this.props.inputStyle} onKeyDown={this.onKeyDown.bind(this)} onKeyPress={this.onKeyPress.bind(this)} onBlur={this.onBlur.bind(this)} ref={(ref) => this.inputElement = ref} />
 
     return (
-      <div className={'editable ' + (this.props.isMultiline ? 'multiline' : '')} onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
+      <div className={className} onDoubleClick={this.startEditing.bind(this)} ref={(ref) => this.containerElement = ref}>
         { spanElement }
         { inputElement }
       </div>

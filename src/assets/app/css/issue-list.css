@@ -26,23 +26,23 @@
   margin: 0 1px 0 0;
 }
 
-.issue-list .grid td.title .editable span.state-ready {
+.issue-list .grid tr.state-ready td.title .editable span {
   background-color: #ffe0b2;
 }
 
-.issue-list .grid td.title .editable span.state-inprogress {
+.issue-list .grid tr.state-inprogress td.title .editable span {
   background-color: #b3e5fc;
 }
 
-.issue-list .grid td.title .editable span.state-finished {
+.issue-list .grid tr.state-finished td.title .editable span {
   background-color: #c5e1a5;
 }
 
-.issue-list .grid td.title .editable span.state-blocked {
+.issue-list .grid tr.state-blocked td.title .editable span {
   background-color: #ffcdd2;
 }
 
-.issue-list .grid td.title .editable span.state-closed {
+.issue-list .grid tr.state-closed td.title .editable span {
   color: #aaa;
   text-decoration: line-through;
 }

@@ -122,12 +122,25 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
     this.cellElements[this.props.selectedColumnIndex].handleKeyDown(event);
   }
 
+  getTRClassName() {
+    return classNames({
+      'selected': this.props.isSelected,
+    });
+  }
+
+  getTDClassName(column: IGridColumn, columnIndex: number) {
+    return classNames({
+      [`${column.key}`]: true,
+      'selected': this.props.isSelected && this.props.selectedColumnIndex == columnIndex
+    });
+  }
+
   render() {
     return (
-      <tr className={this.props.isSelected ? 'selected' : ''} ref={e => this.trElement = e}>
+      <tr className={this.getTRClassName()} ref={e => this.trElement = e}>
         {
           this.props.columns.map((column: IGridColumn, columnIndex: number) =>
-            <td tabIndex='0' className={column.key + ' ' + (this.props.isSelected && this.props.selectedColumnIndex == columnIndex ? 'selected' : '')} onClick={this.handleClick.bind(this)} data-column-index={columnIndex} key={column.key}>
+            <td tabIndex='0' className={this.getTDClassName(column, columnIndex)} onClick={this.handleClick.bind(this)} data-column-index={columnIndex} key={column.key}>
               <column.Cell item={this.props.item} rowIndex={this.props.rowIndex} columnIndex={columnIndex} isSelected={this.props.isSelected && this.props.selectedColumnIndex === columnIndex} ref={(e: GridCell) => this.cellElements[columnIndex] = e} />
             </td>
           )
