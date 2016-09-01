@@ -5,7 +5,6 @@
 
 .filter-box .header {
   padding: 5px 10px;
-  cursor: pointer;
 }
 
 .filter-box .header .title {
@@ -17,15 +16,42 @@
   color: #444;
 }
 
+.filter-box .header a.clear {
+  margin-left: 10px;
+}
+
+.filter-box .toggle {
+  border-top: 1px solid #e1e1e1;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.filter-box .toggle:hover {
+  background-color: #f6f6f6;
+}
+
+.filter-box .toggle .open {
+  display: inline-block;
+}
+
+.filter-box .toggle .close {
+  display: none;
+}
+
+.filter-box.open .toggle .open {
+  display: none;
+}
+
+.filter-box.open .toggle .close {
+  display: inline-block;
+}
+
 .filter-box .body {
   border-top: 1px solid #e1e1e1;
   padding: 10px 10px;
   background-color: #fff;
   display: none;
-}
-
-.filter-box .body a.clear {
-  float: right;
 }
 
 .filter-box .body .filter-group {

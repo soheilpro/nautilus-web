@@ -39,6 +39,9 @@ interface FilterBoxState {
 }
 
 export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
+  private filterBoxElement: HTMLElement;
+  private bodyElement: HTMLElement;
+
   constructor() {
     super();
 
@@ -252,7 +255,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   private toggleFilters() {
-    $('.filter-box .body').slideToggle({
+    $(this.filterBoxElement).toggleClass('open');
+    $(this.bodyElement).slideToggle({
       duration: 300
     });
   }
@@ -327,13 +331,20 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
 
   render() {
     return (
-      <div className='filter-box'>
-        <div className='header' onClick={this.toggleFilters.bind(this)} title='Shortcut: F'>
+      <div className='filter-box' ref={e => this.filterBoxElement = e}>
+        <div className='header'>
           <span className='title'>Filter:</span>
           <span className='query'>{this.renderQuery(this.getQuery())}</span>
+          {
+            this.areAnyItemsSelected() ?
+              <a href='#' className='clear' onClick={this.clearFilters.bind(this)}>Clear</a> : null
+          }
         </div>
-        <div className='body'>
-          <a href='#' style={{display: this.areAnyItemsSelected() ? 'inline' : 'none'}} className='clear' onClick={this.clearFilters.bind(this)}>Clear</a>
+        <div className='toggle' onClick={this.toggleFilters.bind(this)} title='Shortcut: F'>
+          <i className='open fa fa-angle-double-down' aria-hidden='true'></i>
+          <i className='close fa fa-angle-double-up' aria-hidden='true'></i>
+        </div>
+        <div className='body' ref={e => this.bodyElement = e}>
           {
             this.state.groups.map((group) => {
               return (
