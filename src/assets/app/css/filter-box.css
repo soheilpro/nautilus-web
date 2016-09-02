@@ -16,8 +16,34 @@
   color: #444;
 }
 
-.filter-box .header a.clear {
+.filter-box .header .save {
   margin-left: 10px;
+}
+
+.filter-box .header .all {
+  float: right;
+}
+
+.filter-box .header .saved-filters {
+  float: right;
+}
+
+.filter-box .header .saved-filters .saved-filter {
+  margin-left: 5px;
+}
+
+.filter-box .header .saved-filters .saved-filter .delete {
+  margin-right: 5px;
+  color: #eee;
+  visibility: hidden;
+}
+
+.filter-box .header .saved-filters .saved-filter:hover .delete {
+  visibility: visible;
+}
+
+.filter-box .header .saved-filters .saved-filter .delete:hover {
+  color: #D50000;
 }
 
 .filter-box .toggle {

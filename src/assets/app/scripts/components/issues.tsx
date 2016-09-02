@@ -89,6 +89,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
       this.saveFilterState(this.filterBox.getFilterState());
   }
 
+  onSavedFiltersChanged(): void {
+    this.saveSavedFilters(this.filterBox.getSavedFilters());
+  }
+
   handleSelectionChange(index: number): void {
     this.setState({
       selectedIssueIndex: index
@@ -108,6 +112,19 @@ export class Issues extends React.Component<{}, IIssuesState> {
     sessionStorage.setItem('issues/filters', JSON.stringify(filters));
   }
 
+  loadSavedFilters(): any {
+    var item = localStorage.getItem('issues/saved-filters');
+
+    if (!item)
+      return item;
+
+    return JSON.parse(item);
+  }
+
+  saveSavedFilters(savedFilters: any) {
+    localStorage.setItem('issues/saved-filters', JSON.stringify(savedFilters));
+  }
+
   render() {
     var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
 
@@ -120,7 +137,7 @@ export class Issues extends React.Component<{}, IIssuesState> {
         </div>
         <div className='row'>
           <div className='columns'>
-            <FilterBox initialFilterState={this.loadFilterState()} onChanged={this.onFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
+            <FilterBox initialFilterState={this.loadFilterState()} initialSavedFilters={this.loadSavedFilters()} onChanged={this.onFiltersChanged.bind(this)} onSavedFiltersChanged={this.onSavedFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
           </div>
         </div>
         <div className='row'>

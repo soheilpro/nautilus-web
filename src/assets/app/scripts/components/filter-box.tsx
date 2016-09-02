@@ -28,14 +28,22 @@ interface IFilterState {
   exclude: IFilterSelection[]
 }
 
+interface ISavedFilter {
+  name: string;
+  state: IFilterState;
+}
+
 interface FilterBoxProps {
   initialFilterState: IFilterState;
+  initialSavedFilters: ISavedFilter[];
   onChanged(): void;
+  onSavedFiltersChanged(): void;
 }
 
 interface FilterBoxState {
   groups: IFilterGroup[];
   filterState: IFilterState;
+  savedFilters: ISavedFilter[];
 }
 
 export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
@@ -50,7 +58,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       filterState: {
         include: [],
         exclude: []
-      }
+      },
+      savedFilters: []
     };
 
     this.state.groups.push({
@@ -175,6 +184,9 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       this.state.filterState = this.props.initialFilterState;
       this.props.onChanged();
     }
+
+    if (this.props.initialSavedFilters)
+      this.state.savedFilters = this.props.initialSavedFilters;
   }
 
   private areAnyItemsSelected() {
@@ -182,11 +194,35 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   private clearFilters() {
-    this.state.filterState.include = [];
-    this.state.filterState.exclude = [];
+    this.state.filterState = {
+      include: [],
+      exclude: []
+    };
 
     this.forceUpdate();
     this.props.onChanged();
+  }
+
+  private saveFilter() {
+    var name = window.prompt('Name?');
+
+    if (!name)
+      return;
+
+    this.state.savedFilters.push({
+      name: name,
+      state: this.getFilterState()
+    });
+
+    this.forceUpdate();
+    this.props.onSavedFiltersChanged();
+  }
+
+  private removeSavedFilter(savedFilter: ISavedFilter) {
+    this.state.savedFilters = this.state.savedFilters.filter(x => x !== savedFilter);
+
+    this.forceUpdate();
+    this.props.onSavedFiltersChanged();
   }
 
   private onItemSelected(item: IFilterItem, group: IFilterGroup) {
@@ -239,6 +275,13 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     this.props.onChanged();
   }
 
+  private onSavedFilterSelected(savedFilter: ISavedFilter) {
+    this.state.filterState = savedFilter.state;
+
+    this.forceUpdate();
+    this.props.onChanged();
+  }
+
   private toggleFilters() {
     $(this.filterBoxElement).toggleClass('open');
     $(this.bodyElement).slideToggle({
@@ -247,7 +290,11 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   getFilterState(): IFilterState {
-    return this.state.filterState;
+    return JSON.parse(JSON.stringify(this.state.filterState));
+  }
+
+  getSavedFilters(): ISavedFilter[] {
+    return JSON.parse(JSON.stringify(this.state.savedFilters));
   }
 
   getQuery(): NQL.IExpression {
@@ -321,8 +368,25 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
           <span className='query'>{this.renderQuery(this.getQuery())}</span>
           {
             this.areAnyItemsSelected() ?
-              <a href='#' className='clear' onClick={this.clearFilters.bind(this)}>Clear</a> : null
+              <a href='#' className='save' onClick={this.saveFilter.bind(this)}>Save</a> : null
           }
+          <span className='saved-filters'>
+          {
+            _.sortBy(this.state.savedFilters, 'name').map((savedFilter) => {
+              return (
+                <span className='saved-filter'>
+                  <a href='#' className='delete' onClick={this.removeSavedFilter.bind(this, savedFilter)}><i className="fa fa-remove" aria-hidden="true"></i></a>
+                  <a href='#' className='filter' onClick={this.onSavedFilterSelected.bind(this, savedFilter)}>{savedFilter.name}</a>
+                </span>
+              )
+            }, this)
+          }
+          </span>
+          {
+            this.areAnyItemsSelected() ?
+              <a href='#' className='all' onClick={this.clearFilters.bind(this)}>All</a> : null
+          }
+          <div className='clear'></div>
         </div>
         <div className='toggle' onClick={this.toggleFilters.bind(this)} title='Shortcut: F'>
           <i className='open fa fa-angle-double-down' aria-hidden='true'></i>
