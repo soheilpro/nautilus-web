@@ -7,8 +7,6 @@ import { KeyMaster, Key, isNotInInput } from '../keymaster'
 interface IFilterItem {
   key: string;
   title: string;
-  isIncluded: boolean;
-  isExcluded: boolean;
   queryItem: Object;
   queryReturnType: string;
 }
@@ -20,22 +18,24 @@ interface IFilterGroup {
   queryItem: string;
 }
 
+interface IFilterSelection {
+  groupKey: string;
+  itemKey: string;
+}
+
 interface IFilterState {
-  type: string;
-  groups: {
-    key: string;
-    include: string[];
-    exclude: string[];
-  }[]
+  include: IFilterSelection[],
+  exclude: IFilterSelection[]
 }
 
 interface FilterBoxProps {
-  filterState: IFilterState;
+  initialFilterState: IFilterState;
   onChanged(): void;
 }
 
 interface FilterBoxState {
   groups: IFilterGroup[];
+  filterState: IFilterState;
 }
 
 export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
@@ -46,7 +46,11 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     super();
 
     this.state = {
-      groups: []
+      groups: [],
+      filterState: {
+        include: [],
+        exclude: []
+      }
     };
 
     this.state.groups.push({
@@ -56,8 +60,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: milestone.id,
           title: milestone.getFullTitle(),
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(milestone),
           queryReturnType: 'Milestone'
         };
@@ -72,8 +74,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: project.id,
           title: project.name,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(project),
           queryReturnType: 'Project'
         };
@@ -88,8 +88,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: itemArea.id,
           title: itemArea.title,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(itemArea),
           queryReturnType: 'ItemArea'
         };
@@ -104,8 +102,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: itemType.id,
           title: itemType.title,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(itemType),
           queryReturnType: 'ItemType'
         };
@@ -120,8 +116,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: itemPriority.id,
           title: itemPriority.title,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(itemPriority),
           queryReturnType: 'ItemPriority'
         };
@@ -136,8 +130,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: itemState.id,
           title: itemState.title,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(itemState),
           queryReturnType: 'ItemState'
         };
@@ -152,8 +144,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: user.id,
           title: user.name,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(user),
           queryReturnType: 'User'
         };
@@ -168,8 +158,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         return {
           key: user.id,
           title: user.name,
-          isIncluded: false,
-          isExcluded: false,
           queryItem: asEntity(user),
           queryReturnType: 'User'
         };
@@ -183,72 +171,69 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       KeyMaster.handle(event, { which: Key.F }, isNotInInput.bind(this), this.toggleFilters.bind(this));
     });
 
-    if (this.props.filterState) {
-      this.state.groups.forEach(group => {
-        group.items.forEach(item => {
-          var groupState = this.props.filterState.groups.filter(x => x.key === group.key)[0];
-
-          if (!groupState)
-            return;
-
-          item.isIncluded = groupState.include.some(x => x === item.key);
-          item.isExcluded = groupState.exclude.some(x => x === item.key);
-        });
-      });
-
+    if (this.props.initialFilterState) {
+      this.state.filterState = this.props.initialFilterState;
       this.props.onChanged();
     }
   }
 
   private areAnyItemsSelected() {
-    return this.state.groups.some(group => {
-      return group.items.some(item => {
-        return item.isIncluded || item.isExcluded;
-      });
-    });
+    return this.state.filterState.include.length > 0 || this.state.filterState.exclude.length > 0;
   }
 
   private clearFilters() {
-    this.state.groups.forEach(group => {
-      group.items.forEach(item => {
-        item.isIncluded = false;
-        item.isExcluded = false;
-      });
-    });
+    this.state.filterState.include = [];
+    this.state.filterState.exclude = [];
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemSelected(item: IFilterItem, group: IFilterGroup) {
-    this.state.groups.forEach(group2 => {
-      group2.items.forEach(item2 => {
-        item2.isIncluded = (group2.key === group.key && item2.key === item.key);
-        item2.isExcluded = false;
-      });
-    });
+    this.state.filterState.include = [{
+      groupKey: group.key,
+      itemKey: item.key
+    }];
+
+    this.state.filterState.exclude = [];
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemIncluded(item: IFilterItem, group: IFilterGroup) {
-    item.isIncluded = !item.isIncluded;
-
-    group.items.forEach(i => {
-      i.isExcluded = false;
+    this.state.filterState.include.push({
+      groupKey: group.key,
+      itemKey: item.key
     });
+
+    this.state.filterState.exclude = this.state.filterState.exclude.filter(x => x.groupKey !== group.key);
+
+    this.forceUpdate();
+    this.props.onChanged();
+  }
+
+  private onItemDeIncluded(item: IFilterItem, group: IFilterGroup) {
+    this.state.filterState.include = this.state.filterState.include.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key));
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemExcluded(item: IFilterItem, group: IFilterGroup) {
-    group.items.forEach(i => {
-      i.isIncluded = false;
+    this.state.filterState.include = this.state.filterState.include.filter(x => x.groupKey !== group.key);
+
+    this.state.filterState.exclude.push({
+      groupKey: group.key,
+      itemKey: item.key
     });
 
-    item.isExcluded = !item.isExcluded;
+    this.forceUpdate();
+    this.props.onChanged();
+  }
+
+  private onItemDeExcluded(item: IFilterItem, group: IFilterGroup) {
+    this.state.filterState.exclude = this.state.filterState.exclude.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key));
 
     this.forceUpdate();
     this.props.onChanged();
@@ -262,24 +247,15 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   getFilterState(): IFilterState {
-    return {
-      type: 'simple',
-      groups: this.state.groups.map(group => {
-        return {
-          key: group.key,
-          include: group.items.filter(item => item.isIncluded).map(item => item.key),
-          exclude: group.items.filter(item => item.isExcluded).map(item => item.key)
-        };
-      })
-    };
+    return this.state.filterState;
   }
 
   getQuery(): NQL.IExpression {
     var expressions: NQL.IExpression[] = [];
 
     this.state.groups.forEach(group => {
-      var includedItems = group.items.filter(item => item.isIncluded);
-      var excludedItems = group.items.filter(item => item.isExcluded);
+      var includedItems = group.items.filter(item => this.state.filterState.include.some(x => x.groupKey === group.key && x.itemKey === item.key));
+      var excludedItems = group.items.filter(item => this.state.filterState.exclude.some(x => x.groupKey === group.key && x.itemKey === item.key));
 
       if (includedItems.length === 0) {
         // noop
@@ -320,6 +296,14 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     return new NQL.AndExpression(expressions);
   }
 
+  private isIncluded(item: IFilterItem, group: IFilterGroup) {
+    return this.state.filterState.include.some(x => x.groupKey === group.key && x.itemKey === item.key);
+  }
+
+  private isExcluded(item: IFilterItem, group: IFilterGroup) {
+    return this.state.filterState.exclude.some(x => x.groupKey === group.key && x.itemKey === item.key);
+  }
+
   renderQuery(query: NQL.IExpression) {
     if (!query)
       return <span>All</span>;
@@ -353,10 +337,18 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
                   {
                     group.items.map((item) => {
                       return (
-                        <div className={classNames('filter-item', {'selected': item.isIncluded || item.isExcluded})} key={item.key}>
+                        <div className={classNames('filter-item', {'selected': this.isIncluded(item, group) || this.isExcluded(item, group)})} key={item.key}>
                           <a href='#' onClick={this.onItemSelected.bind(this, item, group)}>{item.title}</a>
-                          <i className={classNames('checkbox exclude fa fa-minus-square', {'selected': item.isExcluded})} title='Exclude' aria-hidden='true' onClick={this.onItemExcluded.bind(this, item, group)}></i>
-                          <i className={classNames('checkbox include fa fa-plus-square', {'selected': item.isIncluded})} title='Include' aria-hidden='true' onClick={this.onItemIncluded.bind(this, item, group)}></i>
+                          {
+                            !this.isExcluded(item, group) ?
+                              <i className='checkbox exclude fa fa-minus-square' title='Exclude' aria-hidden='true' onClick={this.onItemExcluded.bind(this, item, group)}></i> :
+                              <i className='checkbox exclude fa fa-minus-square selected' title='Exclude' aria-hidden='true' onClick={this.onItemDeExcluded.bind(this, item, group)}></i>
+                          }
+                          {
+                            !this.isIncluded(item, group) ?
+                              <i className='checkbox include fa fa-plus-square' title='Include' aria-hidden='true' onClick={this.onItemIncluded.bind(this, item, group)}></i> :
+                              <i className='checkbox include fa fa-plus-square selected' title='Include' aria-hidden='true' onClick={this.onItemDeIncluded.bind(this, item, group)}></i>
+                          }
                         </div>
                       )
                     }, this)

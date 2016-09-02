@@ -120,7 +120,7 @@ export class Issues extends React.Component<{}, IIssuesState> {
         </div>
         <div className='row'>
           <div className='columns'>
-            <FilterBox filterState={this.loadFilterState()} onChanged={this.onFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
+            <FilterBox initialFilterState={this.loadFilterState()} onChanged={this.onFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
           </div>
         </div>
         <div className='row'>
