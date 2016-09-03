@@ -6,6 +6,7 @@
 @import '/assets/app/css/issue-detail.css';
 @import '/assets/app/css/issue-list.css';
 @import '/assets/app/css/milestone-list.css';
+@import '/assets/app/css/project-list.css';
 @import '/assets/app/css/skeleton.css';
 
 * {

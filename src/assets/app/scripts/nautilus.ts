@@ -1,4 +1,4 @@
-import { INautilusClient, IEntity, IUser, ISession, IProject, IItemState, IItemType, IItemArea, IItemPriority, IItem, IItemChange } from './sdk/nautilus'
+import { INautilusClient, IEntity, IUser, ISession, IProject, IItemState, IItemType, IItemArea, IItemPriority, IItem, IItemChange, IProjectChange } from './sdk/nautilus'
 
 declare class EventEmitter {
   emitEvent(evt: string, args?: any[]): void;
@@ -61,6 +61,9 @@ export interface INautilus extends EventEmitter {
   getProjects(): IProject[];
   getProjectById(id: string): IProject;
   getProjectByName(name: string): IProject;
+  addProject(project: IProject): void;
+  updateProject(project: IProject, change: IProjectChange): void;
+  deleteProject(project: IProject): void;
   getUsers(): IUser[];
   getUserById(id: string): IUser;
   getUserByName(name: string): IUser;
@@ -217,6 +220,36 @@ export class Nautilus extends EventEmitter implements INautilus {
   getProjectByName(name: string): IProject {
     return this.state.projects.filter(x => x.name === name)[0];
   }
+
+  addProject(project: IProject) {
+    this.client.projects.insert(project, (error, project) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.state.projects.push(project);
+      this.emitEvent('projectAdded', [project]);
+    });
+  };
+
+  updateProject(project: IProject, change: IItemChange) {
+    this.client.projects.update(project.id, change, (error, project) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.state.projects[_.findIndex(this.state.projects, entityComparer.bind(this, project))] = project;
+      this.emitEvent('projectChanged', [project]);
+    });
+  };
+
+  deleteProject(project: IProject) {
+    this.client.projects.delete(project.id, (error) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.state.projects.splice(_.findIndex(this.state.projects, entityComparer.bind(this, project)), 1);
+      this.emitEvent('projectDeleted', [project]);
+    });
+  };
 
   getUsers() {
     return this.state.users;

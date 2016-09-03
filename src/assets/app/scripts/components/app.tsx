@@ -3,6 +3,7 @@ import { Nautilus, ISession } from '../nautilus';
 import { Login } from './login';
 import { Issues } from './issues';
 import { Milestones } from './milestones';
+import { Projects } from './projects';
 
 var Route = ReactRouter.Route;
 var Router = ReactRouter.Router;
@@ -84,6 +85,7 @@ export class App extends React.Component<{}, AppState> {
       <ReactRouter.Router history={browserHistory}>
           <Route path="/" component={Issues}/>
           <Route path="/milestones" component={Milestones}/>
+          <Route path="/projects" component={Projects}/>
       </ReactRouter.Router>
     );
   }
