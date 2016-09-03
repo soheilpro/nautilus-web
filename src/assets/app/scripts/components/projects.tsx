@@ -55,7 +55,7 @@ export class Projects extends React.Component<{}, IProjectsState> {
   render() {
     return (
       <div>
-        <div style={{marginBottom: '20px'}} className='row'>
+        <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addProject.bind(this)}>Add Project</button>
           </div>

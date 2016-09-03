@@ -93,7 +93,13 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
   }
 
   shouldComponentUpdate(nextProps: IGridRowProps, nextState: IGridRowState) {
-    return this.props.isSelected || nextProps.isSelected;
+    if (this.props.item !== nextProps.item)
+      return true;
+
+    if (this.props.isSelected || nextProps.isSelected)
+      return true;
+
+    return false;
   }
 
   componentDidMount() {

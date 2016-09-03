@@ -43,6 +43,7 @@ interface INautilusState {
 export interface INautilus extends EventEmitter {
   login(username: string, password: string): void;
   init(): void;
+  refresh(): void;
   isInitialized(): void;
   getSession(): ISession;
   setSession(session: ISession): void;
@@ -115,6 +116,24 @@ export class Nautilus extends EventEmitter implements INautilus {
   }
 
   init() {
+    this.load((error) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.emitEvent('init');
+    });
+  };
+
+  refresh() {
+    this.load((error) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.emitEvent('refresh');
+    });
+  };
+
+  load(callback: (error: Error) => void) {
     async.parallel([
       this.client.itemStates.getAll.bind(this.client.itemStates, {}),
       this.client.itemTypes.getAll.bind(this.client.itemTypes, {}),
@@ -125,7 +144,7 @@ export class Nautilus extends EventEmitter implements INautilus {
     ],
     (error, results) => {
       if (error)
-        return this.emitEvent('error', [error]);
+        return callback(error);
 
       this.state.itemStates = results[0] as IItemState[];
       this.state.itemTypes = _.sortBy(results[1] as IItemType[], x => x.title);
@@ -139,7 +158,7 @@ export class Nautilus extends EventEmitter implements INautilus {
 
       this.client.items.getAll({}, (error, items) => {
         if (error)
-          return this.emitEvent('error', [error]);
+          return callback(error);
 
         var milestones = items.filter(item => entityComparer(item.type, this.state.milestoneType));
         var issues = items.filter(item => !item.type || this.state.issueTypes.some(issueType => entityComparer(item.type, issueType)));
@@ -148,7 +167,7 @@ export class Nautilus extends EventEmitter implements INautilus {
         this.state.issues = issues.map(this.toIssue.bind(this)) as IIssue[];
         this.state.isInitialized = true;
 
-        this.emitEvent('init');
+        callback(null);
       });
     });
   };

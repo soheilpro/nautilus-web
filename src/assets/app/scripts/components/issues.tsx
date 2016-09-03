@@ -52,8 +52,19 @@ export class Issues extends React.Component<{}, IIssuesState> {
       })
     });
 
+    Nautilus.Instance.on('refresh', () => {
+      this.newAndUpdatedIssues = [];
+      this.setState({
+        issues: this.getFilteredIssues()
+      })
+    });
+
     document.addEventListener('keydown', (event: KeyboardEvent) => {
       KeyMaster.handle(event, { which: Key.N }, isNotInInput.bind(this), this.addIssue.bind(this));
+    });
+
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      KeyMaster.handle(event, { which: Key.R }, isNotInInput.bind(this), this.refresh.bind(this));
     });
 
     ($(".issue-detail-container") as any).sticky();
@@ -61,6 +72,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
 
   addIssue() {
     Nautilus.Instance.addIssue({} as IIssue);
+  }
+
+  refresh() {
+    Nautilus.Instance.refresh();
   }
 
   getFilteredIssues() {
@@ -130,9 +145,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
 
     return (
       <div>
-        <div style={{marginBottom: '20px'}} className='row'>
+        <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}>Add Issue</button>
+            <button title='Shortcut: R' className="button" onClick={this.refresh.bind(this)}><i className='fa fa-refresh' aria-hidden='true'></i></button>
           </div>
         </div>
         <div className='row'>
