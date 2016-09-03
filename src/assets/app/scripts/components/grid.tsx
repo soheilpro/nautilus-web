@@ -97,12 +97,12 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
   }
 
   componentDidMount() {
-    if (this.props.isSelected)
+    if (this.props.isSelected && $(this.trElement).closest('table').is('.focus'))
       (this.trElement.children[this.props.selectedColumnIndex] as HTMLElement).focus();
   }
 
   componentDidUpdate() {
-    if (this.props.isSelected)
+    if (this.props.isSelected && $(this.trElement).closest('table').is('.focus'))
       (this.trElement.children[this.props.selectedColumnIndex] as HTMLElement).focus();
   }
 
