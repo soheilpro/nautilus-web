@@ -2,6 +2,8 @@ interface IKeyCombination {
   which: number;
   ctrlKey?: boolean;
   shiftKey?: boolean;
+  altKey?: boolean;
+  metaKey?: boolean;
 }
 
 interface ICondition {
@@ -17,10 +19,16 @@ export class KeyMaster {
     if (keyCombination.which != event.which)
       return;
 
-    if (keyCombination.ctrlKey !== undefined && keyCombination.ctrlKey !== event.ctrlKey)
+    if (keyCombination.ctrlKey || false !== event.ctrlKey)
       return;
 
-    if (keyCombination.shiftKey !== undefined && keyCombination.shiftKey !== event.shiftKey)
+    if (keyCombination.shiftKey || false !== event.shiftKey)
+      return;
+
+    if (keyCombination.altKey || false !== event.altKey)
+      return;
+
+    if (keyCombination.metaKey || false !== event.metaKey)
       return;
 
     if (condition !== null) {
