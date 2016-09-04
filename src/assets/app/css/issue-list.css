@@ -38,16 +38,20 @@
    line-height: .9em;
 }
 
-.issue-list .grid tr.state-ready td.title .editable span {
+.issue-list .grid tr.state-todo td.title .editable span {
   background-color: #ffe0b2;
 }
 
-.issue-list .grid tr.state-inprogress td.title .editable span {
+.issue-list .grid tr.state-doing td.title .editable span {
   background-color: #b3e5fc;
 }
 
-.issue-list .grid tr.state-finished td.title .editable span {
+.issue-list .grid tr.state-done td.title .editable span {
   background-color: #c5e1a5;
+}
+
+.issue-list .grid tr.state-fixup td.title .editable span {
+  background-color: #ffe0b2;
 }
 
 .issue-list .grid tr.state-blocked td.title .editable span {
