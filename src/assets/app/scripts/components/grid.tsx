@@ -229,7 +229,7 @@ export class Grid extends React.Component<IGridProps, IGridState> implements IGr
     var isInTD = (event.target as HTMLElement).nodeName === 'TD';
 
     // We want to responsd to Tab and Shift+Tab even when we're in a child element of TD
-    KeyMaster.handle(event, { which: Key.Tab, shiftKey: false }, null, this.handleKeyTab.bind(this), isInTD);
+    KeyMaster.handle(event, { which: Key.Tab }, null, this.handleKeyTab.bind(this), isInTD);
     KeyMaster.handle(event, { which: Key.Tab, shiftKey: true }, null, this.handleKeyShiftTab.bind(this), isInTD);
 
     if (!isInTD)

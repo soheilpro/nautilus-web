@@ -19,16 +19,16 @@ export class KeyMaster {
     if (keyCombination.which != event.which)
       return;
 
-    if (keyCombination.ctrlKey || false !== event.ctrlKey)
+    if ((keyCombination.ctrlKey || false) !== event.ctrlKey)
       return;
 
-    if (keyCombination.shiftKey || false !== event.shiftKey)
+    if ((keyCombination.shiftKey || false) !== event.shiftKey)
       return;
 
-    if (keyCombination.altKey || false !== event.altKey)
+    if ((keyCombination.altKey || false) !== event.altKey)
       return;
 
-    if (keyCombination.metaKey || false !== event.metaKey)
+    if ((keyCombination.metaKey || false) !== event.metaKey)
       return;
 
     if (condition !== null) {
