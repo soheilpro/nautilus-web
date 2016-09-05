@@ -70,13 +70,8 @@ export class Issues extends React.Component<{}, IIssuesState> {
 
     document.addEventListener('keydown', (event: KeyboardEvent) => {
       KeyMaster.handle(event, { which: Key.N }, isNotInInput.bind(this), this.addIssue.bind(this));
-    });
-
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
       KeyMaster.handle(event, { which: Key.S }, isNotInInput.bind(this), this.addSubIssue.bind(this));
-    });
-
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      KeyMaster.handle(event, { which: Key.S, shiftKey: true }, isNotInInput.bind(this), this.addSiblingIssue.bind(this));
       KeyMaster.handle(event, { which: Key.R }, isNotInInput.bind(this), this.refresh.bind(this));
     });
 
@@ -88,7 +83,19 @@ export class Issues extends React.Component<{}, IIssuesState> {
   }
 
   addSubIssue() {
-    Nautilus.Instance.addSubIssue({} as IIssue, this.state.issues[this.state.selectedIssueIndex]);
+    var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
+
+    Nautilus.Instance.addSubIssue({} as IIssue, selectedIssue);
+  }
+
+  addSiblingIssue() {
+    var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
+    var parentIssue = selectedIssue.getParent();
+
+    if (!parentIssue)
+      return;
+
+    Nautilus.Instance.addSubIssue({} as IIssue, parentIssue);
   }
 
   refresh() {
@@ -192,7 +199,7 @@ export class Issues extends React.Component<{}, IIssuesState> {
         <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}>Add Issue</button>
-            <button title='Shortcut: S' className="button" onClick={this.addSubIssue.bind(this)}>Add Sub Issue</button>
+            <button title='Shortcut: S\nAdd Sibling Issue: Shift+S' className="button" onClick={this.addSubIssue.bind(this)}>Add Sub Issue</button>
             <button title='Shortcut: R' className="button" onClick={this.refresh.bind(this)}><i className='fa fa-refresh' aria-hidden='true'></i></button>
           </div>
         </div>
