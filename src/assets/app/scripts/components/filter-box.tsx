@@ -226,50 +226,59 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   private onItemSelected(item: IFilterItem, group: IFilterGroup) {
-    this.state.filterState.include = [{
-      groupKey: group.key,
-      itemKey: item.key
-    }];
-
-    this.state.filterState.exclude = [];
+    this.state.filterState = {
+      include: [{
+        groupKey: group.key,
+        itemKey: item.key
+      }],
+      exclude: []
+    };
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemIncluded(item: IFilterItem, group: IFilterGroup) {
-    this.state.filterState.include.push({
-      groupKey: group.key,
-      itemKey: item.key
-    });
-
-    this.state.filterState.exclude = this.state.filterState.exclude.filter(x => x.groupKey !== group.key);
+    this.state.filterState = {
+      include: this.state.filterState.include.concat([{
+        groupKey: group.key,
+        itemKey: item.key
+      }]),
+      exclude: this.state.filterState.exclude.filter(x => x.groupKey !== group.key)
+    };
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemDeIncluded(item: IFilterItem, group: IFilterGroup) {
-    this.state.filterState.include = this.state.filterState.include.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key));
+    this.state.filterState = {
+      include: this.state.filterState.include.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key)),
+      exclude: this.state.filterState.exclude
+    };
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemExcluded(item: IFilterItem, group: IFilterGroup) {
-    this.state.filterState.include = this.state.filterState.include.filter(x => x.groupKey !== group.key);
-
-    this.state.filterState.exclude.push({
-      groupKey: group.key,
-      itemKey: item.key
-    });
+    this.state.filterState = {
+      include: this.state.filterState.include.filter(x => x.groupKey !== group.key),
+      exclude: this.state.filterState.exclude.concat([{
+        groupKey: group.key,
+        itemKey: item.key
+      }])
+    };
 
     this.forceUpdate();
     this.props.onChanged();
   }
 
   private onItemDeExcluded(item: IFilterItem, group: IFilterGroup) {
-    this.state.filterState.exclude = this.state.filterState.exclude.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key));
+    this.state.filterState = {
+      include: this.state.filterState.include,
+      exclude: this.state.filterState.exclude.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key))
+    };
 
     this.forceUpdate();
     this.props.onChanged();
