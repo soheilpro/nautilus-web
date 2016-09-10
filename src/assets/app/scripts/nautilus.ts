@@ -1,4 +1,4 @@
-import { INautilusClient, IEntity, IUser, ISession, IProject, IItemState, IItemType, IItemArea, IItemPriority, IItem, IItemChange, IProjectChange } from './sdk/nautilus'
+import { INautilusClient, IEntity, IUser, IUserPermission, ISession, IProject, IItemState, IItemType, IItemArea, IItemPriority, IItem, IItemChange, IProjectChange } from './sdk/nautilus'
 
 declare class EventEmitter {
   emitEvent(evt: string, args?: any[]): void;
@@ -30,6 +30,7 @@ export interface IIssue extends IExtendedItem {
 interface INautilusState {
   isInitialized?: boolean;
   session?: ISession;
+  permissions?: IUserPermission[];
   itemStates?: IItemState[];
   itemTypes?: IItemType[];
   itemAreas?: IItemArea[];
@@ -49,6 +50,7 @@ export interface INautilus extends EventEmitter {
   isInitialized(): void;
   getSession(): ISession;
   setSession(session: ISession): void;
+  getPermissions(): IUserPermission[];
   getItemStates(): IItemState[];
   getItemStateById(id: string): IItemState;
   getItemStateByTitle(title: string): IItemState;
@@ -144,6 +146,7 @@ export class Nautilus extends EventEmitter implements INautilus {
       this.client.itemPriorities.getAll.bind(this.client.itemPriorities, {}),
       this.client.projects.getAll.bind(this.client.projects, {}),
       this.client.users.getAll.bind(this.client.users, {}),
+      this.client.users.getUserPermissions.bind(this.client.users, this.client.session.user),
     ],
     (error, results) => {
       if (error)
@@ -155,6 +158,7 @@ export class Nautilus extends EventEmitter implements INautilus {
       this.state.itemPriorities = results[3] as IItemPriority[];
       this.state.projects = _.sortBy(results[4] as IProject[], x => x.name);
       this.state.users = _.sortBy(results[5] as IUser[], x => x.name);
+      this.state.permissions = results[6] as IUserPermission[];
 
       this.state.milestoneType = _.find(this.state.itemTypes, itemType => itemType.key === 'milestone');
       this.state.issueTypes = this.state.itemTypes.filter(itemType => /issue\:/.test(itemType.key));
@@ -181,6 +185,10 @@ export class Nautilus extends EventEmitter implements INautilus {
 
   getSession() {
     return this.state.session;
+  }
+
+  getPermissions() {
+    return this.state.permissions;
   }
 
   getItemStates() {

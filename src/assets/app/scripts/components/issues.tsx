@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Nautilus, IIssue, entityComparer } from '../nautilus';
+import { Nav } from './nav';
 import { FilterBox } from './filter-box';
 import { IssueList } from './issue-list';
 import { IssueDetail } from './issue-detail';
@@ -196,6 +197,7 @@ export class Issues extends React.Component<{}, IIssuesState> {
 
     return (
       <div>
+        <Nav />
         <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Issue</button>

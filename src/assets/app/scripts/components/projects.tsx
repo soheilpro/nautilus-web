@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Nautilus, IProject, entityComparer } from '../nautilus';
+import { Nav } from './nav';
 import { ProjectList } from './project-list';
 import { KeyMaster, Key, isNotInInput } from '../keymaster'
 
@@ -55,6 +56,7 @@ export class Projects extends React.Component<{}, IProjectsState> {
   render() {
     return (
       <div>
+        <Nav />
         <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addProject.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Project</button>

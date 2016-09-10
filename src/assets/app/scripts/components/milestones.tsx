@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Nautilus, IMilestone, entityComparer } from '../nautilus';
+import { Nav } from './nav';
 import { MilestoneList } from './milestone-list';
 import { KeyMaster, Key, isNotInInput } from '../keymaster'
 
@@ -55,6 +56,7 @@ export class Milestones extends React.Component<{}, IMilestonesState> {
   render() {
     return (
       <div>
+        <Nav />
         <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addMilestone.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Milestone</button>
