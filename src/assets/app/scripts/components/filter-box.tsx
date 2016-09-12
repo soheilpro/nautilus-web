@@ -33,6 +33,112 @@ interface ISavedFilter {
   state: IFilterState;
 }
 
+interface FilterGroupProps {
+  group: IFilterGroup;
+  filterState: IFilterState;
+  onItemSelected(item: IFilterItem): void;
+  onItemIncluded(item: IFilterItem): void;
+  onItemDeIncluded(item: IFilterItem): void;
+  onItemExcluded(item: IFilterItem): void;
+  onItemDeExcluded(item: IFilterItem): void;
+}
+
+interface FilterGroupState {
+  isOpen?: boolean;
+  searchTerm?: string;
+}
+
+export class FilterGroup extends React.Component<FilterGroupProps, FilterGroupState> {
+  private containerElement: Element;
+  private searchInputElement: Element;
+
+  constructor() {
+    super();
+
+    this.state = {
+      isOpen: false
+    }
+  }
+
+  componentWillMount() {
+    window.addEventListener('click', (event: Event) => {
+      if ($(this.containerElement).has(event.target as Element).length === 0)
+        this.setState({
+          isOpen: false
+        });
+    });
+  }
+
+  componentDidUpdate() {
+    if (this.state.isOpen)
+      $(this.searchInputElement).focus();
+  }
+
+  private toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen,
+      searchTerm: ''
+    });
+  }
+
+  private handleSearchInputChange(event: Event) {
+    this.setState({
+      searchTerm: (event.target as HTMLInputElement).value
+    })
+  }
+
+  private handleSearchInputKeyDown(event: KeyboardEvent) {
+    if (event.which === Key.Escape)
+      this.setState({
+        isOpen: false
+      })
+  }
+
+  private isIncluded(item: IFilterItem) {
+    return this.props.filterState.include.some(x => x.groupKey === this.props.group.key && x.itemKey === item.key);
+  }
+
+  private isExcluded(item: IFilterItem) {
+    return this.props.filterState.exclude.some(x => x.groupKey === this.props.group.key && x.itemKey === item.key);
+  }
+
+  render() {
+    return (
+      <div className={classNames('filter-group', {'open': this.state.isOpen})} key={this.props.group.key} ref={e => this.containerElement = e}>
+        <a href='#' className='title' onClick={this.toggle.bind(this)}>
+          {this.props.group.title}
+          <i className='fa fa-caret-down caret caret-down' aria-hidden="true"></i>
+          <i className='fa fa-caret-up caret caret-up' aria-hidden="true"></i>
+        </a>
+        <div className='content'>
+          <div className='search'>
+            <input value={this.state.searchTerm} type='text' className='input' onChange={this.handleSearchInputChange.bind(this)} onKeyDown={this.handleSearchInputKeyDown.bind(this)} ref={e => this.searchInputElement = e} />
+          </div>
+        {
+          this.props.group.items.filter(item => !this.state.searchTerm || item.title.toLowerCase().indexOf(this.state.searchTerm.toLowerCase()) > -1).map((item) => {
+            return (
+              <div className={classNames('filter-item', {'selected': this.isIncluded(item) || this.isExcluded(item)})} key={item.key}>
+                {
+                  !this.isExcluded(item) ?
+                    <i className='checkbox exclude fa fa-minus-square' title='Exclude' aria-hidden='true' onClick={this.props.onItemExcluded.bind(this, item)}></i> :
+                    <i className='checkbox exclude fa fa-minus-square selected' title='Exclude' aria-hidden='true' onClick={this.props.onItemDeExcluded.bind(this, item)}></i>
+                }
+                {
+                  !this.isIncluded(item) ?
+                    <i className='checkbox include fa fa-plus-square' title='Include' aria-hidden='true' onClick={this.props.onItemIncluded.bind(this, item)}></i> :
+                    <i className='checkbox include fa fa-plus-square selected' title='Include' aria-hidden='true' onClick={this.props.onItemDeIncluded.bind(this, item)}></i>
+                }
+                <a href='#' onClick={this.props.onItemSelected.bind(this, item)}>{item.title}</a>
+              </div>
+            )
+          }, this)
+        }
+        </div>
+      </div>
+    );
+  }
+}
+
 interface FilterBoxProps {
   initialFilterState: IFilterState;
   initialSavedFilters: ISavedFilter[];
@@ -176,10 +282,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
   }
 
   private componentWillMount() {
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
-      KeyMaster.handle(event, { which: Key.F }, isNotInInput.bind(this), this.toggleFilters.bind(this));
-    });
-
     if (this.props.initialFilterState) {
       this.state.filterState = this.props.initialFilterState;
       this.props.onChanged();
@@ -225,7 +327,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     this.props.onSavedFiltersChanged();
   }
 
-  private onItemSelected(item: IFilterItem, group: IFilterGroup) {
+  private onItemSelected(group: IFilterGroup, item: IFilterItem) {
     this.state.filterState = {
       include: [{
         groupKey: group.key,
@@ -238,7 +340,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     this.props.onChanged();
   }
 
-  private onItemIncluded(item: IFilterItem, group: IFilterGroup) {
+  private onItemIncluded(group: IFilterGroup, item: IFilterItem) {
     this.state.filterState = {
       include: this.state.filterState.include.concat([{
         groupKey: group.key,
@@ -251,7 +353,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     this.props.onChanged();
   }
 
-  private onItemDeIncluded(item: IFilterItem, group: IFilterGroup) {
+  private onItemDeIncluded(group: IFilterGroup, item: IFilterItem) {
     this.state.filterState = {
       include: this.state.filterState.include.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key)),
       exclude: this.state.filterState.exclude
@@ -261,7 +363,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     this.props.onChanged();
   }
 
-  private onItemExcluded(item: IFilterItem, group: IFilterGroup) {
+  private onItemExcluded(group: IFilterGroup, item: IFilterItem) {
     this.state.filterState = {
       include: this.state.filterState.include.filter(x => x.groupKey !== group.key),
       exclude: this.state.filterState.exclude.concat([{
@@ -274,7 +376,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     this.props.onChanged();
   }
 
-  private onItemDeExcluded(item: IFilterItem, group: IFilterGroup) {
+  private onItemDeExcluded(group: IFilterGroup, item: IFilterItem) {
     this.state.filterState = {
       include: this.state.filterState.include,
       exclude: this.state.filterState.exclude.filter(x => x.groupKey !== group.key || (x.groupKey === group.key && x.itemKey !== item.key))
@@ -289,13 +391,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
 
     this.forceUpdate();
     this.props.onChanged();
-  }
-
-  private toggleFilters() {
-    $(this.filterBoxElement).toggleClass('open');
-    $(this.bodyElement).slideToggle({
-      duration: 300
-    });
   }
 
   getFilterState(): IFilterState {
@@ -352,14 +447,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     return new NQL.AndExpression(expressions);
   }
 
-  private isIncluded(item: IFilterItem, group: IFilterGroup) {
-    return this.state.filterState.include.some(x => x.groupKey === group.key && x.itemKey === item.key);
-  }
-
-  private isExcluded(item: IFilterItem, group: IFilterGroup) {
-    return this.state.filterState.exclude.some(x => x.groupKey === group.key && x.itemKey === item.key);
-  }
-
   renderQuery(query: NQL.IExpression) {
     if (!query)
       return <span>All</span>;
@@ -397,37 +484,10 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
           }
           <div className='clear'></div>
         </div>
-        <div className='toggle' onClick={this.toggleFilters.bind(this)} title='Shortcut: F'>
-          <i className='open fa fa-angle-double-down' aria-hidden='true'></i>
-          <i className='close fa fa-angle-double-up' aria-hidden='true'></i>
-        </div>
         <div className='body' ref={e => this.bodyElement = e}>
           {
             this.state.groups.map((group) => {
-              return (
-                <div className='filter-group' key={group.key}>
-                  <span className='title'>{group.title}</span>
-                  {
-                    group.items.map((item) => {
-                      return (
-                        <div className={classNames('filter-item', {'selected': this.isIncluded(item, group) || this.isExcluded(item, group)})} key={item.key}>
-                          <a href='#' onClick={this.onItemSelected.bind(this, item, group)}>{item.title}</a>
-                          {
-                            !this.isExcluded(item, group) ?
-                              <i className='checkbox exclude fa fa-minus-square' title='Exclude' aria-hidden='true' onClick={this.onItemExcluded.bind(this, item, group)}></i> :
-                              <i className='checkbox exclude fa fa-minus-square selected' title='Exclude' aria-hidden='true' onClick={this.onItemDeExcluded.bind(this, item, group)}></i>
-                          }
-                          {
-                            !this.isIncluded(item, group) ?
-                              <i className='checkbox include fa fa-plus-square' title='Include' aria-hidden='true' onClick={this.onItemIncluded.bind(this, item, group)}></i> :
-                              <i className='checkbox include fa fa-plus-square selected' title='Include' aria-hidden='true' onClick={this.onItemDeIncluded.bind(this, item, group)}></i>
-                          }
-                        </div>
-                      )
-                    }, this)
-                  }
-                </div>
-              )
+              return <FilterGroup group={group} filterState={this.state.filterState} onItemSelected={this.onItemSelected.bind(this, group)} onItemIncluded={this.onItemIncluded.bind(this, group)} onItemDeExcluded={this.onItemDeExcluded.bind(this, group)} onItemExcluded={this.onItemExcluded.bind(this, group)} onItemDeIncluded={this.onItemDeIncluded.bind(this, group)} />
             }, this)
           }
           <div className='clear'></div>
