@@ -59,7 +59,7 @@ export class Projects extends React.Component<{}, IProjectsState> {
         <Nav />
         <div className='row action-bar'>
           <div className='columns'>
-            <button title='Shortcut: N' className="button-primary" onClick={this.addProject.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Project</button>
+            <button title='Shortcut: N' className="button-primary" onClick={this.addProject.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Project</button>
           </div>
         </div>
         <div className='row'>

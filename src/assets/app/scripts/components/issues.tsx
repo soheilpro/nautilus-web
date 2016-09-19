@@ -200,9 +200,9 @@ export class Issues extends React.Component<{}, IIssuesState> {
         <Nav />
         <div className='row action-bar'>
           <div className='columns'>
-            <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Issue</button>
-            <button title='Shortcut: S\nAdd Sibling Issue: Shift+S' className="button" onClick={this.addSubIssue.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Sub Issue</button>
-            <button title='Shortcut: R' className="button" onClick={this.refresh.bind(this)}><i className='fa fa-refresh' aria-hidden='true'></i></button>
+            <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Issue</button>
+            <button title='Shortcut: S\nAdd Sibling Issue: Shift+S' className="button" onClick={this.addSubIssue.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Sub Issue</button>
+            <button title='Shortcut: R' className="button" onClick={this.refresh.bind(this)}><i className='fa fa-refresh before after' aria-hidden='true'></i></button>
           </div>
         </div>
         <div className='row'>

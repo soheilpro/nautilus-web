@@ -105,11 +105,11 @@ export class FilterGroup extends React.Component<FilterGroupProps, FilterGroupSt
   render() {
     return (
       <div className={classNames('filter-group', {'open': this.state.isOpen})} key={this.props.group.key} ref={e => this.containerElement = e}>
-        <a href='#' className='title' onClick={this.toggle.bind(this)}>
+        <button className='title' onClick={this.toggle.bind(this)}>
           {this.props.group.title}
           <i className='fa fa-caret-down caret caret-down' aria-hidden="true"></i>
           <i className='fa fa-caret-up caret caret-up' aria-hidden="true"></i>
-        </a>
+        </button>
         <div className='content'>
           <div className='search'>
             <input value={this.state.searchTerm} type='text' className='input' onChange={this.handleSearchInputChange.bind(this)} onKeyDown={this.handleSearchInputKeyDown.bind(this)} ref={e => this.searchInputElement = e} />

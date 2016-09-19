@@ -58,17 +58,7 @@
 }
 
 .filter-box .body .filter-group .title {
-  display: block;
-  color: #000;
   margin-right: 20px;
-  user-select: none;
-  text-decoration: none;
-  padding: 5px 10px;
-  border: 1px solid #e1e1e1;
-}
-
-.filter-box .body .filter-group .title:hover {
-  color: #0091EA;
 }
 
 .filter-box .body .filter-group .title .caret {
@@ -86,10 +76,6 @@
 }
 
 .filter-box .body .filter-group .title:hover .caret {
-  color: #0091EA;
-}
-
-.filter-box .body .filter-group.open .title {
   color: #0091EA;
 }
 

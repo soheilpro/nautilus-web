@@ -59,7 +59,7 @@ export class Milestones extends React.Component<{}, IMilestonesState> {
         <Nav />
         <div className='row action-bar'>
           <div className='columns'>
-            <button title='Shortcut: N' className="button-primary" onClick={this.addMilestone.bind(this)}><i className='fa fa-plus' aria-hidden='true'></i> Add Milestone</button>
+            <button title='Shortcut: N' className="button-primary" onClick={this.addMilestone.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Milestone</button>
           </div>
         </div>
         <div className='row'>
