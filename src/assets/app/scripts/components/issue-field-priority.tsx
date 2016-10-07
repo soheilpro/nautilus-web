@@ -3,6 +3,10 @@ import { Nautilus, IItemPriority } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class PriorityIssueField extends IssueField {
+  getPlaceholder(): string {
+    return "Select priority";
+  }
+
   getValue(): IItemPriority {
     return this.props.issue.getPriority();
   }

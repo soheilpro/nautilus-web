@@ -7,7 +7,6 @@ import { AssignedUserIssueField } from './issue-field-assigned-user';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
 import { TypeIssueField } from './issue-field-type';
-import { PriorityIssueField } from './issue-field-priority';
 import { ProjectIssueField } from './issue-field-project';
 import { AreaIssueField } from './issue-field-area';
 import { TitleIssueField } from './issue-field-title';
@@ -113,18 +112,6 @@ var TypeGridColumn: IGridColumn = {
   }
 }
 
-var PriorityGridColumn: IGridColumn = {
-  key: 'priority',
-  HeaderCell: class PriorityHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Priority</span>;
-    }
-  },
-  Cell: class PriorityGridCell extends IssueFieldGridCell {
-    protected Field = PriorityIssueField;
-  }
-}
-
 var StateGridColumn: IGridColumn = {
   key: 'state',
   HeaderCell: class StateHeaderGridCell extends GridHeaderCell {
@@ -194,7 +181,7 @@ export class IssueGrid extends React.Component<IssueGridProps, {}> {
   render() {
     return (
       <div className='issue-list'>
-        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, TitleGridColumn, ProjectGridColumn, TypeGridColumn, PriorityGridColumn, StateGridColumn, AssignedUserGridColumn, MilestoneGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
+        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, TitleGridColumn, ProjectGridColumn, TypeGridColumn, StateGridColumn, AssignedUserGridColumn, MilestoneGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
       </div>
     );
   }
