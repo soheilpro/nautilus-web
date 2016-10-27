@@ -8,23 +8,27 @@ declare class EventEmitter {
 interface IExtendedItem extends IItem {
   getType(): IItemType;
   getTitle(): string;
+  getFullTitle(): string;
   getDescription(): string;
   getState(): IItemState;
   getPriority(): IItemPriority;
   getProject(): IProject;
+  getMilestone(): IMilestone;
+  getTags(): string[];
+  getParent(): IExtendedItem;
+  getParents(): IExtendedItem[];
   getAssignedTo(): IUser;
   getCreatedBy(): IUser;
   getModifiedBy(): IUser;
 }
 
 export interface IMilestone extends IExtendedItem {
-  getFullTitle(): string;
 }
 
 export interface IIssue extends IExtendedItem {
-  getMilestone(): IMilestone;
-  getParent(): IIssue;
-  getParents(): IIssue[];
+}
+
+export interface ITask extends IExtendedItem {
 }
 
 interface INautilusState {
@@ -32,14 +36,19 @@ interface INautilusState {
   session?: ISession;
   permissions?: IUserPermission[];
   itemStates?: IItemState[];
+  milestoneStates?: IItemState[];
+  issueStates?: IItemState[];
+  taskStates?: IItemState[];
   itemTypes?: IItemType[];
-  milestoneType?: IItemType;
+  milestoneTypes?: IItemType[];
   issueTypes?: IItemType[];
+  taskTypes?: IItemType[];
   itemPriorities?: IItemPriority[];
   projects?: IProject[];
   users?: IUser[];
   milestones?: IMilestone[];
   issues?: IIssue[];
+  tasks?: ITask[];
 }
 
 export interface INautilus extends EventEmitter {
@@ -50,12 +59,30 @@ export interface INautilus extends EventEmitter {
   getSession(): ISession;
   setSession(session: ISession): void;
   getPermissions(): IUserPermission[];
+  getMilestoneStates(): IItemState[];
+  getMilestoneStateById(id: string): IItemState;
+  getMilestoneStateByTitle(title: string): IItemState;
+  getIssueStates(): IItemState[];
+  getIssueStateById(id: string): IItemState;
+  getIssueStateByTitle(title: string): IItemState;
   getItemStates(): IItemState[];
   getItemStateById(id: string): IItemState;
   getItemStateByTitle(title: string): IItemState;
+  getTaskStates(): IItemState[];
+  getTaskStateById(id: string): IItemState;
+  getTaskStateByTitle(title: string): IItemState;
+  getMilestoneTypes(): IItemType[];
+  getMilestoneTypeById(id: string): IItemType;
+  getMilestoneTypeByTitle(title: string): IItemType;
+  getItemTypes(): IItemType[];
+  getItemTypeById(id: string): IItemType;
+  getItemTypeByTitle(title: string): IItemType;
   getIssueTypes(): IItemType[];
   getIssueTypeById(id: string): IItemType;
   getIssueTypeByTitle(title: string): IItemType;
+  getTaskTypes(): IItemType[];
+  getTaskTypeById(id: string): IItemType;
+  getTaskTypeByTitle(title: string): IItemType;
   getItemPriorities(): IItemPriority[];
   getItemPriorityById(id: string): IItemPriority;
   getItemPriorityByTitle(title: string): IItemPriority;
@@ -78,6 +105,10 @@ export interface INautilus extends EventEmitter {
   addIssue(issue: IIssue): void;
   updateIssue(issue: IIssue, change: IItemChange): void;
   deleteIssue(issue: IIssue): void;
+  getTasks(): ITask[];
+  addTask(task: ITask): void;
+  updateTask(task: ITask, change: IItemChange): void;
+  deleteTask(task: ITask): void;
 }
 
 export class Nautilus extends EventEmitter implements INautilus {
@@ -152,18 +183,25 @@ export class Nautilus extends EventEmitter implements INautilus {
       this.state.users = _.sortBy(results[4] as IUser[], x => x.name);
       this.state.permissions = results[5] as IUserPermission[];
 
-      this.state.milestoneType = _.find(this.state.itemTypes, itemType => itemType.key === 'milestone');
-      this.state.issueTypes = this.state.itemTypes.filter(itemType => /issue\:/.test(itemType.key));
+      this.state.milestoneStates = this.state.itemStates.filter(itemState => itemState.itemKind === 'milestone');
+      this.state.issueStates = this.state.itemStates.filter(itemState => itemState.itemKind === 'issue');
+      this.state.taskStates = this.state.itemStates.filter(itemState => itemState.itemKind === 'task');
+
+      this.state.milestoneTypes = this.state.itemTypes.filter(itemType => itemType.itemKind === 'milestone');
+      this.state.issueTypes = this.state.itemTypes.filter(itemType => itemType.itemKind === 'issue');
+      this.state.taskTypes = this.state.itemTypes.filter(itemType => itemType.itemKind === 'task');
 
       this.client.items.getAll({}, (error, items) => {
         if (error)
           return callback(error);
-
-        var milestones = items.filter(item => entityComparer(item.type, this.state.milestoneType));
-        var issues = items.filter(item => !item.type || this.state.issueTypes.some(issueType => entityComparer(item.type, issueType)));
+        
+        var milestones = items.filter(item => item.kind === 'milestone');
+        var issues = items.filter(item => item.kind === 'issue');
+        var tasks = items.filter(item => item.kind === 'task');
 
         this.state.milestones = _.sortBy(milestones.map(this.toMilestone.bind(this)) as IMilestone[], x => x.getFullTitle());
         this.state.issues = issues.map(this.toIssue.bind(this)) as IIssue[];
+        this.state.tasks = tasks.map(this.toTask.bind(this)) as ITask[];
         this.state.isInitialized = true;
 
         callback(null);
@@ -195,6 +233,66 @@ export class Nautilus extends EventEmitter implements INautilus {
     return this.state.itemStates.filter(x => x.title === title)[0];
   }
 
+  getMilestoneStates() {
+    return this.state.milestoneStates;
+  };
+
+  getMilestoneStateById(id: string) {
+    return this.state.milestoneStates.filter(x => x.id === id)[0];
+  }
+
+  getMilestoneStateByTitle(title: string) {
+    return this.state.milestoneStates.filter(x => x.title === title)[0];
+  }
+
+  getIssueStates() {
+    return this.state.issueStates;
+  };
+
+  getIssueStateById(id: string) {
+    return this.state.issueStates.filter(x => x.id === id)[0];
+  }
+
+  getIssueStateByTitle(title: string) {
+    return this.state.issueStates.filter(x => x.title === title)[0];
+  }
+
+  getTaskStates() {
+    return this.state.taskStates;
+  };
+
+  getTaskStateById(id: string) {
+    return this.state.taskStates.filter(x => x.id === id)[0];
+  }
+
+  getTaskStateByTitle(title: string) {
+    return this.state.taskStates.filter(x => x.title === title)[0];
+  }
+
+  getItemTypes() {
+    return this.state.itemTypes;
+  };
+
+  getItemTypeById(id: string): IItemType {
+    return this.state.itemTypes.filter(x => x.id === id)[0];
+  }
+
+  getItemTypeByTitle(title: string): IItemType {
+    return this.state.itemTypes.filter(x => x.title === title)[0];
+  }
+
+  getMilestoneTypes() {
+    return this.state.milestoneTypes;
+  };
+
+  getMilestoneTypeById(id: string): IItemType {
+    return this.state.milestoneTypes.filter(x => x.id === id)[0];
+  }
+
+  getMilestoneTypeByTitle(title: string): IItemType {
+    return this.state.milestoneTypes.filter(x => x.title === title)[0];
+  }
+
   getIssueTypes() {
     return this.state.issueTypes;
   };
@@ -205,6 +303,18 @@ export class Nautilus extends EventEmitter implements INautilus {
 
   getIssueTypeByTitle(title: string): IItemType {
     return this.state.issueTypes.filter(x => x.title === title)[0];
+  }
+
+  getTaskTypes() {
+    return this.state.taskTypes;
+  };
+
+  getTaskTypeById(id: string): IItemType {
+    return this.state.taskTypes.filter(x => x.id === id)[0];
+  }
+
+  getTaskTypeByTitle(title: string): IItemType {
+    return this.state.taskTypes.filter(x => x.title === title)[0];
   }
 
   getItemPriorities() {
@@ -286,7 +396,7 @@ export class Nautilus extends EventEmitter implements INautilus {
   }
 
   addMilestone(milestone: IMilestone) {
-    milestone.type = this.state.milestoneType;
+    milestone.kind = 'milestone';
 
     this.client.items.insert(milestone, (error, item) => {
       if (error)
@@ -326,6 +436,8 @@ export class Nautilus extends EventEmitter implements INautilus {
   };
 
   addIssue(issue: IIssue) {
+    issue.kind = 'issue';
+
     this.client.items.insert(issue, (error, item) => {
       if (error)
         return this.emitEvent('error', [error]);
@@ -359,6 +471,54 @@ export class Nautilus extends EventEmitter implements INautilus {
     });
   };
 
+  getTasks() {
+    return this.state.tasks;
+  };
+
+  addTask(task: ITask) {
+    task.kind = 'task';
+
+    this.client.items.insert(task, (error, item) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      var task = this.toTask(item);
+
+      this.state.tasks.push(task);
+      this.emitEvent('taskAdded', [task]);
+    });
+  }
+
+  updateTask(task: ITask, change: IItemChange) {
+    this.client.items.update(task.id, change, (error, item) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      var task = this.toTask(item);
+
+      this.state.tasks[_.findIndex(this.state.tasks, entityComparer.bind(this, task))] = task;
+      this.emitEvent('taskChanged', [task]);
+    });
+  };
+
+  deleteTask(task: ITask) {
+    this.client.items.delete(task.id, (error) => {
+      if (error)
+        return this.emitEvent('error', [error]);
+
+      this.state.tasks.splice(_.findIndex(this.state.tasks, entityComparer.bind(this, task)), 1);
+      this.emitEvent('taskDeleted', [task]);
+    });
+  };
+
+  private toExtendedItem(item: IItem): IExtendedItem {
+    var exntendedItem = item as any;
+    exntendedItem.context = this;
+    exntendedItem.__proto__ = ExtendedItem.prototype;
+
+    return exntendedItem;
+  };
+
   private toMilestone(item: IItem): IMilestone {
     var milestone = item as any;
     milestone.context = this;
@@ -375,9 +535,17 @@ export class Nautilus extends EventEmitter implements INautilus {
 
     return issue;
   };
+
+  private toTask(item: IItem): ITask {
+    var issue = item as any;
+    issue.context = this;
+    issue.__proto__ = Task.prototype;
+
+    return issue;
+  };
 }
 
-class Item implements IExtendedItem {
+class ExtendedItem implements IExtendedItem {
   sid: string;
   context: INautilus;
   type: IItemType;
@@ -392,26 +560,29 @@ class Item implements IExtendedItem {
   createdBy: IUser;
   modifiedBy: IUser;
 
-  getType() {
-    if (!this.type)
-      return undefined;
-
-    return _.find(this.context.getIssueTypes(), entityComparer.bind(this, this.type));
+  getType(): IItemType {
+    throw new Error('NotSupportedException');
   };
 
   getTitle() {
     return this.title;
   }
 
+  getFullTitle() {
+    var project = this.getProject();
+
+    if (!project)
+      return this.title;
+
+    return `${project.name}:‌ ${this.title}`;
+  }
+
   getDescription() {
     return this.description;
   }
 
-  getState() {
-    if (!this.state)
-      return undefined;
-
-    return _.find(this.context.getItemStates(), entityComparer.bind(this, this.state));
+  getState(): IItemState {
+    throw new Error('NotSupportedException');
   };
 
   getPriority() {
@@ -435,6 +606,30 @@ class Item implements IExtendedItem {
     return _.find(this.context.getMilestones(), entityComparer.bind(this, this.parent));
   };
 
+  getTags() {
+    return this.tags;
+  }
+
+  getParent() {
+    if (!this.parent)
+      return undefined;
+
+    return _.find(this.context.getMilestones(), entityComparer.bind(this, this.parent)) ||
+           _.find(this.context.getIssues(), entityComparer.bind(this, this.parent));
+  }
+
+  getParents() {
+    var parents: IExtendedItem[] = [];
+    var parent = this.getParent();
+
+    while (parent) {
+      parents.push(parent);
+      parent = parent.getParent();
+    }
+
+    return parents;
+  }
+
   getAssignedTo() {
     if (!this.assignedTo)
       return undefined;
@@ -451,36 +646,52 @@ class Item implements IExtendedItem {
   };
 }
 
-class Milestone extends Item {
-  getFullTitle() {
-    var project = this.getProject();
-
-    if (!project)
-      return this.title;
-
-    return `${project.name}:‌ ${this.title}`;
-  }
-}
-
-class Issue extends Item {
-  getParent() {
-    if (!this.parent)
+class Milestone extends ExtendedItem {
+  getType() {
+    if (!this.type)
       return undefined;
 
-    return _.find(this.context.getIssues(), entityComparer.bind(this, this.parent));
-  }
+    return _.find(this.context.getMilestoneTypes(), entityComparer.bind(this, this.type));
+  };
 
-  getParents() {
-    var parents: IIssue[] = [];
-    var parent = this.getParent();
+  getState() {
+    if (!this.state)
+      return undefined;
 
-    while (parent) {
-      parents.push(parent);
-      parent = parent.getParent();
-    }
+    return _.find(this.context.getMilestoneStates(), entityComparer.bind(this, this.state));
+  };
+}
 
-    return parents;
-  }
+class Issue extends ExtendedItem {
+  getType() {
+    if (!this.type)
+      return undefined;
+
+    return _.find(this.context.getIssueTypes(), entityComparer.bind(this, this.type));
+  };
+
+  getState() {
+    if (!this.state)
+      return undefined;
+
+    return _.find(this.context.getIssueStates(), entityComparer.bind(this, this.state));
+  };
+}
+
+class Task extends ExtendedItem {
+  getType() {
+    if (!this.type)
+      return undefined;
+
+    return _.find(this.context.getTaskTypes(), entityComparer.bind(this, this.type));
+  };
+
+  getState() {
+    if (!this.state)
+      return undefined;
+
+    return _.find(this.context.getTaskStates(), entityComparer.bind(this, this.state));
+  };
 }
 
 export function entityComparer(entity1: IEntity, entity2: IEntity) {

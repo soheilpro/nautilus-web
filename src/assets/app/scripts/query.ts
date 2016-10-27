@@ -1,4 +1,4 @@
-import { Nautilus, IIssue } from './nautilus';
+import { Nautilus, IIssue, ITask } from './nautilus';
 import * as NQL from './nql/nql'
 
 class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
@@ -55,7 +55,7 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
     if (left instanceof NQL.LocalExpression) {
       var map = mapping[(left as NQL.LocalExpression).name];
 
-      left = new NQL.CastExpression(new NQL.MethodCallExpression(new NQL.LocalExpression('issue'), map.function, []), map.type);
+      left = new NQL.CastExpression(new NQL.MethodCallExpression(new NQL.LocalExpression('this'), map.function, []), map.type);
 
       if (right instanceof NQL.ConstantExpression) {
         right = this.getExpression(right, map.valueToObject, map.type);
@@ -87,7 +87,7 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
 }
 
 export class Query {
-  static evaluate(query: NQL.IExpression, issue: IIssue): boolean {
+  static evaluateIssueFilter(query: NQL.IExpression, issue: IIssue): boolean {
     var normalizedQuery = new QueryNormalizer().tranform(query, null);
 
     var context: NQL.IEvaluationContext = {
@@ -118,7 +118,45 @@ export class Query {
         }
       ],
       locals: {
-        issue: issue
+        this: issue
+      }
+    };
+
+    return new NQL.ExpressionEvaluator().evaluate(normalizedQuery, context);
+  }
+
+  static evaluateTaskFilter(query: NQL.IExpression, task: ITask): boolean {
+    var normalizedQuery = new QueryNormalizer().tranform(query, null);
+
+    var context: NQL.IEvaluationContext = {
+      types: [
+        {
+          name: 'Milestone',
+          base: 'Entity'
+        },
+        {
+          name: 'Project',
+          base: 'Entity'
+        },
+        {
+          name: 'ItemType',
+          base: 'Entity'
+        },
+        {
+          name: 'ItemPriority',
+          base: 'Entity'
+        },
+        {
+          name: 'ItemState',
+          base: 'Entity'
+        },
+        {
+          name: 'User',
+          base: 'Entity'
+        }
+      ],
+      locals: {
+        this: task
       }
     };
 

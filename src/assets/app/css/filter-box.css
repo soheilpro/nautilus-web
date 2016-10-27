@@ -14,10 +14,15 @@
 
 .filter-box .header .query {
   color: #444;
+  margin-right: 20px;
 }
 
-.filter-box .header .save {
-  margin-left: 10px;
+.filter-box .header .query:before {
+  content: '('
+}
+
+.filter-box .header .query:after {
+  content: ')'
 }
 
 .filter-box .header .all {

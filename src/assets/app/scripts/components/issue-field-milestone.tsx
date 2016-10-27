@@ -3,6 +3,10 @@ import { Nautilus, IMilestone } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class MilestoneIssueField extends IssueField {
+  getPlaceholder(): string {
+    return "Milestone";
+  }
+
   getValue(): IMilestone {
     return this.props.issue.getMilestone();
   }

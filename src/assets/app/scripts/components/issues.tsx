@@ -1,122 +1,132 @@
 import * as React from 'react';
-import { Nautilus, IIssue, entityComparer } from '../nautilus';
+import { Nautilus, IItem, IIssue, ITask, entityComparer } from '../nautilus';
 import { Nav } from './nav';
 import { FilterBox } from './filter-box';
 import { IssueList } from './issue-list';
 import { IssueDetail } from './issue-detail';
+import { TaskDetail } from './task-detail';
 import * as NQL from '../nql/nql'
 import { Query } from '../query'
 import { KeyMaster, Key, isNotInInput } from '../keymaster'
 
 interface IIssuesState {
-  issues?: IIssue[];
-  selectedIssueIndex?: number;
+  items?: any[];
+  selectedItemIndex?: number;
+  selectedIssue?: IIssue;
+  selectedTask?: ITask;
 }
 
 export class Issues extends React.Component<{}, IIssuesState> {
   private filterBox: FilterBox;
   private newAndUpdatedIssues: IIssue[] = [];
+  private newAndUpdatedTasks: ITask[] = [];
 
   constructor() {
     super();
 
     this.state = {
-      issues: [],
-      selectedIssueIndex: 0
+      items: []
     };
   }
 
   componentDidMount() {
+    var items = this.getFilteredItems();
+
     this.setState({
-      issues: this.getFilteredIssues(),
-      selectedIssueIndex: 0
+      items: items,
+      selectedItemIndex: 0,
+      selectedIssue: items[0]
     });
 
     Nautilus.Instance.on('issueAdded', (issue) => {
       this.newAndUpdatedIssues.push(issue);
-      this.setState({
-        issues: this.getFilteredIssues(),
-        selectedIssueIndex: 0
-      })
-    });
 
-    Nautilus.Instance.on('subIssueAdded', (issue) => {
-      this.newAndUpdatedIssues.push(issue);
-      var issues = this.getFilteredIssues();
       this.setState({
-        issues: issues,
-        selectedIssueIndex: issues.indexOf(issue)
+        items: this.getFilteredItems()
       })
     });
 
     Nautilus.Instance.on('issueChanged', (issue) => {
       this.newAndUpdatedIssues.push(issue);
+
       this.setState({
-        issues: this.getFilteredIssues()
+        items: this.getFilteredItems()
       })
     });
 
     Nautilus.Instance.on('issueDeleted', () => {
       this.setState({
-        issues: this.getFilteredIssues()
+        items: this.getFilteredItems()
+      })
+    });
+
+    Nautilus.Instance.on('taskAdded', (task) => {
+      this.newAndUpdatedTasks.push(task);
+
+      this.setState({
+        items: this.getFilteredItems()
+      })
+    });
+
+    Nautilus.Instance.on('taskChanged', (task) => {
+      this.newAndUpdatedTasks.push(task);
+
+      this.setState({
+        items: this.getFilteredItems()
+      })
+    });
+
+    Nautilus.Instance.on('taskDeleted', () => {
+      this.setState({
+        items: this.getFilteredItems()
       })
     });
 
     Nautilus.Instance.on('refresh', () => {
       this.newAndUpdatedIssues = [];
       this.setState({
-        issues: this.getFilteredIssues()
+        items: this.getFilteredItems()
       })
     });
 
     document.addEventListener('keydown', (event: KeyboardEvent) => {
       KeyMaster.handle(event, { which: Key.N }, isNotInInput.bind(this), this.addIssue.bind(this));
-      KeyMaster.handle(event, { which: Key.S }, isNotInInput.bind(this), this.addSubIssue.bind(this));
-      KeyMaster.handle(event, { which: Key.S, shiftKey: true }, isNotInInput.bind(this), this.addSiblingIssue.bind(this));
+      KeyMaster.handle(event, { which: Key.T }, isNotInInput.bind(this), this.addTask.bind(this));
       KeyMaster.handle(event, { which: Key.R }, isNotInInput.bind(this), this.refresh.bind(this));
     });
 
-    ($(".issue-detail-container") as any).sticky();
+    ($(".detail-container") as any).sticky();
   }
 
   addIssue() {
     Nautilus.Instance.addIssue({} as IIssue);
   }
 
-  addSubIssue() {
-    var issue = {} as IIssue;
-    issue.parent = this.state.issues[this.state.selectedIssueIndex];
-
-    Nautilus.Instance.addIssue(issue);
-  }
-
-  addSiblingIssue() {
-    var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
-    var parentIssue = selectedIssue.getParent();
-
-    if (!parentIssue)
-      return;
-
-    var issue = {} as IIssue;
-    issue.parent = parentIssue;
-
-    Nautilus.Instance.addIssue(issue);
+  addTask() {
+    var task = {} as ITask;
+    task.parent = this.state.selectedIssue;
+    
+    Nautilus.Instance.addTask(task);
   }
 
   refresh() {
     Nautilus.Instance.refresh();
   }
 
-  getFilteredIssues() {
-    var issues = Nautilus.Instance.getIssues();
+  getFilteredItems() {
+    var filteredIssues = this.getFilteredIssues();
+    var filteredTasks = this.getFilteredTasks();
 
-    var filterQuery = this.filterBox ? this.filterBox.getQuery() : null;
+    if (this.filterBox && this.filterBox.getIssueFilterQuery())
+      filteredTasks = filteredTasks.filter(task => filteredIssues.some(issue => entityComparer(task.parent, issue)));
 
-    if (filterQuery)
-      issues = issues.filter(issue => this.newAndUpdatedIssues.some(entityComparer.bind(this, issue)) || Query.evaluate(filterQuery, issue));
+    if (this.filterBox && this.filterBox.getTaskFilterQuery())
+      filteredIssues = filteredIssues.filter(issue => filteredTasks.some(task => entityComparer(task.parent, issue)));
 
-    issues = issues.slice();
-    issues.sort((x: IIssue, y: IIssue) => {
+    var items = filteredIssues.concat(filteredTasks);
+
+    items = items.slice();
+    items.sort((x: IIssue, y: IIssue) => {
       var xNodes = x.getParents();
       xNodes.reverse();
       xNodes.push(x);
@@ -145,15 +155,41 @@ export class Issues extends React.Component<{}, IIssuesState> {
       }
     });
 
+    return items;
+  }
+
+  getFilteredIssues() {
+    var issues = Nautilus.Instance.getIssues();
+
+    var filterQuery = this.filterBox ? this.filterBox.getIssueFilterQuery() : null;
+
+    if (filterQuery)
+      issues = issues.filter(issue => this.newAndUpdatedIssues.some(entityComparer.bind(this, issue)) || Query.evaluateIssueFilter(filterQuery, issue));
+
     return issues;
+  }
+
+  getFilteredTasks() {
+    var tasks = Nautilus.Instance.getTasks();
+
+    var filterQuery = this.filterBox ? this.filterBox.getTaskFilterQuery() : null;
+
+    if (filterQuery)
+      tasks = tasks.filter(task => this.newAndUpdatedTasks.some(entityComparer.bind(this, task)) || Query.evaluateTaskFilter(filterQuery, task));
+
+    return tasks;
   }
 
   onFiltersChanged(): void {
     this.newAndUpdatedIssues = [];
+    this.newAndUpdatedTasks = [];
+    var items = this.getFilteredItems();
 
     this.setState({
-      issues: this.getFilteredIssues(),
-      selectedIssueIndex: 0
+      items: items,
+      selectedItemIndex: 0,
+      selectedIssue: items[0],
+      selectedTask: null
     })
 
     if (this.filterBox)
@@ -166,8 +202,22 @@ export class Issues extends React.Component<{}, IIssuesState> {
 
   handleSelectionChange(index: number): void {
     this.setState({
-      selectedIssueIndex: index
+      selectedItemIndex: index
     });
+
+    var item = this.state.items[index];
+
+    if (item.kind === 'issue')
+      return this.setState({
+        selectedIssue: item as IIssue,
+        selectedTask: null
+      });
+
+    if (item.kind === 'task')
+      return this.setState({
+        selectedIssue: (item as ITask).getParent(),
+        selectedTask: item as ITask
+      });
   }
 
   loadFilterState(): any {
@@ -183,7 +233,11 @@ export class Issues extends React.Component<{}, IIssuesState> {
     sessionStorage.setItem('issues/filters', JSON.stringify(filters));
   }
 
-  loadSavedFilters(): any {
+  saveTaskFilterState(filters: any) {
+    sessionStorage.setItem('tasks/filters', JSON.stringify(filters));
+  }
+
+  loadSavedIssueFilters(): any {
     var item = localStorage.getItem('issues/saved-filters');
 
     if (!item)
@@ -196,34 +250,48 @@ export class Issues extends React.Component<{}, IIssuesState> {
     localStorage.setItem('issues/saved-filters', JSON.stringify(savedFilters));
   }
 
-  render() {
-    var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
+  loadSavedTaskFilters(): any {
+    var item = localStorage.getItem('tasks/saved-filters');
 
+    if (!item)
+      return item;
+
+    return JSON.parse(item);
+  }
+
+  saveSavedTaskFilters(savedFilters: any) {
+    localStorage.setItem('tasks/saved-filters', JSON.stringify(savedFilters));
+  }
+
+  render() {
     return (
       <div>
         <Nav />
         <div className='row action-bar'>
           <div className='columns'>
             <button title='Shortcut: N' className="button-primary" onClick={this.addIssue.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Issue</button>
-            <button title='Shortcut: S\nAdd Sibling Issue: Shift+S' className="button" onClick={this.addSubIssue.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Sub Issue</button>
+            <button title='Shortcut: T' className="button-primary" onClick={this.addTask.bind(this)}><i className='fa fa-plus before' aria-hidden='true'></i> Add Task</button>
             <button title='Shortcut: R' className="button" onClick={this.refresh.bind(this)}><i className='fa fa-refresh before after' aria-hidden='true'></i></button>
           </div>
         </div>
         <div className='row'>
           <div className='columns'>
-            <FilterBox initialFilterState={this.loadFilterState()} initialSavedFilters={this.loadSavedFilters()} onChanged={this.onFiltersChanged.bind(this)} onSavedFiltersChanged={this.onSavedFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
+            <FilterBox initialFilterState={this.loadFilterState()} initialSavedFilters={this.loadSavedIssueFilters()} onChanged={this.onFiltersChanged.bind(this)} onSavedFiltersChanged={this.onSavedFiltersChanged.bind(this)} ref={ref => this.filterBox = ref} />
           </div>
         </div>
         <div className='row'>
           <div className='two columns' style={{minHeight: '1px'}}>
-            <div className='issue-detail-container'>
+            <div className='detail-container'>
               {
-                selectedIssue ? <IssueDetail issue={selectedIssue} /> : null
+                this.state.selectedIssue ? <IssueDetail issue={this.state.selectedIssue} /> : null
+              }
+              {
+                this.state.selectedTask ? <TaskDetail task={this.state.selectedTask} /> : null
               }
             </div>
           </div>
           <div className='ten columns'>
-            <IssueList issues={this.state.issues} selectedIssueIndex={this.state.selectedIssueIndex} onSelectionChange={this.handleSelectionChange.bind(this)} />
+            <IssueList issues={this.state.items} selectedIssueIndex={this.state.selectedItemIndex} onSelectionChange={this.handleSelectionChange.bind(this)} />
           </div>
         </div>
       </div>

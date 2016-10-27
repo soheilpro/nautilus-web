@@ -1,6 +1,7 @@
 import { IEntity, IFilter, IChange, IService, BaseService } from './base';
 
 export interface IItemType extends IEntity {
+  itemKind?: string;
   title?: string;
   key?: string;
   order?: number;
@@ -29,6 +30,7 @@ export class ItemTypeService extends BaseService<IItemType, IItemTypeFilter, IIt
 
   entityToParams(entity: IItemType): Object {
     return {
+      itemKind: entity.itemKind,
       title: entity.title,
       key: entity.key,
       order: entity.order

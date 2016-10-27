@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { Nautilus, IUser } from '../nautilus';
-import { IssueField } from './issue-field';
+import { TaskField } from './task-field';
 
-export class AssignedToIssueField extends IssueField {
+export class AssignedToTaskField extends TaskField {
+  getPlaceholder(): string {
+    return "Assigned To";
+  }
+
   getValue(): IUser {
-    return this.props.issue.getAssignedTo();
+    return this.props.task.getAssignedTo();
   }
 
   getValues(): IUser[] {
@@ -24,6 +28,6 @@ export class AssignedToIssueField extends IssueField {
   }
 
   setValue(value: IUser): void {
-    Nautilus.Instance.updateIssue(this.props.issue, { assignedTo: value || null });
+    Nautilus.Instance.updateTask(this.props.task, { assignedTo: value || null });
   }
 };

@@ -34,49 +34,65 @@ abstract class MilestoneFieldGridCell extends GridCell {
 
 var SidGridColumn: IGridColumn = {
   key: 'sid',
-  HeaderCell: class SidHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>#</span>;
+  getHeaderCell() {
+    return class SidHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>#</span>;
+      }
     }
   },
-  Cell: class SidFieldGridCell extends MilestoneFieldGridCell {
-    protected Field = SidMilestoneField;
+  getCell() {
+    return class SidFieldGridCell extends MilestoneFieldGridCell {
+      protected Field = SidMilestoneField;
+    }
   }
 }
 
 var TitleGridColumn: IGridColumn = {
   key: 'title',
-  HeaderCell: class TitleHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Title</span>;
+  getHeaderCell() {
+    return class TitleHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Title</span>;
+      }
     }
   },
-  Cell: class TitleGridCell extends MilestoneFieldGridCell {
-    protected Field = TitleMilestoneField;
+  getCell() {
+    return class TitleGridCell extends MilestoneFieldGridCell {
+      protected Field = TitleMilestoneField;
+    }
   }
 }
 
 var ProjectGridColumn: IGridColumn = {
   key: 'project',
-  HeaderCell: class PropertyHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Project</span>;
+  getHeaderCell() {
+    return class PropertyHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Project</span>;
+      }
     }
   },
-  Cell: class ProjectGridCell extends MilestoneFieldGridCell {
-    protected Field = ProjectMilestoneField;
+  getCell() {
+    return class ProjectGridCell extends MilestoneFieldGridCell {
+      protected Field = ProjectMilestoneField;
+    }
   }
 }
 
 var StateGridColumn: IGridColumn = {
   key: 'state',
-  HeaderCell: class StateHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>State</span>;
+  getHeaderCell() {
+    return class StateHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>State</span>;
+      }
     }
   },
-  Cell: class StateGridCell extends MilestoneFieldGridCell {
-    protected Field = StateMilestoneField;
+  getCell() {
+    return class StateGridCell extends MilestoneFieldGridCell {
+      protected Field = StateMilestoneField;
+    }
   }
 }
 

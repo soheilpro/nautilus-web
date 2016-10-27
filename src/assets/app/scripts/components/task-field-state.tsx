@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { Nautilus, IItemState } from '../nautilus';
-import { MilestoneField } from './milestone-field';
+import { TaskField } from './task-field';
 
-export class StateMilestoneField extends MilestoneField {
+export class StateTaskField extends TaskField {
+  getPlaceholder(): string {
+    return "State";
+  }
+
   getValue(): IItemState {
-    return this.props.milestone.getState();
+    return this.props.task.getState();
   }
 
   getValues(): IItemState[] {
-    return Nautilus.Instance.getMilestoneStates();
+    return Nautilus.Instance.getTaskStates();
   }
 
   valueToString(value: IItemState): string {
@@ -24,6 +28,6 @@ export class StateMilestoneField extends MilestoneField {
   }
 
   setValue(value: IItemState): void {
-    Nautilus.Instance.updateMilestone(this.props.milestone, { state: value || null });
+    Nautilus.Instance.updateTask(this.props.task, { state: value || null });
   }
 };

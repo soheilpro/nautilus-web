@@ -3,6 +3,10 @@ import { Nautilus, IProject, entityComparer } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class ProjectIssueField extends IssueField {
+  getPlaceholder(): string {
+    return "Project";
+  }
+
   getValue(): IProject {
     return this.props.issue.getProject();
   }

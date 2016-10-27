@@ -31,13 +31,17 @@ abstract class ProjectFieldGridCell extends GridCell {
 
 var NameGridColumn: IGridColumn = {
   key: 'name',
-  HeaderCell: class NameHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Name</span>;
+  getHeaderCell() {
+    return class NameHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Name</span>;
+      }
     }
   },
-  Cell: class NameGridCell extends ProjectFieldGridCell {
-    protected Field = NameProjectField;
+  getCell() {
+    return  class NameGridCell extends ProjectFieldGridCell {
+      protected Field = NameProjectField;
+    }
   }
 }
 

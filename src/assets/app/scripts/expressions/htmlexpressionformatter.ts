@@ -33,7 +33,7 @@ export class HTMLExpressionFormatter extends NQL.ExpressionVisitor<string, {}> {
       title = Nautilus.Instance.getProjectById((expression.value as IEntity).id).name;
 
     if (expression.type === 'ItemType')
-      title = Nautilus.Instance.getIssueTypeById((expression.value as IEntity).id).title;
+      title = Nautilus.Instance.getItemTypeById((expression.value as IEntity).id).title;
 
     if (expression.type === 'ItemPriority')
       title = Nautilus.Instance.getItemPriorityById((expression.value as IEntity).id).title;

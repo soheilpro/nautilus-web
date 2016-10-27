@@ -36,8 +36,8 @@ export abstract class GridCell extends React.Component<IGridCellProps, IGridCell
 
 export interface IGridColumn {
   key: string;
-  HeaderCell: typeof GridHeaderCell;
-  Cell: typeof GridCell;
+  getHeaderCell(): typeof GridHeaderCell;
+  getCell(item: any): typeof GridCell;
 }
 
 // GridHeaderRow
@@ -50,13 +50,19 @@ interface IGridHeaderRowState {
 }
 
 export class GridHeaderRow extends React.Component<IGridHeaderRowProps, IGridHeaderRowState> {
+  private renderHeaderCell(column: IGridColumn) {
+    var HeaderCell = column.getHeaderCell();
+
+    return <HeaderCell />;
+  } 
+
   render() {
     return (
       <tr>
         {
           this.props.columns.map((column: IGridColumn, columnIndex: number) =>
             <th className={column.key} key={column.key}>
-              <column.HeaderCell />
+              { this.renderHeaderCell(column) }
             </th>
           )
         }
@@ -141,13 +147,19 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
     });
   }
 
+  private renderCell(column: IGridColumn, columnIndex: number) {
+    var Cell = column.getCell(this.props.item);
+
+    return <Cell item={this.props.item} rowIndex={this.props.rowIndex} columnIndex={columnIndex} isSelected={this.props.isSelected && this.props.selectedColumnIndex === columnIndex} ref={(e: GridCell) => this.cellElements[columnIndex] = e} />;
+  } 
+
   render() {
     return (
       <tr className={this.getTRClassName()} ref={e => this.trElement = e}>
         {
           this.props.columns.map((column: IGridColumn, columnIndex: number) =>
             <td tabIndex={0} className={this.getTDClassName(column, columnIndex)} onClick={this.handleClick.bind(this)} data-column-index={columnIndex} key={column.key}>
-              <column.Cell item={this.props.item} rowIndex={this.props.rowIndex} columnIndex={columnIndex} isSelected={this.props.isSelected && this.props.selectedColumnIndex === columnIndex} ref={(e: GridCell) => this.cellElements[columnIndex] = e} />
+              { this.renderCell(column, columnIndex) }
             </td>
           )
         }

@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Nautilus, IItemType } from '../nautilus';
-import { IssueField } from './issue-field';
+import { TaskField } from './task-field';
 
-export class TypeIssueField extends IssueField {
+export class TypeTaskField extends TaskField {
   getPlaceholder(): string {
     return "Type";
   }
 
   getValue(): IItemType {
-    return this.props.issue.getType();
+    return this.props.task.getType();
   }
 
   getValues(): IItemType[] {
-    return Nautilus.Instance.getIssueTypes();
+    return Nautilus.Instance.getTaskTypes();
   }
 
   valueToString(value: IItemType): string {
@@ -28,6 +28,6 @@ export class TypeIssueField extends IssueField {
   }
 
   setValue(value: IItemType): void {
-    Nautilus.Instance.updateIssue(this.props.issue, { type: value || null });
+    Nautilus.Instance.updateTask(this.props.task, { type: value || null });
   }
 };

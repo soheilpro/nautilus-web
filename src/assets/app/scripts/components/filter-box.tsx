@@ -147,7 +147,8 @@ interface FilterBoxProps {
 }
 
 interface FilterBoxState {
-  groups: IFilterGroup[];
+  issueGroups: IFilterGroup[];
+  taskGroups: IFilterGroup[];
   filterState: IFilterState;
   savedFilters: ISavedFilter[];
 }
@@ -160,7 +161,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     super();
 
     this.state = {
-      groups: [],
+      issueGroups: [],
+      taskGroups: [],
       filterState: {
         include: [],
         exclude: []
@@ -168,8 +170,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       savedFilters: []
     };
 
-    this.state.groups.push({
-      key: 'milestone',
+    this.state.issueGroups.push({
+      key: 'issue.milestone',
       title: 'Milestone',
       items: Nautilus.Instance.getMilestones().map(milestone => {
         return {
@@ -182,8 +184,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       queryItem: 'milestone'
     });
 
-    this.state.groups.push({
-      key: 'project',
+    this.state.issueGroups.push({
+      key: 'issue.project',
       title: 'Project',
       items: Nautilus.Instance.getProjects().map(project => {
         return {
@@ -196,8 +198,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       queryItem: 'project'
     });
 
-    this.state.groups.push({
-      key: 'type',
+    this.state.issueGroups.push({
+      key: 'issue.type',
       title: 'Type',
       items: Nautilus.Instance.getIssueTypes().map(itemType => {
         return {
@@ -210,8 +212,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       queryItem: 'type'
     });
 
-    this.state.groups.push({
-      key: 'priority',
+    this.state.issueGroups.push({
+      key: 'issue.priority',
       title: 'Priority',
       items: Nautilus.Instance.getItemPriorities().map(itemPriority => {
         return {
@@ -224,22 +226,64 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       queryItem: 'priority'
     });
 
-    this.state.groups.push({
-      key: 'state',
+    this.state.issueGroups.push({
+      key: 'issue.state',
       title: 'State',
-      items: Nautilus.Instance.getItemStates().map(itemState => {
+      items: Nautilus.Instance.getIssueStates().map(issueState => {
         return {
-          key: itemState.id,
-          title: itemState.title,
-          queryItem: asEntity(itemState),
+          key: issueState.id,
+          title: issueState.title,
+          queryItem: asEntity(issueState),
           queryReturnType: 'ItemState'
         };
       }),
       queryItem: 'state'
     });
 
-    this.state.groups.push({
-      key: 'assignedTo',
+    this.state.issueGroups.push({
+      key: 'issue.createdBy',
+      title: 'Created By',
+      items: Nautilus.Instance.getUsers().map(user => {
+        return {
+          key: user.id,
+          title: user.name,
+          queryItem: asEntity(user),
+          queryReturnType: 'User'
+        };
+      }),
+      queryItem: 'createdBy'
+    });
+
+    this.state.taskGroups.push({
+      key: 'task.type',
+      title: 'Type',
+      items: Nautilus.Instance.getTaskTypes().map(taskType => {
+        return {
+          key: taskType.id,
+          title: taskType.title,
+          queryItem: asEntity(taskType),
+          queryReturnType: 'ItemType'
+        };
+      }),
+      queryItem: 'type'
+    });
+
+    this.state.taskGroups.push({
+      key: 'task.state',
+      title: 'State',
+      items: Nautilus.Instance.getTaskStates().map(taskState => {
+        return {
+          key: taskState.id,
+          title: taskState.title,
+          queryItem: asEntity(taskState),
+          queryReturnType: 'ItemState'
+        };
+      }),
+      queryItem: 'state'
+    });
+
+    this.state.taskGroups.push({
+      key: 'task.assignedTo',
       title: 'Assigned To',
       items: Nautilus.Instance.getUsers().map(user => {
         return {
@@ -252,8 +296,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
       queryItem: 'assignedTo'
     });
 
-    this.state.groups.push({
-      key: 'createdBy',
+    this.state.taskGroups.push({
+      key: 'task.createdBy',
       title: 'Created By',
       items: Nautilus.Instance.getUsers().map(user => {
         return {
@@ -387,10 +431,56 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     return JSON.parse(JSON.stringify(this.state.savedFilters));
   }
 
-  getQuery(): NQL.IExpression {
+  getIssueFilterQuery(): NQL.IExpression {
     var expressions: NQL.IExpression[] = [];
 
-    this.state.groups.forEach(group => {
+    this.state.issueGroups.forEach(group => {
+      var includedItems = group.items.filter(item => this.state.filterState.include.some(x => x.groupKey === group.key && x.itemKey === item.key));
+      var excludedItems = group.items.filter(item => this.state.filterState.exclude.some(x => x.groupKey === group.key && x.itemKey === item.key));
+
+      if (includedItems.length === 0) {
+        // noop
+      }
+      else if (includedItems.length === 1) {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ConstantExpression(includedItems[0].queryItem, includedItems[0].queryReturnType),
+          '=='));
+      }
+      else {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ListExpression(includedItems.map(item => new NQL.ConstantExpression(item.queryItem, item.queryReturnType))),
+          'IN'));
+      }
+
+      if (excludedItems.length === 0) {
+        // noop
+      }
+      else if (excludedItems.length === 1) {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ConstantExpression(excludedItems[0].queryItem, excludedItems[0].queryReturnType),
+          '!='));
+      }
+      else {
+        expressions.push(new NQL.ComparisonExpression(
+          new NQL.LocalExpression(group.queryItem),
+          new NQL.ListExpression(excludedItems.map(item => new NQL.ConstantExpression(item.queryItem, item.queryReturnType))),
+          'NOT IN'));
+      }
+    });
+
+    if (expressions.length === 0)
+      return null;
+
+    return new NQL.AndExpression(expressions);
+  }
+
+  getTaskFilterQuery(): NQL.IExpression {
+    var expressions: NQL.IExpression[] = [];
+
+    this.state.taskGroups.forEach(group => {
       var includedItems = group.items.filter(item => this.state.filterState.include.some(x => x.groupKey === group.key && x.itemKey === item.key));
       var excludedItems = group.items.filter(item => this.state.filterState.exclude.some(x => x.groupKey === group.key && x.itemKey === item.key));
 
@@ -446,8 +536,10 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     return (
       <div className='filter-box' ref={e => this.filterBoxElement = e}>
         <div className='header'>
-          <span className='title'>Filter:</span>
-          <span className='query'>{this.renderQuery(this.getQuery())}</span>
+          <span className='title'>Issues:</span>
+          <span className='query'>{this.renderQuery(this.getIssueFilterQuery())}</span>
+          <span className='title'>Tasks:</span>
+          <span className='query'>{this.renderQuery(this.getTaskFilterQuery())}</span>
           {
             this.areAnyItemsSelected() ?
               <a href='#' className='save' onClick={this.saveFilter.bind(this)}>Save</a> : null
@@ -472,7 +564,14 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
         </div>
         <div className='body' ref={e => this.bodyElement = e}>
           {
-            this.state.groups.map((group) => {
+            this.state.issueGroups.map((group) => {
+              return <FilterGroup group={group} filterState={this.state.filterState} onItemSelected={this.onItemSelected.bind(this, group)} onItemIncluded={this.onItemIncluded.bind(this, group)} onItemDeExcluded={this.onItemDeExcluded.bind(this, group)} onItemExcluded={this.onItemExcluded.bind(this, group)} onItemDeIncluded={this.onItemDeIncluded.bind(this, group)} />
+            }, this)
+          }
+        </div>
+        <div className='body' ref={e => this.bodyElement = e}>
+          {
+            this.state.taskGroups.map((group) => {
               return <FilterGroup group={group} filterState={this.state.filterState} onItemSelected={this.onItemSelected.bind(this, group)} onItemIncluded={this.onItemIncluded.bind(this, group)} onItemDeExcluded={this.onItemDeExcluded.bind(this, group)} onItemExcluded={this.onItemExcluded.bind(this, group)} onItemDeIncluded={this.onItemDeIncluded.bind(this, group)} />
             }, this)
           }

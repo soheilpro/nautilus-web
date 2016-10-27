@@ -12,21 +12,6 @@
   white-space: nowrap;
 }
 
-.issue-list .grid td.title {
-  width: 100%;
-  white-space: normal;
-}
-
-.issue-list .grid td .indent:not(.last) {
-  margin-right: 10px;
-}
-
-.issue-list .grid td .indent.last:after {
-  content: '\21b2'; /* downwards arrow with tip leftwards */
-  color: #bbb;
-  margin-left: 2px;
-}
-
 .issue-list .grid td .span {
   padding: 2px 4px;
   line-height: 1.9em;
@@ -36,14 +21,34 @@
   margin: 0 1px 0 0;
 }
 
-.issue-list .grid td.title .indents-container {
+.issue-list .grid td.sid {
+  direction: rtl;
+  text-align: right;
+}
+
+.issue-list .grid td.sid .indents-container {
   display: table-cell;
   min-width: 1px;
 }
 
-.issue-list .grid td.title .editable-container {
+.issue-list .grid td.sid .editable-container {
   display: table-cell;
   width: 100%;
+}
+
+.issue-list .grid td.sid .indent:not(.last) {
+  margin-right: 10px;
+}
+
+.issue-list .grid td.sid .indent.last:after {
+  content: '\21b2'; /* downwards arrow with tip leftwards */
+  color: #bbb;
+  margin-left: 2px;
+}
+
+.issue-list .grid td.title {
+  width: 100%;
+  white-space: normal;
 }
 
 .issue-list .grid tr.priority-high td.title .editable:not(.editing):after {
@@ -58,27 +63,27 @@
    line-height: .9em;
 }
 
-.issue-list .grid tr.state-todo td.title .editable .span {
+.issue-list .grid tr.state-todo td.type .editable .span {
   background-color: #ffe0b2;
 }
 
-.issue-list .grid tr.state-doing td.title .editable .span {
+.issue-list .grid tr.state-doing td.type .editable .span {
   background-color: #b3e5fc;
 }
 
-.issue-list .grid tr.state-done td.title .editable .span {
+.issue-list .grid tr.state-done td.type .editable .span {
   background-color: #c5e1a5;
 }
 
-.issue-list .grid tr.state-fixup td.title .editable .span {
+.issue-list .grid tr.state-fixup td.type .editable .span {
   background-color: #ffc7b2;
 }
 
-.issue-list .grid tr.state-blocked td.title .editable .span {
+.issue-list .grid tr.state-blocked td.type .editable .span {
   background-color: #ffcdd2;
 }
 
-.issue-list .grid tr.state-closed td.title .editable .span {
+.issue-list .grid tr.state-closed td.type .editable .span {
   color: #aaa;
   text-decoration: line-through;
 }

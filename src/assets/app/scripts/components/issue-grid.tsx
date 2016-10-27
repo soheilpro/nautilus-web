@@ -1,18 +1,22 @@
 import * as React from 'react';
-import { Nautilus, IIssue, entityComparer } from '../nautilus';
+import { Nautilus, IItem, IIssue, entityComparer } from '../nautilus';
 import { KeyMaster, Key } from '../keymaster'
 import { Grid, GridHeaderRow, GridRow, GridHeaderCell, GridCell, IGridColumn } from './grid';
 import { IssueField } from './issue-field';
-import { AssignedToIssueField } from './issue-field-assigned-to';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
 import { TypeIssueField } from './issue-field-type';
 import { ProjectIssueField } from './issue-field-project';
 import { TitleIssueField } from './issue-field-title';
 import { SidIssueField } from './issue-field-sid';
+import { SidTaskField } from './task-field-sid';
+import { TitleTaskField } from './task-field-title';
+import { TypeTaskField } from './task-field-type';
+import { StateTaskField } from './task-field-state';
+import { AssignedToTaskField } from './task-field-assigned-to';
 import config from '../config';
 
-abstract class IssueFieldGridCell extends GridCell {
+abstract class ItemFieldGridCell extends GridCell {
   private fieldElement: IssueField;
   protected Field: any;
 
@@ -20,7 +24,7 @@ abstract class IssueFieldGridCell extends GridCell {
     KeyMaster.handle(event, { which: Key.Enter }, null, this.handleKeyEnter.bind(this), true);
   }
 
-  copyFrom(sourceCell: IssueFieldGridCell) {
+  copyFrom(sourceCell: ItemFieldGridCell) {
     var sourceCellValue = sourceCell.fieldElement.getValue();
     var destinationCellValue = this.fieldElement.getValue();
 
@@ -35,91 +39,181 @@ abstract class IssueFieldGridCell extends GridCell {
   render() {
     var Field = this.Field;
 
-    return <Field issue={this.props.item} ref={(e: IssueField) => this.fieldElement = e} />;
+    return <Field issue={this.props.item} task={this.props.item} ref={(e: IssueField) => this.fieldElement = e} />;
   }
 }
 
 var SidGridColumn: IGridColumn = {
   key: 'sid',
-  HeaderCell: class SidHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>#</span>;
-    }
+  getHeaderCell() {
+    return class SidHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>#</span>;
+      }
+    };
   },
-  Cell: class SidFieldGridCell extends IssueFieldGridCell {
-    protected Field = SidIssueField;
+  getCell(item: IItem) {
+    if (item.kind === 'issue')
+      return class SidFieldGridCell extends ItemFieldGridCell {
+        protected Field = SidIssueField;
+      };
+
+    if (item.kind === 'task')
+      return class SidFieldGridCell extends ItemFieldGridCell {
+        protected Field = SidTaskField;
+      };
+
+    throw new Error('Not supported');
   }
 }
 
 var MilestoneGridColumn: IGridColumn = {
   key: 'milestone',
-  HeaderCell: class MilestoneHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Milestone</span>;
-    }
+  getHeaderCell() {
+    return class MilestoneHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Milestone</span>;
+      }
+    };
   },
-  Cell: class MilestoneGridCell extends IssueFieldGridCell {
-    protected Field = MilestoneIssueField;
+  getCell(item: any) {
+    if (item.kind === 'issue')
+      return class MilestoneGridCell extends ItemFieldGridCell {
+        protected Field = MilestoneIssueField;
+      };
+
+    if (item.kind === 'task')
+      return class MilestoneGridCell extends GridCell {
+        render() {
+          return <span></span>;
+        }
+      };
+
+    throw new Error('Not supported');
   }
 }
 
 var TitleGridColumn: IGridColumn = {
   key: 'title',
-  HeaderCell: class TitleHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Title</span>;
-    }
+  getHeaderCell() {
+    return class TitleHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Title</span>;
+      }
+    };
   },
-  Cell: class TitleGridCell extends IssueFieldGridCell {
-    protected Field = TitleIssueField;
+  getCell(item: IItem) {
+    if (item.kind === 'issue')
+      return class TitleGridCell extends ItemFieldGridCell {
+        protected Field = TitleIssueField;
+      };
+
+    if (item.kind === 'task')
+      return class TitleGridCell extends ItemFieldGridCell {
+        protected Field = TitleTaskField;
+      };
+
+    throw new Error('Not supported');
   }
 }
 
 var ProjectGridColumn: IGridColumn = {
   key: 'project',
-  HeaderCell: class PropertyHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Project</span>;
-    }
+  getHeaderCell() {
+    return class PropertyHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Project</span>;
+      }
+    };
   },
-  Cell: class ProjectGridCell extends IssueFieldGridCell {
-    protected Field = ProjectIssueField;
+  getCell(item: IItem) {
+    if (item.kind === 'issue')
+      return class ProjectGridCell extends ItemFieldGridCell {
+        protected Field = ProjectIssueField;
+      };
+
+    if (item.kind === 'task')
+      return class ProjectGridCell extends GridCell {
+        render() {
+          return <span></span>;
+        }
+      };
+
+    throw new Error('Not supported');
   }
 }
 
 var TypeGridColumn: IGridColumn = {
   key: 'type',
-  HeaderCell: class TypeHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Type</span>;
-    }
+  getHeaderCell() {
+    return class TypeHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Type</span>;
+      }
+    };
   },
-  Cell: class TypeGridCell extends IssueFieldGridCell {
-    protected Field = TypeIssueField;
+  getCell(item: IItem) {
+    if (item.kind === 'issue')
+      return class TypeGridCell extends ItemFieldGridCell {
+        protected Field = TypeIssueField;
+      };
+
+    if (item.kind === 'task')
+      return class TypeGridCell extends ItemFieldGridCell {
+        protected Field = TypeTaskField;
+      };
+
+    throw new Error('Not supported');
   }
 }
 
 var StateGridColumn: IGridColumn = {
   key: 'state',
-  HeaderCell: class StateHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>State</span>;
-    }
+  getHeaderCell() {
+    return class StateHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>State</span>;
+      }
+    };
   },
-  Cell: class StateGridCell extends IssueFieldGridCell {
-    protected Field = StateIssueField;
+  getCell(item: IItem) {
+    if (item.kind === 'issue')
+      return class StateGridCell extends ItemFieldGridCell {
+        protected Field = StateIssueField;
+      };
+
+    if (item.kind === 'task')
+      return class StateGridCell extends ItemFieldGridCell {
+        protected Field = StateTaskField;
+      };
+
+    throw new Error('Not supported');
   }
 }
 
 var AssignedToGridColumn: IGridColumn = {
   key: 'assignedTo',
-  HeaderCell: class AssignedToHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Assigned To</span>;
-    }
+  getHeaderCell() {
+    return class AssignedToHeaderGridCell extends GridHeaderCell {
+      render() {
+        return <span>Assigned To</span>;
+      }
+    };
   },
-  Cell: class AssignedToGridCell extends IssueFieldGridCell {
-    protected Field = AssignedToIssueField;
+  getCell(item: IItem) {
+    if (item.kind === 'issue')
+      return class AssignedToGridCell extends GridCell {
+        render() {
+          return <span></span>;
+        }
+      };
+
+    if (item.kind === 'task')
+      return class AssignedToGridCell extends ItemFieldGridCell {
+        protected Field = AssignedToTaskField;
+      };
+
+    throw new Error('Not supported');
   }
 }
 
@@ -168,7 +262,7 @@ export class IssueGrid extends React.Component<IssueGridProps, {}> {
   render() {
     return (
       <div className='issue-list'>
-        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, TitleGridColumn, ProjectGridColumn, TypeGridColumn, StateGridColumn, AssignedToGridColumn, MilestoneGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
+        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, TypeGridColumn, TitleGridColumn, ProjectGridColumn, MilestoneGridColumn, StateGridColumn, AssignedToGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
       </div>
     );
   }

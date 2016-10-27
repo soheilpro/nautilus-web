@@ -2,6 +2,7 @@ import { IEntity, IFilter, IChange, IService, BaseService } from './base';
 
 export interface IItem extends IEntity {
   sid: string;
+  kind?: string;
   type?: IEntity;
   title?: string;
   description?: string;
@@ -47,6 +48,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
 
   entityToParams(entity: IItem): Object {
     return {
+      kind: entity.kind,
       type_id: this.toId(entity.type),
       title: entity.title,
       description: entity.description,

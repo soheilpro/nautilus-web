@@ -3,12 +3,16 @@ import { Nautilus, IItemState } from '../nautilus';
 import { IssueField } from './issue-field';
 
 export class StateIssueField extends IssueField {
+  getPlaceholder(): string {
+    return "State";
+  }
+
   getValue(): IItemState {
     return this.props.issue.getState();
   }
 
   getValues(): IItemState[] {
-    return Nautilus.Instance.getItemStates();
+    return Nautilus.Instance.getIssueStates();
   }
 
   valueToString(value: IItemState): string {
