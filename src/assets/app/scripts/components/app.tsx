@@ -50,7 +50,7 @@ export class App extends React.Component<{}, AppState> {
     var item = localStorage.getItem('session');
 
     if (!item)
-      return item;
+      return undefined;
 
     return JSON.parse(item);
   }

@@ -146,7 +146,7 @@ export class GridRow extends React.Component<IGridRowProps, IGridRowState> imple
       <tr className={this.getTRClassName()} ref={e => this.trElement = e}>
         {
           this.props.columns.map((column: IGridColumn, columnIndex: number) =>
-            <td tabIndex='0' className={this.getTDClassName(column, columnIndex)} onClick={this.handleClick.bind(this)} data-column-index={columnIndex} key={column.key}>
+            <td tabIndex={0} className={this.getTDClassName(column, columnIndex)} onClick={this.handleClick.bind(this)} data-column-index={columnIndex} key={column.key}>
               <column.Cell item={this.props.item} rowIndex={this.props.rowIndex} columnIndex={columnIndex} isSelected={this.props.isSelected && this.props.selectedColumnIndex === columnIndex} ref={(e: GridCell) => this.cellElements[columnIndex] = e} />
             </td>
           )

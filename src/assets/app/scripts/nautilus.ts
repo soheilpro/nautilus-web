@@ -391,7 +391,7 @@ class Item implements IExtendedItem {
 
   getType() {
     if (!this.type)
-      return;
+      return undefined;
 
     return _.find(this.context.getIssueTypes(), entityComparer.bind(this, this.type));
   };
@@ -406,35 +406,35 @@ class Item implements IExtendedItem {
 
   getState() {
     if (!this.state)
-      return;
+      return undefined;
 
     return _.find(this.context.getItemStates(), entityComparer.bind(this, this.state));
   };
 
   getPriority() {
     if (!this.priority)
-      return;
+      return undefined;
 
     return _.find(this.context.getItemPriorities(), entityComparer.bind(this, this.priority));
   };
 
   getProject() {
     if (!this.project)
-      return;
+      return undefined;
 
     return _.find(this.context.getProjects(), entityComparer.bind(this, this.project));
   };
 
   getMilestone() {
     if (!this.parent)
-      return;
+      return undefined;
 
     return _.find(this.context.getMilestones(), entityComparer.bind(this, this.parent));
   };
 
   getAssignedTo() {
     if (!this.assignedTo)
-      return;
+      return undefined;
 
     return _.find(this.context.getUsers(), entityComparer.bind(this, this.assignedTo));
   };
@@ -458,7 +458,7 @@ class Milestone extends Item {
 class Issue extends Item {
   getParent() {
     if (!this.parent)
-      return;
+      return undefined;
 
     return _.find(this.context.getIssues(), entityComparer.bind(this, this.parent));
   }
@@ -485,7 +485,7 @@ export function entityComparer(entity1: IEntity, entity2: IEntity) {
 
 export function asEntity(entity: IEntity) {
   if (!entity)
-    return;
+    return undefined;
 
   return {
     id: entity.id
