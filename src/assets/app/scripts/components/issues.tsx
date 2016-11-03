@@ -84,9 +84,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
   }
 
   addSubIssue() {
-    var selectedIssue = this.state.issues[this.state.selectedIssueIndex];
+    var issue = {} as IIssue;
+    issue.parent = this.state.issues[this.state.selectedIssueIndex];
 
-    Nautilus.Instance.addSubIssue({} as IIssue, selectedIssue);
+    Nautilus.Instance.addIssue(issue);
   }
 
   addSiblingIssue() {
@@ -96,7 +97,10 @@ export class Issues extends React.Component<{}, IIssuesState> {
     if (!parentIssue)
       return;
 
-    Nautilus.Instance.addSubIssue({} as IIssue, parentIssue);
+    var issue = {} as IIssue;
+    issue.parent = parentIssue;
+
+    Nautilus.Instance.addIssue(issue);
   }
 
   refresh() {

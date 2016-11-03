@@ -9,7 +9,7 @@ export interface IItem extends IEntity {
   priority?: IEntity;
   project?: IEntity;
   area?: IEntity;
-  subItems?: IEntity[];
+  parent?: IEntity;
   prerequisiteItems?: IEntity[];
   assignedUsers?: IEntity[];
   creator?: IEntity;
@@ -27,9 +27,7 @@ export interface IItemChange extends IChange {
   priority?: IEntity;
   project?: IEntity;
   area?: IEntity;
-  subItems?: IEntity[];
-  subItems_add?: IEntity[];
-  subItems_remove?: IEntity[];
+  parent?: IEntity;
   prerequisiteItems?: IEntity[];
   prerequisiteItems_add?: IEntity[];
   prerequisiteItems_remove?: IEntity[];
@@ -61,7 +59,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       priority_id: this.toId(entity.priority),
       project_id: this.toId(entity.project),
       area_id: this.toId(entity.area),
-      sub_item_ids: this.toIdArray(entity.subItems),
+      parent_id: this.toId(entity.parent),
       prerequisite_item_ids: this.toIdArray(entity.prerequisiteItems),
       assigned_user_ids: this.toIdArray(entity.assignedUsers),
     };
@@ -76,9 +74,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       priority_id: this.toId(change.priority),
       project_id: this.toId(change.project),
       area_id: this.toId(change.area),
-      sub_item_ids: this.toIdArray(change.subItems),
-      add_sub_item_ids: this.toIdArray(change.subItems_add),
-      remove_sub_item_ids: this.toIdArray(change.subItems_remove),
+      parent_id: this.toId(change.parent),
       prerequisite_item_ids: this.toIdArray(change.prerequisiteItems),
       add_prerequisite_item_ids: this.toIdArray(change.prerequisiteItems_add),
       remove_prerequisite_item_ids: this.toIdArray(change.prerequisiteItems_remove),

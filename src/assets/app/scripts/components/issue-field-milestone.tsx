@@ -30,6 +30,6 @@ export class MilestoneIssueField extends IssueField {
   }
 
   setValue(value: IMilestone): void {
-    Nautilus.Instance.updateIssueMilestone(this.props.issue, value || null);
+    Nautilus.Instance.updateIssue(this.props.issue, { parent: value || null });
   }
 };

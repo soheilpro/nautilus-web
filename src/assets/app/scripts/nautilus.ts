@@ -80,10 +80,8 @@ export interface INautilus extends EventEmitter {
   deleteMilestone(milestone: IMilestone): void;
   getIssues(): IIssue[];
   addIssue(issue: IIssue): void;
-  addSubIssue(issue: IIssue, parentIssue: IIssue): void;
   updateIssue(issue: IIssue, change: IItemChange): void;
   deleteIssue(issue: IIssue): void;
-  updateIssueMilestone(issue: IIssue, newMilestone: IMilestone): void;
 }
 
 export class Nautilus extends EventEmitter implements INautilus {
@@ -357,33 +355,6 @@ export class Nautilus extends EventEmitter implements INautilus {
     });
   }
 
-  addSubIssue(issue: IIssue, parentIssue: IIssue) {
-    issue.project = parentIssue.project;
-
-    this.client.items.insert(issue, (error, item) => {
-      if (error)
-        return this.emitEvent('error', [error]);
-
-      var issue = this.toIssue(item);
-
-      this.state.issues.push(issue);
-
-      var change: IItemChange = {
-        subItems_add: [issue]
-      };
-
-      this.client.items.update(parentIssue.id, change, (error, item) => {
-        if (error)
-          return this.emitEvent('error', [error]);
-
-        var parentIssue = this.toIssue(item);
-
-        this.state.issues[_.findIndex(this.state.issues, entityComparer.bind(this, parentIssue))] = parentIssue;
-        this.emitEvent('subIssueAdded', [issue, parentIssue]);
-      });
-    });
-  }
-
   updateIssue(issue: IIssue, change: IItemChange) {
     this.client.items.update(issue.id, change, (error, item) => {
       if (error)
@@ -403,59 +374,6 @@ export class Nautilus extends EventEmitter implements INautilus {
 
       this.state.issues.splice(_.findIndex(this.state.issues, entityComparer.bind(this, issue)), 1);
       this.emitEvent('issueDeleted', [issue]);
-    });
-  };
-
-  updateIssueMilestone(issue: IIssue, newMilestone: IMilestone) {
-    var oldMilestone = issue.getMilestone();
-
-    async.parallel([
-      (callback) => {
-        if (!oldMilestone)
-          return callback();
-
-        var change: IItemChange = {
-          subItems_remove: [issue]
-        };
-
-        this.client.items.update(oldMilestone.id, change, (error, item) => {
-          if (error)
-            return callback(error);
-
-          var milestone = this.toMilestone(item);
-
-          this.state.milestones[_.findIndex(this.state.milestones, entityComparer.bind(this, milestone))] = milestone;
-          this.emitEvent('milestoneChanged', [milestone]);
-
-          callback();
-        });
-      },
-      (callback) => {
-        if (!newMilestone)
-          return callback();
-
-        var change: IItemChange = {
-          subItems_add: [issue]
-        };
-
-        this.client.items.update(newMilestone.id, change, (error, item) => {
-          if (error)
-            return callback(error);
-
-          var milestone = this.toMilestone(item);
-
-          this.state.milestones[_.findIndex(this.state.milestones, entityComparer.bind(this, milestone))] = milestone;
-          this.emitEvent('milestoneChanged', [milestone]);
-
-          callback();
-        });
-      }
-    ],
-    (error, results) => {
-      if (error)
-        return this.emitEvent('error', [error]);
-
-        this.emitEvent('issueChanged', [issue]);
     });
   };
 
@@ -487,7 +405,7 @@ class Item implements IExtendedItem {
   priority: IItemPriority;
   project: IProject;
   area: IItemArea;
-  subItems: IItem[];
+  parent: IItem;
   assignedUsers: IUser[];
   creator: IUser;
 
@@ -535,9 +453,10 @@ class Item implements IExtendedItem {
   };
 
   getMilestone() {
-    return _.find(this.context.getMilestones(), (milestone: IMilestone) => {
-      return _.any(milestone.subItems, entityComparer.bind(this, this));
-    });
+    if (!this.parent)
+      return;
+
+    return _.find(this.context.getMilestones(), entityComparer.bind(this, this.parent));
   };
 
   getAssignedUser() {
@@ -564,10 +483,11 @@ class Milestone extends Item {
 }
 
 class Issue extends Item {
-  getParent(): IIssue {
-    return _.find(this.context.getIssues(), (issue: IIssue) => {
-      return _.any(issue.subItems, entityComparer.bind(this, this));
-    });
+  getParent() {
+    if (!this.parent)
+      return;
+
+    return _.find(this.context.getIssues(), entityComparer.bind(this, this.parent));
   }
 
   getParents() {
