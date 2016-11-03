@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Nautilus, IProject, IItemArea, entityComparer } from '../nautilus';
+import { Nautilus, IProject, entityComparer } from '../nautilus';
 import { MilestoneField } from './milestone-field';
 
 export class ProjectMilestoneField extends MilestoneField {
@@ -24,12 +24,6 @@ export class ProjectMilestoneField extends MilestoneField {
   }
 
   setValue(value: IProject): void {
-    var currentArea = this.props.milestone.getArea();
-    var newArea: IItemArea = undefined;
-
-    if (currentArea && currentArea.project && !entityComparer(currentArea.project, value))
-      newArea = null;
-
-    Nautilus.Instance.updateMilestone(this.props.milestone, { project: value || null, area: newArea });
+    Nautilus.Instance.updateMilestone(this.props.milestone, { project: value || null });
   }
 };

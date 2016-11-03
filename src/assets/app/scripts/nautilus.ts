@@ -1,4 +1,4 @@
-import { INautilusClient, IEntity, IUser, IUserPermission, ISession, IProject, IItemState, IItemType, IItemArea, IItemPriority, IItem, IItemChange, IProjectChange } from './sdk/nautilus'
+import { INautilusClient, IEntity, IUser, IUserPermission, ISession, IProject, IItemState, IItemType, IItemPriority, IItem, IItemChange, IProjectChange } from './sdk/nautilus'
 
 declare class EventEmitter {
   emitEvent(evt: string, args?: any[]): void;
@@ -12,7 +12,6 @@ interface IExtendedItem extends IItem {
   getState(): IItemState;
   getPriority(): IItemPriority;
   getProject(): IProject;
-  getArea(): IItemArea;
   getAssignedUser(): IUser;
   getCreator(): IUser;
 }
@@ -33,7 +32,6 @@ interface INautilusState {
   permissions?: IUserPermission[];
   itemStates?: IItemState[];
   itemTypes?: IItemType[];
-  itemAreas?: IItemArea[];
   milestoneType?: IItemType;
   issueTypes?: IItemType[];
   itemPriorities?: IItemPriority[];
@@ -57,9 +55,6 @@ export interface INautilus extends EventEmitter {
   getIssueTypes(): IItemType[];
   getIssueTypeById(id: string): IItemType;
   getIssueTypeByTitle(title: string): IItemType;
-  getItemAreas(): IItemArea[];
-  getItemAreaById(id: string): IItemArea;
-  getItemAreaByTitle(title: string): IItemArea;
   getItemPriorities(): IItemPriority[];
   getItemPriorityById(id: string): IItemPriority;
   getItemPriorityByTitle(title: string): IItemPriority;
@@ -140,7 +135,6 @@ export class Nautilus extends EventEmitter implements INautilus {
     async.parallel([
       this.client.itemStates.getAll.bind(this.client.itemStates, {}),
       this.client.itemTypes.getAll.bind(this.client.itemTypes, {}),
-      this.client.itemAreas.getAll.bind(this.client.itemAreas, {}),
       this.client.itemPriorities.getAll.bind(this.client.itemPriorities, {}),
       this.client.projects.getAll.bind(this.client.projects, {}),
       this.client.users.getAll.bind(this.client.users, {}),
@@ -152,11 +146,10 @@ export class Nautilus extends EventEmitter implements INautilus {
 
       this.state.itemStates = results[0] as IItemState[];
       this.state.itemTypes = _.sortBy(results[1] as IItemType[], x => x.title);
-      this.state.itemAreas = _.sortBy(results[2] as IItemArea[], x => x.title);
-      this.state.itemPriorities = results[3] as IItemPriority[];
-      this.state.projects = _.sortBy(results[4] as IProject[], x => x.name);
-      this.state.users = _.sortBy(results[5] as IUser[], x => x.name);
-      this.state.permissions = results[6] as IUserPermission[];
+      this.state.itemPriorities = results[2] as IItemPriority[];
+      this.state.projects = _.sortBy(results[3] as IProject[], x => x.name);
+      this.state.users = _.sortBy(results[4] as IUser[], x => x.name);
+      this.state.permissions = results[5] as IUserPermission[];
 
       this.state.milestoneType = _.find(this.state.itemTypes, itemType => itemType.key === 'milestone');
       this.state.issueTypes = this.state.itemTypes.filter(itemType => /issue\:/.test(itemType.key));
@@ -211,18 +204,6 @@ export class Nautilus extends EventEmitter implements INautilus {
 
   getIssueTypeByTitle(title: string): IItemType {
     return this.state.issueTypes.filter(x => x.title === title)[0];
-  }
-
-  getItemAreas() {
-    return this.state.itemAreas;
-  };
-
-  getItemAreaById(id: string) {
-    return this.state.itemAreas.filter(x => x.id === id)[0];
-  }
-
-  getItemAreaByTitle(title: string) {
-    return this.state.itemAreas.filter(x => x.title === title)[0];
   }
 
   getItemPriorities() {
@@ -404,7 +385,6 @@ class Item implements IExtendedItem {
   state: IItemState;
   priority: IItemPriority;
   project: IProject;
-  area: IItemArea;
   parent: IItem;
   assignedUsers: IUser[];
   creator: IUser;
@@ -443,13 +423,6 @@ class Item implements IExtendedItem {
       return;
 
     return _.find(this.context.getProjects(), entityComparer.bind(this, this.project));
-  };
-
-  getArea() {
-    if (!this.area)
-      return;
-
-    return _.find(this.context.getItemAreas(), entityComparer.bind(this, this.area));
   };
 
   getMilestone() {

@@ -197,20 +197,6 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     });
 
     this.state.groups.push({
-      key: 'area',
-      title: 'Area',
-      items: Nautilus.Instance.getItemAreas().map(itemArea => {
-        return {
-          key: itemArea.id,
-          title: itemArea.title,
-          queryItem: asEntity(itemArea),
-          queryReturnType: 'ItemArea'
-        };
-      }),
-      queryItem: 'area'
-    });
-
-    this.state.groups.push({
       key: 'type',
       title: 'Type',
       items: Nautilus.Instance.getIssueTypes().map(itemType => {

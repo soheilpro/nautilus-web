@@ -8,7 +8,6 @@ import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
 import { TypeIssueField } from './issue-field-type';
 import { ProjectIssueField } from './issue-field-project';
-import { AreaIssueField } from './issue-field-area';
 import { TitleIssueField } from './issue-field-title';
 import { SidIssueField } from './issue-field-sid';
 import config from '../config';
@@ -85,18 +84,6 @@ var ProjectGridColumn: IGridColumn = {
   },
   Cell: class ProjectGridCell extends IssueFieldGridCell {
     protected Field = ProjectIssueField;
-  }
-}
-
-var AreaGridColumn: IGridColumn = {
-  key: 'area',
-  HeaderCell: class AreaHeaderGridCell extends GridHeaderCell {
-    render() {
-      return <span>Area</span>;
-    }
-  },
-  Cell: class AreaGridCell extends IssueFieldGridCell {
-    protected Field = AreaIssueField;
   }
 }
 

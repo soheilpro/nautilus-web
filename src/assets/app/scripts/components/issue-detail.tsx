@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Nautilus, IIssue } from '../nautilus';
 import { DescriptionIssueField } from './issue-field-description';
-import { AreaIssueField } from './issue-field-area';
 import { PriorityIssueField } from './issue-field-priority';
 import { CreatorIssueField } from './issue-field-creator';
 
@@ -19,10 +18,6 @@ export class IssueDetail extends React.Component<IssueDetailProps, {}> {
 
         <strong>Priority:</strong>
         <PriorityIssueField issue={this.props.issue} />
-        <br />
-
-        <strong>Area:</strong>
-        <AreaIssueField issue={this.props.issue} />
         <br />
 
         <strong>Creator:</strong>

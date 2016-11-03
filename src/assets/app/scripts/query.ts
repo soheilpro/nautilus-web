@@ -25,11 +25,6 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
         valueToObject: (value: string) => Nautilus.Instance.getProjectByName(value),
         type: 'Project'
       },
-      'area': {
-        function: 'getArea',
-        valueToObject: (value: string) => Nautilus.Instance.getItemAreaByTitle(value),
-        type: 'ItemArea'
-      },
       'type': {
         function: 'getType',
         valueToObject: (value: string) => Nautilus.Instance.getIssueTypeByTitle(value),
@@ -103,10 +98,6 @@ export class Query {
         },
         {
           name: 'Project',
-          base: 'Entity'
-        },
-        {
-          name: 'ItemArea',
           base: 'Entity'
         },
         {
