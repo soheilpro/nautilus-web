@@ -7,6 +7,7 @@ export interface IItem extends IEntity {
   description?: string;
   state?: IEntity;
   priority?: IEntity;
+  tags?: string[];
   project?: IEntity;
   parent?: IEntity;
   assignedTo?: IEntity;
@@ -24,6 +25,7 @@ export interface IItemChange extends IChange {
   description?: string;
   state?: IEntity;
   priority?: IEntity;
+  tags?: string[];  
   project?: IEntity;
   parent?: IEntity;
   assignedTo?: IEntity;
@@ -50,6 +52,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       description: entity.description,
       state_id: this.toId(entity.state),
       priority_id: this.toId(entity.priority),
+      tags: entity.tags ? entity.tags.join(' ') : undefined,
       project_id: this.toId(entity.project),
       parent_id: this.toId(entity.parent),
       assigned_to_id: this.toId(entity.assignedTo),
@@ -63,6 +66,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       description: change.description,
       state_id: this.toId(change.state),
       priority_id: this.toId(change.priority),
+      tags: change.tags ? change.tags.join(' ') : undefined,
       project_id: this.toId(change.project),
       parent_id: this.toId(change.parent),
       assigned_to_id: this.toId(change.assignedTo),

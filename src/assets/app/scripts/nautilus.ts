@@ -385,6 +385,7 @@ class Item implements IExtendedItem {
   description: string;
   state: IItemState;
   priority: IItemPriority;
+  tags: string[];
   project: IProject;
   parent: IItem;
   assignedTo: IUser;
