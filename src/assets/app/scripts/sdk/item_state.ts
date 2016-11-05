@@ -2,8 +2,7 @@ import { IEntity, IFilter, IChange, IService, BaseService } from './base';
 
 export interface IItemState extends IEntity {
   title?: string;
-  type?: string;
-  color?: string;
+  key?: string;
 }
 
 export interface IItemStateFilter extends IFilter {
@@ -11,8 +10,7 @@ export interface IItemStateFilter extends IFilter {
 
 export interface IItemStateChange extends IChange {
   title?: string;
-  type?: string;
-  color?: string;
+  key?: string;
 }
 
 export interface IItemStateService extends IService<IItemState, IItemStateFilter, IItemStateChange> {
@@ -30,16 +28,14 @@ export class ItemStateService extends BaseService<IItemState, IItemStateFilter, 
   entityToParams(entity: IItemState): Object {
     return {
       title: entity.title,
-      type: entity.type,
-      color: entity.color
+      key: entity.key
     };
   }
 
   changeToParams(change: IItemStateChange): Object {
     return {
       title: change.title,
-      type: change.type,
-      color: change.color
+      key: change.key
     };
   }
 }

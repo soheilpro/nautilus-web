@@ -145,7 +145,7 @@ class IssueGridRow extends GridRow {
 
     var state = issue.getState();
     if (state)
-      className.push("state-" + state.type);
+      className.push("state-" + state.key);
 
     return classNames(super.getTRClassName(), className.join(' '));
   }
