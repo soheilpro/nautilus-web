@@ -9,7 +9,6 @@ export interface IItem extends IEntity {
   priority?: IEntity;
   project?: IEntity;
   parent?: IEntity;
-  prerequisiteItems?: IEntity[];
   assignedTo?: IEntity;
   createdBy?: IEntity;
   modifiedBy?: IEntity;
@@ -27,9 +26,6 @@ export interface IItemChange extends IChange {
   priority?: IEntity;
   project?: IEntity;
   parent?: IEntity;
-  prerequisiteItems?: IEntity[];
-  prerequisiteItems_add?: IEntity[];
-  prerequisiteItems_remove?: IEntity[];
   assignedTo?: IEntity;
 }
 
@@ -56,7 +52,6 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       priority_id: this.toId(entity.priority),
       project_id: this.toId(entity.project),
       parent_id: this.toId(entity.parent),
-      prerequisite_item_ids: this.toIdArray(entity.prerequisiteItems),
       assigned_to_id: this.toId(entity.assignedTo),
     };
   }
@@ -70,9 +65,6 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       priority_id: this.toId(change.priority),
       project_id: this.toId(change.project),
       parent_id: this.toId(change.parent),
-      prerequisite_item_ids: this.toIdArray(change.prerequisiteItems),
-      add_prerequisite_item_ids: this.toIdArray(change.prerequisiteItems_add),
-      remove_prerequisite_item_ids: this.toIdArray(change.prerequisiteItems_remove),
       assigned_to_id: this.toId(change.assignedTo),
     }
   }
