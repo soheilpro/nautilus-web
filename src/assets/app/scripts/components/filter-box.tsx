@@ -253,8 +253,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     });
 
     this.state.groups.push({
-      key: 'creator',
-      title: 'Creator',
+      key: 'createdBy',
+      title: 'Created By',
       items: Nautilus.Instance.getUsers().map(user => {
         return {
           key: user.id,
@@ -263,7 +263,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
           queryReturnType: 'User'
         };
       }),
-      queryItem: 'creator'
+      queryItem: 'createdBy'
     });
   }
 

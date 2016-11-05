@@ -45,8 +45,8 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
         valueToObject: (value: string) => Nautilus.Instance.getUserByName(value),
         type: 'User'
       },
-      'creator': {
-        function: 'getCreator',
+      'createdBy': {
+        function: 'getCreatedBy',
         valueToObject: (value: string) => Nautilus.Instance.getUserByName(value),
         type: 'User'
       }

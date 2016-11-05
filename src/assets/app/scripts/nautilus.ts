@@ -13,7 +13,7 @@ interface IExtendedItem extends IItem {
   getPriority(): IItemPriority;
   getProject(): IProject;
   getAssignedTo(): IUser;
-  getCreator(): IUser;
+  getCreatedBy(): IUser;
 }
 
 export interface IMilestone extends IExtendedItem {
@@ -387,7 +387,7 @@ class Item implements IExtendedItem {
   project: IProject;
   parent: IItem;
   assignedTo: IUser;
-  creator: IUser;
+  createdBy: IUser;
 
   getType() {
     if (!this.type)
@@ -439,8 +439,8 @@ class Item implements IExtendedItem {
     return _.find(this.context.getUsers(), entityComparer.bind(this, this.assignedTo));
   };
 
-  getCreator() {
-    return _.find(this.context.getUsers(), entityComparer.bind(this, this.creator));
+  getCreatedBy() {
+    return _.find(this.context.getUsers(), entityComparer.bind(this, this.createdBy));
   };
 }
 

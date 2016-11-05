@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Nautilus, IUser } from '../nautilus';
 import { IssueField } from './issue-field';
 
-export class CreatorIssueField extends IssueField {
+export class CreatedByIssueField extends IssueField {
   getValue(): IUser {
-    return this.props.issue.getCreator();
+    return this.props.issue.getCreatedBy();
   }
 
   valueToString(value: IUser) {

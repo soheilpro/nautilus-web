@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Nautilus, IIssue } from '../nautilus';
 import { DescriptionIssueField } from './issue-field-description';
 import { PriorityIssueField } from './issue-field-priority';
-import { CreatorIssueField } from './issue-field-creator';
+import { CreatedByIssueField } from './issue-field-created-by';
 
 interface IssueDetailProps {
   issue: IIssue;
@@ -20,8 +20,8 @@ export class IssueDetail extends React.Component<IssueDetailProps, {}> {
         <PriorityIssueField issue={this.props.issue} />
         <br />
 
-        <strong>Creator:</strong>
-        <CreatorIssueField issue={this.props.issue} />
+        <strong>Created By:</strong>
+        <CreatedByIssueField issue={this.props.issue} />
       </div>
     );
   }
