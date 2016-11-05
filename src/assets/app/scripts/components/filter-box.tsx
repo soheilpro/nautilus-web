@@ -239,8 +239,8 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
     });
 
     this.state.groups.push({
-      key: 'assignee',
-      title: 'Assignee',
+      key: 'assignedTo',
+      title: 'Assigned To',
       items: Nautilus.Instance.getUsers().map(user => {
         return {
           key: user.id,
@@ -249,7 +249,7 @@ export class FilterBox extends React.Component<FilterBoxProps, FilterBoxState> {
           queryReturnType: 'User'
         };
       }),
-      queryItem: 'assignee'
+      queryItem: 'assignedTo'
     });
 
     this.state.groups.push({

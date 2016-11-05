@@ -12,7 +12,7 @@ interface IExtendedItem extends IItem {
   getState(): IItemState;
   getPriority(): IItemPriority;
   getProject(): IProject;
-  getAssignedUser(): IUser;
+  getAssignedTo(): IUser;
   getCreator(): IUser;
 }
 
@@ -386,7 +386,7 @@ class Item implements IExtendedItem {
   priority: IItemPriority;
   project: IProject;
   parent: IItem;
-  assignedUsers: IUser[];
+  assignedTo: IUser;
   creator: IUser;
 
   getType() {
@@ -432,11 +432,11 @@ class Item implements IExtendedItem {
     return _.find(this.context.getMilestones(), entityComparer.bind(this, this.parent));
   };
 
-  getAssignedUser() {
-    if (!this.assignedUsers || this.assignedUsers.length <= 0)
+  getAssignedTo() {
+    if (!this.assignedTo)
       return;
 
-    return _.find(this.context.getUsers(), entityComparer.bind(this, this.assignedUsers[0]));
+    return _.find(this.context.getUsers(), entityComparer.bind(this, this.assignedTo));
   };
 
   getCreator() {

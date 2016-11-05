@@ -3,7 +3,7 @@ import { Nautilus, IIssue, entityComparer } from '../nautilus';
 import { KeyMaster, Key } from '../keymaster'
 import { Grid, GridHeaderRow, GridRow, GridHeaderCell, GridCell, IGridColumn } from './grid';
 import { IssueField } from './issue-field';
-import { AssignedUserIssueField } from './issue-field-assigned-user';
+import { AssignedToIssueField } from './issue-field-assigned-to';
 import { MilestoneIssueField } from './issue-field-milestone';
 import { StateIssueField } from './issue-field-state';
 import { TypeIssueField } from './issue-field-type';
@@ -111,15 +111,15 @@ var StateGridColumn: IGridColumn = {
   }
 }
 
-var AssignedUserGridColumn: IGridColumn = {
-  key: 'assignee',
-  HeaderCell: class AssignedUserHeaderGridCell extends GridHeaderCell {
+var AssignedToGridColumn: IGridColumn = {
+  key: 'assignedTo',
+  HeaderCell: class AssignedToHeaderGridCell extends GridHeaderCell {
     render() {
-      return <span>Assignee</span>;
+      return <span>Assigned To</span>;
     }
   },
-  Cell: class AssignedUserGridCell extends IssueFieldGridCell {
-    protected Field = AssignedUserIssueField;
+  Cell: class AssignedToGridCell extends IssueFieldGridCell {
+    protected Field = AssignedToIssueField;
   }
 }
 
@@ -168,7 +168,7 @@ export class IssueGrid extends React.Component<IssueGridProps, {}> {
   render() {
     return (
       <div className='issue-list'>
-        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, TitleGridColumn, ProjectGridColumn, TypeGridColumn, StateGridColumn, AssignedUserGridColumn, MilestoneGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
+        <Grid HeaderRow={IssueGridHeaderRow} Row={IssueGridRow} columns={[SidGridColumn, TitleGridColumn, ProjectGridColumn, TypeGridColumn, StateGridColumn, AssignedToGridColumn, MilestoneGridColumn]} items={this.props.issues} horizontalDirection={config.rtl ? 'rightToLeft' : 'leftToRight'} verticalOrder='reversed' selectedRowIndex={this.props.selectedIssueIndex} onRowSelectionChange={this.props.onSelectionChange.bind(this)} onRowDeletionRequest={this.handleRowDeletionRequest.bind(this)} />
       </div>
     );
   }

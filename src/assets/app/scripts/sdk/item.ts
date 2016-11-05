@@ -10,7 +10,7 @@ export interface IItem extends IEntity {
   project?: IEntity;
   parent?: IEntity;
   prerequisiteItems?: IEntity[];
-  assignedUsers?: IEntity[];
+  assignedTo?: IEntity;
   creator?: IEntity;
 }
 
@@ -29,9 +29,7 @@ export interface IItemChange extends IChange {
   prerequisiteItems?: IEntity[];
   prerequisiteItems_add?: IEntity[];
   prerequisiteItems_remove?: IEntity[];
-  assignedUsers?: IEntity[];
-  assignedUsers_add?: IEntity[];
-  assignedUsers_remove?: IEntity[];
+  assignedTo?: IEntity;
 }
 
 export interface IItemService extends IService<IItem, IItemFilter, IItemChange> {
@@ -58,7 +56,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       project_id: this.toId(entity.project),
       parent_id: this.toId(entity.parent),
       prerequisite_item_ids: this.toIdArray(entity.prerequisiteItems),
-      assigned_user_ids: this.toIdArray(entity.assignedUsers),
+      assigned_to_id: this.toId(entity.assignedTo),
     };
   }
 
@@ -74,9 +72,7 @@ export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> im
       prerequisite_item_ids: this.toIdArray(change.prerequisiteItems),
       add_prerequisite_item_ids: this.toIdArray(change.prerequisiteItems_add),
       remove_prerequisite_item_ids: this.toIdArray(change.prerequisiteItems_remove),
-      assigned_user_ids: this.toIdArray(change.assignedUsers),
-      add_assigner_user_ids: this.toIdArray(change.assignedUsers_add),
-      remove_assigner_user_ids: this.toIdArray(change.assignedUsers_remove),
+      assigned_to_id: this.toId(change.assignedTo),
     }
   }
 }

@@ -40,8 +40,8 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
         valueToObject: (value: string) => Nautilus.Instance.getItemStateByTitle(value),
         type: 'ItemState'
       },
-      'assignee': {
-        function: 'getAssignedUser',
+      'assignedTo': {
+        function: 'getAssignedTo',
         valueToObject: (value: string) => Nautilus.Instance.getUserByName(value),
         type: 'User'
       },

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Nautilus, IUser } from '../nautilus';
 import { IssueField } from './issue-field';
 
-export class AssignedUserIssueField extends IssueField {
+export class AssignedToIssueField extends IssueField {
   getValue(): IUser {
-    return this.props.issue.getAssignedUser();
+    return this.props.issue.getAssignedTo();
   }
 
   getValues(): IUser[] {
@@ -24,6 +24,6 @@ export class AssignedUserIssueField extends IssueField {
   }
 
   setValue(value: IUser): void {
-    Nautilus.Instance.updateIssue(this.props.issue, { assignedUsers: [value] || null });
+    Nautilus.Instance.updateIssue(this.props.issue, { assignedTo: value || null });
   }
 };
