@@ -12,6 +12,7 @@ export interface IItem extends IEntity {
   prerequisiteItems?: IEntity[];
   assignedTo?: IEntity;
   createdBy?: IEntity;
+  modifiedBy?: IEntity;
 }
 
 export interface IItemFilter extends IFilter {

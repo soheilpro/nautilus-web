@@ -14,6 +14,7 @@ interface IExtendedItem extends IItem {
   getProject(): IProject;
   getAssignedTo(): IUser;
   getCreatedBy(): IUser;
+  getModifiedBy(): IUser;
 }
 
 export interface IMilestone extends IExtendedItem {
@@ -388,6 +389,7 @@ class Item implements IExtendedItem {
   parent: IItem;
   assignedTo: IUser;
   createdBy: IUser;
+  modifiedBy: IUser;
 
   getType() {
     if (!this.type)
@@ -441,6 +443,10 @@ class Item implements IExtendedItem {
 
   getCreatedBy() {
     return _.find(this.context.getUsers(), entityComparer.bind(this, this.createdBy));
+  };
+
+  getModifiedBy() {
+    return _.find(this.context.getUsers(), entityComparer.bind(this, this.modifiedBy));
   };
 }
 
