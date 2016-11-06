@@ -3,6 +3,7 @@ import { IEntity, IFilter, IChange, IService, BaseService } from './base';
 export interface IUser extends IEntity {
   username?: string;
   name?: string;
+  email?: string;
 }
 
 export interface IUserPermission extends IEntity {
@@ -17,6 +18,7 @@ export interface IUserFilter extends IFilter {
 export interface IUserChange extends IChange {
   username?: string;
   name?: string;
+  email?: string;
 }
 
 export interface IUserService extends IService<IUser, IUserFilter, IUserChange> {
@@ -37,14 +39,16 @@ export class UserService extends BaseService<IUser, IUserFilter, IUserChange> im
   entityToParams(entity: IUser): Object {
     return {
       username: entity.username,
-      name: entity.name
+      name: entity.name,
+      email: entity.email
     };
   }
 
   changeToParams(change: IUserChange): Object {
     return {
       username: change.username,
-      name: change.name
+      name: change.name,
+      email: change.email
     };
   }
 
