@@ -4,3 +4,4 @@ src/node_modules
 src/out
 src/assets/app/scripts/main.bundle.js
 src/assets/app/scripts/main.bundle.js.map
+src/npm-debug.log
