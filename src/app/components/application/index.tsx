@@ -2,64 +2,62 @@ import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 import { ISession } from '../../sdk';
 import App from '../../app';
-import Loading from './loading';
+import Splash from '../splash';
 import Login from '../login';
 import Issues from '../issues';
 
 export default class Application extends React.Component<{}, {}> {
+  private app = App.Instance;
+
   constructor() {
     super();
 
-    this.handleLogIn = this.handleLogIn.bind(this);
-    this.handleInitialized = this.handleInitialized.bind(this);
-    this.handleLoaded = this.handleLoaded.bind(this);
+    this.handleAppInitialize = this.handleAppInitialize.bind(this);
+    this.handleAppLogIn = this.handleAppLogIn.bind(this);
+    this.handleAppLoad = this.handleAppLoad.bind(this);
 
     this.state = {};
   }
 
   componentWillMount() {
-    App.Instance.on('initialized', this.handleInitialized);
-    App.Instance.on('login', this.handleLogIn);
-    App.Instance.on('loaded', this.handleLogIn);
+    this.app.on('initialize', this.handleAppInitialize);
+    this.app.on('login', this.handleAppLogIn);
+    this.app.on('load', this.handleAppLoad);
   }
 
   componentWillUnmount() {
-    App.Instance.off('initialized', this.handleInitialized);
-    App.Instance.off('login', this.handleLogIn);
-    App.Instance.off('loaded', this.handleLogIn);
+    this.app.off('initialize', this.handleAppInitialize);
+    this.app.off('login', this.handleAppLogIn);
+    this.app.off('load', this.handleAppLoad);
   }
 
-  private handleInitialized() {
+  private handleAppInitialize() {
     this.forceUpdate();
   }
 
-  private handleLogIn(session: ISession) {
+  private handleAppLogIn(session: ISession) {
     this.forceUpdate();
   }
 
-  private handleLoaded() {
+  private handleAppLoad() {
     this.forceUpdate();
   }
 
   render() {
-    if (!App.Instance.isInitialized())
-      return (
-        <span />
-      );
+    if (!this.app.isInitialized())
+      return <span />;
 
-    if (!App.Instance.getSession())
-      return (
-        <Login />
-      );
+    if (!this.app.isLoggedIn())
+      return <Login />;
 
-    if (!App.Instance.isLoaded())
-      return (
-        <Loading />
-      );
+    if (!this.app.isLoaded())
+      return <Splash />;
 
     return (
       <Router history={browserHistory}>
-          <Route path="/" component={Issues}/>
+        <Route path="/" component={Issues}/>
+        <Route path="/milestones" component={Issues}/>
+        <Route path="/projects" component={Issues}/>
       </Router>
     );
   }

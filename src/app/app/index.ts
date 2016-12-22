@@ -1,26 +1,37 @@
-import { IClient, ISession } from '../sdk';
+import { IClient, IEntity, ISession, IUser, IUserPermission, IProject, IItemState, IItemType, IItemPriority } from '../sdk';
 import EventEmitter = require('wolfy87-eventemitter');
 
-interface IApplicationState {
+interface IAppState {
   isInitialized?: boolean;
   session?: ISession;
   isLoaded?: boolean;
+  userPermissions?: IUserPermission[];
+  users?: IUser[];
+  projects?: IProject[];
+  itemStates?: IItemState[];
+  itemTypes?: IItemType[];
+  itemPriorities?: IItemPriority[];
 }
 
-export interface IApplication extends EventEmitter {
-  initialize(): void;
+export interface IApp extends EventEmitter {
   isInitialized(): boolean;
+  initialize(): void;
 
-  getSession(): ISession;
-  createSession(username: string, password: string): Promise<ISession>;
+  isLoggedIn(): boolean;
+  logIn(username: string, password: string): Promise<ISession>;
 
-  load(): void;
   isLoaded(): boolean;
+  load(): void;
+
+  getCurrentUser(): IUser;
+  getCurrentUserPermissions(): IUserPermission[];
+
+  getUser(user: IUser): IUser;
 }
 
-export default class Application extends EventEmitter implements IApplication {
-  public static Instance: IApplication;
-  private state: IApplicationState;
+export default class App extends EventEmitter implements IApp {
+  public static Instance: IApp;
+  private state: IAppState;
   private client: IClient;
 
   constructor(client: IClient) {
@@ -28,6 +39,10 @@ export default class Application extends EventEmitter implements IApplication {
 
     this.state = {};
     this.client = client;
+  }
+
+  isInitialized() {
+    return this.state.isInitialized;
   }
 
   initialize() {
@@ -40,18 +55,14 @@ export default class Application extends EventEmitter implements IApplication {
     }
 
     this.state.isInitialized = true;
-    this.emit('initialized');
+    this.emit('initialize');
   }
 
-  isInitialized() {
-    return this.state.isInitialized;
+  isLoggedIn() {
+    return this.state.session !== undefined;
   }
 
-  getSession() {
-    return this.state.session;
-  }
-
-  async createSession(username: string, password: string): Promise<ISession> {
+  async logIn(username: string, password: string): Promise<ISession> {
     let session = await this.client.sessions.create(username, password);
 
     if (session) {
@@ -67,22 +78,40 @@ export default class Application extends EventEmitter implements IApplication {
     return session;
   }
 
+  isLoaded() {
+    return this.state.isLoaded;
+  }
+
   async load() {
-    let [users, userPermissions, projects, itemStates, itemTypes, itemPriorities] = await Promise.all([
-      this.client.users.getAll({}),
+    let [userPermissions, users, projects, itemStates, itemTypes, itemPriorities] = await Promise.all([
       this.client.users.getUserPermissions(this.state.session.user),
+      this.client.users.getAll({}),
       this.client.projects.getAll({}),
       this.client.itemStates.getAll({}),
       this.client.itemTypes.getAll({}),
       this.client.itemPriorities.getAll({})
     ]);
 
+    this.state.userPermissions = userPermissions;
+    this.state.users = users;
+    this.state.projects = projects;
+    this.state.itemStates = itemStates;
+    this.state.itemTypes = itemTypes;
+    this.state.itemPriorities = itemPriorities;
     this.state.isLoaded = true;
-    this.emit('loaded');
+    this.emit('load');
   }
 
-  isLoaded() {
-    return this.state.isLoaded;
+  getCurrentUser() {
+    return this.state.session.user;
+  }
+
+  getCurrentUserPermissions() {
+    return this.state.userPermissions;
+  }
+
+  getUser(user: IUser) {
+    return this.state.users.filter(entityComparer.bind(this, user))[0];
   }
 
   private loadSession(): ISession {
@@ -98,3 +127,12 @@ export default class Application extends EventEmitter implements IApplication {
     localStorage.setItem('session', JSON.stringify(session));
   }
 }
+
+export function entityComparer(entity1: IEntity, entity2: IEntity) {
+  if (!entity1 || !entity2)
+    return false;
+
+  return entity1.id === entity2.id;
+}
+
+export *  from '../sdk';

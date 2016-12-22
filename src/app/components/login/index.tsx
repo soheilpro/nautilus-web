@@ -1,6 +1,8 @@
 import * as React from 'react';
 import App from '../../app';
 
+require('./index.less');
+
 interface ILoginState {
   username?: string;
   password?: string;
@@ -8,12 +10,14 @@ interface ILoginState {
 }
 
 export default class Login extends React.Component<{}, ILoginState> {
+  private app = App.Instance;
+
   constructor() {
     super();
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
 
     this.state = {
       username: '',
@@ -33,7 +37,7 @@ export default class Login extends React.Component<{}, ILoginState> {
     });
   }
 
-  private async handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  private async handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (this.state.username.trim().length === 0) {
@@ -48,7 +52,7 @@ export default class Login extends React.Component<{}, ILoginState> {
       });
     }
 
-    let session = await App.Instance.createSession(this.state.username, this.state.password);
+    let session = await this.app.logIn(this.state.username, this.state.password);
 
     if (!session) {
       this.setState({
@@ -59,31 +63,27 @@ export default class Login extends React.Component<{}, ILoginState> {
 
   render() {
     return (
-      <div className="container">
-          <div className="row">
-              <div className="four columns">&nbsp;</div>
-              <div style={{ marginTop: '20vh' }} className="four columns">
-                  <h1 style={{ textAlign: 'center' }}>App</h1>
-                  <br />
-                  <form onSubmit={this.handleSubmit}>
-                      {
-                        this.state.error ?
-                          <div className="row bottom-margin" style={{textAlign: 'center'}}>
-                            <span className="validation-error">{this.state.error}</span>
-                          </div>
-                          : null
-                      }
-                      <div className="row bottom-margin">
-                        <input name="username" type="text" placeholder="Username" className="u-full-width" value={this.state.username} onChange={this.handleUsernameChange} />
-                      </div>
-                      <div className="row bottom-margin">
-                        <input name="password" type="password" placeholder="Password" className="u-full-width" value={this.state.password} onChange={this.handlePasswordChange} />
-                      </div>
-                      <div className="row">
-                        <button type="submit" className="button-primary u-full-width">Log In</button>
-                      </div>
-                  </form>
-              </div>
+      <div className="login component">
+        <div className="container">
+            <div className="title">nautilus</div>
+            <form onSubmit={this.handleFormSubmit}>
+                {
+                  this.state.error ?
+                    <div className="row" style={{textAlign: 'center'}}>
+                      <span className="validation-error">{this.state.error}</span>
+                    </div>
+                    : null
+                }
+                <div className="row">
+                  <input name="username" type="text" placeholder="Username" className="full-width" value={this.state.username} onChange={this.handleUsernameChange} />
+                </div>
+                <div className="row">
+                  <input name="password" type="password" placeholder="Password" className="full-width" value={this.state.password} onChange={this.handlePasswordChange} />
+                </div>
+                <div className="row">
+                  <button type="submit" className="full-width">Log In</button>
+                </div>
+            </form>
           </div>
       </div>
     );

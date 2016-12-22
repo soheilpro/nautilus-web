@@ -1,0 +1,28 @@
+.button,
+button,
+input[type="submit"],
+input[type="button"] {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 34px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 2px;
+  background-color: @primary;
+  color: @white;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten(@primary, 5%);
+  }
+
+  i.before {
+    margin-right: 5px;
+  }
+
+  i.after {
+    margin-left: 5px;
+  }
+}

@@ -6,11 +6,11 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     app: './app/main.tsx',
-    vendor: ['react', 'react-dom', 'react-router', 'axios', 'jquery', 'underscore', 'wolfy87-eventemitter']
+    vendor: ['react', 'react-dom', 'react-router', 'axios', 'jquery', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5']
   },
   output: {
     path: './out',
-    filename: '[name]-[hash].js'
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
@@ -19,10 +19,10 @@ module.exports = {
     loaders: [
       { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
       { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') },
-      { test: /\.ttf(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' },
-      { test: /\.svg(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' },
-      { test: /\.woff2?(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' },
-      { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' }
+      { test: /\.ttf(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.svg(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.woff2?(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' }
     ],
     preLoaders: [
       { test: /\.js$/, loader: "source-map-loader" }
@@ -30,8 +30,8 @@ module.exports = {
   },
   plugins: [
     failPlugin,
-    new ExtractTextPlugin('[name]-[hash].css'),
-    new webpack.optimize.CommonsChunkPlugin('vendor', '[name]-[hash].js'),
+    new ExtractTextPlugin('[name].css'),
+    new webpack.optimize.CommonsChunkPlugin('vendor', '[name].js'),
     new HtmlWebpackPlugin({
       template: './app/index.ejs'
     })

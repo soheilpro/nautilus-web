@@ -1,0 +1,22 @@
+@import '../../assets/stylesheets/common';
+
+.nav {
+  padding: 5px 10px 0 10px;
+  margin-top: 10px;
+  border-bottom: 2px solid @gray;
+
+  a {
+    padding: 5px 10px;
+    display: inline-block;
+    text-decoration: none;
+    color: @black;
+
+    &:hover {
+      color: @black;
+    }
+
+    &.active {
+      background-color: @gray;
+    }
+  }
+}

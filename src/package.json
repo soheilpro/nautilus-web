@@ -5,10 +5,11 @@
   "scripts": {
     "build": "buno webpack",
     "clean": "rm -rf ./out",
-    "start": "http-server ./out",
+    "start": "http-server -c-1 ./out",
     "watch": "webpack --watch"
   },
   "dependencies": {
+    "blueimp-md5": "^2.6.0",
     "http-server": "^0.9.0",
     "jquery": "^3.1.1",
     "react": "^15.4.1",
@@ -18,6 +19,7 @@
     "wolfy87-eventemitter": "^5.1.0"
   },
   "devDependencies": {
+    "@types/blueimp-md5": "^1.1.30",
     "@types/jquery": "^2.0.34",
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.19",

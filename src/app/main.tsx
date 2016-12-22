@@ -4,7 +4,7 @@ import Client from './sdk';
 import App from './app';
 import Application from './components/application';
 
-require('./main.less');
+require('./assets/stylesheets/main.less');
 
 let client = new Client();
 client.address = 'http://localhost:3000';
