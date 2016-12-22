@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as blueimpmd5 from 'blueimp-md5';
-import { IUser } from '../../app';
+import { IUser } from '../../application';
 
 require('./index.less');
 

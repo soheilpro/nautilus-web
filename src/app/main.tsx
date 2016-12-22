@@ -1,18 +1,18 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Client from './sdk';
-import App from './app';
-import Application from './components/application';
+import Application from './application';
+import App from './components/app';
 
 require('./assets/stylesheets/main.less');
 
 let client = new Client();
 client.address = 'http://localhost:3000';
 
-App.Instance = new App(client);
-App.Instance.initialize();
+Application.Instance = new Application(client);
+Application.Instance.initialize();
 
 ReactDOM.render(
-  <Application />,
+  <App />,
   document.getElementById('app')
 );

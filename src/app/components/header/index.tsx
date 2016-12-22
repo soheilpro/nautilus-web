@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Link, IndexLink } from 'react-router';
-import App from '../../app';
+import Application from '../../application';
 import Avatar from '../avatar';
 
 require('./index.less');
 
 export default class Header extends React.Component<{}, {}> {
-  private app = App.Instance;
+  private application = Application.Instance;
 
   render() {
-    let user = this.app.getUser(this.app.getCurrentUser());
+    let user = this.application.getUser(this.application.getCurrentUser());
 
     return (
       <div className="header row">

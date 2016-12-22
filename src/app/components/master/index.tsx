@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link, IndexLink } from 'react-router';
-import App from '../../app';
 import Header from '../header';
 import Nav from '../nav';
 

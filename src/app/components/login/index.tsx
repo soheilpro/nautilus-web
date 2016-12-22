@@ -1,5 +1,5 @@
 import * as React from 'react';
-import App from '../../app';
+import Application from '../../application';
 
 require('./index.less');
 
@@ -10,7 +10,7 @@ interface ILoginState {
 }
 
 export default class Login extends React.Component<{}, ILoginState> {
-  private app = App.Instance;
+  private application = Application.Instance;
 
   constructor() {
     super();
@@ -52,7 +52,7 @@ export default class Login extends React.Component<{}, ILoginState> {
       });
     }
 
-    let session = await this.app.logIn(this.state.username, this.state.password);
+    let session = await this.application.logIn(this.state.username, this.state.password);
 
     if (!session) {
       this.setState({
