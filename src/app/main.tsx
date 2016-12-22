@@ -6,10 +6,7 @@ import App from './components/app';
 
 require('./assets/stylesheets/main.less');
 
-let client = new Client();
-client.address = 'http://localhost:3000';
-
-Application.Instance = new Application(client);
+Application.Instance = new Application({ apiAddress: 'http://localhost:3000' });
 Application.Instance.initialize();
 
 ReactDOM.render(

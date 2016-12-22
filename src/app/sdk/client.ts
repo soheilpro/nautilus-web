@@ -6,8 +6,12 @@ import { IItemTypeService, ItemTypeService } from './item_type';
 import { IItemPriorityService, ItemPriorityService } from './item_priority';
 import { IItemService, ItemService } from './item';
 
+interface IClientConfig {
+  apiAddress: string;
+}
+
 export interface IClient {
-  address: string;
+  config: IClientConfig;
   session: ISession;
   users: IUserService;
   sessions: ISessionService;
@@ -19,7 +23,7 @@ export interface IClient {
 }
 
 export default class Client implements IClient {
-  address: string;
+  config: IClientConfig;
   session: ISession;
   users: IUserService;
   sessions: ISessionService;
@@ -29,7 +33,8 @@ export default class Client implements IClient {
   itemPriorities: IItemPriorityService;
   items: IItemService;
 
-  constructor() {
+  constructor(config: IClientConfig) {
+    this.config = config;
     this.users = new UserService(this);
     this.sessions = new SessionService(this);
     this.projects = new ProjectService(this);

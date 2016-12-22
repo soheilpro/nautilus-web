@@ -11,12 +11,10 @@ export default class Nav extends React.Component<{}, {}> {
     let hasAdminPermission = this.application.getCurrentUserPermissions().some(permission => !permission.project && permission.name === 'admin');
 
     return (
-      <div className="row nav">
-        <div className="columns">
-          <IndexLink to="/" activeClassName="active">Issues</IndexLink>
-          <Link to="/milestones" activeClassName="active">Milestones</Link>
-          { hasAdminPermission ? <Link to="/projects" activeClassName="active">Projects</Link> : null }
-        </div>
+      <div className="nav component">
+        <IndexLink to="/" activeClassName="active">Issues</IndexLink>
+        <Link to="/milestones" activeClassName="active">Milestones</Link>
+        { hasAdminPermission ? <Link to="/projects" activeClassName="active">Projects</Link> : null }
       </div>
     );
   }

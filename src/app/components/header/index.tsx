@@ -12,12 +12,14 @@ export default class Header extends React.Component<{}, {}> {
     let user = this.application.getUser(this.application.getCurrentUser());
 
     return (
-      <div className="header row">
-        <div className="main pull-left">
-          <a href="/" className="title">nautilus</a>
-        </div>
-        <div className="profile pull-right">
-          <Avatar user={user} size={30} />
+      <div className="header component">
+        <div className="row">
+          <div className="main pull-left">
+            <a href="/" className="title">nautilus</a>
+          </div>
+          <div className="profile pull-right">
+            <Avatar user={user} size={30} />
+          </div>
         </div>
       </div>
     );

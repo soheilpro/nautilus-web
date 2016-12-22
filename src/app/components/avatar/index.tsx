@@ -18,7 +18,7 @@ export default class Avatar extends React.Component<IAvatarProps, {}> {
     let md5: any = blueimpmd5;
 
     return (
-      <div className="avatar">
+      <div className="avatar component">
         <img src={`http://www.gravatar.com/avatar/${md5(this.props.user.email)}?s=${this.props.size * 2}&d=identicon`} width={this.props.size} height={this.props.size} />
       </div>
     );

@@ -1,18 +1,20 @@
 @import '../../assets/stylesheets/common';
 
-.nav {
+.nav.component {
   padding: 5px 10px 0 10px;
   margin-top: 10px;
   border-bottom: 2px solid @gray;
 
   a {
+    margin-right: 5px;
     padding: 5px 10px;
     display: inline-block;
     text-decoration: none;
     color: @black;
 
     &:hover {
-      color: @black;
+      background-color: lighten(@gray, 3%);
+      background-color: @gray;
     }
 
     &.active {

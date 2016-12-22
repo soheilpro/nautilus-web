@@ -1,4 +1,4 @@
-import { IClient, IEntity, ISession, IUser, IUserPermission, IProject, IItemState, IItemType, IItemPriority } from '../sdk';
+import Client, { IClient, IEntity, ISession, IUser, IUserPermission, IProject, IItemState, IItemType, IItemPriority } from '../sdk';
 import EventEmitter = require('wolfy87-eventemitter');
 
 interface IApplicationState {
@@ -13,6 +13,10 @@ interface IApplicationState {
   itemPriorities?: IItemPriority[];
 }
 
+interface IApplicationConfig {
+  apiAddress: string;
+}
+
 export interface IApplication extends EventEmitter {
   isInitialized(): boolean;
   initialize(): void;
@@ -21,7 +25,6 @@ export interface IApplication extends EventEmitter {
   logIn(username: string, password: string): Promise<ISession>;
 
   isLoaded(): boolean;
-  load(): void;
 
   getCurrentUser(): IUser;
   getCurrentUserPermissions(): IUserPermission[];
@@ -34,11 +37,11 @@ export default class Application extends EventEmitter implements IApplication {
   private state: IApplicationState;
   private client: IClient;
 
-  constructor(client: IClient) {
+  constructor(config: IApplicationConfig) {
     super();
 
     this.state = {};
-    this.client = client;
+    this.client = new Client(config);
   }
 
   isInitialized() {
@@ -51,6 +54,7 @@ export default class Application extends EventEmitter implements IApplication {
     if (session) {
       this.state.session = session;
       this.client.session = session;
+
       this.load();
     }
 

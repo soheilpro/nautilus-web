@@ -86,7 +86,7 @@ export abstract class BaseService<TEntity extends IEntity, TFilter extends IFilt
   protected invoke(options: {method: string, path: string; params?: Object}): Promise<any> {
     let config: AxiosRequestConfig = {
       method: options.method,
-      url: this.client.address + options.path,
+      url: this.client.config.apiAddress + options.path,
       data: _.pick(options.params, (value: any) => value !== undefined),
       validateStatus: () => true
     };
