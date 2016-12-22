@@ -1,15 +1,14 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "sourceMap": true,
-        "rootDir": "app",
-        "outDir": "out"
-    },
-    "exclude": [
-        "node_modules",
-        "assets"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "lib": [ "es5", "es2015.promise", "dom" ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

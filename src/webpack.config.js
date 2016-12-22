@@ -1,28 +1,50 @@
-var failPlugin = require('webpack-fail-plugin');
+let webpack = require('webpack');
+let failPlugin = require('webpack-fail-plugin');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: "./assets/app/scripts/main.tsx",
-  output: {
-    filename: "./assets/app/scripts/main.bundle.js",
+  entry: {
+    app: './app/main.tsx',
+    vendor: ['react', 'react-dom', 'react-router', 'axios', 'jquery', 'underscore', 'wolfy87-eventemitter']
   },
-  devtool: "source-map",
+  output: {
+    path: './out',
+    filename: '[name]-[hash].js'
+  },
   resolve: {
-    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
   },
   module: {
     loaders: [
-      { test: /\.tsx?$/, loader: "ts-loader" }
+      { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+      { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') },
+      { test: /\.ttf(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' },
+      { test: /\.svg(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' },
+      { test: /\.woff2?(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' },
+      { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name]-[hash].[ext]' }
     ],
     preLoaders: [
       { test: /\.js$/, loader: "source-map-loader" }
     ]
   },
   plugins: [
-      failPlugin
+    failPlugin,
+    new ExtractTextPlugin('[name]-[hash].css'),
+    new webpack.optimize.CommonsChunkPlugin('vendor', '[name]-[hash].js'),
+    new HtmlWebpackPlugin({
+      template: './app/index.ejs'
+    })
   ],
-  externals: {
-    "react": "React",
-    "react-dom": "ReactDOM",
-    "react-router": "React-Router"
-  }
+  devtool: 'source-map'
 };
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  );
+}

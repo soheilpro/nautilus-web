@@ -1,7 +1,0 @@
-.grid tr.selected {
-  background-color: #f6f6f6;
-}
-
-.grid.focus tr.selected td.selected {
-  background-color: #e9e9e9;
-}
