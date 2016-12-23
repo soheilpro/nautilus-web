@@ -1,9 +1,9 @@
 import { IUserService, UserService } from './user';
 import { ISession, ISessionService, SessionService } from './session';
 import { IProjectService, ProjectService } from './project';
-import { IItemStateService, ItemStateService } from './item_state';
-import { IItemTypeService, ItemTypeService } from './item_type';
-import { IItemPriorityService, ItemPriorityService } from './item_priority';
+import { IItemStateService, ItemStateService } from './item-state';
+import { IItemTypeService, ItemTypeService } from './item-type';
+import { IItemPriorityService, ItemPriorityService } from './item-priority';
 import { IItemService, ItemService } from './item';
 
 interface IClientConfig {

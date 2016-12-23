@@ -1,5 +1,11 @@
-import Client, { IClient, IEntity, ISession, IUser, IUserPermission, IProject, IItemState, IItemType, IItemPriority } from '../sdk';
+import Client, { IClient, IEntity, ISession, IUser, IUserPermission, IProject, IItem, IItemState, IItemType, IItemPriority } from '../sdk';
 import EventEmitter = require('wolfy87-eventemitter');
+
+export interface IIssue extends IItem {
+}
+
+export interface ITask extends IItem {
+}
 
 interface IApplicationState {
   isInitialized?: boolean;
@@ -11,6 +17,7 @@ interface IApplicationState {
   itemStates?: IItemState[];
   itemTypes?: IItemType[];
   itemPriorities?: IItemPriority[];
+  items?: IItem[];
 }
 
 interface IApplicationConfig {
@@ -30,6 +37,8 @@ export interface IApplication extends EventEmitter {
   getCurrentUserPermissions(): IUserPermission[];
 
   getUser(user: IUser): IUser;
+
+  getIssues(): Promise<IIssue[]>;
 }
 
 export default class Application extends EventEmitter implements IApplication {
@@ -86,13 +95,14 @@ export default class Application extends EventEmitter implements IApplication {
   }
 
   async load() {
-    let [userPermissions, users, projects, itemStates, itemTypes, itemPriorities] = await Promise.all([
+    let [userPermissions, users, projects, itemStates, itemTypes, itemPriorities, items] = await Promise.all([
       this.client.users.getUserPermissions(this.state.session.user),
       this.client.users.getAll({}),
       this.client.projects.getAll({}),
       this.client.itemStates.getAll({}),
       this.client.itemTypes.getAll({}),
-      this.client.itemPriorities.getAll({})
+      this.client.itemPriorities.getAll({}),
+      this.client.items.getAll({})
     ]);
 
     this.state.userPermissions = userPermissions;
@@ -101,6 +111,7 @@ export default class Application extends EventEmitter implements IApplication {
     this.state.itemStates = itemStates;
     this.state.itemTypes = itemTypes;
     this.state.itemPriorities = itemPriorities;
+    this.state.items = items;
     this.state.isLoaded = true;
     this.emit('load');
   }
@@ -115,6 +126,12 @@ export default class Application extends EventEmitter implements IApplication {
 
   getUser(user: IUser) {
     return this.state.users.filter(entityComparer.bind(this, user))[0];
+  }
+
+  getIssues(): Promise<IIssue[]> {
+    let issues = this.state.items.filter(item => item.kind === 'issue');
+
+    return Promise.resolve(issues);
   }
 
   private loadSession(): ISession {

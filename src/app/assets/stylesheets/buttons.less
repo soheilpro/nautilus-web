@@ -5,8 +5,8 @@ input[type="button"] {
   display: inline-block;
   box-sizing: border-box;
   height: 34px;
-  padding: 6px 12px;
-  border: none;
+  padding: 6px 14px;
+  border: 1px solid @primary;
   border-radius: 2px;
   background-color: @primary;
   color: @white;
@@ -24,5 +24,18 @@ input[type="button"] {
 
   i.after {
     margin-left: 5px;
+  }
+}
+
+.button.secondary,
+button.secondary,
+input[type="submit"].secondary,
+input[type="button"].secondary {
+  border-color: @darkgray;
+  background-color: @white;
+  color: @text;
+
+  &:hover {
+    color: @primary;
   }
 }
