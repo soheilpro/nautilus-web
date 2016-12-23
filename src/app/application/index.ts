@@ -33,7 +33,6 @@ export interface IApplication extends EventEmitter {
 }
 
 export default class Application extends EventEmitter implements IApplication {
-  public static Instance: IApplication;
   private state: IApplicationState;
   private client: IClient;
 

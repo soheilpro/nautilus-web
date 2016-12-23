@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Link, IndexLink } from 'react-router';
-import Application from '../../application';
+import ServiceManager from '../../service-manager';
 
 require('./index.less');
 
 export default class Nav extends React.Component<{}, {}> {
-  private application = Application.Instance;
+  private application = ServiceManager.Instance.getApplication();
 
   render() {
     let hasAdminPermission = this.application.getCurrentUserPermissions().some(permission => !permission.project && permission.name === 'admin');

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Application from '../../application';
+import ServiceManager from '../../service-manager';
 
 require('./index.less');
 
@@ -10,7 +10,7 @@ interface ILoginState {
 }
 
 export default class Login extends React.Component<{}, ILoginState> {
-  private application = Application.Instance;
+  private application = ServiceManager.Instance.getApplication();
 
   constructor() {
     super();

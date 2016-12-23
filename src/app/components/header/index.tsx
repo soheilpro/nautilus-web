@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Link, IndexLink } from 'react-router';
-import Application from '../../application';
+import ServiceManager from '../../service-manager';
 import Avatar from '../avatar';
 
 require('./index.less');
 
 export default class Header extends React.Component<{}, {}> {
-  private application = Application.Instance;
+  private application = ServiceManager.Instance.getApplication();
 
   render() {
     let user = this.application.getUser(this.application.getCurrentUser());

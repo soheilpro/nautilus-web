@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
-import { ISession } from '../../sdk';
-import Application from '../../application';
+import { ISession } from '../../application';
+import ServiceManager from '../../service-manager';
 import Splash from '../splash';
 import Login from '../login';
 import Issues from '../issues';
 
 export default class App extends React.Component<{}, {}> {
-  private application = Application.Instance;
+  private application = ServiceManager.Instance.getApplication();
 
   constructor() {
     super();
