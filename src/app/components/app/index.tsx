@@ -4,7 +4,7 @@ import { ISession } from '../../application';
 import ServiceManager from '../../service-manager';
 import Splash from '../splash';
 import Login from '../login';
-import Issues from '../issues';
+import Main from '../main';
 
 export default class App extends React.Component<{}, {}> {
   private application = ServiceManager.Instance.getApplication();
@@ -53,12 +53,6 @@ export default class App extends React.Component<{}, {}> {
     if (!this.application.isLoaded())
       return <Splash />;
 
-    return (
-      <Router history={browserHistory}>
-        <Route path="/" component={Issues}/>
-        <Route path="/milestones" component={Issues}/>
-        <Route path="/projects" component={Issues}/>
-      </Router>
-    );
+    return <Main />;
   }
 };

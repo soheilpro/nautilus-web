@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
 import ServiceManager from '../../service-manager';
+import { Command, ICommandProvider, ICommand } from '../../controller';
 import Master from '../master';
 import IssueList from '../issue-list';
 import IssueDetail from '../issue-detail';
@@ -12,8 +13,9 @@ interface IIssuesState {
   selectedIssue?: IIssue;
 }
 
-export default class Issues extends React.Component<{}, IIssuesState> {
+export default class Issues extends React.Component<{}, IIssuesState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
+  private controller = ServiceManager.Instance.getController();
 
   constructor() {
     super();
@@ -26,12 +28,23 @@ export default class Issues extends React.Component<{}, IIssuesState> {
   }
 
   async componentWillMount() {
+    this.controller.registerCommandProvider(this);
+
     this.setState({
       issues: await this.application.getIssues()
     });
   }
 
   componentWillUnmount() {
+    this.controller.unregisterCommandProvider(this);
+  }
+
+  getCommands() {
+    return [
+      new Command('new-issue', 'New Issue', () => { console.log('new issue'); }),
+      new Command('new-task', 'New Task', () => { console.log('new task'); }),
+      new Command('refresh', 'Refresh', () => { console.log('refresh'); }),
+    ];
   }
 
   private handleSelectedIssueChange(issue: IIssue) {

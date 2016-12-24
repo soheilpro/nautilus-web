@@ -5,6 +5,7 @@ import Nav from '../nav';
 require('./index.less');
 
 export default class Master extends React.Component<{}, {}> {
+
   render() {
     return (
       <div className="master component">

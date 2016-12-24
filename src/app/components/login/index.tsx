@@ -75,10 +75,10 @@ export default class Login extends React.Component<{}, ILoginState> {
                     : null
                 }
                 <div className="row">
-                  <input name="username" type="text" placeholder="Username" className="full-width" value={this.state.username} onChange={this.handleUsernameChange} />
+                  <input type="text" placeholder="Username" className="full-width" value={this.state.username} onChange={this.handleUsernameChange} />
                 </div>
                 <div className="row">
-                  <input name="password" type="password" placeholder="Password" className="full-width" value={this.state.password} onChange={this.handlePasswordChange} />
+                  <input type="password" placeholder="Password" className="full-width" value={this.state.password} onChange={this.handlePasswordChange} />
                 </div>
                 <div className="row">
                   <button type="submit" className="full-width">Log In</button>

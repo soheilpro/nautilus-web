@@ -6,7 +6,7 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     app: './app/main.tsx',
-    vendor: ['react', 'react-dom', 'react-router', 'axios', 'jquery', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5']
+    vendor: ['react', 'react-dom', 'react-router', 'axios', 'jquery', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5', 'classnames']
   },
   output: {
     path: './out',
