@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IIssue } from '../../application';
 import ServiceManager from '../../service-manager';
 import { Command, ICommandProvider, ICommand } from '../../controller';
+import { KeyCode } from '../../keyboard';
 import Master from '../master';
 import IssueList from '../issue-list';
 import IssueDetail from '../issue-detail';
@@ -41,9 +42,24 @@ export default class Issues extends React.Component<{}, IIssuesState> implements
 
   getCommands() {
     return [
-      new Command('new-issue', 'New Issue', () => { console.log('new issue'); }),
-      new Command('new-task', 'New Task', () => { console.log('new task'); }),
-      new Command('refresh', 'Refresh', () => { console.log('refresh'); }),
+      new Command({
+        id: 'new-issue',
+        name: 'New Issue',
+        shortcut: { keyCombinations: [{ which: KeyCode.N }], },
+        doAction: () => { console.log('new issue'); },
+      }),
+      new Command({
+        id: 'new-task',
+        name: 'New Task',
+        shortcut: { keyCombinations: [{ which: KeyCode.T }], },
+        doAction: () => { console.log('new task'); },
+      }),
+      new Command({
+        id: 'refresh',
+        name: 'Refresh',
+        shortcut: { keyCombinations: [{ which: KeyCode.R }], },
+        doAction: () => { console.log('refresh'); },
+      }),
     ];
   }
 

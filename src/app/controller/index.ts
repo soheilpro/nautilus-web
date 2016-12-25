@@ -1,20 +1,26 @@
+import { IShortcut } from '../keyboard';
+
 export interface ICommand {
   id: string;
   name: string;
+  shortcut: IShortcut;
+  hidden: boolean;
   do(): void;
 }
 
 export class Command implements ICommand {
   id: string;
   name: string;
+  shortcut: IShortcut;
+  hidden: boolean;
   doAction: Function;
-  undoAction: Function;
 
-  constructor(id: string, name: string, doAction: Function, undoAction?: Function) {
-    this.id = id;
-    this.name = name;
-    this.doAction = doAction;
-    this.undoAction = undoAction;
+  constructor(options: {id: string, name: string, doAction: Function, shortcut?: IShortcut, hidden?: boolean}) {
+    this.id = options.id;
+    this.name = options.name;
+    this.shortcut = options.shortcut;
+    this.hidden = options.hidden;
+    this.doAction = options.doAction;
   }
 
   do() {

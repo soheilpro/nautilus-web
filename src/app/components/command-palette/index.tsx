@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ICommand } from '../../controller';
 import * as classNames from 'classnames';
+import Shortcut from '../shortcut';
 
 interface ICommandPaletteProps {
   commands: ICommand[];
@@ -30,7 +31,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
 
     this.state = {
       searchQuery: '',
-      filteredCommands: props.commands,
+      filteredCommands: this.filterCommands(props.commands, ''),
       selectedCommandIndex: 0,
     };
   }
@@ -44,7 +45,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
 
     this.setState({
       searchQuery: query,
-      filteredCommands: this.filteredCommands(this.props.commands, query),
+      filteredCommands: this.filterCommands(this.props.commands, query),
       selectedCommandIndex: 0,
     });
   }
@@ -75,7 +76,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
       }
     }
     else if (event.which === 13) {
-      if (this.filteredCommands.length === 0)
+      if (this.state.filteredCommands.length === 0)
         return;
 
       event.preventDefault();
@@ -105,8 +106,8 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
       this.props.onSelectCommand(command);
   }
 
-  private filteredCommands(commands: ICommand[], query: string) {
-    return commands.filter(command => command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  private filterCommands(commands: ICommand[], query: string) {
+    return commands.filter(command => !command.hidden && command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   render() {
@@ -119,7 +120,16 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
               this.state.filteredCommands.map((command, index) => {
                 return (
                   <a className={classNames('command', {'selected': index === this.state.selectedCommandIndex})} onClick={this.handleCommandSelect.bind(null, command)} key={command.id}>
-                    {command.name}
+                    <span className="title">
+                      {command.name}
+                    </span>
+                    <span className="shortcut">
+                      {
+                        command.shortcut ?
+                          <Shortcut shortcut={command.shortcut} />
+                          : null
+                      }
+                    </span>
                   </a>
                 );
               })
