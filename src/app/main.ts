@@ -18,6 +18,6 @@ let controller = new Controller();
 ServiceManager.Instance.setController(controller);
 
 ReactDOM.render(
-  <App />,
+  React.createElement(App),
   document.getElementById('app')
 );
