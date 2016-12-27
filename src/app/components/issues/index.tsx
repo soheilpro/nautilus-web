@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import ServiceManager from '../../services';
+import { ServiceManager } from '../../services';
 import { Command, ICommandProvider, ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import Master from '../master';

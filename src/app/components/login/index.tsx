@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ServiceManager from '../../services';
+import { ServiceManager } from '../../services';
 
 require('./index.less');
 

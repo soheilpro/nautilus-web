@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
-import ServiceManager from '../../services';
+import { ServiceManager } from '../../services';
 import { Command, ICommandProvider, ICommand } from '../../commands';
 import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
 import Issues from '../issues';

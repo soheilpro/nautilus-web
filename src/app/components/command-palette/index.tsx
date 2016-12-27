@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import ServiceManager from '../../services';
+import { ServiceManager } from '../../services';
 import { ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import Shortcut from '../shortcut';
