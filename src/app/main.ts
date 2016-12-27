@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import ServiceManager from './service-manager';
+import ServiceManager from './services';
 import Application from './application';
-import Controller from './controller';
-
+import CommandManager from './commands';
+import KeyBindingManager from './key-bindings';
 import App from './components/app';
 
 require('./assets/stylesheets/main.less');
@@ -14,8 +14,11 @@ let application = new Application({ apiAddress: 'http://localhost:3000' });
 application.initialize();
 ServiceManager.Instance.setApplication(application);
 
-let controller = new Controller();
-ServiceManager.Instance.setController(controller);
+let commandManager = new CommandManager();
+ServiceManager.Instance.setCommandManager(commandManager);
+
+let keyBindingManager = new KeyBindingManager();
+ServiceManager.Instance.setKeyBindingManager(keyBindingManager);
 
 ReactDOM.render(
   React.createElement(App),

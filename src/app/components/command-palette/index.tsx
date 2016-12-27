@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { ICommand } from '../../controller';
 import * as classNames from 'classnames';
+import ServiceManager from '../../services';
+import { ICommand } from '../../commands';
+import { KeyCode } from '../../keyboard';
 import Shortcut from '../shortcut';
 
 interface ICommandPaletteProps {
@@ -18,6 +20,7 @@ interface ICommandPaletteState {
 require('./index.less');
 
 export default class CommandPalette extends React.Component<ICommandPaletteProps, ICommandPaletteState> {
+  private keyBindingManager = ServiceManager.Instance.getKeyBindingManager();
   private containerElement: HTMLElement;
   private searchQueryElement: HTMLElement;
 
@@ -51,13 +54,13 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
   }
 
   private handleSearchQueryKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.which === 27) {
+    if (event.which === KeyCode.Escape) {
       event.preventDefault();
 
       if (this.props.onDismiss)
         this.props.onDismiss();
     }
-    else if (event.which === 40) {
+    else if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
       if (this.state.selectedCommandIndex < this.state.filteredCommands.length - 1) {
@@ -66,7 +69,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
         });
       }
     }
-    else if (event.which === 38) {
+    else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
       if (this.state.selectedCommandIndex > 0) {
@@ -75,7 +78,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
         });
       }
     }
-    else if (event.which === 13) {
+    else if (event.which === KeyCode.Enter) {
       if (this.state.filteredCommands.length === 0)
         return;
 
@@ -124,11 +127,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
                       {command.name}
                     </span>
                     <span className="shortcut">
-                      {
-                        command.shortcut ?
-                          <Shortcut shortcut={command.shortcut} />
-                          : null
-                      }
+                      <Shortcut shortcut={this.keyBindingManager.getShortcutsForCommand(command.id)[0]} />
                     </span>
                   </a>
                 );

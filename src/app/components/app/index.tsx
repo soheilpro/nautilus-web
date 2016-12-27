@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 import { ISession } from '../../application';
-import ServiceManager from '../../service-manager';
+import ServiceManager from '../../services';
 import Splash from '../splash';
 import Login from '../login';
 import Main from '../main';

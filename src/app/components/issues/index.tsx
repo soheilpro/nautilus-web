@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import ServiceManager from '../../service-manager';
-import { Command, ICommandProvider, ICommand } from '../../controller';
+import ServiceManager from '../../services';
+import { Command, ICommandProvider, ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import Master from '../master';
 import IssueList from '../issue-list';
@@ -16,7 +16,7 @@ interface IIssuesState {
 
 export default class Issues extends React.Component<{}, IIssuesState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
-  private controller = ServiceManager.Instance.getController();
+  private controller = ServiceManager.Instance.getCommandManager();
 
   constructor() {
     super();
@@ -45,19 +45,16 @@ export default class Issues extends React.Component<{}, IIssuesState> implements
       new Command({
         id: 'new-issue',
         name: 'New Issue',
-        shortcut: { keyCombinations: [{ which: KeyCode.N }], },
         doAction: () => { console.log('new issue'); },
       }),
       new Command({
         id: 'new-task',
         name: 'New Task',
-        shortcut: { keyCombinations: [{ which: KeyCode.T }], },
         doAction: () => { console.log('new task'); },
       }),
       new Command({
         id: 'refresh',
         name: 'Refresh',
-        shortcut: { keyCombinations: [{ which: KeyCode.R }], },
         doAction: () => { console.log('refresh'); },
       }),
     ];

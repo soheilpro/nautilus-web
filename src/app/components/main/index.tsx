@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
-import ServiceManager from '../../service-manager';
-import { Command, ICommandProvider, ICommand } from '../../controller';
+import ServiceManager from '../../services';
+import { Command, ICommandProvider, ICommand } from '../../commands';
 import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
 import Issues from '../issues';
 import Milestones from '../milestones';
@@ -29,7 +29,8 @@ interface IMainState {
 }
 
 export default class Main extends React.Component<{}, IMainState> implements ICommandProvider {
-  private controller = ServiceManager.Instance.getController();
+  private controller = ServiceManager.Instance.getCommandManager();
+  private keyBindingManager = ServiceManager.Instance.getKeyBindingManager();
   private keyboardEvents: KeyboardEvent[] = [];
 
   constructor() {
@@ -58,25 +59,21 @@ export default class Main extends React.Component<{}, IMainState> implements ICo
         id: 'show-command-palette',
         name: 'Show Command Palette',
         doAction: () => { this.setState({ isCommandPalleteVisible: true }); },
-        shortcut: { keyCombinations: [{ which: KeyCode.P }], },
         hidden: true,
       }),
       new Command({
         id: 'go-to-issues',
         name: 'Go to Issues',
-        shortcut: { keyCombinations: [{ which: KeyCode.G }, { which: KeyCode.I }], },
         doAction: () => { browserHistory.push('/'); },
       }),
       new Command({
         id: 'go-to-milestones',
         name: 'Go to Milestones',
-        shortcut: { keyCombinations: [{ which: KeyCode.G }, { which: KeyCode.M }], },
         doAction: () => { browserHistory.push('/milestones'); },
       }),
       new Command({
         id: 'go-to-projects',
         name: 'Go to Projects',
-        shortcut: { keyCombinations: [{ which: KeyCode.G }, { which: KeyCode.P }], },
         doAction: () => { browserHistory.push('/projects'); },
       }),
     ];
@@ -96,17 +93,20 @@ export default class Main extends React.Component<{}, IMainState> implements ICo
       }
     }
 
-    for (let command of this.controller.getCommands()) {
-      if (!command.shortcut)
+    for (let keyBinding of this.keyBindingManager.getKeyBindings()) {
+      if (!KeyCombination.matchesAll(keyBinding.shortcut, this.keyboardEvents))
         continue;
 
-      if (!KeyCombination.matchesAll(command.shortcut.keyCombinations, this.keyboardEvents))
-        continue;
+      let command = this.controller.getCommand(keyBinding.commandId);
+
+      if (!command)
+        return;
+
+      command.do();
 
       event.preventDefault();
       this.keyboardEvents = [];
 
-      command.do();
       break;
     }
   }

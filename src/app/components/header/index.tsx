@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link, IndexLink } from 'react-router';
-import ServiceManager from '../../service-manager';
+import ServiceManager from '../../services';
 import Avatar from '../avatar';
 
 require('./index.less');

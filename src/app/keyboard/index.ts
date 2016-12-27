@@ -1,5 +1,5 @@
 export interface IKeyCombination {
-  which: number;
+  keyCode: number;
   ctrlKey?: boolean;
   shiftKey?: boolean;
   altKey?: boolean;
@@ -8,7 +8,7 @@ export interface IKeyCombination {
 
 export class KeyCombination {
   static matches(keyCombination: IKeyCombination, event: KeyboardEvent): boolean {
-    if (keyCombination.which !== event.which)
+    if (keyCombination.keyCode !== event.keyCode)
       return false;
 
     if ((keyCombination.ctrlKey || false) !== event.ctrlKey)
@@ -26,10 +26,7 @@ export class KeyCombination {
     return true;
   }
 
-  static matchesAll(keyCombinations: IKeyCombination[], events: KeyboardEvent[]): boolean {
-    if (keyCombinations.length !== events.length)
-      return false;
-
+  static matchesAll(keyCombinations: IShortcut, events: KeyboardEvent[]): boolean {
     for (let i = 0; i < keyCombinations.length; i++)
       if (!this.matches(keyCombinations[i], events[i]))
         return false;
@@ -38,8 +35,7 @@ export class KeyCombination {
   }
 }
 
-export interface IShortcut {
-  keyCombinations: IKeyCombination[];
+export interface IShortcut extends Array<IKeyCombination> {
 }
 
 interface ICondition {

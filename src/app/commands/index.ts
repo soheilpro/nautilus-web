@@ -1,9 +1,6 @@
-import { IShortcut } from '../keyboard';
-
 export interface ICommand {
   id: string;
   name: string;
-  shortcut: IShortcut;
   hidden: boolean;
   do(): void;
 }
@@ -11,14 +8,12 @@ export interface ICommand {
 export class Command implements ICommand {
   id: string;
   name: string;
-  shortcut: IShortcut;
   hidden: boolean;
   doAction: Function;
 
-  constructor(options: {id: string, name: string, doAction: Function, shortcut?: IShortcut, hidden?: boolean}) {
+  constructor(options: {id: string, name: string, doAction: Function, hidden?: boolean}) {
     this.id = options.id;
     this.name = options.name;
-    this.shortcut = options.shortcut;
     this.hidden = options.hidden;
     this.doAction = options.doAction;
   }
@@ -32,13 +27,14 @@ export interface ICommandProvider {
   getCommands(): ICommand[];
 }
 
-export interface IController {
+export interface ICommandManager {
   registerCommandProvider(commandProvider: ICommandProvider): void;
   unregisterCommandProvider(commandProvider: ICommandProvider): void;
   getCommands(): ICommand[];
+  getCommand(id: string): ICommand;
 }
 
-export default class Controller implements IController {
+export default class CommandManager implements ICommandManager {
   private commandProviders: ICommandProvider[] = [];
 
   registerCommandProvider(commandProvider: ICommandProvider) {
@@ -58,5 +54,14 @@ export default class Controller implements IController {
         commands.push(command);
 
     return commands;
+  }
+
+  getCommand(id: string): ICommand {
+    for (let commandProvider of this.commandProviders)
+      for (let command of commandProvider.getCommands())
+        if (command.id === id)
+        return command;
+
+    return null;
   }
 }
