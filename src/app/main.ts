@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ServiceManager } from './services';
-import Application from './application';
+import { Application } from './application';
 import { CommandManager } from './commands';
 import { KeyBindingManager } from './key-bindings';
 import App from './components/app';
