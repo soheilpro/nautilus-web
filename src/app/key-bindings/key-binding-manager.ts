@@ -9,6 +9,18 @@ export class KeyBindingManager implements IKeyBindingManager {
         commandId: 'show-command-palette',
       },
       {
+        shortcut: [{ keyCode: KeyCode.G }, { keyCode: KeyCode.I }],
+        commandId: 'go-to-issues',
+      },
+      {
+        shortcut: [{ keyCode: KeyCode.G }, { keyCode: KeyCode.M }],
+        commandId: 'go-to-milestones',
+      },
+      {
+        shortcut: [{ keyCode: KeyCode.G }, { keyCode: KeyCode.P }],
+        commandId: 'go-to-projects',
+      },
+      {
         shortcut: [{ keyCode: KeyCode.N }],
         commandId: 'new-issue',
       }
