@@ -1,41 +1,10 @@
-import { IEntity, IFilter, IChange, IService, BaseService } from './base';
+import { ServiceBase } from '../service-base';
+import { IItem } from './iitem';
+import { IItemService } from './iitem-service';
+import { IItemFilter } from './iitem-filter';
+import { IItemChange } from './iitem-change';
 
-export interface IItem extends IEntity {
-  sid: string;
-  kind?: string;
-  type?: IEntity;
-  title?: string;
-  description?: string;
-  state?: IEntity;
-  priority?: IEntity;
-  tags?: string[];
-  project?: IEntity;
-  parent?: IEntity;
-  assignedTo?: IEntity;
-  createdBy?: IEntity;
-  modifiedBy?: IEntity;
-}
-
-export interface IItemFilter extends IFilter {
-  type?: string;
-}
-
-export interface IItemChange extends IChange {
-  type?: IEntity;
-  title?: string;
-  description?: string;
-  state?: IEntity;
-  priority?: IEntity;
-  tags?: string[];
-  project?: IEntity;
-  parent?: IEntity;
-  assignedTo?: IEntity;
-}
-
-export interface IItemService extends IService<IItem, IItemFilter, IItemChange> {
-}
-
-export class ItemService extends BaseService<IItem, IItemFilter, IItemChange> implements IItemService {
+export class ItemService extends ServiceBase<IItem, IItemFilter, IItemChange> implements IItemService {
   basePath(): string {
     return '/items';
   }

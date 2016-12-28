@@ -10,7 +10,7 @@ require('./assets/stylesheets/main.less');
 
 ServiceManager.Instance = new ServiceManager();
 
-let application = new Application({ apiAddress: 'http://localhost:3000' });
+let application = new Application({ address: 'http://localhost:3000' });
 application.initialize();
 ServiceManager.Instance.setApplication(application);
 

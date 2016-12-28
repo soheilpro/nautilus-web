@@ -1,10 +1,13 @@
 import { IApplication } from './iapplication';
-import { IApplicationConfig } from './iapplication-config';
 import { IIssue } from './iissue';
 import { entityComparer } from './entity-comparer';
 import { ISession, IUser, IUserPermission, IProject, IItem, IItemState, IItemType, IItemPriority } from '../sdk';
-import Client, { IClient } from '../sdk';
+import { Client, IClient } from '../sdk';
 import EventEmitter = require('wolfy87-eventemitter');
+
+export interface IApplicationConfig {
+  address: string;
+}
 
 export interface IApplicationState {
   isInitialized?: boolean;
@@ -23,11 +26,11 @@ export class Application extends EventEmitter implements IApplication {
   private state: IApplicationState;
   private client: IClient;
 
-  constructor(config: IApplicationConfig) {
+  constructor({ address }: IApplicationConfig) {
     super();
 
     this.state = {};
-    this.client = new Client(config);
+    this.client = new Client({ address: address });
   }
 
   isInitialized() {

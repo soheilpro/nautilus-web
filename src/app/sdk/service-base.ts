@@ -1,28 +1,11 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as _ from 'underscore';
+import { IEntity } from './ientity';
+import { IFilter } from './ifilter';
+import { IChange } from './ichange';
+import { IClient } from './iclient';
 
-import { IClient } from './client';
-
-export interface IEntity {
-  id?: string;
-}
-
-export interface IFilter {
-  id?: string;
-}
-
-export interface IChange {
-}
-
-export interface IService<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange> {
-  getAll(filter: TFilter): Promise<TEntity[]>;
-  get(filter: TFilter): Promise<TEntity>;
-  insert(entity: TEntity): Promise<TEntity>;
-  update(id: string, change: TChange): Promise<TEntity>;
-  delete(id: string): Promise<void>;
-}
-
-export abstract class BaseService<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange> {
+export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange> {
   private client: IClient;
 
   constructor(client: IClient) {
@@ -86,7 +69,7 @@ export abstract class BaseService<TEntity extends IEntity, TFilter extends IFilt
   protected invoke(options: {method: string, path: string; params?: Object}): Promise<any> {
     let config: AxiosRequestConfig = {
       method: options.method,
-      url: this.client.config.apiAddress + options.path,
+      url: this.client.address + options.path,
       data: _.pick(options.params, (value: any) => value !== undefined),
       validateStatus: () => true
     };
