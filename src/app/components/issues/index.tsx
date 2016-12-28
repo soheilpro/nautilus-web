@@ -74,9 +74,9 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
       <Master>
         <div className="issues component">
           <div className="row action-bar">
-            <button title="Shortcut: N"><i className="fa fa-plus before" aria-hidden="true"></i> New Issue</button>
-            <button title="Shortcut: T"><i className="fa fa-plus before" aria-hidden="true"></i> New Task</button>
-            <button title="Shortcut: R" className="secondary"><i className="fa fa-refresh before after" aria-hidden="true"></i></button>
+            <button><i className="fa fa-plus before" aria-hidden="true"></i> New Issue</button>
+            <button><i className="fa fa-plus before" aria-hidden="true"></i> New Task</button>
+            <button className="secondary"><i className="fa fa-refresh before after" aria-hidden="true"></i></button>
           </div>
           <div className="row container">
             <div className="list pull-left">
