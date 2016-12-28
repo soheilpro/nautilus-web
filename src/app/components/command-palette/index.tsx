@@ -127,7 +127,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
                       {command.name}
                     </span>
                     <span className="shortcut">
-                      <Shortcut shortcut={this.keyBindingManager.getShortcutsForCommand(command.id)[0]} />
+                      <Shortcut shortcut={this.keyBindingManager.getKeyBindings().filter(keyBinding => keyBinding.commandId === command.id).map(keyBinding => keyBinding.shortcut)[0]} />
                     </span>
                   </a>
                 );

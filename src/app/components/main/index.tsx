@@ -40,16 +40,16 @@ export default class Main extends React.Component<{}, IMainState> implements ICo
     this.handleCommandPaletteDismiss = this.handleCommandPaletteDismiss.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
 
-    document.addEventListener('keydown', this.handleKeyDown);
-
     this.state = {};
   }
 
   componentWillMount() {
     this.controller.registerCommandProvider(this);
+    document.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
     this.controller.unregisterCommandProvider(this);
   }
 
