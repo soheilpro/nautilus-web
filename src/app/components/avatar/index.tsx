@@ -9,7 +9,10 @@ interface IAvatarProps {
   size?: number;
 }
 
-export default class Avatar extends React.Component<IAvatarProps, {}> {
+interface IAvatarState {
+}
+
+export default class Avatar extends React.Component<IAvatarProps, IAvatarState> {
   public static defaultProps: IAvatarProps = {
     size: 50
   };

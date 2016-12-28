@@ -25,7 +25,7 @@ export default class CommandPalette extends React.Component<ICommandPaletteProps
   private searchQueryElement: HTMLElement;
 
   constructor(props: ICommandPaletteProps) {
-    super(props);
+    super();
 
     this.handleContainerBlur = this.handleContainerBlur.bind(this);
     this.handleSearchQueryChange = this.handleSearchQueryChange.bind(this);

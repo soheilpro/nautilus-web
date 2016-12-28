@@ -8,7 +8,10 @@ interface IIssueListProps {
   onSelectedIssueChange?(issue: IIssue): void;
 }
 
-export default class IssueList extends React.Component<IIssueListProps, {}> {
+interface IIssueListState {
+}
+
+export default class IssueList extends React.Component<IIssueListProps, IIssueListState> {
   constructor() {
     super();
 

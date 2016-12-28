@@ -1,7 +1,13 @@
 import * as React from 'react';
 import Master from '../master';
 
-export default class Projects extends React.Component<{}, {}> {
+interface IProjectsProps {
+}
+
+interface IProjectsState {
+}
+
+export default class Projects extends React.Component<IProjectsProps, IProjectsState> {
   render() {
     return (
       <Master>

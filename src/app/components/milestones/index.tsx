@@ -1,7 +1,13 @@
 import * as React from 'react';
 import Master from '../master';
 
-export default class Milestones extends React.Component<{}, {}> {
+interface IMilestonesProps {
+}
+
+interface IMilestonesState {
+}
+
+export default class Milestones extends React.Component<IMilestonesProps, IMilestonesState> {
   render() {
     return (
       <Master>

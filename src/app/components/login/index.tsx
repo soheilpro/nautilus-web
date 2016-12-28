@@ -3,13 +3,16 @@ import { ServiceManager } from '../../services';
 
 require('./index.less');
 
+interface ILoginProps {
+}
+
 interface ILoginState {
   username?: string;
   password?: string;
   error?: string;
 }
 
-export default class Login extends React.Component<{}, ILoginState> {
+export default class Login extends React.Component<ILoginProps, ILoginState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

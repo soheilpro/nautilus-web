@@ -4,7 +4,13 @@ import { ServiceManager } from '../../services';
 
 require('./index.less');
 
-export default class Nav extends React.Component<{}, {}> {
+interface INavProps {
+}
+
+interface INavState {
+}
+
+export default class Nav extends React.Component<INavProps, INavState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

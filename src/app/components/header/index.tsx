@@ -5,7 +5,13 @@ import Avatar from '../avatar';
 
 require('./index.less');
 
-export default class Header extends React.Component<{}, {}> {
+interface IHeaderProps {
+}
+
+interface IHeaderState {
+}
+
+export default class Header extends React.Component<IHeaderProps, IHeaderState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

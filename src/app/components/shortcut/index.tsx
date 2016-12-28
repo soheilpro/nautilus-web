@@ -7,7 +7,10 @@ interface IShortcutProps {
   shortcut: IShortcut;
 }
 
-export default class Shortcut extends React.Component<IShortcutProps, {}> {
+interface IShortcutState {
+}
+
+export default class Shortcut extends React.Component<IShortcutProps, IShortcutState> {
   render() {
     if (!this.props.shortcut)
       return null;

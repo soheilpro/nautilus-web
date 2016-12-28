@@ -4,8 +4,13 @@ import Nav from '../nav';
 
 require('./index.less');
 
-export default class Master extends React.Component<{}, {}> {
+interface IMasterProps {
+}
 
+interface IMasterState {
+}
+
+export default class Master extends React.Component<IMasterProps, IMasterState> {
   render() {
     return (
       <div className="master component">

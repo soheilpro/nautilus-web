@@ -9,12 +9,15 @@ import Master from '../master';
 
 require('./index.less');
 
+interface IIssuesProps {
+}
+
 interface IIssuesState {
   issues?: IIssue[];
   selectedIssue?: IIssue;
 }
 
-export default class Issues extends React.Component<{}, IIssuesState> implements ICommandProvider {
+export default class Issues extends React.Component<IIssuesProps, IIssuesState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private controller = ServiceManager.Instance.getCommandManager();
 

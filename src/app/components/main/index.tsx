@@ -24,11 +24,14 @@ class MainRouter extends React.Component<{}, {}> {
   }
 }
 
+interface IMainProps {
+}
+
 interface IMainState {
   isCommandPalleteVisible?: boolean;
 }
 
-export default class Main extends React.Component<{}, IMainState> implements ICommandProvider {
+export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
   private controller = ServiceManager.Instance.getCommandManager();
   private keyBindingManager = ServiceManager.Instance.getKeyBindingManager();
   private keyboardEvents: KeyboardEvent[] = [];

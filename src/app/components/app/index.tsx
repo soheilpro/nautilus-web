@@ -6,7 +6,13 @@ import Login from '../login';
 import Main from '../main';
 import Splash from '../splash';
 
-export default class App extends React.Component<{}, {}> {
+interface IAppProps {
+}
+
+interface IAppState {
+}
+
+export default class App extends React.Component<IAppProps, IAppState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
