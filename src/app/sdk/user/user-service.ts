@@ -1,9 +1,9 @@
 import { ServiceBase } from '../service-base';
 import { IUser } from './iuser';
-import { IUserService } from './iuser-service';
-import { IUserFilter } from './iuser-filter';
 import { IUserChange } from './iuser-change';
+import { IUserFilter } from './iuser-filter';
 import { IUserPermission } from './iuser-permission';
+import { IUserService } from './iuser-service';
 
 export class UserService extends ServiceBase<IUser, IUserFilter, IUserChange> implements IUserService {
   basePath(): string {

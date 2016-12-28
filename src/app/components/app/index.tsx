@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
-import { ServiceManager } from '../../services';
 import { ISession } from '../../application';
-import Splash from '../splash';
+import { ServiceManager } from '../../services';
 import Login from '../login';
 import Main from '../main';
+import Splash from '../splash';
 
 export default class App extends React.Component<{}, {}> {
   private application = ServiceManager.Instance.getApplication();

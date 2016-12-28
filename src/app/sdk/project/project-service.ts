@@ -1,8 +1,8 @@
 import { ServiceBase } from '../service-base';
 import { IProject } from './iproject';
-import { IProjectService } from './iproject-service';
-import { IProjectFilter } from './iproject-filter';
 import { IProjectChange } from './iproject-change';
+import { IProjectFilter } from './iproject-filter';
+import { IProjectService } from './iproject-service';
 
 export class ProjectService extends ServiceBase<IProject, IProjectFilter, IProjectChange> implements IProjectService {
   basePath(): string {

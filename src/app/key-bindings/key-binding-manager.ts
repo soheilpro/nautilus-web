@@ -1,5 +1,5 @@
-import { IKeyBindingManager } from './ikey-binding-manager';
 import { KeyCode } from '../keyboard';
+import { IKeyBindingManager } from './ikey-binding-manager';
 
 export class KeyBindingManager implements IKeyBindingManager {
   getKeyBindings() {

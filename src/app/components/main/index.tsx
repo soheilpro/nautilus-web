@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
-import { ServiceManager } from '../../services';
-import { Command, ICommandProvider, ICommand } from '../../commands';
+import { Command, ICommand, ICommandProvider } from '../../commands';
 import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
+import { ServiceManager } from '../../services';
+import CommandPalette from '../command-palette';
 import Issues from '../issues';
 import Milestones from '../milestones';
 import Projects from '../projects';
-import CommandPalette from '../command-palette';
 
 class MainRouter extends React.Component<{}, {}> {
   shouldComponentUpdate() {

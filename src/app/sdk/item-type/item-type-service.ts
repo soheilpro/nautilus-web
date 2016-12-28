@@ -1,8 +1,8 @@
 import { ServiceBase } from '../service-base';
 import { IItemType } from './iitem-type';
-import { IItemTypeService } from './iitem-type-service';
-import { IItemTypeFilter } from './iitem-type-filter';
 import { IItemTypeChange } from './iitem-type-change';
+import { IItemTypeFilter } from './iitem-type-filter';
+import { IItemTypeService } from './iitem-type-service';
 
 export class ItemTypeService extends ServiceBase<IItemType, IItemTypeFilter, IItemTypeChange> implements IItemTypeService {
   basePath(): string {

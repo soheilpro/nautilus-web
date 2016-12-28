@@ -1,10 +1,10 @@
-import { IUserService } from './user';
-import { ISessionService, ISession } from './session';
-import { IProjectService } from './project';
 import { IItemPriorityService } from './item-priority';
+import { IItemService } from './item';
 import { IItemStateService } from './item-state';
 import { IItemTypeService } from './item-type';
-import { IItemService } from './item';
+import { IProjectService } from './project';
+import { ISessionService, ISession } from './session';
+import { IUserService } from './user';
 
 export interface IClient {
   address: string;

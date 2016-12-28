@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IShortcut, KeyName } from '../../keyboard';
+import { KeyName, IShortcut } from '../../keyboard';
 
 require('./index.less');
 

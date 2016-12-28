@@ -1,8 +1,8 @@
 import { ServiceBase } from '../service-base';
 import { IItemState } from './iitem-state';
-import { IItemStateService } from './iitem-state-service';
-import { IItemStateFilter } from './iitem-state-filter';
 import { IItemStateChange } from './iitem-state-change';
+import { IItemStateFilter } from './iitem-state-filter';
+import { IItemStateService } from './iitem-state-service';
 
 export class ItemStateService extends ServiceBase<IItemState, IItemStateFilter, IItemStateChange> implements IItemStateService {
   basePath(): string {

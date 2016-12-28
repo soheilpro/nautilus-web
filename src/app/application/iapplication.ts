@@ -1,5 +1,5 @@
-import { IIssue } from './iissue';
 import { ISession, IUser, IUserPermission } from '../sdk';
+import { IIssue } from './iissue';
 
 export interface IApplication extends EventEmitter {
   isInitialized(): boolean;

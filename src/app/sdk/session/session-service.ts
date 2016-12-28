@@ -1,8 +1,8 @@
 import { ServiceBase } from '../service-base';
 import { ISession } from './isession';
-import { ISessionService } from './isession-service';
-import { ISessionFilter } from './isession-filter';
 import { ISessionChange } from './isession-change';
+import { ISessionFilter } from './isession-filter';
+import { ISessionService } from './isession-service';
 
 export class SessionService extends ServiceBase<ISession, ISessionFilter, ISessionChange> implements ISessionService {
   basePath(): string {

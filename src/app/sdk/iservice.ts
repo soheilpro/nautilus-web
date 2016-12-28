@@ -1,6 +1,6 @@
+import { IChange } from './ichange';
 import { IEntity } from './ientity';
 import { IFilter } from './ifilter';
-import { IChange } from './ichange';
 
 export interface IService<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange> {
   getAll(filter: TFilter): Promise<TEntity[]>;

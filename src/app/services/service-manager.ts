@@ -1,7 +1,7 @@
-import { IServiceManager } from './iservice-manager';
 import { IApplication } from '../application';
 import { ICommandManager } from '../commands';
 import { IKeyBindingManager } from '../key-bindings';
+import { IServiceManager } from './iservice-manager';
 
 export class ServiceManager {
   static Instance: IServiceManager;

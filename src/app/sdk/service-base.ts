@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as _ from 'underscore';
-import { IEntity } from './ientity';
-import { IFilter } from './ifilter';
 import { IChange } from './ichange';
 import { IClient } from './iclient';
+import { IEntity } from './ientity';
+import { IFilter } from './ifilter';
 
 export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange> {
   private client: IClient;

@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { Command, ICommand, ICommandProvider } from '../../commands';
 import { IIssue } from '../../application';
-import { ServiceManager } from '../../services';
-import { Command, ICommandProvider, ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
-import Master from '../master';
-import IssueList from '../issue-list';
+import { ServiceManager } from '../../services';
 import IssueDetail from '../issue-detail';
+import IssueList from '../issue-list';
+import Master from '../master';
 
 require('./index.less');
 
