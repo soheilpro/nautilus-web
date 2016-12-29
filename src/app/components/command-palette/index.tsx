@@ -5,6 +5,8 @@ import { ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import Shortcut from '../shortcut';
 
+require('./index.less');
+
 interface ICommandPaletteProps {
   commands: ICommand[];
   onSelectCommand(command: ICommand): void;
@@ -16,8 +18,6 @@ interface ICommandPaletteState {
   filteredCommands?: ICommand[];
   selectedCommandIndex?: number;
 }
-
-require('./index.less');
 
 export default class CommandPalette extends React.Component<ICommandPaletteProps, ICommandPaletteState> {
   private keyBindingManager = ServiceManager.Instance.getKeyBindingManager();
