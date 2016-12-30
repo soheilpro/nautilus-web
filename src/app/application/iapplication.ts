@@ -16,4 +16,5 @@ export interface IApplication extends EventEmitter {
   getUser(user: IUser): IUser;
 
   getIssues(): Promise<IIssue[]>;
+  searchIssues(query: string): Promise<IIssue[]>;
 }

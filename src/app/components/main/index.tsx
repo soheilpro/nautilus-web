@@ -5,12 +5,14 @@ import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import Routes from './routes';
 import CommandsModal from '../commands-modal';
+import SearchModal, { ISearchResult } from '../search-modal';
 
 interface IMainProps {
 }
 
 interface IMainState {
   isCommandsModalOpen?: boolean;
+  isSearchModalOpen?: boolean;
 }
 
 export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
@@ -24,6 +26,8 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
     this.handleCommandsModalCommandSelect = this.handleCommandsModalCommandSelect.bind(this);
     this.handleCommandsModalCloseRequest = this.handleCommandsModalCloseRequest.bind(this);
+    this.handleSearchModalSearchResultSelect = this.handleSearchModalSearchResultSelect.bind(this);
+    this.handleSearchModalCloseRequest = this.handleSearchModalCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -41,10 +45,15 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
   getCommands() {
     return [
       new Command({
-        id: 'show-command-palette',
-        name: 'Show Command Palette',
+        id: 'search-commands',
+        name: 'Search commands',
         doAction: () => { this.setState({ isCommandsModalOpen: true }); },
         hidden: true,
+      }),
+      new Command({
+        id: 'search-issues',
+        name: 'Search',
+        doAction: () => { this.setState({ isSearchModalOpen: true }); }
       }),
       new Command({
         id: 'go-to-issues',
@@ -110,11 +119,24 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     });
   }
 
+  private handleSearchModalSearchResultSelect(searchResult: ISearchResult) {
+    this.setState({
+      isSearchModalOpen: false
+    });
+  }
+
+  private handleSearchModalCloseRequest() {
+    this.setState({
+      isSearchModalOpen: false
+    });
+  }
+
   render() {
     return (
       <div>
         <Routes />
         <CommandsModal isOpen={this.state.isCommandsModalOpen} onCommandSelect={this.handleCommandsModalCommandSelect} onCloseRequest={this.handleCommandsModalCloseRequest} />
+        <SearchModal isOpen={this.state.isSearchModalOpen} onSearchResultSelect={this.handleSearchModalSearchResultSelect} onCloseRequest={this.handleSearchModalCloseRequest} />
       </div>
     );
   }

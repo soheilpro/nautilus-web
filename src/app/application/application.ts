@@ -114,6 +114,12 @@ export class Application extends EventEmitter implements IApplication {
     return Promise.resolve(issues);
   }
 
+  searchIssues(query: string) {
+    let issues = this.state.items.filter(item => item.kind === 'issue' && item.title.indexOf(query) !== -1);
+
+    return Promise.resolve(issues);
+  }
+
   private loadSession(): ISession {
     let item = localStorage.getItem('session');
 

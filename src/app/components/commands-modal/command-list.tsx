@@ -111,8 +111,8 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
         </div>
         {
           this.state.filteredCommands.length === 0 ?
-            <div className="no-commands-matching">
-              No commands matching.
+            <div className="no-commands-found">
+              No commands found.
             </div>
             : null
         }

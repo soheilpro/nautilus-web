@@ -4,7 +4,6 @@ import { Application } from './application';
 import { CommandManager } from './commands';
 import { KeyBindingManager } from './key-bindings';
 import { ServiceManager } from './services';
-import { SearchManager } from './search';
 import App from './components/app';
 
 require('./assets/stylesheets/main.less');
@@ -20,9 +19,6 @@ ServiceManager.Instance.setCommandManager(commandManager);
 
 let keyBindingManager = new KeyBindingManager();
 ServiceManager.Instance.setKeyBindingManager(keyBindingManager);
-
-let searchManager = new SearchManager();
-ServiceManager.Instance.setSearchManager(searchManager);
 
 ReactDOM.render(
   React.createElement(App),

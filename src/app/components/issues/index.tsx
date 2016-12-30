@@ -48,17 +48,17 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
       new Command({
         id: 'new-issue',
         name: 'New Issue',
-        doAction: () => { console.log('new issue'); },
+        doAction: () => { alert('new issue'); },
       }),
       new Command({
         id: 'new-task',
         name: 'New Task',
-        doAction: () => { console.log('new task'); },
+        doAction: () => { alert('new task'); },
       }),
       new Command({
         id: 'refresh',
         name: 'Refresh',
-        doAction: () => { console.log('refresh'); },
+        doAction: () => { alert('refresh'); },
       }),
     ];
   }

@@ -4,6 +4,7 @@
     "target": "es5",
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "noImplicitThis": true,
     "sourceMap": true,
     "jsx": "react",
     "lib": [ "es5", "es2015.promise", "dom" ]

@@ -1,12 +1,17 @@
 import { KeyCode } from '../keyboard';
+import { IKeyBinding } from './ikey-binding';
 import { IKeyBindingProvider } from './ikey-binding-provider';
 
 export class DefaultKeyBindingProvider implements IKeyBindingProvider {
   getKeyBindings() {
-    return [
+    let keyBindings: IKeyBinding[] = [
       {
         shortcut: [{ keyCode: KeyCode.P }],
-        commandId: 'show-command-palette',
+        commandId: 'search-commands',
+      },
+      {
+        shortcut: [{ keyCode: KeyCode.S }],
+        commandId: 'search-issues',
       },
       {
         shortcut: [{ keyCode: KeyCode.G }, { keyCode: KeyCode.I }],
@@ -25,5 +30,7 @@ export class DefaultKeyBindingProvider implements IKeyBindingProvider {
         commandId: 'new-issue',
       }
     ];
+
+    return keyBindings;
   }
 }

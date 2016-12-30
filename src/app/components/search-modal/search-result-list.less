@@ -1,15 +1,8 @@
 @import '../../assets/stylesheets/common';
 
-.command-list.component {
-  .search {
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    padding: 4px;
-  }
-
-  .commands {
-    .command {
+.search-result-list.component {
+  .search-results {
+    .search-result {
       display: block;
       padding: 4px 6px;
       color: @text;
@@ -25,13 +18,15 @@
         color: @white;
       }
 
-      .shortcut {
-        float: right;
+      .issue {
+        .sid {
+          margin-right: 10px;
+        }
       }
     }
   }
 
-  .no-commands-found {
+  .no-search-results-found {
     padding: 4px;
     color: @darkdarkgray;
   }

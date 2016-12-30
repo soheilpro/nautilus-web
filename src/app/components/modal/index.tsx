@@ -15,7 +15,7 @@ interface IModalState {
 export default class Modal extends React.Component<IModalProps, IModalState> {
   private containerElement: HTMLElement;
 
-  constructor(props: IModalProps) {
+  constructor() {
     super();
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
@@ -48,7 +48,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
     return (
       <div className="modal component">
-        <div className="container" tabIndex={0} onKeyDown={this.handleContainerKeyDown}  onBlur={this.handleContainerBlur} ref={e => this.containerElement = e}>
+        <div className="container" tabIndex={0} onKeyDown={this.handleContainerKeyDown} onBlur={this.handleContainerBlur} ref={e => this.containerElement = e}>
           {this.props.children}
         </div>
       </div>
