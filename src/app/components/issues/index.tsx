@@ -19,7 +19,7 @@ interface IIssuesState {
 
 export default class Issues extends React.Component<IIssuesProps, IIssuesState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
-  private controller = ServiceManager.Instance.getCommandManager();
+  private commandManager = ServiceManager.Instance.getCommandManager();
 
   constructor() {
     super();
@@ -32,7 +32,7 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
   }
 
   async componentWillMount() {
-    this.controller.registerCommandProvider(this);
+    this.commandManager.registerCommandProvider(this);
 
     this.setState({
       issues: await this.application.getIssues()
@@ -40,7 +40,7 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
   }
 
   componentWillUnmount() {
-    this.controller.unregisterCommandProvider(this);
+    this.commandManager.unregisterCommandProvider(this);
   }
 
   getCommands() {

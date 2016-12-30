@@ -1,0 +1,38 @@
+@import '../../assets/stylesheets/common';
+
+.command-list.component {
+  .search {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 4px;
+  }
+
+  .commands {
+    .command {
+      display: block;
+      padding: 4px 6px;
+      color: @text;
+      cursor: pointer;
+
+      &:hover {
+        background-color: @gray;
+        text-decoration: none;
+      }
+
+      &.selected {
+        background-color: @primary;
+        color: @white;
+      }
+
+      .shortcut {
+        float: right;
+      }
+    }
+  }
+
+  .no-commands-matching {
+    padding: 4px;
+    color: @darkdarkgray;
+  }
+}

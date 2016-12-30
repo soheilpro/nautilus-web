@@ -1,59 +1,41 @@
 import * as React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { Command, ICommand, ICommandProvider } from '../../commands';
 import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
-import CommandPalette from '../command-palette';
-import Issues from '../issues';
-import Milestones from '../milestones';
-import Projects from '../projects';
-
-class MainRouter extends React.Component<{}, {}> {
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  render() {
-    return (
-      <Router history={browserHistory}>
-        <Route path="/" component={Issues}/>
-        <Route path="/milestones" component={Milestones}/>
-        <Route path="/projects" component={Projects}/>
-      </Router>
-    );
-  }
-}
+import Routes from './routes';
+import CommandsModal from '../commands-modal';
 
 interface IMainProps {
 }
 
 interface IMainState {
-  isCommandPalleteVisible?: boolean;
+  isCommandsModalOpen?: boolean;
 }
 
 export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
-  private controller = ServiceManager.Instance.getCommandManager();
+  private commandManager = ServiceManager.Instance.getCommandManager();
   private keyBindingManager = ServiceManager.Instance.getKeyBindingManager();
   private keyboardEvents: KeyboardEvent[] = [];
 
   constructor() {
     super();
 
-    this.handleCommandPaletteSelectCommand = this.handleCommandPaletteSelectCommand.bind(this);
-    this.handleCommandPaletteDismiss = this.handleCommandPaletteDismiss.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
+    this.handleCommandsModalCommandSelect = this.handleCommandsModalCommandSelect.bind(this);
+    this.handleCommandsModalCloseRequest = this.handleCommandsModalCloseRequest.bind(this);
 
     this.state = {};
   }
 
   componentWillMount() {
-    this.controller.registerCommandProvider(this);
-    document.addEventListener('keydown', this.handleKeyDown);
+    this.commandManager.registerCommandProvider(this);
+    document.addEventListener('keydown', this.handleDocumentKeyDown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-    this.controller.unregisterCommandProvider(this);
+    document.removeEventListener('keydown', this.handleDocumentKeyDown);
+    this.commandManager.unregisterCommandProvider(this);
   }
 
   getCommands() {
@@ -61,7 +43,7 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
       new Command({
         id: 'show-command-palette',
         name: 'Show Command Palette',
-        doAction: () => { this.setState({ isCommandPalleteVisible: true }); },
+        doAction: () => { this.setState({ isCommandsModalOpen: true }); },
         hidden: true,
       }),
       new Command({
@@ -82,7 +64,7 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     ];
   }
 
-  private handleKeyDown(event: KeyboardEvent) {
+  private handleDocumentKeyDown(event: KeyboardEvent) {
     if (isInputEvent(event))
       return;
 
@@ -100,7 +82,7 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
       if (!KeyCombination.matchesAll(keyBinding.shortcut, this.keyboardEvents))
         continue;
 
-      let command = this.controller.getCommand(keyBinding.commandId);
+      let command = this.commandManager.getCommand(keyBinding.commandId);
 
       if (!command)
         return;
@@ -114,29 +96,25 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     }
   }
 
-  private handleCommandPaletteSelectCommand(command: ICommand) {
+  private handleCommandsModalCommandSelect(command: ICommand) {
     command.do();
 
     this.setState({
-      isCommandPalleteVisible: false
+      isCommandsModalOpen: false
     });
   }
 
-  private handleCommandPaletteDismiss() {
+  private handleCommandsModalCloseRequest() {
     this.setState({
-      isCommandPalleteVisible: false
+      isCommandsModalOpen: false
     });
   }
 
   render() {
     return (
       <div>
-        <MainRouter />
-        {
-          this.state.isCommandPalleteVisible ?
-            <CommandPalette commands={this.controller.getCommands()} onSelectCommand={this.handleCommandPaletteSelectCommand} onDismiss={this.handleCommandPaletteDismiss} />
-            : null
-        }
+        <Routes />
+        <CommandsModal isOpen={this.state.isCommandsModalOpen} onCommandSelect={this.handleCommandsModalCommandSelect} onCloseRequest={this.handleCommandsModalCloseRequest} />
       </div>
     );
   }
