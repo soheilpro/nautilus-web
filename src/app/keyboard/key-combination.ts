@@ -22,6 +22,9 @@ export class KeyCombination {
   }
 
   static matchesAll(keyCombinations: IShortcut, events: KeyboardEvent[]): boolean {
+    if (keyCombinations.length !== events.length)
+      return false;
+
     for (let i = 0; i < keyCombinations.length; i++)
       if (!this.matches(keyCombinations[i], events[i]))
         return false;
