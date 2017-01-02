@@ -17,7 +17,6 @@ interface IMainState {
 
 export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private keyBindingManager = ServiceManager.Instance.getKeyBindingManager();
   private keyboardEvents: KeyboardEvent[] = [];
 
   constructor() {
@@ -47,28 +46,33 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
       new Command({
         id: 'search-commands',
         name: 'Search commands',
-        doAction: () => { this.setState({ isCommandsModalOpen: true }); },
+        shortcuts: [[{ keyCode: KeyCode.P }]],
         hidden: true,
+        onExecute: () => { this.setState({ isCommandsModalOpen: true }); },
       }),
       new Command({
         id: 'search-issues',
+        shortcuts: [[{ keyCode: KeyCode.S }]],
         name: 'Search',
-        doAction: () => { this.setState({ isSearchModalOpen: true }); }
+        onExecute: () => { this.setState({ isSearchModalOpen: true }); }
       }),
       new Command({
         id: 'go-to-issues',
         name: 'Go to Issues',
-        doAction: () => { browserHistory.push('/'); },
+        shortcuts: [[{ keyCode: KeyCode.G }, { keyCode: KeyCode.I }]],
+        onExecute: () => { browserHistory.push('/'); },
       }),
       new Command({
         id: 'go-to-milestones',
+        shortcuts: [[{ keyCode: KeyCode.G }, { keyCode: KeyCode.M }]],
         name: 'Go to Milestones',
-        doAction: () => { browserHistory.push('/milestones'); },
+        onExecute: () => { browserHistory.push('/milestones'); },
       }),
       new Command({
         id: 'go-to-projects',
         name: 'Go to Projects',
-        doAction: () => { browserHistory.push('/projects'); },
+        shortcuts: [[{ keyCode: KeyCode.G }, { keyCode: KeyCode.P }]],
+        onExecute: () => { browserHistory.push('/projects'); },
       }),
     ];
   }
@@ -79,7 +83,7 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
 
     this.keyboardEvents.push(event);
 
-    // Starting from the one before the last event, if we encounter a stale event, remove that event and all events before that
+    // Starting from the event before the last event, if we encounter a stale event, remove that event and all events before that
     for (let i = this.keyboardEvents.length - 2; i >= 0; i--) {
       if (this.keyboardEvents[i + 1].timeStamp - this.keyboardEvents[i].timeStamp > 500) {
         this.keyboardEvents.splice(0, i + 1);
@@ -87,26 +91,27 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
       }
     }
 
-    for (let keyBinding of this.keyBindingManager.getKeyBindings()) {
-      if (!KeyCombination.matchesAll(keyBinding.shortcut, this.keyboardEvents))
-        continue;
+    let command = this.findCommandByShortcut(this.keyboardEvents);
 
-      let command = this.commandManager.getCommand(keyBinding.commandId);
-
-      if (!command)
-        return;
-
-      command.do();
+    if (command) {
+      command.execute();
 
       event.preventDefault();
       this.keyboardEvents = [];
-
-      break;
     }
   }
 
+  private findCommandByShortcut(keyboardEvents: KeyboardEvent[]) {
+    for (let command of this.commandManager.getCommands())
+      for (let shortcut of command.shortcuts)
+        if (KeyCombination.matchesAll(shortcut, keyboardEvents))
+          return command;
+
+    return null;
+  }
+
   private handleCommandsModalCommandSelect(command: ICommand) {
-    command.do();
+    command.execute();
 
     this.setState({
       isCommandsModalOpen: false

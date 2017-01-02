@@ -48,17 +48,20 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
       new Command({
         id: 'new-issue',
         name: 'New Issue',
-        doAction: () => { alert('new issue'); },
+        shortcuts: [[{ keyCode: KeyCode.N }]],
+        onExecute: () => { alert('new issue'); },
       }),
       new Command({
         id: 'new-task',
         name: 'New Task',
-        doAction: () => { alert('new task'); },
+        shortcuts: [[{ keyCode: KeyCode.T }]],
+        onExecute: () => { alert('new task'); },
       }),
       new Command({
         id: 'refresh',
         name: 'Refresh',
-        doAction: () => { alert('refresh'); },
+        shortcuts: [[{ keyCode: KeyCode.R }]],
+        onExecute: () => { alert('refresh'); },
       }),
     ];
   }

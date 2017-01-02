@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Application } from './application';
 import { CommandManager } from './commands';
-import { KeyBindingManager } from './key-bindings';
 import { ServiceManager } from './services';
 import App from './components/app';
 
@@ -16,9 +15,6 @@ ServiceManager.Instance.setApplication(application);
 
 let commandManager = new CommandManager();
 ServiceManager.Instance.setCommandManager(commandManager);
-
-let keyBindingManager = new KeyBindingManager();
-ServiceManager.Instance.setKeyBindingManager(keyBindingManager);
 
 ReactDOM.render(
   React.createElement(App),

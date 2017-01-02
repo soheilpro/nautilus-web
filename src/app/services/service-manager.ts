@@ -1,6 +1,5 @@
 import { IApplication } from '../application';
 import { ICommandManager } from '../commands';
-import { IKeyBindingManager } from '../key-bindings';
 import { IServiceManager } from './iservice-manager';
 
 export class ServiceManager {
@@ -8,7 +7,6 @@ export class ServiceManager {
 
   private application: IApplication;
   private CommandManager: ICommandManager;
-  private keyBindingManager: IKeyBindingManager;
 
   setApplication(application: IApplication) {
     this.application = application;
@@ -24,13 +22,5 @@ export class ServiceManager {
 
   getCommandManager() {
     return this.CommandManager;
-  }
-
-  setKeyBindingManager(keyBindingManager: IKeyBindingManager) {
-    this.keyBindingManager = keyBindingManager;
-  }
-
-  getKeyBindingManager() {
-    return this.keyBindingManager;
   }
 }

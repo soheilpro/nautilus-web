@@ -40,7 +40,7 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
                         {command.name}
                       </span>
                       <span className="shortcut">
-                        <Shortcut shortcut={null} />
+                        <Shortcut shortcut={command.shortcuts[0]} />
                       </span>
                     </a>
                   );

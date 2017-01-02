@@ -1,19 +1,30 @@
+import { IShortcut } from '../keyboard';
 import { ICommand } from './icommand';
+
+interface ICommandOptions {
+  id: string;
+  name: string;
+  shortcuts?: IShortcut[];
+  hidden?: boolean;
+  onExecute: Function;
+}
 
 export class Command implements ICommand {
   id: string;
   name: string;
+  shortcuts: IShortcut[];
   hidden: boolean;
-  doAction: Function;
+  onExecute: Function;
 
-  constructor(options: {id: string, name: string, doAction: Function, hidden?: boolean}) {
-    this.id = options.id;
-    this.name = options.name;
-    this.hidden = options.hidden;
-    this.doAction = options.doAction;
+  constructor({id, name, shortcuts, hidden, onExecute}: ICommandOptions) {
+    this.id = id;
+    this.name = name;
+    this.shortcuts = shortcuts;
+    this.hidden = hidden;
+    this.onExecute = onExecute;
   }
 
-  do() {
-    this.doAction();
+  execute() {
+    this.onExecute();
   }
 }
