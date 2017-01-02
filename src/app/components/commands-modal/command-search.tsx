@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-require('./search-options.less');
+require('./command-search.less');
 
-interface ISearchOptionsProps {
+interface ICommandSearchProps {
   onQueryChange(query: string): void;
 }
 
-interface ISearchOptionsState {
+interface ICommandSearchState {
   query?: string;
 }
 
-export default class SearchOptions extends React.Component<ISearchOptionsProps, ISearchOptionsState> {
+export default class CommandSearch extends React.Component<ICommandSearchProps, ICommandSearchState> {
   constructor() {
     super();
 
@@ -33,8 +33,8 @@ export default class SearchOptions extends React.Component<ISearchOptionsProps, 
 
   render() {
     return (
-      <div className="search-options component">
-        <input placeholder="Search issues, milestones, projects, users..." className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
+      <div className="command-search component">
+        <input placeholder="Search commands" className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
       </div>
     );
   }

@@ -8,7 +8,7 @@ require('./search-result-list.less');
 interface ISearchResultListProps {
   searchResults: ISearchResult[];
   selectedSearchResultIndex: number;
-  onSearchResultSelect(result: ISearchResult): void;
+  onSearchResultSelect(searchResult: ISearchResult): void;
 }
 
 interface ISearchResultListState {
