@@ -17,4 +17,6 @@ export interface IApplication extends EventEmitter {
 
   getIssues(): Promise<IIssue[]>;
   searchIssues(query: string): Promise<IIssue[]>;
+  addIssue(issue: IIssue): Promise<IIssue>;
+  deleteIssue(issue: IIssue): Promise<void>;
 }

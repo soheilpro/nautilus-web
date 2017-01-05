@@ -4,6 +4,7 @@ export interface ICommand {
   id: string;
   name: string;
   shortcuts: IShortcut[];
-  hidden: boolean;
+  isHidden: boolean;
+  isDisabled: boolean;
   execute(): void;
 }

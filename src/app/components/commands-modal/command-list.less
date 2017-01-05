@@ -15,6 +15,10 @@
       color: @text;
       cursor: pointer;
 
+      .shortcut {
+        float: right;
+      }
+
       &:hover {
         background-color: @gray;
         text-decoration: none;
@@ -23,10 +27,6 @@
       &.selected {
         background-color: @primary;
         color: @white;
-      }
-
-      .shortcut {
-        float: right;
       }
     }
   }

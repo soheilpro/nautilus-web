@@ -120,6 +120,25 @@ export class Application extends EventEmitter implements IApplication {
     return Promise.resolve(issues);
   }
 
+  async addIssue(issue: IIssue) {
+    issue.kind = 'issue';
+
+    issue = await this.client.items.insert(issue);
+    this.state.items.push(issue);
+
+    this.emit('issues.add', issue);
+
+    return issue;
+  }
+
+  async deleteIssue(issue: IIssue): Promise<void> {
+    await this.client.items.delete(issue.id);
+
+    this.state.items.splice(this.state.items.indexOf(issue) , 1);
+
+    this.emit('issues.delete', issue);
+  }
+
   private loadSession(): ISession {
     let item = localStorage.getItem('session');
 

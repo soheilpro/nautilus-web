@@ -70,7 +70,7 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
   }
 
   private filter(commands: ICommand[], query: string) {
-    return commands.filter(command => !command.hidden && command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return commands.filter(command => !command.isHidden && command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   render() {

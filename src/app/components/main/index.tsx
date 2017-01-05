@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { browserHistory } from 'react-router';
-import { Command, ICommand, ICommandProvider } from '../../commands';
+import { ICommand, ICommandProvider } from '../../commands';
 import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
+import SearchCommandsCommand from './search-commands-command';
+import SearchIssuesCommand from './search-issues-command';
+import UndoCommand from './undo-command';
+import ViewIssuesCommand from './view-issues-command';
 import Routes from './routes';
 import CommandsModal from '../commands-modal';
 import SearchModal, { ISearchResult } from '../search-modal';
@@ -16,6 +19,7 @@ interface IMainState {
 }
 
 export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
+  private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private keyboardEvents: KeyboardEvent[] = [];
 
@@ -43,37 +47,10 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
 
   getCommands() {
     return [
-      new Command({
-        id: 'search-commands',
-        name: 'Search commands',
-        shortcuts: [[{ keyCode: KeyCode.P }]],
-        hidden: true,
-        onExecute: () => { this.setState({ isCommandsModalOpen: true }); },
-      }),
-      new Command({
-        id: 'search-issues',
-        shortcuts: [[{ keyCode: KeyCode.S }]],
-        name: 'Search',
-        onExecute: () => { this.setState({ isSearchModalOpen: true }); }
-      }),
-      new Command({
-        id: 'go-to-issues',
-        name: 'Go to Issues',
-        shortcuts: [[{ keyCode: KeyCode.G }, { keyCode: KeyCode.I }]],
-        onExecute: () => { browserHistory.push('/'); },
-      }),
-      new Command({
-        id: 'go-to-milestones',
-        shortcuts: [[{ keyCode: KeyCode.G }, { keyCode: KeyCode.M }]],
-        name: 'Go to Milestones',
-        onExecute: () => { browserHistory.push('/milestones'); },
-      }),
-      new Command({
-        id: 'go-to-projects',
-        name: 'Go to Projects',
-        shortcuts: [[{ keyCode: KeyCode.G }, { keyCode: KeyCode.P }]],
-        onExecute: () => { browserHistory.push('/projects'); },
-      }),
+      new SearchCommandsCommand(this),
+      new SearchIssuesCommand(this),
+      new ViewIssuesCommand(),
+      new UndoCommand(this.actionManager),
     ];
   }
 
