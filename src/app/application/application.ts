@@ -2,56 +2,49 @@ import EventEmitter = require('wolfy87-eventemitter');
 import { Client, IClient, IUser, ISession, IUserPermission, IProject, IItemPriority, IItemState, IItemType, IItem } from '../sdk';
 import { entityComparer } from './entity-comparer';
 import { IApplication } from './iapplication';
-import { IIssue } from './iissue';
+import { IIssuesModule, IssuesModule } from './issues';
 
 export interface IApplicationConfig {
   address: string;
 }
 
-export interface IApplicationState {
-  isInitialized?: boolean;
-  session?: ISession;
-  isLoaded?: boolean;
-  userPermissions?: IUserPermission[];
-  users?: IUser[];
-  projects?: IProject[];
-  itemStates?: IItemState[];
-  itemTypes?: IItemType[];
-  itemPriorities?: IItemPriority[];
-  items?: IItem[];
-}
-
 export class Application extends EventEmitter implements IApplication {
-  private state: IApplicationState;
   private client: IClient;
+  private session: ISession;
+  private isInitializedState: boolean;
+  private isLoadedState: boolean;
+
+  issues: IIssuesModule;
 
   constructor({ address }: IApplicationConfig) {
     super();
 
-    this.state = {};
-    this.client = new Client({ address: address });
+    let client = new Client({ address: address });
+
+    this.client = client;
+    this.issues = new IssuesModule(client);
   }
 
   isInitialized() {
-    return this.state.isInitialized;
+    return this.isInitializedState;
   }
 
   initialize() {
     let session = this.loadSession();
 
     if (session) {
-      this.state.session = session;
+      this.session = session;
       this.client.session = session;
 
       this.load();
     }
 
-    this.state.isInitialized = true;
+    this.isInitializedState = true;
     this.emit('initialize');
   }
 
   isLoggedIn() {
-    return this.state.session !== undefined;
+    return this.session !== null;
   }
 
   async logIn(username: string, password: string): Promise<ISession> {
@@ -60,8 +53,8 @@ export class Application extends EventEmitter implements IApplication {
     if (session) {
       this.saveSession(session);
 
+      this.session = session;
       this.client.session = session;
-      this.state.session = session;
       this.emit('login', session);
 
       this.load();
@@ -70,73 +63,22 @@ export class Application extends EventEmitter implements IApplication {
     return session;
   }
 
+  getSession() {
+    return this.session;
+  }
+
   isLoaded() {
-    return this.state.isLoaded;
+    return this.isLoadedState;
   }
 
   async load() {
-    let [userPermissions, users, projects, itemStates, itemTypes, itemPriorities, items] = await Promise.all([
-      this.client.users.getUserPermissions(this.state.session.user),
-      this.client.users.getAll({}),
-      this.client.projects.getAll({}),
-      this.client.itemStates.getAll({}),
-      this.client.itemTypes.getAll({}),
-      this.client.itemPriorities.getAll({}),
-      this.client.items.getAll({})
+    await Promise.all([
+      this.issues.load(),
     ]);
 
-    this.state.userPermissions = userPermissions;
-    this.state.users = users;
-    this.state.projects = projects;
-    this.state.itemStates = itemStates;
-    this.state.itemTypes = itemTypes;
-    this.state.itemPriorities = itemPriorities;
-    this.state.items = items;
-    this.state.isLoaded = true;
+    this.isLoadedState = true;
+
     this.emit('load');
-  }
-
-  getCurrentUser() {
-    return this.state.session.user;
-  }
-
-  getCurrentUserPermissions() {
-    return this.state.userPermissions;
-  }
-
-  getUser(user: IUser) {
-    return this.state.users.filter(entityComparer.bind(this, user))[0];
-  }
-
-  getIssues(): Promise<IIssue[]> {
-    let issues = this.state.items.filter(item => item.kind === 'issue');
-
-    return Promise.resolve(issues);
-  }
-
-  searchIssues(query: string) {
-    let issues = this.state.items.filter(item => item.kind === 'issue' && item.title.indexOf(query) !== -1);
-
-    return Promise.resolve(issues);
-  }
-
-  async addIssue(issue: IIssue) {
-    issue.kind = 'issue';
-
-    issue = await this.client.items.insert(issue);
-    this.state.items.push(issue);
-
-    this.emit('issues.add', issue);
-
-    return issue;
-  }
-
-  async deleteIssue(issue: IIssue): Promise<void> {
-    await this.client.items.delete(issue.id);
-
-    this.state.items.splice(this.state.items.indexOf(issue) , 1);
-
-    this.emit('issues.delete', issue);
   }
 
   private loadSession(): ISession {

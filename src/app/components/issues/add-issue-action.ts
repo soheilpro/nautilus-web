@@ -9,10 +9,10 @@ export default class AddIssueAction extends BaseAction {
   }
 
   async execute() {
-    this.issue = await this.application.addIssue({});
+    this.issue = await this.application.issues.add({});
   }
 
   undo() {
-    this.application.deleteIssue(this.issue);
+    this.application.issues.delete(this.issue);
   }
 }

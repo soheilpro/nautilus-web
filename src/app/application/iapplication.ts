@@ -1,5 +1,5 @@
-import { ISession, IUser, IUserPermission } from '../sdk';
-import { IIssue } from './iissue';
+import { ISession, IUser, IUserPermission, IItem } from '../sdk';
+import { IIssuesModule } from './issues';
 
 export interface IApplication extends EventEmitter {
   isInitialized(): boolean;
@@ -10,13 +10,7 @@ export interface IApplication extends EventEmitter {
 
   isLoaded(): boolean;
 
-  getCurrentUser(): IUser;
-  getCurrentUserPermissions(): IUserPermission[];
+  getSession(): ISession;
 
-  getUser(user: IUser): IUser;
-
-  getIssues(): Promise<IIssue[]>;
-  searchIssues(query: string): Promise<IIssue[]>;
-  addIssue(issue: IIssue): Promise<IIssue>;
-  deleteIssue(issue: IIssue): Promise<void>;
+  issues: IIssuesModule;
 }

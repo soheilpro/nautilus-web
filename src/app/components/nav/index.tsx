@@ -11,16 +11,12 @@ interface INavState {
 }
 
 export default class Nav extends React.Component<INavProps, INavState> {
-  private application = ServiceManager.Instance.getApplication();
-
   render() {
-    let hasAdminPermission = this.application.getCurrentUserPermissions().some(permission => !permission.project && permission.name === 'admin');
-
     return (
       <div className="nav component">
         <IndexLink to="/" activeClassName="active">Issues</IndexLink>
         <Link to="/milestones" activeClassName="active">Milestones</Link>
-        { hasAdminPermission ? <Link to="/projects" activeClassName="active">Projects</Link> : null }
+        <Link to="/projects" activeClassName="active">Projects</Link>
       </div>
     );
   }

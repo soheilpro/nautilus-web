@@ -86,7 +86,7 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
   }
 
   private async search(query: string) {
-    let issues = await this.application.searchIssues(query);
+    let issues = await this.application.issues.search(query);
 
     return issues.map(issue => {
       return {

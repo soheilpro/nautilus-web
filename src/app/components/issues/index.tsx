@@ -40,19 +40,19 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
   }
 
   async componentWillMount() {
-    this.application.on('issues.add', this.handleApplicationIssuesAdd);
-    this.application.on('issues.delete', this.handleApplicationIssuesDelete);
+    this.application.issues.on('add', this.handleApplicationIssuesAdd);
+    this.application.issues.on('delete', this.handleApplicationIssuesDelete);
     this.commandManager.registerCommandProvider(this);
 
     this.setState({
-      issues: await this.application.getIssues()
+      issues: await this.application.issues.getAll()
     });
   }
 
   componentWillUnmount() {
     this.commandManager.unregisterCommandProvider(this);
-    this.application.off('issues.delete', this.handleApplicationIssuesDelete);
-    this.application.off('issues.add', this.handleApplicationIssuesAdd);
+    this.application.issues.off('delete', this.handleApplicationIssuesDelete);
+    this.application.issues.off('add', this.handleApplicationIssuesAdd);
   }
 
   getCommands() {
@@ -63,13 +63,13 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
 
   private async handleApplicationIssuesAdd(issue: IIssue) {
     this.setState({
-      issues: await this.application.getIssues()
+      issues: await this.application.issues.getAll()
     });
   }
 
   private async handleApplicationIssuesDelete(issue: IIssue) {
     this.setState({
-      issues: await this.application.getIssues()
+      issues: await this.application.issues.getAll()
     });
   }
 
