@@ -20,7 +20,7 @@ export class IssuesModule extends BaseModule {
   }
 
   search(query: string) {
-    let issues = this.issues.filter(item => item.title.indexOf(query) !== -1);
+    let issues = this.issues.filter(item => item.title && item.title.indexOf(query) !== -1);
 
     return Promise.resolve(issues);
   }
