@@ -3,6 +3,8 @@ import { Client, IClient, IUser, ISession, IUserPermission, IProject, IItemPrior
 import { entityComparer } from './entity-comparer';
 import { IApplication } from './iapplication';
 import { IIssuesModule, IssuesModule } from './issues';
+import { IProjectsModule, ProjectsModule } from './projects';
+import { IUsersModule, UsersModule } from './users';
 
 export interface IApplicationConfig {
   address: string;
@@ -14,6 +16,8 @@ export class Application extends EventEmitter implements IApplication {
   private isInitializedState: boolean;
   private isLoadedState: boolean;
 
+  users: IUsersModule;
+  projects: IProjectsModule;
   issues: IIssuesModule;
 
   constructor({ address }: IApplicationConfig) {
@@ -22,6 +26,8 @@ export class Application extends EventEmitter implements IApplication {
     let client = new Client({ address: address });
 
     this.client = client;
+    this.users = new UsersModule(client);
+    this.projects = new ProjectsModule(client);
     this.issues = new IssuesModule(client);
   }
 
@@ -73,6 +79,8 @@ export class Application extends EventEmitter implements IApplication {
 
   async load() {
     await Promise.all([
+      this.users.load(),
+      this.projects.load(),
       this.issues.load(),
     ]);
 
