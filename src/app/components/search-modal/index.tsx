@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { IIssue } from '../../application';
 import Modal from '../modal';
 import SearchBox from './search-box';
 import { ISearchResult } from './isearch-result';
 
 interface ISearchModalProps {
   isOpen: boolean;
-  onSearchResultSelect(searchResult: ISearchResult): void;
+  onIssueSelect(issue: IIssue): void;
   onCloseRequest(): void;
 }
 
@@ -16,10 +17,8 @@ export default class SearchModal extends React.Component<ISearchModalProps, ISea
   render() {
     return (
       <Modal isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
-        <SearchBox onSearchResultSelect={this.props.onSearchResultSelect} />
+        <SearchBox onIssueSelect={this.props.onIssueSelect} />
       </Modal>
     );
   }
 }
-
-export * from './isearch-result';

@@ -34,7 +34,7 @@ export default class CommandSearch extends React.Component<ICommandSearchProps, 
   render() {
     return (
       <div className="command-search component">
-        <input placeholder="Search commands" className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
+        <input type="text" placeholder="Search commands" className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
       </div>
     );
   }

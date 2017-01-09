@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import { ISearchResult } from './isearch-result';
@@ -9,7 +10,7 @@ import SearchResultList from './search-result-list';
 require ('./search-box.less');
 
 interface ISearchBoxProps {
-  onSearchResultSelect(searchResult: ISearchResult): void;
+  onIssueSelect(issue: IIssue): void;
 }
 
 interface ISearchBoxState {
@@ -26,8 +27,20 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
     this.handleOptionsQueryChange = this.handleOptionsQueryChange.bind(this);
+    this.handleSearchResultListSearchResultSelect = this.handleSearchResultListSearchResultSelect.bind(this);
 
     this.state = {};
+  }
+
+  private onSearchResultSelect(searchResult: ISearchResult) {
+    switch (searchResult.type) {
+      case 'Issue':
+        this.props.onIssueSelect(searchResult.item);
+        break;
+
+      default:
+        throw new Error('Not implemented.');
+    }
   }
 
   private handleContainerKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -54,7 +67,7 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
 
       if (this.state.searchResults.length > 0) {
         let searchResult = this.state.searchResults[this.state.selectedSearchResultIndex];
-        this.props.onSearchResultSelect(searchResult);
+        this.onSearchResultSelect(searchResult);
       }
     }
   }
@@ -97,6 +110,10 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
     });
   }
 
+  private handleSearchResultListSearchResultSelect(searchResult: ISearchResult) {
+    this.onSearchResultSelect(searchResult);
+  }
+
   render() {
     return (
       <div className="search-box component">
@@ -106,7 +123,7 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
           </div>
           {
             this.state.searchResults ?
-              <SearchResultList searchResults={this.state.searchResults} selectedSearchResultIndex={this.state.selectedSearchResultIndex} onSearchResultSelect={this.props.onSearchResultSelect} />
+              <SearchResultList searchResults={this.state.searchResults} selectedSearchResultIndex={this.state.selectedSearchResultIndex} onSearchResultSelect={this.handleSearchResultListSearchResultSelect} />
               :
               <SearchGuide />
           }

@@ -34,7 +34,7 @@ export default class SearchOptions extends React.Component<ISearchOptionsProps, 
   render() {
     return (
       <div className="search-options component">
-        <input placeholder="Search issues, milestones, projects, users..." className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
+        <input type="text" placeholder="Search issues, milestones, projects, users..." className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
       </div>
     );
   }
