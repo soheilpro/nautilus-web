@@ -1,8 +1,10 @@
 import * as React from 'react';
+import Input from '../input';
 
 require('./search-options.less');
 
 interface ISearchOptionsProps {
+  autoFocus: boolean;
   onQueryChange(query: string): void;
 }
 
@@ -16,25 +18,21 @@ export default class SearchOptions extends React.Component<ISearchOptionsProps, 
 
     this.handleQueryChange = this.handleQueryChange.bind(this);
 
-    this.state = {
-      query: '',
-    };
+    this.state = {};
   }
 
-  private handleQueryChange(event: React.FormEvent<HTMLInputElement>) {
-    let query = (event.target as HTMLInputElement).value;
-
-    this.props.onQueryChange(query);
+  private handleQueryChange(value: string) {
+    this.props.onQueryChange(value);
 
     this.setState({
-      query: query,
+      query: value,
     });
   }
 
   render() {
     return (
       <div className="search-options component">
-        <input type="text" placeholder="Search issues, milestones, projects, users..." className="query" value={this.state.query} autoFocus={true} onChange={this.handleQueryChange} />
+        <Input className="query" placeholder="Search issues, milestones, projects, users..." value={this.state.query} autoFocus={this.props.autoFocus} onChange={this.handleQueryChange} />
       </div>
     );
   }

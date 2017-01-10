@@ -35,7 +35,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
         {
           this.props.issues.map(issue => {
             return (
-              <div tabIndex={0} className="issue" onFocus={this.handleFocus.bind(null, issue)} key={issue.id}>
+              <div className="issue" tabIndex={0} onFocus={this.handleFocus.bind(null, issue)} key={issue.id}>
                 <span>{issue.sid}</span>
                 <span>{issue.title}</span>
               </div>

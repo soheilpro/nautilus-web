@@ -1,9 +1,9 @@
 import { IApplication } from '..';
 import { IClient, IProject } from '../../sdk';
 import { BaseModule } from '../base-module';
-import { IProjectsModule } from './iprojects-module';
+import { IProjectModule } from './iproject-module';
 
-export class ProjectsModule extends BaseModule {
+export class ProjectModule extends BaseModule implements IProjectModule {
   private projects: IProject[];
 
   constructor(private client: IClient) {
@@ -11,10 +11,10 @@ export class ProjectsModule extends BaseModule {
   }
 
   async load() {
-    this.projects = (await this.client.projects.getAll({}));
+    this.projects = await this.client.projects.getAll({});
   }
 
-  getAll(): IProject[] {
+  getAll() {
     return this.projects;
   }
 }

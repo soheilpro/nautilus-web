@@ -8,7 +8,8 @@ import CommandSearch from './command-search';
 require ('./command-box.less');
 
 interface ISearchBoxProps {
-  onCommandSelect(command: ICommand): void;
+  autoFocus: boolean;
+  onSelect(command: ICommand): void;
 }
 
 interface ISearchBoxState {
@@ -55,7 +56,7 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
 
       if (this.state.commands.length > 0) {
         let command = this.state.commands[this.state.selectedCommandIndex];
-        this.props.onCommandSelect(command);
+        this.props.onSelect(command);
       }
     }
   }
@@ -78,9 +79,9 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
       <div className="search-box component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <div className="filter">
-            <CommandSearch onQueryChange={this.handleCommandSearchQueryChange} />
+            <CommandSearch autoFocus={this.props.autoFocus} onQueryChange={this.handleCommandSearchQueryChange} />
           </div>
-          <CommandList commands={this.state.commands} selectedCommandIndex={this.state.selectedCommandIndex} onCommandSelect={this.props.onCommandSelect} />
+          <CommandList commands={this.state.commands} selectedCommandIndex={this.state.selectedCommandIndex} onSelect={this.props.onSelect} />
         </div>
       </div>
     );

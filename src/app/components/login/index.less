@@ -1,5 +1,7 @@
+@import '../../assets/stylesheets/common';
+
 .login.component {
-  > .container {
+  .container {
     width: 270px;
     margin-top: 20vh;
     margin-right: auto;
@@ -10,6 +12,26 @@
       font-weight: bold;
       text-align: center;
       margin-bottom: 40px;
+    }
+
+    .error {
+      margin-bottom: 20px;
+      text-align: center;
+      color: @error;
+    }
+
+    .username {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .password {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .submit {
+      width: 100%;
     }
   }
 }

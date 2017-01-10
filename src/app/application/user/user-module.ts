@@ -1,9 +1,11 @@
+import * as _ from 'underscore';
 import { IApplication } from '..';
 import { IClient, IUser } from '../../sdk';
 import { BaseModule } from '../base-module';
-import { IUsersModule } from './iusers-module';
+import { entityComparer } from '../entity-comparer';
+import { IUserModule } from './iuser-module';
 
-export class UsersModule extends BaseModule {
+export class UserModule extends BaseModule implements IUserModule {
   private users: IUser[];
 
   constructor(private client: IClient) {
@@ -14,7 +16,11 @@ export class UsersModule extends BaseModule {
     this.users = (await this.client.users.getAll({}));
   }
 
-  getAll(): IUser[] {
+  getAll() {
     return this.users;
+  }
+
+  get(user: IUser) {
+    return _.find(this.users, entityComparer.bind(null, user));
   }
 }

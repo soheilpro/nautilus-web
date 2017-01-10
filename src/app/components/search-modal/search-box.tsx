@@ -10,6 +10,7 @@ import SearchResultList from './search-result-list';
 require ('./search-box.less');
 
 interface ISearchBoxProps {
+  autoFocus: boolean;
   onIssueSelect(issue: IIssue): void;
 }
 
@@ -119,7 +120,7 @@ export default class SearchBox extends React.Component<ISearchBoxProps, ISearchB
       <div className="search-box component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <div className="options">
-            <SearchOptions onQueryChange={this.handleOptionsQueryChange} />
+            <SearchOptions autoFocus={this.props.autoFocus} onQueryChange={this.handleOptionsQueryChange} />
           </div>
           {
             this.state.searchResults ?

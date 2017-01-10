@@ -7,7 +7,7 @@ import CommandBox from './command-box';
 
 interface ICommandsModalProps {
   isOpen: boolean;
-  onCommandSelect(command: ICommand): void;
+  onSelect(command: ICommand): void;
   onCloseRequest(): void;
 }
 
@@ -18,7 +18,7 @@ export default class CommandsModal extends React.Component<ICommandsModalProps, 
   render() {
     return (
       <Modal isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
-        <CommandBox onCommandSelect={this.props.onCommandSelect} />
+        <CommandBox autoFocus={true} onSelect={this.props.onSelect} />
       </Modal>
     );
   }

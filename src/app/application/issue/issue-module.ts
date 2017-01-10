@@ -1,10 +1,10 @@
 import { IApplication } from '..';
 import { IClient, IItem } from '../../sdk';
 import { BaseModule } from '../base-module';
-import { IIssuesModule } from './iissues-module';
 import { IIssue } from './iissue';
+import { IIssueModule } from './iissue-module';
 
-export class IssuesModule extends BaseModule {
+export class IssueModule extends BaseModule implements IIssueModule {
   private issues: IIssue[];
 
   constructor(private client: IClient) {
@@ -15,7 +15,7 @@ export class IssuesModule extends BaseModule {
     this.issues = (await this.client.items.getAll({})).filter(item => item.kind === 'issue');
   }
 
-  getAll(): Promise<IIssue[]> {
+  getAll() {
     return Promise.resolve(this.issues);
   }
 
@@ -36,7 +36,7 @@ export class IssuesModule extends BaseModule {
     return issue;
   }
 
-  async delete(issue: IIssue): Promise<void> {
+  async delete(issue: IIssue) {
     await this.client.items.delete(issue.id);
 
     this.issues.splice(this.issues.indexOf(issue) , 1);

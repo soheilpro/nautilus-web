@@ -17,7 +17,7 @@ export default class SearchModal extends React.Component<ISearchModalProps, ISea
   render() {
     return (
       <Modal isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
-        <SearchBox onIssueSelect={this.props.onIssueSelect} />
+        <SearchBox autoFocus={true} onIssueSelect={this.props.onIssueSelect} />
       </Modal>
     );
   }

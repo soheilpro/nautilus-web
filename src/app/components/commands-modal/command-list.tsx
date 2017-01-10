@@ -9,7 +9,7 @@ require('./command-list.less');
 interface ICommandListProps {
   commands: ICommand[];
   selectedCommandIndex: number;
-  onCommandSelect(command: ICommand): void;
+  onSelect(command: ICommand): void;
 }
 
 interface ICommandListState {
@@ -23,7 +23,7 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
   }
 
   private handleCommandClick(command: ICommand) {
-    this.props.onCommandSelect(command);
+    this.props.onSelect(command);
   }
 
   render() {

@@ -3,11 +3,10 @@ import { ICommand, ICommandProvider } from '../../commands';
 import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
-import AddIssueAction from './add-issue-action';
-import NewIssueCommand from './new-issue-command';
 import IssueDetail from '../issue-detail';
 import IssueList from '../issue-list';
 import Master from '../master';
+import Button from '../button';
 
 require('./index.less');
 
@@ -39,13 +38,15 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     this.application.issues.on('add', this.handleApplicationIssuesAdd);
     this.application.issues.on('delete', this.handleApplicationIssuesDelete);
     this.commandManager.registerCommandProvider(this);
+  }
 
+  async componentDidMount() {
     this.setState({
-      issues: await this.application.issues.getAll()
+      issues: await this.application.issues.getAll(),
     });
   }
 
@@ -56,26 +57,23 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
   }
 
   getCommands() {
-    return [
-      new NewIssueCommand(this.actionManager, this.application),
-    ];
+    return [] as ICommand[];
   }
 
   private async handleApplicationIssuesAdd(issue: IIssue) {
     this.setState({
-      issues: await this.application.issues.getAll()
+      issues: await this.application.issues.getAll(),
     });
   }
 
   private async handleApplicationIssuesDelete(issue: IIssue) {
     this.setState({
-      issues: await this.application.issues.getAll()
+      issues: await this.application.issues.getAll(),
     });
   }
 
   private handleNewIssueButtonClick() {
-    let action = new AddIssueAction(this.application);
-    this.actionManager.execute(action);
+    this.commandManager.getCommand('new-issue').execute();
   }
 
   private handleNewTaskButtonClick() {
@@ -86,7 +84,7 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
 
   private handleIssueListSelectedIssueChange(issue: IIssue) {
     this.setState({
-      selectedIssue: issue
+      selectedIssue: issue,
     });
   }
 
@@ -94,16 +92,16 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
     return (
       <Master>
         <div className="issues component">
-          <div className="row action-bar">
-            <button onClick={this.handleNewIssueButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Issue</button>
-            <button onClick={this.handleNewTaskButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Task</button>
-            <button className="secondary" onClick={this.handleRefreshButtonClick}><i className="fa fa-refresh before after" aria-hidden="true"></i></button>
+          <div className="action-bar">
+            <Button onClick={this.handleNewIssueButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Issue</Button>
+            <Button onClick={this.handleNewTaskButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Task</Button>
+            <Button type="secondary" onClick={this.handleRefreshButtonClick}><i className="fa fa-refresh before after" aria-hidden="true"></i></Button>
           </div>
           <div className="row container">
-            <div className="list pull-left">
+            <div className="list">
               <IssueList issues={this.state.issues} onSelectedIssueChange={this.handleIssueListSelectedIssueChange} />
             </div>
-            <div className="detail pull-right">
+            <div className="detail">
               {
                 this.state.selectedIssue ?
                   <IssueDetail issue={this.state.selectedIssue} />

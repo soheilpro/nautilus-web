@@ -15,6 +15,7 @@ export class ItemPriorityService extends ServiceBase<IItemPriority, IItemPriorit
 
   entityToParams(entity: IItemPriority): Object {
     return {
+      itemKind: entity.itemKind,
       title: entity.title,
       key: entity.key,
       order: entity.order

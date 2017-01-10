@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { ServiceManager } from '../../services';
+import Input from '../input';
+import Button from '../button';
 
 require('./index.less');
 
@@ -22,21 +24,18 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
 
-    this.state = {
-      username: '',
-      password: ''
-    };
+    this.state = {};
   }
 
-  private handleUsernameChange(event: React.FormEvent<HTMLInputElement>) {
+  private handleUsernameChange(value: string) {
     this.setState({
-      username: (event.target as HTMLInputElement).value
+      username: value,
     });
   }
 
-  private handlePasswordChange(event: React.FormEvent<HTMLInputElement>) {
+  private handlePasswordChange(value: string) {
     this.setState({
-      password: (event.target as HTMLInputElement).value
+      password: value,
     });
   }
 
@@ -72,20 +71,12 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
             <form onSubmit={this.handleFormSubmit}>
                 {
                   this.state.error ?
-                    <div className="row" style={{textAlign: 'center'}}>
-                      <span className="validation-error">{this.state.error}</span>
-                    </div>
+                    <div className="error">{this.state.error}</div>
                     : null
                 }
-                <div className="row">
-                  <input type="text" placeholder="Username" className="full-width" value={this.state.username} onChange={this.handleUsernameChange} />
-                </div>
-                <div className="row">
-                  <input type="password" placeholder="Password" className="full-width" value={this.state.password} onChange={this.handlePasswordChange} />
-                </div>
-                <div className="row">
-                  <button type="submit" className="full-width">Log In</button>
-                </div>
+                <Input className="username" placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} />
+                <Input className="password" placeholder="Password" secret={true} value={this.state.password} onChange={this.handlePasswordChange} />
+                <Button className="submit" type="submit">Log In</Button>
             </form>
           </div>
       </div>

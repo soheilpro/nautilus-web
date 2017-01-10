@@ -2,9 +2,12 @@ import EventEmitter = require('wolfy87-eventemitter');
 import { Client, IClient, IUser, ISession, IUserPermission, IProject, IItemPriority, IItemState, IItemType, IItem } from '../sdk';
 import { entityComparer } from './entity-comparer';
 import { IApplication } from './iapplication';
-import { IIssuesModule, IssuesModule } from './issues';
-import { IProjectsModule, ProjectsModule } from './projects';
-import { IUsersModule, UsersModule } from './users';
+import { IIssueModule, IssueModule } from './issue';
+import { IIssuePriorityModule, IssuePriorityModule } from './issue-priority';
+import { IIssueStateModule, IssueStateModule } from './issue-state';
+import { IIssueTypeModule, IssueTypeModule } from './issue-type';
+import { IProjectModule, ProjectModule } from './project';
+import { IUserModule, UserModule } from './user';
 
 export interface IApplicationConfig {
   address: string;
@@ -16,9 +19,12 @@ export class Application extends EventEmitter implements IApplication {
   private isInitializedState: boolean;
   private isLoadedState: boolean;
 
-  users: IUsersModule;
-  projects: IProjectsModule;
-  issues: IIssuesModule;
+  users: IUserModule;
+  projects: IProjectModule;
+  issuePriorities: IIssuePriorityModule;
+  issueStates: IIssueStateModule;
+  issueTypes: IIssueTypeModule;
+  issues: IIssueModule;
 
   constructor({ address }: IApplicationConfig) {
     super();
@@ -26,9 +32,12 @@ export class Application extends EventEmitter implements IApplication {
     let client = new Client({ address: address });
 
     this.client = client;
-    this.users = new UsersModule(client);
-    this.projects = new ProjectsModule(client);
-    this.issues = new IssuesModule(client);
+    this.users = new UserModule(client);
+    this.projects = new ProjectModule(client);
+    this.issuePriorities = new IssuePriorityModule(client);
+    this.issueStates = new IssueStateModule(client);
+    this.issueTypes = new IssueTypeModule(client);
+    this.issues = new IssueModule(client);
   }
 
   isInitialized() {
@@ -50,7 +59,7 @@ export class Application extends EventEmitter implements IApplication {
   }
 
   isLoggedIn() {
-    return this.session !== null;
+    return !!this.session;
   }
 
   async logIn(username: string, password: string): Promise<ISession> {
@@ -81,6 +90,9 @@ export class Application extends EventEmitter implements IApplication {
     await Promise.all([
       this.users.load(),
       this.projects.load(),
+      this.issuePriorities.load(),
+      this.issueStates.load(),
+      this.issueTypes.load(),
       this.issues.load(),
     ]);
 

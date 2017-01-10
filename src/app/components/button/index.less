@@ -1,9 +1,7 @@
-.button,
-button,
-input[type="submit"],
-input[type="button"] {
+@import '../../assets/stylesheets/common';
+
+.button.component {
   display: inline-block;
-  box-sizing: border-box;
   height: 34px;
   padding: 6px 14px;
   border: 1px solid @primary;
@@ -25,17 +23,14 @@ input[type="button"] {
   i.after {
     margin-left: 5px;
   }
-}
 
-.button.secondary,
-button.secondary,
-input[type="submit"].secondary,
-input[type="button"].secondary {
-  border-color: @darkgray;
-  background-color: @white;
-  color: @text;
+  &.secondary {
+    border-color: @darkgray;
+    background-color: @white;
+    color: @text;
 
-  &:hover {
-    color: @primary;
+    &:hover {
+      color: @primary;
+    }
   }
 }

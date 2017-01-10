@@ -1,7 +1,10 @@
 import { ISession, IUser, IUserPermission, IItem } from '../sdk';
-import { IIssuesModule } from './issues';
-import { IProjectsModule } from './projects';
-import { IUsersModule } from './users';
+import { IIssueModule } from './issue';
+import { IIssuePriorityModule } from './issue-priority';
+import { IIssueStateModule } from './issue-state';
+import { IIssueTypeModule } from './issue-type';
+import { IProjectModule } from './project';
+import { IUserModule } from './user';
 
 export interface IApplication extends EventEmitter {
   isInitialized(): boolean;
@@ -14,7 +17,10 @@ export interface IApplication extends EventEmitter {
 
   getSession(): ISession;
 
-  users: IProjectsModule;
-  projects: IProjectsModule;
-  issues: IIssuesModule;
+  users: IUserModule;
+  projects: IProjectModule;
+  issuePriorities: IIssuePriorityModule;
+  issueStates: IIssueStateModule;
+  issueTypes: IIssueTypeModule;
+  issues: IIssueModule;
 }

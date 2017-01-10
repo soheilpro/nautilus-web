@@ -1,14 +1,18 @@
 import * as React from 'react';
+import { IIssue } from '../../application';
 import { ICommand, ICommandProvider } from '../../commands';
 import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
-import SearchCommandsCommand from './search-commands-command';
-import SearchIssuesCommand from './search-issues-command';
+import AddIssueAction from './add-issue-action';
+import NewIssueCommand from './new-issue-command';
+import ViewCommandsCommand from './view-commands-command';
+import SearchCommand from './search-command';
 import UndoCommand from './undo-command';
 import ViewIssuesCommand from './view-issues-command';
 import Routes from './routes';
 import CommandsModal from '../commands-modal';
-import SearchModal, { ISearchResult } from '../search-modal';
+import SearchModal from '../search-modal';
+import AddEditIssueModal from '../add-edit-issue';
 
 interface IMainProps {
 }
@@ -16,9 +20,11 @@ interface IMainProps {
 interface IMainState {
   isCommandsModalOpen?: boolean;
   isSearchModalOpen?: boolean;
+  isAddEditIssueModalOpen?: boolean;
 }
 
 export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
+  private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private keyboardEvents: KeyboardEvent[] = [];
@@ -27,10 +33,15 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     super();
 
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
-    this.handleCommandsModalCommandSelect = this.handleCommandsModalCommandSelect.bind(this);
+    this.handleViewCommandsCommandExecute = this.handleViewCommandsCommandExecute.bind(this);
+    this.handleSearchCommandExecute = this.handleSearchCommandExecute.bind(this);
+    this.handleNewIssueCommandExecute = this.handleNewIssueCommandExecute.bind(this);
+    this.handleCommandsModalSelect = this.handleCommandsModalSelect.bind(this);
     this.handleCommandsModalCloseRequest = this.handleCommandsModalCloseRequest.bind(this);
-    this.handleSearchModalSearchResultSelect = this.handleSearchModalSearchResultSelect.bind(this);
+    this.handleSearchModalIssueSelect = this.handleSearchModalIssueSelect.bind(this);
     this.handleSearchModalCloseRequest = this.handleSearchModalCloseRequest.bind(this);
+    this.handleAddEditIssueModalSave = this.handleAddEditIssueModalSave.bind(this);
+    this.handleAddEditIssueModalCloseRequest = this.handleAddEditIssueModalCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -47,10 +58,11 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
 
   getCommands() {
     return [
-      new SearchCommandsCommand(this),
-      new SearchIssuesCommand(this),
+      new ViewCommandsCommand(this.handleViewCommandsCommandExecute),
+      new SearchCommand(this.handleSearchCommandExecute),
       new ViewIssuesCommand(),
       new UndoCommand(this.actionManager),
+      new NewIssueCommand(this.handleNewIssueCommandExecute),
     ];
   }
 
@@ -87,29 +99,61 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     return null;
   }
 
-  private handleCommandsModalCommandSelect(command: ICommand) {
+  private handleViewCommandsCommandExecute() {
+    this.setState({
+      isCommandsModalOpen: true,
+    });
+  }
+
+  private handleSearchCommandExecute() {
+    this.setState({
+      isSearchModalOpen: true,
+    });
+  }
+
+  private handleNewIssueCommandExecute() {
+    this.setState({
+      isAddEditIssueModalOpen: true,
+    });
+  }
+
+  private handleCommandsModalSelect(command: ICommand) {
     command.execute();
 
     this.setState({
-      isCommandsModalOpen: false
+      isCommandsModalOpen: false,
     });
   }
 
   private handleCommandsModalCloseRequest() {
     this.setState({
-      isCommandsModalOpen: false
+      isCommandsModalOpen: false,
     });
   }
 
-  private handleSearchModalSearchResultSelect(searchResult: ISearchResult) {
+  private handleSearchModalIssueSelect(issue: IIssue) {
     this.setState({
-      isSearchModalOpen: false
+      isSearchModalOpen: false,
     });
   }
 
   private handleSearchModalCloseRequest() {
     this.setState({
-      isSearchModalOpen: false
+      isSearchModalOpen: false,
+    });
+  }
+
+  private handleAddEditIssueModalSave(issue: IIssue) {
+    this.actionManager.execute(new AddIssueAction(issue, this.application));
+
+    this.setState({
+      isAddEditIssueModalOpen: false,
+    });
+  }
+
+  private handleAddEditIssueModalCloseRequest() {
+    this.setState({
+      isAddEditIssueModalOpen: false,
     });
   }
 
@@ -117,8 +161,9 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
     return (
       <div>
         <Routes />
-        <CommandsModal isOpen={this.state.isCommandsModalOpen} onCommandSelect={this.handleCommandsModalCommandSelect} onCloseRequest={this.handleCommandsModalCloseRequest} />
-        <SearchModal isOpen={this.state.isSearchModalOpen} onSearchResultSelect={this.handleSearchModalSearchResultSelect} onCloseRequest={this.handleSearchModalCloseRequest} />
+        <CommandsModal isOpen={this.state.isCommandsModalOpen} onSelect={this.handleCommandsModalSelect} onCloseRequest={this.handleCommandsModalCloseRequest} />
+        <SearchModal isOpen={this.state.isSearchModalOpen} onIssueSelect={this.handleSearchModalIssueSelect} onCloseRequest={this.handleSearchModalCloseRequest} />
+        <AddEditIssueModal isOpen={this.state.isAddEditIssueModalOpen} onSave={this.handleAddEditIssueModalSave} onCloseRequest={this.handleAddEditIssueModalCloseRequest} />
       </div>
     );
   }
