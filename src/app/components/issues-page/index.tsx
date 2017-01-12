@@ -7,6 +7,7 @@ import IssueDetail from '../issue-detail';
 import IssueList from '../issue-list';
 import MasterPage from '../master-page';
 import Button from '../button';
+import Icon from '../icon';
 
 require('./index.less');
 
@@ -93,9 +94,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
       <MasterPage>
         <div className="issues-page component">
           <div className="action-bar">
-            <Button onClick={this.handleNewIssueButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Issue</Button>
-            <Button onClick={this.handleNewTaskButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Task</Button>
-            <Button type="secondary" onClick={this.handleRefreshButtonClick}><i className="fa fa-refresh before after" aria-hidden="true"></i></Button>
+            <Button onClick={this.handleNewIssueButtonClick}><Icon name="plus" position="before" /> New Issue</Button>
+            <Button onClick={this.handleNewTaskButtonClick}><Icon name="plus" position="before" /> New Task</Button>
+            <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="row container">
             <div className="list">
