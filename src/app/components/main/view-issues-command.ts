@@ -15,6 +15,10 @@ export default class ViewIssuesCommand extends BaseCommand {
     return [{ keyCode: KeyCode.G }, { keyCode: KeyCode.I }];
   }
 
+  get isDisabled() {
+    return browserHistory.getCurrentLocation().pathname === '/';
+  }
+
   execute() {
     browserHistory.push('/');
   }

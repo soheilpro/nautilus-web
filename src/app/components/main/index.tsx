@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
+import { ICommandProvider } from '../../commands';
+import { ServiceManager } from '../../services';
+import ViewIssuesCommand from './view-issues-command';
 import IssuesPage from '../issues-page';
 import MilestonesPage from '../milestones-page';
 import ProjectsPage from '../projects-page';
@@ -13,7 +16,23 @@ interface IMainProps {
 interface IMainState {
 }
 
-export default class Main extends React.Component<IMainProps, IMainState> {
+export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
+  private commandManager = ServiceManager.Instance.getCommandManager();
+
+  componentWillMount() {
+    this.commandManager.registerCommandProvider(this);
+  }
+
+  componentWillUnmount() {
+    this.commandManager.unregisterCommandProvider(this);
+  }
+
+  getCommands() {
+    return [
+      new ViewIssuesCommand(),
+    ];
+  }
+
   render() {
     return (
       <div>

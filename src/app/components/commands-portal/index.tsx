@@ -5,7 +5,6 @@ import { ServiceManager } from '../../services';
 import ViewCommandsCommand from './view-commands-command';
 import CommandsModal from '../commands-modal';
 import UndoCommand from './undo-command';
-import ViewIssuesCommand from './view-issues-command';
 
 interface ICommandsPortalProps {
 }
@@ -44,7 +43,6 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
   getCommands() {
     return [
       new ViewCommandsCommand(this.handleViewCommandsCommandExecute),
-      new ViewIssuesCommand(),
       new UndoCommand(this.actionManager),
     ];
   }
