@@ -16,7 +16,7 @@ interface ISearchModalState {
 export default class SearchModal extends React.Component<ISearchModalProps, ISearchModalState> {
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
+      <Modal isOpen={this.props.isOpen} top={20} width={600} onCloseRequest={this.props.onCloseRequest}>
         <SearchBox autoFocus={true} onIssueSelect={this.props.onIssueSelect} />
       </Modal>
     );

@@ -17,7 +17,7 @@ interface IAddEditIssueModalState {
 export default class AddEditIssueModal extends React.Component<IAddEditIssueModalProps, IAddEditIssueModalState> {
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
+      <Modal isOpen={this.props.isOpen} width={800} onCloseRequest={this.props.onCloseRequest}>
         <AddEditIssueBox onSave={this.props.onSave} autoFocus={true} />
       </Modal>
     );

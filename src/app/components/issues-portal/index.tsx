@@ -5,6 +5,7 @@ import { ServiceManager } from '../../services';
 import AddEditIssueModal from '../add-edit-issue-modal';
 import NewIssueCommand from './new-issue-command';
 import AddIssueAction from './add-issue-action';
+import DeleteIssueAction from './delete-issue-action';
 
 interface IIssuesPortalProps {
 }
@@ -23,6 +24,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
     super();
 
     this.handleIssueControllerAddIssue = this.handleIssueControllerAddIssue.bind(this);
+    this.handleIssueControllerDeleteIssue = this.handleIssueControllerDeleteIssue.bind(this);
     this.handleNewIssueCommandExecute = this.handleNewIssueCommandExecute.bind(this);
     this.handleAddEditIssueModalSave = this.handleAddEditIssueModalSave.bind(this);
     this.handleAddEditIssueModalCloseRequest = this.handleAddEditIssueModalCloseRequest.bind(this);
@@ -33,10 +35,12 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
   componentWillMount() {
     this.commandManager.registerCommandProvider(this);
     this.issueController.on('addIssue', this.handleIssueControllerAddIssue);
+    this.issueController.on('deleteIssue', this.handleIssueControllerDeleteIssue);
   }
 
   componentWillUnmount() {
-    this.issueController.on('addIssue', this.handleIssueControllerAddIssue);
+    this.issueController.off('deleteIssue', this.handleIssueControllerDeleteIssue);
+    this.issueController.off('addIssue', this.handleIssueControllerAddIssue);
     this.commandManager.unregisterCommandProvider(this);
   }
 
@@ -52,9 +56,17 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
     });
   }
 
-  private async handleIssueControllerAddIssue() {
+  private handleIssueControllerAddIssue() {
     this.setState({
       isAddEditIssueModalOpen: true,
+    });
+  }
+
+  private handleIssueControllerDeleteIssue({ issue }: { issue: IIssue }) {
+    this.actionManager.execute(new DeleteIssueAction(issue, this.application));
+
+    this.setState({
+      isAddEditIssueModalOpen: false,
     });
   }
 

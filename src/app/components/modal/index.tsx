@@ -6,6 +6,8 @@ require('./index.less');
 
 interface IModalProps {
   isOpen: boolean;
+  top?: number;
+  width?: number;
   onCloseRequest(): void;
 }
 
@@ -14,6 +16,11 @@ interface IModalState {
 
 export default class Modal extends React.Component<IModalProps, IModalState> {
   private containerElement: HTMLElement;
+
+  static defaultProps = {
+    top: 120,
+    width: 600,
+  };
 
   constructor() {
     super();
@@ -48,7 +55,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
     return (
       <div className="modal component">
-        <div className="container" tabIndex={0} onKeyDown={this.handleContainerKeyDown} onBlur={this.handleContainerBlur} ref={e => this.containerElement = e}>
+        <div className="container" style={{ top: this.props.top, left: `calc(100% / 2 - ${this.props.width}px / 2)`, width: this.props.width }} tabIndex={0} onKeyDown={this.handleContainerKeyDown} onBlur={this.handleContainerBlur} ref={e => this.containerElement = e}>
           {this.props.children}
         </div>
       </div>

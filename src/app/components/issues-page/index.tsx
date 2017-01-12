@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ICommand, ICommandProvider } from '../../commands';
+import { ICommandProvider, ICommand } from '../../commands';
 import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
@@ -41,9 +41,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   componentWillMount() {
+    this.commandManager.registerCommandProvider(this);
     this.application.issues.on('add', this.handleApplicationIssuesAdd);
     this.application.issues.on('delete', this.handleApplicationIssuesDelete);
-    this.commandManager.registerCommandProvider(this);
   }
 
   async componentDidMount() {
@@ -53,9 +53,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
     this.application.issues.off('delete', this.handleApplicationIssuesDelete);
     this.application.issues.off('add', this.handleApplicationIssuesAdd);
+    this.commandManager.unregisterCommandProvider(this);
   }
 
   getCommands() {
