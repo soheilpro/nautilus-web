@@ -12,7 +12,7 @@ import ViewIssuesCommand from './view-issues-command';
 import Routes from './routes';
 import CommandsModal from '../commands-modal';
 import SearchModal from '../search-modal';
-import AddEditIssueModal from '../add-edit-issue';
+import AddEditIssueModal from '../add-edit-issue-modal';
 
 interface IMainProps {
 }

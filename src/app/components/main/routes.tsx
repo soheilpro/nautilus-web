@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
-import Issues from '../issues';
-import Milestones from '../milestones';
-import Projects from '../projects';
+import IssuesPage from '../issues-page';
+import MilestonesPage from '../milestones-page';
+import ProjectsPage from '../projects-page';
 
 interface IRoutesProps {
 }
@@ -18,9 +18,9 @@ export default class Routes extends React.Component<IRoutesProps, IRoutesState> 
   render() {
     return (
       <Router history={browserHistory}>
-        <Route path="/" component={Issues}/>
-        <Route path="/milestones" component={Milestones}/>
-        <Route path="/projects" component={Projects}/>
+        <Route path="/" component={IssuesPage}/>
+        <Route path="/milestones" component={MilestonesPage}/>
+        <Route path="/projects" component={ProjectsPage}/>
       </Router>
     );
   }

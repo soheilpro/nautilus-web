@@ -5,20 +5,20 @@ import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import IssueDetail from '../issue-detail';
 import IssueList from '../issue-list';
-import Master from '../master';
+import MasterPage from '../master-page';
 import Button from '../button';
 
 require('./index.less');
 
-interface IIssuesProps {
+interface IIssuesPageProps {
 }
 
-interface IIssuesState {
+interface IIssuesPageState {
   issues?: IIssue[];
   selectedIssue?: IIssue;
 }
 
-export default class Issues extends React.Component<IIssuesProps, IIssuesState> implements ICommandProvider {
+export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
@@ -90,8 +90,8 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
 
   render() {
     return (
-      <Master>
-        <div className="issues component">
+      <MasterPage>
+        <div className="issues-page component">
           <div className="action-bar">
             <Button onClick={this.handleNewIssueButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Issue</Button>
             <Button onClick={this.handleNewTaskButtonClick}><i className="fa fa-plus before" aria-hidden="true"></i> New Task</Button>
@@ -110,7 +110,7 @@ export default class Issues extends React.Component<IIssuesProps, IIssuesState> 
             </div>
           </div>
         </div>
-      </Master>
+      </MasterPage>
     );
   }
 };

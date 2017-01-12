@@ -1,24 +1,24 @@
 import * as React from 'react';
 import Header from '../header';
-import Nav from '../nav';
+import Navigation from '../navigation';
 
 require('./index.less');
 
-interface IMasterProps {
+interface IMasterPageProps {
 }
 
-interface IMasterState {
+interface IMasterPageState {
 }
 
-export default class Master extends React.Component<IMasterProps, IMasterState> {
+export default class MasterPage extends React.Component<IMasterPageProps, IMasterPageState> {
   render() {
     return (
-      <div className="master component">
+      <div className="master-page component">
         <div className="header">
           <Header />
         </div>
-        <div className="nav">
-          <Nav />
+        <div className="navigation">
+          <Navigation />
         </div>
         <div className="content">
           { this.props.children }

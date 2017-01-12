@@ -4,16 +4,16 @@ import { ServiceManager } from '../../services';
 
 require('./index.less');
 
-interface INavProps {
+interface INavigationProps {
 }
 
-interface INavState {
+interface INavigationState {
 }
 
-export default class Nav extends React.Component<INavProps, INavState> {
+export default class Navigation extends React.Component<INavigationProps, INavigationState> {
   render() {
     return (
-      <div className="nav component">
+      <div className="navigation component">
         <IndexLink to="/" activeClassName="active">Issues</IndexLink>
         <Link to="/milestones" activeClassName="active">Milestones</Link>
         <Link to="/projects" activeClassName="active">Projects</Link>
