@@ -14,10 +14,8 @@ export default class NewIssueCommand extends BaseCommand {
     return 'New Issue';
   }
 
-  get shortcuts() {
-    return [
-      [{ keyCode: KeyCode.N }]
-    ];
+  get shortcut() {
+    return [{ keyCode: KeyCode.N }];
   }
 
   execute() {

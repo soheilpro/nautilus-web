@@ -14,10 +14,8 @@ export default class SearchCommand extends BaseCommand {
     return 'Search';
   }
 
-  get shortcuts() {
-    return [
-      [{ keyCode: KeyCode.S }]
-    ];
+  get shortcut() {
+    return [{ keyCode: KeyCode.S }];
   }
 
   execute() {

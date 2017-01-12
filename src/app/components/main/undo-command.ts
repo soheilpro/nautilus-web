@@ -16,10 +16,8 @@ export default class UndoCommand extends BaseCommand {
     return 'Undo';
   }
 
-  get shortcuts() {
-    return [
-      [{ keyCode: KeyCode.Z }]
-    ];
+  get shortcut() {
+    return [{ keyCode: KeyCode.Z }];
   }
 
   get isDisabled() {

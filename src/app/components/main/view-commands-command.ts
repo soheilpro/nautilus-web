@@ -14,10 +14,8 @@ export default class ViewCommandsCommand extends BaseCommand {
     return 'View Commands';
   }
 
-  get shortcuts() {
-    return [
-      [{ keyCode: KeyCode.P }]
-    ];
+  get shortcut() {
+    return [{ keyCode: KeyCode.P }];
   }
 
   get isHidden() {

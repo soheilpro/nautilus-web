@@ -80,23 +80,38 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
       }
     }
 
-    let command = this.findCommandByShortcut(this.keyboardEvents);
+    // Find (fully of partially) matching commands
+    let matchingCommands: ICommand[] = [];
+    for (let command of this.commandManager.getCommands()) {
+      if (!command.shortcut)
+        continue;
 
-    if (command) {
-      command.execute();
+      if (KeyCombination.matchesSome(command.shortcut, this.keyboardEvents) > 0)
+        matchingCommands.push(command);
+    }
 
-      event.preventDefault();
+    // No mathing command
+    if (matchingCommands.length === 0) {
+
+      // Reset events
       this.keyboardEvents = [];
     }
-  }
+    // One matching command
+    else if (matchingCommands.length === 1) {
+      let command = matchingCommands[0];
 
-  private findCommandByShortcut(keyboardEvents: KeyboardEvent[]) {
-    for (let command of this.commandManager.getCommands())
-      for (let shortcut of command.shortcuts)
-        if (KeyCombination.matchesAll(shortcut, keyboardEvents))
-          return command;
+      // Fully matching command
+      if (command.shortcut.length === this.keyboardEvents.length) {
+        command.execute();
 
-    return null;
+        event.preventDefault();
+        this.keyboardEvents = [];
+      }
+      else {
+        // Partially matching command
+        // Wait for more events
+      }
+    }
   }
 
   private handleViewCommandsCommandExecute() {
