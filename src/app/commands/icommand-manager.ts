@@ -5,5 +5,4 @@ export interface ICommandManager {
   registerCommandProvider(commandProvider: ICommandProvider): void;
   unregisterCommandProvider(commandProvider: ICommandProvider): void;
   getCommands(): ICommand[];
-  getCommand(id: string): ICommand;
 }

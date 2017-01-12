@@ -20,7 +20,7 @@ export default class MasterPage extends React.Component<IMasterPageProps, IMaste
         <div className="navigation">
           <Navigation />
         </div>
-        <div className="content">
+        <div className="body">
           { this.props.children }
         </div>
       </div>

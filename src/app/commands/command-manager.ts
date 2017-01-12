@@ -24,13 +24,4 @@ export class CommandManager implements ICommandManager {
 
     return commands;
   }
-
-  getCommand(id: string): ICommand {
-    for (let commandProvider of this.commandProviders)
-      for (let command of commandProvider.getCommands())
-        if (command.id === id)
-        return command;
-
-    return null;
-  }
 }

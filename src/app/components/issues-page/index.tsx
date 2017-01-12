@@ -23,6 +23,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
+  private issueController = ServiceManager.Instance.getIssueController();
 
   constructor() {
     super();
@@ -74,7 +75,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private handleNewIssueButtonClick() {
-    this.commandManager.getCommand('new-issue').execute();
+    this.issueController.addIssue();
   }
 
   private handleNewTaskButtonClick() {
