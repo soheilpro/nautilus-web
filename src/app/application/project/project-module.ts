@@ -1,4 +1,3 @@
-import { IApplication } from '..';
 import { IClient, IProject } from '../../sdk';
 import { BaseModule } from '../base-module';
 import { IProjectModule } from './iproject-module';

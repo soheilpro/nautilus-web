@@ -1,4 +1,3 @@
-import { IApplication } from '..';
 import { IClient } from '../../sdk';
 import { BaseModule } from '../base-module';
 import { IIssuePriority } from './iissue-priority';

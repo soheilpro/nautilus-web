@@ -1,5 +1,4 @@
 import * as _ from 'underscore';
-import { IApplication } from '..';
 import { IClient, IUser } from '../../sdk';
 import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';

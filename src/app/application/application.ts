@@ -1,6 +1,5 @@
 import EventEmitter = require('wolfy87-eventemitter');
-import { Client, IClient, IUser, ISession, IUserPermission, IProject, IItemPriority, IItemState, IItemType, IItem } from '../sdk';
-import { entityComparer } from './entity-comparer';
+import { Client, IClient, ISession } from '../sdk';
 import { IApplication } from './iapplication';
 import { IIssueModule, IssueModule } from './issue';
 import { IIssuePriorityModule, IssuePriorityModule } from './issue-priority';

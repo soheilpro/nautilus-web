@@ -1,7 +1,5 @@
 import * as React from 'react';
-import * as classNames from 'classnames';
 import { ICommand } from '../../commands';
-import { ServiceManager } from '../../services';
 import Modal from '../modal';
 import CommandBox from './command-box';
 

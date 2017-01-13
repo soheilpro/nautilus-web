@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
 
 require('./index.less');

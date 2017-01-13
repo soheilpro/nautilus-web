@@ -1,4 +1,3 @@
-import { IClient, IUser } from '../../sdk';
 import { IModule } from '../imodule';
 import { IIssueType } from './iissue-type';
 

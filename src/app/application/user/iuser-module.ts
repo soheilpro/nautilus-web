@@ -1,4 +1,4 @@
-import { IClient, IUser } from '../../sdk';
+import { IUser } from '../../sdk';
 import { IModule } from '../imodule';
 
 export interface IUserModule extends IModule {

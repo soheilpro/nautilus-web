@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import { ICommand } from '../../commands';
-import { ServiceManager } from '../../services';
 import Modal from '../modal';
 import AddEditIssueBox from './add-edit-issue-box';
 

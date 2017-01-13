@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { ICommand } from '../../commands';
-import { IIssue } from '../../application';
 import Shortcut from '../shortcut';
 
 require('./command-list.less');

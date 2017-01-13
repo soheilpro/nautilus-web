@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IProject, entityComparer } from '../../application';
+import { IProject } from '../../application';
 import { ServiceManager } from '../../services';
 import Dropdown from '../dropdown';
 

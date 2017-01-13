@@ -1,4 +1,4 @@
-import { ISession, IUser, IUserPermission, IItem } from '../sdk';
+import { ISession } from '../sdk';
 import { IIssueModule } from './issue';
 import { IIssuePriorityModule } from './issue-priority';
 import { IIssueStateModule } from './issue-state';

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ICommandProvider, ICommand } from '../../commands';
 import { IIssue } from '../../application';
-import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import IssueDetail from '../issue-detail';
 import IssueList from '../issue-list';

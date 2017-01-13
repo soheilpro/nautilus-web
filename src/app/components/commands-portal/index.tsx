@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ICommandProvider, ICommand } from '../../commands';
-import { KeyCode, KeyCombination, isInputEvent } from '../../keyboard';
+import { KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import ViewCommandsCommand from './view-commands-command';
 import CommandsModal from '../commands-modal';

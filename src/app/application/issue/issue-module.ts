@@ -1,5 +1,4 @@
-import { IApplication } from '..';
-import { IClient, IItem } from '../../sdk';
+import { IClient } from '../../sdk';
 import { BaseModule } from '../base-module';
 import { IIssue } from './iissue';
 import { IIssueModule } from './iissue-module';

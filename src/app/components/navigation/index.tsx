@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link, IndexLink } from 'react-router';
-import { ServiceManager } from '../../services';
 
 require('./index.less');
 

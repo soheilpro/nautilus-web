@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IIssue } from '../../application';
 import Modal from '../modal';
 import SearchBox from './search-box';
-import { ISearchResult } from './isearch-result';
 
 interface ISearchModalProps {
   isOpen: boolean;

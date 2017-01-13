@@ -1,4 +1,3 @@
-import { browserHistory } from 'react-router';
 import { IActionManager } from '../../actions';
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
