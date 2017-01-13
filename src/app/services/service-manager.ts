@@ -1,16 +1,16 @@
 import { IApplication } from '../application';
 import { IActionManager } from '../actions';
 import { ICommandManager } from '../commands';
-import { IIssueController } from '../issues';
+import { IControllerManager } from '../controllers';
 import { IServiceManager } from './iservice-manager';
 
-export class ServiceManager {
+export class ServiceManager implements IServiceManager {
   static Instance: IServiceManager;
 
   private application: IApplication;
   private actionManager: IActionManager;
   private commandManager: ICommandManager;
-  private issueController: IIssueController;
+  private controllerManager: IControllerManager;
 
   setApplication(application: IApplication) {
     this.application = application;
@@ -36,11 +36,11 @@ export class ServiceManager {
     return this.commandManager;
   }
 
-  setIssueController(issueController: IIssueController) {
-    this.issueController = issueController;
+  setControllerManager(controllerManager: IControllerManager) {
+    this.controllerManager = controllerManager;
   }
 
-  getIssueController() {
-    return this.issueController;
+  getControllerManager() {
+    return this.controllerManager;
   }
 }

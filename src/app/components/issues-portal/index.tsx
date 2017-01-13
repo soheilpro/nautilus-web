@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
 import { ICommandProvider } from '../../commands';
+import { IIssueController } from '../../issues';
 import { ServiceManager } from '../../services';
 import AddEditIssueModal from '../add-edit-issue-modal';
 import NewIssueCommand from './new-issue-command';
@@ -14,17 +15,14 @@ interface IIssuesPortalState {
   isAddEditIssueModalOpen?: boolean;
 }
 
-export default class IssuesPortal extends React.Component<IIssuesPortalProps, IIssuesPortalState> implements ICommandProvider {
+export default class IssuesPortal extends React.Component<IIssuesPortalProps, IIssuesPortalState> implements ICommandProvider, IIssueController {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private issueController = ServiceManager.Instance.getIssueController();
 
   constructor() {
     super();
 
-    this.handleIssueControllerAddIssue = this.handleIssueControllerAddIssue.bind(this);
-    this.handleIssueControllerDeleteIssue = this.handleIssueControllerDeleteIssue.bind(this);
     this.handleNewIssueCommandExecute = this.handleNewIssueCommandExecute.bind(this);
     this.handleAddEditIssueModalSave = this.handleAddEditIssueModalSave.bind(this);
     this.handleAddEditIssueModalCloseRequest = this.handleAddEditIssueModalCloseRequest.bind(this);
@@ -33,15 +31,13 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
   }
 
   componentWillMount() {
+    ServiceManager.Instance.getControllerManager().setIssueController(this);
     this.commandManager.registerCommandProvider(this);
-    this.issueController.on('addIssue', this.handleIssueControllerAddIssue);
-    this.issueController.on('deleteIssue', this.handleIssueControllerDeleteIssue);
   }
 
   componentWillUnmount() {
-    this.issueController.off('deleteIssue', this.handleIssueControllerDeleteIssue);
-    this.issueController.off('addIssue', this.handleIssueControllerAddIssue);
     this.commandManager.unregisterCommandProvider(this);
+    ServiceManager.Instance.getControllerManager().setIssueController(undefined);
   }
 
   getCommands() {
@@ -50,23 +46,23 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
     ];
   }
 
-  private handleNewIssueCommandExecute() {
+  addIssue() {
     this.setState({
       isAddEditIssueModalOpen: true,
     });
   }
 
-  private handleIssueControllerAddIssue() {
-    this.setState({
-      isAddEditIssueModalOpen: true,
-    });
-  }
-
-  private handleIssueControllerDeleteIssue({ issue }: { issue: IIssue }) {
+  deleteIssue(issue: IIssue) {
     this.actionManager.execute(new DeleteIssueAction(issue, this.application));
 
     this.setState({
       isAddEditIssueModalOpen: false,
+    });
+  }
+
+  private handleNewIssueCommandExecute() {
+    this.setState({
+      isAddEditIssueModalOpen: true,
     });
   }
 

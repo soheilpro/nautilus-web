@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Application } from './application';
 import { ActionManager } from './actions';
 import { CommandManager } from './commands';
-import { IssueController } from './issues';
+import { ControllerManager } from './controllers';
 import { ServiceManager } from './services';
 import App from './components/app';
 
@@ -21,8 +21,8 @@ ServiceManager.Instance.setActionManager(actionManager);
 let commandManager = new CommandManager();
 ServiceManager.Instance.setCommandManager(commandManager);
 
-let issueController = new IssueController();
-ServiceManager.Instance.setIssueController(issueController);
+let controllerManager = new ControllerManager();
+ServiceManager.Instance.setControllerManager(controllerManager);
 
 ReactDOM.render(
   React.createElement(App),
