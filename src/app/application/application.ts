@@ -69,7 +69,7 @@ export class Application extends EventEmitter implements IApplication {
 
       this.session = session;
       this.client.session = session;
-      this.emit('login', session);
+      this.emit('login');
 
       this.load();
     }

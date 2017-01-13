@@ -60,13 +60,13 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     return [] as ICommand[];
   }
 
-  private async handleApplicationIssuesAdd(issue: IIssue) {
+  private async handleApplicationIssuesAdd({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
     });
   }
 
-  private async handleApplicationIssuesDelete(issue: IIssue) {
+  private async handleApplicationIssuesDelete({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
     });

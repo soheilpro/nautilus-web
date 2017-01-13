@@ -40,7 +40,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
     this.forceUpdate();
   }
 
-  private handleApplicationLogIn(session: ISession) {
+  private handleApplicationLogIn() {
     this.forceUpdate();
   }
 

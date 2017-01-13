@@ -30,7 +30,7 @@ export class IssueModule extends BaseModule implements IIssueModule {
     issue = await this.client.items.insert(issue);
     this.issues.push(issue);
 
-    this.emit('add', issue);
+    this.emit('add', { issue });
 
     return issue;
   }
@@ -40,6 +40,6 @@ export class IssueModule extends BaseModule implements IIssueModule {
 
     this.issues.splice(this.issues.indexOf(issue) , 1);
 
-    this.emit('delete', issue);
+    this.emit('delete', { issue });
   }
 }
