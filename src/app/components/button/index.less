@@ -25,4 +25,14 @@
       color: @primary;
     }
   }
+
+  &.destructive {
+    border-color: @danger;
+    background-color: @danger;
+    color: @white;
+
+    &:hover {
+      background-color: lighten(@danger, 5%);
+    }
+  }
 }

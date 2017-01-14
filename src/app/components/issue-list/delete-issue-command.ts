@@ -13,7 +13,7 @@ export default class DeleteIssueCommand extends BaseCommand {
   }
 
   get name() {
-    return `Delete Issue #${this.issue.sid}`;
+    return 'Delete Issue';
   }
 
   get shortcut() {

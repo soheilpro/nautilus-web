@@ -4,7 +4,9 @@ import * as classNames from 'classnames';
 require('./index.less');
 
 interface IButtonProps {
-  type?: 'primary' | 'secondary' | 'submit';
+  type?: 'primary' | 'secondary' | 'submit' | 'destructive';
+  autoFocus?: boolean;
+  form?: string;
   className?: string;
   onClick?(): void;
 }
@@ -30,7 +32,7 @@ export default class Button extends React.Component<IButtonProps, IButtonState> 
 
   render() {
     return (
-      <button className={classNames('button component', this.props.type, this.props.className)} onClick={this.handleButtonClick}>{this.props.children}</button>
+      <button className={classNames('button component', this.props.type, this.props.className)} autoFocus={this.props.autoFocus} form={this.props.form} onClick={this.handleButtonClick}>{this.props.children}</button>
     );
   }
 };

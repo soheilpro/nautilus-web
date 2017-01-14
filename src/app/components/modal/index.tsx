@@ -61,3 +61,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     );
   }
 };
+
+export * from './header'
+export * from './content'
+export * from './action-bar'

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IProject, IIssuePriority, IIssueState, IIssueType, IIssue } from '../../application';
+import { ModalHeader, ModalContent, ModalActionBar } from '../modal';
 import Input from '../input';
 import ProjectDropdown from '../project-dropdown';
 import IssuePriorityDropdown from '../issue-priority-dropdown';
@@ -12,6 +13,7 @@ require('./add-edit-issue-box.less');
 interface IAddEditIssueBoxProps {
   autoFocus: boolean;
   onSave(issue: IIssue): void;
+  onCloseRequest(): void;
 }
 
 interface IAddEditIssueBoxState {
@@ -92,62 +94,63 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
   render() {
     return (
       <div className="add-edit-issue-box component">
-        <form className="form" onSubmit={this.handleFormSubmit}>
-          <div className="field">
-            <div className="label">
-              Title:
+        <ModalHeader>New Issue</ModalHeader>
+        <ModalContent>
+          <form className="form" id="addEditIssueForm" onSubmit={this.handleFormSubmit}>
+            <div className="field">
+              <div className="label">
+                Title:
+              </div>
+              <div className="value">
+                <Input className="title" value={this.state.title} autoFocus={this.props.autoFocus} onChange={this.handleTitleInputChange} />
+              </div>
             </div>
-            <div className="value">
-              <Input className="title" value={this.state.title} autoFocus={this.props.autoFocus} onChange={this.handleTitleInputChange} />
+            <div className="field">
+              <div className="label">
+                Project:
+              </div>
+              <div className="value">
+                <ProjectDropdown className="project" project={this.state.project} onChange={this.handleProjectDropdownChange} />
+              </div>
             </div>
-          </div>
-          <div className="field">
-            <div className="label">
-              Project:
+            <div className="field">
+              <div className="label">
+                Type:
+              </div>
+              <div className="value">
+                <IssueTypeDropdown className="issue-type" issueType={this.state.type} onChange={this.handleTypeInputChange} />
+              </div>
             </div>
-            <div className="value">
-              <ProjectDropdown className="project" project={this.state.project} onChange={this.handleProjectDropdownChange} />
+            <div className="field">
+              <div className="label">
+                Priority:
+              </div>
+              <div className="value">
+                <IssuePriorityDropdown className="issue-priority" issuePriority={this.state.priority} onChange={this.handlePriorityInputChange} />
+              </div>
             </div>
-          </div>
-          <div className="field">
-            <div className="label">
-              Type:
+            <div className="field">
+              <div className="label">
+                State:
+              </div>
+              <div className="value">
+                <IssueStateDropdown className="issue-state" issueState={this.state.state} onChange={this.handleStateInputChange} />
+              </div>
             </div>
-            <div className="value">
-              <IssueTypeDropdown className="issue-type" issueType={this.state.type} onChange={this.handleTypeInputChange} />
+            <div className="field">
+              <div className="label">
+                Description:
+              </div>
+              <div className="value">
+                <Input className="description" value={this.state.description} multiline={true} onChange={this.handleDescriptionInputChange} />
+              </div>
             </div>
-          </div>
-          <div className="field">
-            <div className="label">
-              Priority:
-            </div>
-            <div className="value">
-              <IssuePriorityDropdown className="issue-priority" issuePriority={this.state.priority} onChange={this.handlePriorityInputChange} />
-            </div>
-          </div>
-          <div className="field">
-            <div className="label">
-              State:
-            </div>
-            <div className="value">
-              <IssueStateDropdown className="issue-state" issueState={this.state.state} onChange={this.handleStateInputChange} />
-            </div>
-          </div>
-          <div className="field">
-            <div className="label">
-              Description:
-            </div>
-            <div className="value">
-              <Input className="description" value={this.state.description} multiline={true} onChange={this.handleDescriptionInputChange} />
-            </div>
-          </div>
-          <div className="commands">
-            <div className="label"></div>
-            <div className="commands">
-              <Button type="submit">Add Issue</Button>
-            </div>
-          </div>
-        </form>
+          </form>
+        </ModalContent>
+        <ModalActionBar>
+          <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
+          <Button type="submit" form="addEditIssueForm">Add Issue</Button>
+        </ModalActionBar>
       </div>
     );
   }
