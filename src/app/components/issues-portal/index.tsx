@@ -36,13 +36,13 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
   }
 
   componentWillMount() {
-    ServiceManager.Instance.getControllerManager().setIssueController(this);
+    ServiceManager.Instance.setIssueController(this);
     this.commandManager.registerCommandProvider(this);
   }
 
   componentWillUnmount() {
     this.commandManager.unregisterCommandProvider(this);
-    ServiceManager.Instance.getControllerManager().setIssueController(undefined);
+    ServiceManager.Instance.setIssueController(undefined);
   }
 
   getCommands() {

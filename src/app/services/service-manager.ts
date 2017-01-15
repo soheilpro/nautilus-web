@@ -1,7 +1,7 @@
 import { IApplication } from '../application';
 import { IActionManager } from '../actions';
 import { ICommandManager } from '../commands';
-import { IControllerManager } from '../controllers';
+import { IIssueController } from '../issues';
 import { IServiceManager } from './iservice-manager';
 
 export class ServiceManager implements IServiceManager {
@@ -10,7 +10,7 @@ export class ServiceManager implements IServiceManager {
   private application: IApplication;
   private actionManager: IActionManager;
   private commandManager: ICommandManager;
-  private controllerManager: IControllerManager;
+  private issueController: IIssueController;
 
   setApplication(application: IApplication) {
     this.application = application;
@@ -36,11 +36,11 @@ export class ServiceManager implements IServiceManager {
     return this.commandManager;
   }
 
-  setControllerManager(controllerManager: IControllerManager) {
-    this.controllerManager = controllerManager;
+  setIssueController(issueController: IIssueController) {
+    this.issueController = issueController;
   }
 
-  getControllerManager() {
-    return this.controllerManager;
+  getIssueController() {
+    return this.issueController;
   }
 }

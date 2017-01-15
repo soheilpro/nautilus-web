@@ -21,7 +21,7 @@ interface IIssuesPageState {
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private controllerManager = ServiceManager.Instance.getControllerManager();
+  private issueController = ServiceManager.Instance.getIssueController();
 
   constructor() {
     super();
@@ -73,7 +73,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private handleNewIssueButtonClick() {
-    this.controllerManager.getIssueController().addIssue();
+    this.issueController.addIssue();
   }
 
   private handleNewTaskButtonClick() {

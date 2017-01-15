@@ -19,7 +19,7 @@ interface IIssueListState {
 
 export default class IssueList extends React.Component<IIssueListProps, IIssueListState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private controllerManager = ServiceManager.Instance.getControllerManager();
+  private issueController = ServiceManager.Instance.getIssueController();
 
   constructor() {
     super();
@@ -42,7 +42,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     let selectedIssue = this.props.issues[this.state.selectedIssueIndex];
 
     return [
-      selectedIssue ? new DeleteIssueCommand(selectedIssue, this.controllerManager.getIssueController()) : undefined,
+      selectedIssue ? new DeleteIssueCommand(selectedIssue, this.issueController) : undefined,
     ];
   }
 

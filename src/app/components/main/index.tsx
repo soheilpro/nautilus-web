@@ -36,14 +36,14 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
   render() {
     return (
       <div>
+        <CommandsPortal />
+        <SearchPortal />
+        <IssuesPortal />
         <Router history={browserHistory}>
           <Route path="/" component={IssuesPage}/>
           <Route path="/milestones" component={MilestonesPage}/>
           <Route path="/projects" component={ProjectsPage}/>
         </Router>
-        <CommandsPortal />
-        <SearchPortal />
-        <IssuesPortal />
       </div>
     );
   }
