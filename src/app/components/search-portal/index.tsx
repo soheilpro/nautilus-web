@@ -2,14 +2,14 @@ import * as React from 'react';
 import { IIssue } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
-import SearchModal from '../search-modal';
+import SearchWindow from '../search-window';
 import SearchCommand from './search-command';
 
 interface ISearchPortalProps {
 }
 
 interface ISearchPortalState {
-  isSearchModalOpen?: boolean;
+  isSearchWindowOpen?: boolean;
 }
 
 export default class SearchPortal extends React.Component<ISearchPortalProps, ISearchPortalState> implements ICommandProvider {
@@ -19,8 +19,8 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
     super();
 
     this.handleSearchCommandExecute = this.handleSearchCommandExecute.bind(this);
-    this.handleSearchModalIssueSelect = this.handleSearchModalIssueSelect.bind(this);
-    this.handleSearchModalCloseRequest = this.handleSearchModalCloseRequest.bind(this);
+    this.handleSearchWindowIssueSelect = this.handleSearchWindowIssueSelect.bind(this);
+    this.handleSearchWindowCloseRequest = this.handleSearchWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -41,26 +41,26 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
 
   private handleSearchCommandExecute() {
     this.setState({
-      isSearchModalOpen: true,
+      isSearchWindowOpen: true,
     });
   }
 
-  private handleSearchModalIssueSelect(issue: IIssue) {
+  private handleSearchWindowIssueSelect(issue: IIssue) {
     this.setState({
-      isSearchModalOpen: false,
+      isSearchWindowOpen: false,
     });
   }
 
-  private handleSearchModalCloseRequest() {
+  private handleSearchWindowCloseRequest() {
     this.setState({
-      isSearchModalOpen: false,
+      isSearchWindowOpen: false,
     });
   }
 
   render() {
     return (
       <div className="search-portal component">
-        <SearchModal isOpen={this.state.isSearchModalOpen} onIssueSelect={this.handleSearchModalIssueSelect} onCloseRequest={this.handleSearchModalCloseRequest} />
+        <SearchWindow isOpen={this.state.isSearchWindowOpen} onIssueSelect={this.handleSearchWindowIssueSelect} onCloseRequest={this.handleSearchWindowCloseRequest} />
       </div>
     );
   }

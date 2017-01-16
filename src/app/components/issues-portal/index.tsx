@@ -3,8 +3,8 @@ import { IIssue } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { IIssueController } from '../../issues';
 import { ServiceManager } from '../../services';
-import AddEditIssueModal from '../add-edit-issue-modal';
-import DeleteIssueConfirmationModal from '../delete-issue-confirmation-modal';
+import AddEditIssueWindow from '../add-edit-issue-window';
+import DeleteIssueConfirmationWindow from '../delete-issue-confirmation-window';
 import NewIssueCommand from './new-issue-command';
 import AddIssueAction from './add-issue-action';
 import DeleteIssueAction from './delete-issue-action';
@@ -13,8 +13,8 @@ interface IIssuesPortalProps {
 }
 
 interface IIssuesPortalState {
-  isAddEditIssueModalOpen?: boolean;
-  isDeleteIssueConfirmationModalOpen?: boolean;
+  isAddEditIssueWindowOpen?: boolean;
+  isDeleteIssueConfirmationWindowOpen?: boolean;
   issueToDelete?: IIssue;
 }
 
@@ -27,10 +27,10 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
     super();
 
     this.handleNewIssueCommandExecute = this.handleNewIssueCommandExecute.bind(this);
-    this.handleAddEditIssueModalSave = this.handleAddEditIssueModalSave.bind(this);
-    this.handleAddEditIssueModalCloseRequest = this.handleAddEditIssueModalCloseRequest.bind(this);
-    this.handleDeleteIssueConfirmationModalConfirm = this.handleDeleteIssueConfirmationModalConfirm.bind(this);
-    this.handleDeleteIssueConfirmationModalCloseRequest = this.handleDeleteIssueConfirmationModalCloseRequest.bind(this);
+    this.handleAddEditIssueWindowSave = this.handleAddEditIssueWindowSave.bind(this);
+    this.handleAddEditIssueWindowCloseRequest = this.handleAddEditIssueWindowCloseRequest.bind(this);
+    this.handleDeleteIssueConfirmationWindowConfirm = this.handleDeleteIssueConfirmationWindowConfirm.bind(this);
+    this.handleDeleteIssueConfirmationWindowCloseRequest = this.handleDeleteIssueConfirmationWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -53,56 +53,56 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
 
   addIssue() {
     this.setState({
-      isAddEditIssueModalOpen: true,
+      isAddEditIssueWindowOpen: true,
     });
   }
 
   deleteIssue(issue: IIssue) {
     this.setState({
-      isDeleteIssueConfirmationModalOpen: true,
+      isDeleteIssueConfirmationWindowOpen: true,
       issueToDelete: issue,
     });
   }
 
   private handleNewIssueCommandExecute() {
     this.setState({
-      isAddEditIssueModalOpen: true,
+      isAddEditIssueWindowOpen: true,
     });
   }
 
-  private handleAddEditIssueModalSave(issue: IIssue) {
+  private handleAddEditIssueWindowSave(issue: IIssue) {
     this.actionManager.execute(new AddIssueAction(issue, this.application));
 
     this.setState({
-      isAddEditIssueModalOpen: false,
+      isAddEditIssueWindowOpen: false,
     });
   }
 
-  private handleAddEditIssueModalCloseRequest() {
+  private handleAddEditIssueWindowCloseRequest() {
     this.setState({
-      isAddEditIssueModalOpen: false,
+      isAddEditIssueWindowOpen: false,
     });
   }
 
-  private handleDeleteIssueConfirmationModalConfirm() {
+  private handleDeleteIssueConfirmationWindowConfirm() {
     this.actionManager.execute(new DeleteIssueAction(this.state.issueToDelete, this.application));
 
     this.setState({
-      isDeleteIssueConfirmationModalOpen: false,
+      isDeleteIssueConfirmationWindowOpen: false,
     });
   }
 
-  private handleDeleteIssueConfirmationModalCloseRequest() {
+  private handleDeleteIssueConfirmationWindowCloseRequest() {
     this.setState({
-      isDeleteIssueConfirmationModalOpen: false,
+      isDeleteIssueConfirmationWindowOpen: false,
     });
   }
 
   render() {
     return (
       <div className="issues-portal component">
-        <AddEditIssueModal isOpen={this.state.isAddEditIssueModalOpen} onSave={this.handleAddEditIssueModalSave} onCloseRequest={this.handleAddEditIssueModalCloseRequest} />
-        <DeleteIssueConfirmationModal issue={this.state.issueToDelete} isOpen={this.state.isDeleteIssueConfirmationModalOpen} onConfirm={this.handleDeleteIssueConfirmationModalConfirm} onCloseRequest={this.handleDeleteIssueConfirmationModalCloseRequest} />
+        <AddEditIssueWindow isOpen={this.state.isAddEditIssueWindowOpen} onSave={this.handleAddEditIssueWindowSave} onCloseRequest={this.handleAddEditIssueWindowCloseRequest} />
+        <DeleteIssueConfirmationWindow issue={this.state.issueToDelete} isOpen={this.state.isDeleteIssueConfirmationWindowOpen} onConfirm={this.handleDeleteIssueConfirmationWindowConfirm} onCloseRequest={this.handleDeleteIssueConfirmationWindowCloseRequest} />
       </div>
     );
   }

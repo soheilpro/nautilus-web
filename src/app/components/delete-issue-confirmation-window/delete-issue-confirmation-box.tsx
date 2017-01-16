@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import { ModalHeader, ModalContent, ModalActionBar } from '../modal';
+import { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Button from '../button';
 
 interface IDeleteIssueConfirmationBoxProps {
@@ -16,14 +16,14 @@ export default class DeleteIssueConfirmationBox extends React.Component<IDeleteI
   render() {
     return (
       <div>
-        <ModalHeader>Delete Issue</ModalHeader>
-        <ModalContent>
+        <WindowHeader>Delete Issue</WindowHeader>
+        <WindowContent>
           Are you sure you want to delete issue #{this.props.issue.sid}?
-        </ModalContent>
-        <ModalActionBar>
+        </WindowContent>
+        <WindowActionBar>
           <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
           <Button type="destructive" autoFocus={true} onClick={this.props.onConfirm}>Delete Issue</Button>
-        </ModalActionBar>
+        </WindowActionBar>
       </div>
     );
   }

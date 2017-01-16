@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import Modal from '../modal';
+import Window from '../window';
 import AddEditIssueBox from './add-edit-issue-box';
 
-interface IAddEditIssueModalProps {
+interface IAddEditIssueWindowProps {
   isOpen: boolean;
   onSave(issue: IIssue): void;
   onCloseRequest(): void;
 }
 
-interface IAddEditIssueModalState {
+interface IAddEditIssueWindowState {
 }
 
-export default class AddEditIssueModal extends React.Component<IAddEditIssueModalProps, IAddEditIssueModalState> {
+export default class AddEditIssueWindow extends React.Component<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} width={800} onCloseRequest={this.props.onCloseRequest}>
+      <Window isOpen={this.props.isOpen} width={800} onCloseRequest={this.props.onCloseRequest}>
         <AddEditIssueBox onSave={this.props.onSave} autoFocus={true} onCloseRequest={this.props.onCloseRequest} />
-      </Modal>
+      </Window>
     );
   }
 }

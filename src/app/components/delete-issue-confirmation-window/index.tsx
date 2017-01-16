@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import Modal from '../modal';
+import Window from '../window';
 import DeleteIssueConfirmationBox from './delete-issue-confirmation-box';
 
-interface IDeleteIssueConfirmationModalProps {
+interface IDeleteIssueConfirmationWindowProps {
   issue: IIssue;
   isOpen: boolean;
   onConfirm(): void;
   onCloseRequest(): void;
 }
 
-interface IDeleteIssueConfirmationModalState {
+interface IDeleteIssueConfirmationWindowState {
 }
 
-export default class DeleteIssueConfirmationModal extends React.Component<IDeleteIssueConfirmationModalProps, IDeleteIssueConfirmationModalState> {
+export default class DeleteIssueConfirmationWindow extends React.Component<IDeleteIssueConfirmationWindowProps, IDeleteIssueConfirmationWindowState> {
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
+      <Window isOpen={this.props.isOpen} onCloseRequest={this.props.onCloseRequest}>
         <DeleteIssueConfirmationBox issue={this.props.issue} onConfirm={this.props.onConfirm} onCloseRequest={this.props.onCloseRequest} />
-      </Modal>
+      </Window>
     );
   }
 }

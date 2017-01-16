@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IProject, IIssuePriority, IIssueState, IIssueType, IIssue } from '../../application';
-import { ModalHeader, ModalContent, ModalActionBar } from '../modal';
+import { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectDropdown from '../project-dropdown';
 import IssuePriorityDropdown from '../issue-priority-dropdown';
@@ -94,8 +94,8 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
   render() {
     return (
       <div className="add-edit-issue-box component">
-        <ModalHeader>New Issue</ModalHeader>
-        <ModalContent>
+        <WindowHeader>New Issue</WindowHeader>
+        <WindowContent>
           <form className="form" id="addEditIssueForm" onSubmit={this.handleFormSubmit}>
             <div className="field">
               <div className="label">
@@ -146,11 +146,11 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
               </div>
             </div>
           </form>
-        </ModalContent>
-        <ModalActionBar>
+        </WindowContent>
+        <WindowActionBar>
           <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
           <Button type="submit" form="addEditIssueForm">Add Issue</Button>
-        </ModalActionBar>
+        </WindowActionBar>
       </div>
     );
   }

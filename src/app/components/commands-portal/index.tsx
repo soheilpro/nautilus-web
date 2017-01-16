@@ -3,14 +3,14 @@ import { ICommandProvider, ICommand } from '../../commands';
 import { KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import ViewCommandsCommand from './view-commands-command';
-import CommandsModal from '../commands-modal';
+import CommandsWindow from '../commands-window';
 import UndoCommand from './undo-command';
 
 interface ICommandsPortalProps {
 }
 
 interface ICommandsPortalState {
-  isCommandsModalOpen?: boolean;
+  isCommandsWindowOpen?: boolean;
 }
 
 export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandProvider {
@@ -24,8 +24,8 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
 
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
     this.handleViewCommandsCommandExecute = this.handleViewCommandsCommandExecute.bind(this);
-    this.handleCommandsModalSelect = this.handleCommandsModalSelect.bind(this);
-    this.handleCommandsModalCloseRequest = this.handleCommandsModalCloseRequest.bind(this);
+    this.handleCommandsWindowSelect = this.handleCommandsWindowSelect.bind(this);
+    this.handleCommandsWindowCloseRequest = this.handleCommandsWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -97,28 +97,28 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
 
   private handleViewCommandsCommandExecute() {
     this.setState({
-      isCommandsModalOpen: true,
+      isCommandsWindowOpen: true,
     });
   }
 
-  private handleCommandsModalSelect(command: ICommand) {
+  private handleCommandsWindowSelect(command: ICommand) {
     command.execute();
 
     this.setState({
-      isCommandsModalOpen: false,
+      isCommandsWindowOpen: false,
     });
   }
 
-  private handleCommandsModalCloseRequest() {
+  private handleCommandsWindowCloseRequest() {
     this.setState({
-      isCommandsModalOpen: false,
+      isCommandsWindowOpen: false,
     });
   }
 
   render() {
     return (
       <div className="commands-portal component">
-        <CommandsModal isOpen={this.state.isCommandsModalOpen} onSelect={this.handleCommandsModalSelect} onCloseRequest={this.handleCommandsModalCloseRequest} />
+        <CommandsWindow isOpen={this.state.isCommandsWindowOpen} onSelect={this.handleCommandsWindowSelect} onCloseRequest={this.handleCommandsWindowCloseRequest} />
       </div>
     );
   }
