@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IIssue } from '../../application';
+import { KeyCode } from '../../keyboard';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import DeleteIssueCommand from './delete-issue-command';
@@ -25,6 +26,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     super();
 
     this.handleIssueFocus = this.handleIssueFocus.bind(this);
+    this.handleIssueListKeyDown = this.handleIssueListKeyDown.bind(this);
     this.handleIssueListBlur = this.handleIssueListBlur.bind(this);
 
     this.state = {};
@@ -56,6 +58,35 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     });
   }
 
+  private handleIssueListKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.which === KeyCode.DownArrow) {
+      event.preventDefault();
+
+      if (this.state.selectedIssueIndex < this.props.issues.length - 1) {
+        let selectedIssueIndex = this.state.selectedIssueIndex + 1;
+
+        this.setState({
+          selectedIssueIndex: selectedIssueIndex,
+        });
+
+        this.props.onSelectedIssueChange(this.props.issues[selectedIssueIndex]);
+      }
+    }
+    else if (event.which === KeyCode.UpArrow) {
+      event.preventDefault();
+
+      if (this.state.selectedIssueIndex > 0) {
+        let selectedIssueIndex = this.state.selectedIssueIndex - 1;
+
+        this.setState({
+          selectedIssueIndex: selectedIssueIndex,
+        });
+
+        this.props.onSelectedIssueChange(this.props.issues[selectedIssueIndex]);
+      }
+    }
+  }
+
   private handleIssueListBlur() {
     this.setState({
       isFocused: false,
@@ -64,7 +95,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
 
   render() {
     return (
-      <div className={classNames('issue-list component', { focused: this.state.isFocused })} onBlur={this.handleIssueListBlur}>
+      <div className={classNames('issue-list component', { focused: this.state.isFocused })} onKeyDown={this.handleIssueListKeyDown} onBlur={this.handleIssueListBlur}>
         {
           this.props.issues.map((issue, index) => {
             return (
