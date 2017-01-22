@@ -5,6 +5,10 @@ import { KeyCode } from '../../keyboard';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import DeleteIssueCommand from './delete-issue-command';
+import ProjectField from '../project-field';
+import IssueTypeField from '../issue-type-field';
+import IssuePriorityField from '../issue-priority-field';
+import IssueStateField from '../issue-state-field';
 
 require('./index.less');
 
@@ -102,6 +106,10 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
               <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} tabIndex={0} onFocus={this.handleIssueFocus.bind(null, issue, index)} key={issue.id}>
                 <span className="sid">{issue.sid}</span>
                 <span className="title">{issue.title}</span>
+                <span className="project"><ProjectField project={issue.project} /></span>
+                <span className="type"><IssueTypeField issueType={issue.type} /></span>
+                <span className="priority"><IssuePriorityField issuePriority={issue.priority} /></span>
+                <span className="state"><IssueStateField issueState={issue.state} /></span>
               </div>
             );
           })

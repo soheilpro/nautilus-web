@@ -1,5 +1,7 @@
+import * as _ from 'underscore';
 import { IClient } from '../../sdk';
 import { BaseModule } from '../base-module';
+import { entityComparer } from '../entity-comparer';
 import { IIssuePriority } from './iissue-priority';
 import { IIssuePriorityModule } from './iissue-priority-module';
 
@@ -16,5 +18,9 @@ export class IssuePriorityModule extends BaseModule implements IIssuePriorityMod
 
   getAll() {
     return this.issuePriorities;
+  }
+
+  get(IssuePriority: IIssuePriority) {
+    return _.find(this.issuePriorities, entityComparer.bind(null, IssuePriority));
   }
 }

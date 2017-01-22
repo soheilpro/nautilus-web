@@ -1,5 +1,7 @@
+import * as _ from 'underscore';
 import { IClient } from '../../sdk';
 import { BaseModule } from '../base-module';
+import { entityComparer } from '../entity-comparer';
 import { IIssueType } from './iissue-type';
 import { IIssueTypeModule } from './iissue-type-module';
 
@@ -16,5 +18,9 @@ export class IssueTypeModule extends BaseModule implements IIssueTypeModule {
 
   getAll() {
     return this.issueTypes;
+  }
+
+  get(IssueType: IIssueType) {
+    return _.find(this.issueTypes, entityComparer.bind(null, IssueType));
   }
 }

@@ -1,9 +1,11 @@
 @import '../../assets/stylesheets/common';
 
 .issue-list.component {
+
   .issue {
     border-bottom: 1px solid @gray;
-    padding: 5px;
+    padding: 5px 9px;
+    display: flex;
 
     &.selected {
       background-color: #f6f6f6;
@@ -11,6 +13,23 @@
 
     .title {
       margin-left: 10px;
+      width: 100%;
+    }
+
+    .project {
+      margin-left: 20px;
+    }
+
+    .type {
+      margin-left: 20px;
+    }
+
+    .priority {
+      margin-left: 20px;
+    }
+
+    .state {
+      margin-left: 20px;
     }
   }
 
