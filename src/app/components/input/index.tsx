@@ -9,6 +9,7 @@ interface IInputProps {
   secret?: boolean;
   multiline?: boolean;
   autoFocus?: boolean;
+  selectOnFocus?: boolean;
   className?: string;
   onChange(value: string): void;
 }
@@ -25,13 +26,25 @@ export default class Input extends React.Component<IInputProps, IInputState> {
     super();
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputFocus = this.handleInputFocus.bind(this);
     this.handleTextAreaChange = this.handleTextAreaChange.bind(this);
+    this.handleTextAreaFocus = this.handleTextAreaFocus.bind(this);
+  }
+
+  private handleInputFocus(event: React.FormEvent<HTMLInputElement>) {
+    if (this.props.selectOnFocus)
+      (event.target as HTMLInputElement).select();
   }
 
   private handleInputChange(event: React.FormEvent<HTMLInputElement>) {
     let value = (event.target as HTMLInputElement).value;
 
     this.props.onChange(value);
+  }
+
+  private handleTextAreaFocus(event: React.FormEvent<HTMLTextAreaElement>) {
+    if (this.props.selectOnFocus)
+      (event.target as HTMLTextAreaElement).select();
   }
 
   private handleTextAreaChange(event: React.FormEvent<HTMLTextAreaElement>) {
@@ -43,9 +56,9 @@ export default class Input extends React.Component<IInputProps, IInputState> {
   render() {
     return (
       this.props.multiline ?
-        <textarea className={classNames('input component', this.props.className)} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onChange={this.handleTextAreaChange} />
+        <textarea className={classNames('input component', this.props.className)} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onFocus={this.handleTextAreaFocus} onChange={this.handleTextAreaChange} />
         :
-        <input className={classNames('input component', this.props.className)} type={this.props.secret ? 'password' : 'text'} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onChange={this.handleInputChange} />
+        <input className={classNames('input component', this.props.className)} type={this.props.secret ? 'password' : 'text'} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onFocus={this.handleInputFocus} onChange={this.handleInputChange} />
     );
   }
 };

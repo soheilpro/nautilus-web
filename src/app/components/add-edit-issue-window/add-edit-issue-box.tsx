@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IProject, IIssuePriority, IIssueState, IIssueType, IIssue } from '../../application';
+import { IProject, IIssuePriority, IIssueState, IIssueType, IIssue, IIssueChange } from '../../application';
 import { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectDropdown from '../project-dropdown';
@@ -11,8 +11,11 @@ import Button from '../button';
 require('./add-edit-issue-box.less');
 
 interface IAddEditIssueBoxProps {
+  mode: 'add' | 'edit';
+  issue?: IIssue;
   autoFocus: boolean;
-  onSave(issue: IIssue): void;
+  onAdd?(issue: IIssue): void;
+  onUpdate?(issueChange: IIssueChange): void;
   onCloseRequest(): void;
 }
 
@@ -26,7 +29,7 @@ interface IAddEditIssueBoxState {
 }
 
 export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxProps, IAddEditIssueBoxState> {
-  constructor() {
+  constructor(props: IAddEditIssueBoxProps) {
     super();
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -38,21 +41,47 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
     this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
 
     this.state = {};
+
+    if (props.issue) {
+      this.state.title = props.issue.title;
+      this.state.project = props.issue.project;
+      this.state.type = props.issue.type;
+      this.state.priority = props.issue.priority;
+      this.state.state = props.issue.state;
+      this.state.description = props.issue.description;
+    }
   }
 
   private handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    let issue: IIssue = {
-      type: this.state.type,
-      title: this.state.title,
-      description: this.state.description,
-      state: this.state.state,
-      priority: this.state.priority,
-      project: this.state.project,
-    };
+    switch (this.props.mode) {
+      case 'add':
+        let issue: IIssue = {
+          type: this.state.type,
+          title: this.state.title,
+          description: this.state.description,
+          state: this.state.state,
+          priority: this.state.priority,
+          project: this.state.project,
+        };
 
-    this.props.onSave(issue);
+        this.props.onAdd(issue);
+        break;
+
+      case 'edit':
+        let issueChange: IIssueChange = {
+          type: this.state.type || null,
+          title: this.state.title || null,
+          description: this.state.description || null,
+          state: this.state.state || null,
+          priority: this.state.priority || null,
+          project: this.state.project || null,
+        };
+
+        this.props.onUpdate(issueChange);
+        break;
+    }
   }
 
   private handleTitleInputChange(value: string) {
@@ -94,7 +123,18 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
   render() {
     return (
       <div className="add-edit-issue-box component">
-        <WindowHeader>New Issue</WindowHeader>
+        <WindowHeader>
+          {
+            this.props.mode === 'add' ?
+            'New Issue'
+            : null
+          }
+          {
+            this.props.mode === 'edit' ?
+            `Edit Issue #${this.props.issue.sid}`
+            : null
+          }
+        </WindowHeader>
         <WindowContent>
           <form className="form" id="addEditIssueForm" onSubmit={this.handleFormSubmit}>
             <div className="field">
@@ -102,7 +142,7 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
                 Title:
               </div>
               <div className="value">
-                <Input className="title" value={this.state.title} autoFocus={this.props.autoFocus} onChange={this.handleTitleInputChange} />
+                <Input className="title" value={this.state.title} autoFocus={this.props.autoFocus} selectOnFocus={true} onChange={this.handleTitleInputChange} />
               </div>
             </div>
             <div className="field">
@@ -142,14 +182,23 @@ export default class AddEditIssueBox extends React.Component<IAddEditIssueBoxPro
                 Description:
               </div>
               <div className="value">
-                <Input className="description" value={this.state.description} multiline={true} onChange={this.handleDescriptionInputChange} />
+                <Input className="description" value={this.state.description} multiline={true} selectOnFocus={true} onChange={this.handleDescriptionInputChange} />
               </div>
             </div>
           </form>
         </WindowContent>
         <WindowActionBar>
           <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
-          <Button type="submit" form="addEditIssueForm">Add Issue</Button>
+          {
+            this.props.mode === 'add' ?
+              <Button type="submit" form="addEditIssueForm">Add Issue</Button>
+              : null
+          }
+          {
+            this.props.mode === 'edit' ?
+              <Button type="submit" form="addEditIssueForm">Update Issue</Button>
+              : null
+          }
         </WindowActionBar>
       </div>
     );

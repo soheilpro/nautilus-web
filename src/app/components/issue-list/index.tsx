@@ -4,6 +4,7 @@ import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
+import EditIssueCommand from './edit-issue-command';
 import DeleteIssueCommand from './delete-issue-command';
 import ProjectField from '../project-field';
 import IssueTypeField from '../issue-type-field';
@@ -30,6 +31,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     super();
 
     this.handleIssueFocus = this.handleIssueFocus.bind(this);
+    this.handleIssueDoubleClick = this.handleIssueDoubleClick.bind(this);
     this.handleIssueListKeyDown = this.handleIssueListKeyDown.bind(this);
     this.handleIssueListBlur = this.handleIssueListBlur.bind(this);
 
@@ -48,6 +50,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     let selectedIssue = this.props.issues[this.state.selectedIssueIndex];
 
     return [
+      selectedIssue ? new EditIssueCommand(selectedIssue, this.issueController) : undefined,
       selectedIssue ? new DeleteIssueCommand(selectedIssue, this.issueController) : undefined,
     ];
   }
@@ -60,6 +63,10 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
       isFocused: true,
       selectedIssueIndex: index,
     });
+  }
+
+  private handleIssueDoubleClick(issue: IIssue, index: number) {
+    this.issueController.editIssue(issue);
   }
 
   private handleIssueListKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -103,13 +110,29 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
         {
           this.props.issues.map((issue, index) => {
             return (
-              <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} tabIndex={0} onFocus={this.handleIssueFocus.bind(null, issue, index)} key={issue.id}>
+              <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} tabIndex={0} onFocus={this.handleIssueFocus.bind(null, issue, index)} onDoubleClick={this.handleIssueDoubleClick.bind(null, issue, index)} key={issue.id}>
                 <span className="sid">{issue.sid}</span>
                 <span className="title">{issue.title}</span>
-                <span className="project"><ProjectField project={issue.project} /></span>
-                <span className="type"><IssueTypeField issueType={issue.type} /></span>
-                <span className="priority"><IssuePriorityField issuePriority={issue.priority} /></span>
-                <span className="state"><IssueStateField issueState={issue.state} /></span>
+                {
+                  issue.project ?
+                    <span className="project"><ProjectField project={issue.project} /></span>
+                    : null
+                }
+                {
+                  issue.type ?
+                    <span className="type"><IssueTypeField issueType={issue.type} /></span>
+                    : null
+                }
+                {
+                  issue.priority ?
+                    <span className="priority"><IssuePriorityField issuePriority={issue.priority} /></span>
+                    : null
+                }
+                {
+                  issue.state ?
+                    <span className="state"><IssueStateField issueState={issue.state} /></span>
+                    : null
+                }
               </div>
             );
           })

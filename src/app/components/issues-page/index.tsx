@@ -27,6 +27,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     super();
 
     this.handleApplicationIssuesAdd = this.handleApplicationIssuesAdd.bind(this);
+    this.handleApplicationIssuesUpdate = this.handleApplicationIssuesUpdate.bind(this);
     this.handleApplicationIssuesDelete = this.handleApplicationIssuesDelete.bind(this);
     this.handleNewIssueButtonClick = this.handleNewIssueButtonClick.bind(this);
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
@@ -41,6 +42,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   componentWillMount() {
     this.commandManager.registerCommandProvider(this);
     this.application.issues.on('add', this.handleApplicationIssuesAdd);
+    this.application.issues.on('update', this.handleApplicationIssuesUpdate);
     this.application.issues.on('delete', this.handleApplicationIssuesDelete);
   }
 
@@ -52,6 +54,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   componentWillUnmount() {
     this.application.issues.off('delete', this.handleApplicationIssuesDelete);
+    this.application.issues.off('update', this.handleApplicationIssuesUpdate);
     this.application.issues.off('add', this.handleApplicationIssuesAdd);
     this.commandManager.unregisterCommandProvider(this);
   }
@@ -61,6 +64,12 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleApplicationIssuesAdd({ issue }: { issue: IIssue }) {
+    this.setState({
+      issues: await this.application.issues.getAll(),
+    });
+  }
+
+  private async handleApplicationIssuesUpdate({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
     });
