@@ -1,8 +1,10 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 
 require('./index.less');
 
 interface IWindowProps {
+  className?: string;
 }
 
 interface IWindowState {
@@ -11,7 +13,7 @@ interface IWindowState {
 export default class Window extends React.Component<IWindowProps, IWindowState> {
   render() {
     return (
-      <div className="window component">
+      <div className={classNames('window component', this.props.className)}>
         {this.props.children}
       </div>
     );
