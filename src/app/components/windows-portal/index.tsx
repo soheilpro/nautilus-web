@@ -9,6 +9,7 @@ interface IExtendedWindow extends IWindow {
   zIndex?: number;
   containerElement?: HTMLElement;
   focusedElement?: HTMLElement;
+  elementToFocusOnClose?: HTMLElement;
 }
 
 require('./index.less');
@@ -18,6 +19,7 @@ interface IWindowsPortalProps {
 
 interface IWindowsPortalState {
   windows?: IExtendedWindow[];
+  elementToFocus?: HTMLElement;
 }
 
 export default class WindowsPortal extends React.Component<IWindowsPortalProps, IWindowsPortalState> implements IWindowManager {
@@ -41,6 +43,11 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     ServiceManager.Instance.setWindowManager(this);
   }
 
+  componentDidUpdate() {
+    if (this.state.elementToFocus)
+      this.state.elementToFocus.focus();
+  }
+
   componentWillUnmount() {
     ServiceManager.Instance.setWindowManager(undefined);
   }
@@ -51,15 +58,18 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     extendedWindow.zIndex = this.lastZIndex++;
     extendedWindow.top = extendedWindow.top || 120;
     extendedWindow.width = extendedWindow.width || 600;
+    extendedWindow.elementToFocusOnClose = document.activeElement as HTMLElement;
 
     this.setState(state => ({
       windows: state.windows.concat(extendedWindow),
+      elementToFocus: null,
     }));
   }
 
   closeWindow(window: any) {
     this.setState(state => ({
       windows: state.windows.filter(x => x !== window),
+      elementToFocus: window.elementToFocusOnClose,
     }));
   }
 
