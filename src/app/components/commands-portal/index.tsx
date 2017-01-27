@@ -26,7 +26,6 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
     this.handleViewCommandsCommandExecute = this.handleViewCommandsCommandExecute.bind(this);
     this.handleCommandsWindowSelect = this.handleCommandsWindowSelect.bind(this);
-    this.handleCommandsWindowCloseRequest = this.handleCommandsWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -98,7 +97,7 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
 
   private handleViewCommandsCommandExecute() {
     this.commandsWindow = {
-      content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} onCloseRequest={this.handleCommandsWindowCloseRequest} />,
+      content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
       top: 20,
     };
 
@@ -107,10 +106,6 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
 
   private handleCommandsWindowSelect(command: ICommand) {
     command.execute();
-    this.windowManager.closeWindow(this.commandsWindow);
-  }
-
-  private handleCommandsWindowCloseRequest() {
     this.windowManager.closeWindow(this.commandsWindow);
   }
 

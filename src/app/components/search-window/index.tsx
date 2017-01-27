@@ -5,7 +5,6 @@ import SearchBox from './search-box';
 
 interface ISearchWindowProps {
   onIssueSelect(issue: IIssue): void;
-  onCloseRequest(): void;
 }
 
 interface ISearchWindowState {
@@ -14,7 +13,7 @@ interface ISearchWindowState {
 export default class SearchWindow extends React.Component<ISearchWindowProps, ISearchWindowState> {
   render() {
     return (
-      <Window onCloseRequest={this.props.onCloseRequest}>
+      <Window>
         <SearchBox autoFocus={true} onIssueSelect={this.props.onIssueSelect} />
       </Window>
     );

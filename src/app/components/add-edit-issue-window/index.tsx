@@ -17,7 +17,7 @@ interface IAddEditIssueWindowState {
 export default class AddEditIssueWindow extends React.Component<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
   render() {
     return (
-      <Window onCloseRequest={this.props.onCloseRequest}>
+      <Window>
         <AddEditIssueBox mode={this.props.mode} issue={this.props.issue} autoFocus={true} onAdd={this.props.onAdd} onUpdate={this.props.onUpdate} onCloseRequest={this.props.onCloseRequest} />
       </Window>
     );

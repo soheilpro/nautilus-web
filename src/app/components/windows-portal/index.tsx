@@ -1,10 +1,13 @@
 import * as React from 'react';
+import * as _ from 'underscore';
+import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import { IWindow, IWindowManager } from '../../windows';
 
 interface IExtendedWindow extends IWindow {
   key?: number;
   zIndex?: number;
+  containerElement?: HTMLElement;
 }
 
 require('./index.less');
@@ -22,6 +25,9 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
 
   constructor() {
     super();
+
+    this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
+    this.handleContainerBlur = this.handleContainerBlur.bind(this);
 
     this.state = {
       windows: [],
@@ -54,13 +60,30 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     }));
   }
 
+  private handleContainerKeyDown(window: IExtendedWindow, event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.which === KeyCode.Escape) {
+      event.preventDefault();
+
+      this.closeWindow(window);
+    }
+  }
+
+  private handleContainerBlur(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
+    setTimeout(() => {
+      if (window.containerElement.contains(document.activeElement))
+        return;
+
+      this.closeWindow(window);
+    }, 0);
+  }
+
   render() {
     return (
       <div className="windows-portal component">
       {
         this.state.windows.map((window, index) => {
           return (
-            <div className="window-container" style={{ top: window.top, left: `calc(100% / 2 - ${window.width}px / 2)`, width: window.width, zIndex: window.zIndex }} key={window.key} tabIndex={0}>
+            <div className="window-container" style={{ top: window.top, left: `calc(100% / 2 - ${window.width}px / 2)`, width: window.width, zIndex: window.zIndex }} tabIndex={0} onKeyDown={_.partial(this.handleContainerKeyDown, window)} onBlur={_.partial(this.handleContainerBlur, window)} ref={e => window.containerElement = e} key={window.key}>
               {window.content}
             </div>
           );

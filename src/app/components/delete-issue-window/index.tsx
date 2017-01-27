@@ -15,7 +15,7 @@ interface IDeleteIssueWindowState {
 export default class DeleteIssueWindow extends React.Component<IDeleteIssueWindowProps, IDeleteIssueWindowState> {
   render() {
     return (
-      <Window onCloseRequest={this.props.onCloseRequest}>
+      <Window>
         <DeleteIssueBox issue={this.props.issue} onConfirm={this.props.onConfirm} onCloseRequest={this.props.onCloseRequest} />
       </Window>
     );

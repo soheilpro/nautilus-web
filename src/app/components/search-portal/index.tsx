@@ -22,7 +22,6 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
 
     this.handleSearchCommandExecute = this.handleSearchCommandExecute.bind(this);
     this.handleSearchWindowIssueSelect = this.handleSearchWindowIssueSelect.bind(this);
-    this.handleSearchWindowCloseRequest = this.handleSearchWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -43,7 +42,7 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
 
   private handleSearchCommandExecute() {
     this.searchWindow = {
-      content: <SearchWindow onIssueSelect={this.handleSearchWindowIssueSelect} onCloseRequest={this.handleSearchWindowCloseRequest} />,
+      content: <SearchWindow onIssueSelect={this.handleSearchWindowIssueSelect} />,
       top: 20,
     };
 
@@ -53,10 +52,6 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
   private handleSearchWindowIssueSelect(issue: IIssue) {
     // TODO
 
-    this.windowManager.closeWindow(this.searchWindow);
-  }
-
-  private handleSearchWindowCloseRequest() {
     this.windowManager.closeWindow(this.searchWindow);
   }
 
