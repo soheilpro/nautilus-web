@@ -8,6 +8,7 @@ interface IExtendedWindow extends IWindow {
   key?: number;
   zIndex?: number;
   containerElement?: HTMLElement;
+  focusedElement?: HTMLElement;
 }
 
 require('./index.less');
@@ -26,7 +27,9 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
   constructor() {
     super();
 
+    this.handleOverlayFocus = this.handleOverlayFocus.bind(this);
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
+    this.handleContainerFocus = this.handleContainerFocus.bind(this);
     this.handleContainerBlur = this.handleContainerBlur.bind(this);
 
     this.state = {
@@ -60,6 +63,10 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     }));
   }
 
+  private handleOverlayFocus(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
+    window.focusedElement.focus();
+  }
+
   private handleContainerKeyDown(window: IExtendedWindow, event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.which === KeyCode.Escape) {
       event.preventDefault();
@@ -68,7 +75,14 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     }
   }
 
+  private handleContainerFocus(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
+    window.focusedElement = event.target as HTMLElement;
+  }
+
   private handleContainerBlur(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
+    if (window.isModal)
+      return;
+
     setTimeout(() => {
       if (window.containerElement.contains(document.activeElement))
         return;
@@ -83,8 +97,15 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
       {
         this.state.windows.map((window, index) => {
           return (
-            <div className="window-container" style={{ top: window.top, left: `calc(100% / 2 - ${window.width}px / 2)`, width: window.width, zIndex: window.zIndex }} tabIndex={0} onKeyDown={_.partial(this.handleContainerKeyDown, window)} onBlur={_.partial(this.handleContainerBlur, window)} ref={e => window.containerElement = e} key={window.key}>
-              {window.content}
+            <div key={window.key}>
+              {
+                window.isModal ?
+                  <div className="overlay" tabIndex={0} onFocus={_.partial(this.handleOverlayFocus, window)}></div>
+                  : null
+              }
+              <div className="window-container" style={{ top: window.top, left: `calc(100% / 2 - ${window.width}px / 2)`, width: window.width, zIndex: window.zIndex }} tabIndex={0} onKeyDown={_.partial(this.handleContainerKeyDown, window)} onFocus={_.partial(this.handleContainerFocus, window)} onBlur={_.partial(this.handleContainerBlur, window)} ref={e => window.containerElement = e}>
+                {window.content}
+              </div>
             </div>
           );
         })
