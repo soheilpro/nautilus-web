@@ -1,10 +1,12 @@
 import * as React from 'react';
+import * as _ from 'underscore';
 import { IIssue, IIssueChange } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { IIssueController } from '../../issues';
 import { ServiceManager } from '../../services';
+import { IWindow } from '../../windows';
 import AddEditIssueWindow from '../add-edit-issue-window';
-import DeleteIssueConfirmationWindow from '../delete-issue-confirmation-window';
+import DeleteIssueWindow from '../delete-issue-window';
 import NewIssueCommand from './new-issue-command';
 import AddIssueAction from './add-issue-action';
 import UpdateIssueAction from './update-issue-action';
@@ -14,28 +16,26 @@ interface IIssuesPortalProps {
 }
 
 interface IIssuesPortalState {
-  isAddIssueWindowOpen?: boolean;
-  isEditIssueWindowOpen?: boolean;
-  editingIssue?: IIssue;
-  isDeleteIssueConfirmationWindowOpen?: boolean;
-  deletingIssue?: IIssue;
 }
 
 export default class IssuesPortal extends React.Component<IIssuesPortalProps, IIssuesPortalState> implements ICommandProvider, IIssueController {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
+  private windowManager = ServiceManager.Instance.getWindowManager();
+  private addIssueWindow: IWindow;
+  private editIssueWindow: IWindow;
+  private deleteIssueWindow: IWindow;
 
   constructor() {
     super();
 
-    this.handleNewIssueCommandExecute = this.handleNewIssueCommandExecute.bind(this);
     this.handleAddIssueWindowAdd = this.handleAddIssueWindowAdd.bind(this);
     this.handleAddIssueWindowCloseRequest = this.handleAddIssueWindowCloseRequest.bind(this);
     this.handleEditIssueWindowUpdate = this.handleEditIssueWindowUpdate.bind(this);
     this.handleEditIssueWindowCloseRequest = this.handleEditIssueWindowCloseRequest.bind(this);
-    this.handleDeleteIssueConfirmationWindowConfirm = this.handleDeleteIssueConfirmationWindowConfirm.bind(this);
-    this.handleDeleteIssueConfirmationWindowCloseRequest = this.handleDeleteIssueConfirmationWindowCloseRequest.bind(this);
+    this.handleDeleteIssueWindowConfirm = this.handleDeleteIssueWindowConfirm.bind(this);
+    this.handleDeleteIssueWindowCloseRequest = this.handleDeleteIssueWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -52,84 +52,66 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
 
   getCommands() {
     return [
-      new NewIssueCommand(this.handleNewIssueCommandExecute),
+      new NewIssueCommand(),
     ];
   }
 
   addIssue() {
-    this.setState({
-      isAddIssueWindowOpen: true,
-    });
+    this.addIssueWindow = {
+      content: <AddEditIssueWindow mode="add" onAdd={this.handleAddIssueWindowAdd} onCloseRequest={this.handleAddIssueWindowCloseRequest} />,
+      width: 800,
+    };
+
+    this.windowManager.showWindow(this.addIssueWindow);
   }
 
   editIssue(issue: IIssue) {
-    this.setState({
-      isEditIssueWindowOpen: true,
-      editingIssue: issue,
-    });
+    this.editIssueWindow = {
+      content: <AddEditIssueWindow mode="edit" issue={issue} onUpdate={_.partial(this.handleEditIssueWindowUpdate, issue)} onCloseRequest={this.handleEditIssueWindowCloseRequest} />,
+      width: 800,
+    };
+
+    this.windowManager.showWindow(this.editIssueWindow);
   }
 
   deleteIssue(issue: IIssue) {
-    this.setState({
-      isDeleteIssueConfirmationWindowOpen: true,
-      deletingIssue: issue,
-    });
-  }
+    this.deleteIssueWindow = {
+      content: <DeleteIssueWindow issue={issue} onConfirm={_.partial(this.handleDeleteIssueWindowConfirm, issue)} onCloseRequest={this.handleDeleteIssueWindowCloseRequest} />,
+    };
 
-  private handleNewIssueCommandExecute() {
-    this.setState({
-      isAddIssueWindowOpen: true,
-    });
+    this.windowManager.showWindow(this.deleteIssueWindow);
   }
 
   private handleAddIssueWindowAdd(issue: IIssue) {
     this.actionManager.execute(new AddIssueAction(issue, this.application));
-
-    this.setState({
-      isAddIssueWindowOpen: false,
-    });
+    this.windowManager.closeWindow(this.addIssueWindow);
   }
 
   private handleAddIssueWindowCloseRequest() {
-    this.setState({
-      isAddIssueWindowOpen: false,
-    });
+    this.windowManager.closeWindow(this.addIssueWindow);
   }
 
-  private handleEditIssueWindowUpdate(issueChange: IIssueChange) {
-    this.actionManager.execute(new UpdateIssueAction(this.state.editingIssue, issueChange, this.application));
-
-    this.setState({
-      isEditIssueWindowOpen: false,
-    });
+  private handleEditIssueWindowUpdate(issue: IIssue, issueChange: IIssueChange) {
+    this.actionManager.execute(new UpdateIssueAction(issue, issueChange, this.application));
+    this.windowManager.closeWindow(this.editIssueWindow);
   }
 
   private handleEditIssueWindowCloseRequest() {
-    this.setState({
-      isEditIssueWindowOpen: false,
-    });
+    this.windowManager.closeWindow(this.editIssueWindow);
   }
 
-  private handleDeleteIssueConfirmationWindowConfirm() {
-    this.actionManager.execute(new DeleteIssueAction(this.state.deletingIssue, this.application));
-
-    this.setState({
-      isDeleteIssueConfirmationWindowOpen: false,
-    });
+  private handleDeleteIssueWindowConfirm(issue: IIssue) {
+    this.actionManager.execute(new DeleteIssueAction(issue, this.application));
+    this.windowManager.closeWindow(this.deleteIssueWindow);
   }
 
-  private handleDeleteIssueConfirmationWindowCloseRequest() {
-    this.setState({
-      isDeleteIssueConfirmationWindowOpen: false,
-    });
+  private handleDeleteIssueWindowCloseRequest() {
+    this.windowManager.closeWindow(this.deleteIssueWindow);
   }
 
   render() {
     return (
       <div className="issues-portal component">
-        <AddEditIssueWindow mode="add" isOpen={this.state.isAddIssueWindowOpen} onAdd={this.handleAddIssueWindowAdd} onCloseRequest={this.handleAddIssueWindowCloseRequest} />
-        <AddEditIssueWindow mode="edit" isOpen={this.state.isEditIssueWindowOpen} issue={this.state.editingIssue} onUpdate={this.handleEditIssueWindowUpdate} onCloseRequest={this.handleEditIssueWindowCloseRequest} />
-        <DeleteIssueConfirmationWindow issue={this.state.deletingIssue} isOpen={this.state.isDeleteIssueConfirmationWindowOpen} onConfirm={this.handleDeleteIssueConfirmationWindowConfirm} onCloseRequest={this.handleDeleteIssueConfirmationWindowCloseRequest} />
       </div>
     );
   }

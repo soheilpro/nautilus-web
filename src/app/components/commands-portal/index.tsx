@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ICommandProvider, ICommand } from '../../commands';
 import { KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
+import { IWindow } from '../../windows';
 import ViewCommandsCommand from './view-commands-command';
 import CommandsWindow from '../commands-window';
 import UndoCommand from './undo-command';
@@ -10,14 +11,14 @@ interface ICommandsPortalProps {
 }
 
 interface ICommandsPortalState {
-  isCommandsWindowOpen?: boolean;
 }
 
 export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandProvider {
-  private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
+  private windowManager = ServiceManager.Instance.getWindowManager();
   private keyboardEvents: KeyboardEvent[] = [];
+  private commandsWindow: IWindow;
 
   constructor() {
     super();
@@ -96,29 +97,26 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
   }
 
   private handleViewCommandsCommandExecute() {
-    this.setState({
-      isCommandsWindowOpen: true,
-    });
+    this.commandsWindow = {
+      content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} onCloseRequest={this.handleCommandsWindowCloseRequest} />,
+      top: 20,
+    };
+
+    this.windowManager.showWindow(this.commandsWindow);
   }
 
   private handleCommandsWindowSelect(command: ICommand) {
     command.execute();
-
-    this.setState({
-      isCommandsWindowOpen: false,
-    });
+    this.windowManager.closeWindow(this.commandsWindow);
   }
 
   private handleCommandsWindowCloseRequest() {
-    this.setState({
-      isCommandsWindowOpen: false,
-    });
+    this.windowManager.closeWindow(this.commandsWindow);
   }
 
   render() {
     return (
       <div className="commands-portal component">
-        <CommandsWindow isOpen={this.state.isCommandsWindowOpen} onSelect={this.handleCommandsWindowSelect} onCloseRequest={this.handleCommandsWindowCloseRequest} />
       </div>
     );
   }

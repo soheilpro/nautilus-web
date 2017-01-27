@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IIssue } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
+import { IWindow } from '../../windows';
 import SearchWindow from '../search-window';
 import SearchCommand from './search-command';
 
@@ -9,11 +10,12 @@ interface ISearchPortalProps {
 }
 
 interface ISearchPortalState {
-  isSearchWindowOpen?: boolean;
 }
 
 export default class SearchPortal extends React.Component<ISearchPortalProps, ISearchPortalState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
+  private windowManager = ServiceManager.Instance.getWindowManager();
+  private searchWindow: IWindow;
 
   constructor() {
     super();
@@ -40,27 +42,27 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
   }
 
   private handleSearchCommandExecute() {
-    this.setState({
-      isSearchWindowOpen: true,
-    });
+    this.searchWindow = {
+      content: <SearchWindow onIssueSelect={this.handleSearchWindowIssueSelect} onCloseRequest={this.handleSearchWindowCloseRequest} />,
+      top: 20,
+    };
+
+    this.windowManager.showWindow(this.searchWindow);
   }
 
   private handleSearchWindowIssueSelect(issue: IIssue) {
-    this.setState({
-      isSearchWindowOpen: false,
-    });
+    // TODO
+
+    this.windowManager.closeWindow(this.searchWindow);
   }
 
   private handleSearchWindowCloseRequest() {
-    this.setState({
-      isSearchWindowOpen: false,
-    });
+    this.windowManager.closeWindow(this.searchWindow);
   }
 
   render() {
     return (
       <div className="search-portal component">
-        <SearchWindow isOpen={this.state.isSearchWindowOpen} onIssueSelect={this.handleSearchWindowIssueSelect} onCloseRequest={this.handleSearchWindowCloseRequest} />
       </div>
     );
   }

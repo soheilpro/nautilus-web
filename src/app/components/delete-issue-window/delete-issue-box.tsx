@@ -3,16 +3,16 @@ import { IIssue } from '../../application';
 import { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Button from '../button';
 
-interface IDeleteIssueConfirmationBoxProps {
+interface IDeleteIssueBoxProps {
   issue: IIssue;
   onConfirm(): void;
   onCloseRequest(): void;
 }
 
-interface IDeleteIssueConfirmationBoxState {
+interface IDeleteIssueBoxState {
 }
 
-export default class DeleteIssueConfirmationBox extends React.Component<IDeleteIssueConfirmationBoxProps, IDeleteIssueConfirmationBoxState> {
+export default class DeleteIssueBox extends React.Component<IDeleteIssueBoxProps, IDeleteIssueBoxState> {
   render() {
     return (
       <div>

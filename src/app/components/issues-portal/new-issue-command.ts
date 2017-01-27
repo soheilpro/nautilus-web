@@ -1,10 +1,9 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
+import { ServiceManager } from '../../services';
 
 export default class NewIssueCommand extends BaseCommand {
-  constructor(private onExecute: Function) {
-    super();
-  }
+  private issueController = ServiceManager.Instance.getIssueController();
 
   get id() {
     return 'new-issue';
@@ -19,6 +18,6 @@ export default class NewIssueCommand extends BaseCommand {
   }
 
   execute() {
-    this.onExecute();
+    this.issueController.addIssue();
   }
 }

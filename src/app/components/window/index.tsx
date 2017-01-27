@@ -4,9 +4,6 @@ import { KeyCode } from '../../keyboard';
 require('./index.less');
 
 interface IWindowProps {
-  isOpen: boolean;
-  top?: number;
-  width?: number;
   onCloseRequest(): void;
 }
 
@@ -15,11 +12,6 @@ interface IWindowState {
 
 export default class Window extends React.Component<IWindowProps, IWindowState> {
   private containerElement: HTMLElement;
-
-  static defaultProps = {
-    top: 120,
-    width: 600,
-  };
 
   constructor() {
     super();
@@ -49,12 +41,9 @@ export default class Window extends React.Component<IWindowProps, IWindowState> 
   }
 
   render() {
-    if (!this.props.isOpen)
-      return null;
-
     return (
       <div className="window component">
-        <div className="container" style={{ top: this.props.top, left: `calc(100% / 2 - ${this.props.width}px / 2)`, width: this.props.width }} tabIndex={0} onKeyDown={this.handleContainerKeyDown} onBlur={this.handleContainerBlur} ref={e => this.containerElement = e}>
+        <div className="container" tabIndex={0} onKeyDown={this.handleContainerKeyDown} onBlur={this.handleContainerBlur} ref={e => this.containerElement = e}>
           {this.props.children}
         </div>
       </div>
