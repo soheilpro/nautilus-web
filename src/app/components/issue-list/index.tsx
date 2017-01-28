@@ -30,10 +30,11 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
   constructor() {
     super();
 
-    this.handleIssueFocus = this.handleIssueFocus.bind(this);
-    this.handleIssueDoubleClick = this.handleIssueDoubleClick.bind(this);
     this.handleIssueListKeyDown = this.handleIssueListKeyDown.bind(this);
+    this.handleIssueListFocus = this.handleIssueListFocus.bind(this);
     this.handleIssueListBlur = this.handleIssueListBlur.bind(this);
+    this.handleIssueClick = this.handleIssueClick.bind(this);
+    this.handleIssueDoubleClick = this.handleIssueDoubleClick.bind(this);
 
     this.state = {};
   }
@@ -53,20 +54,6 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
       selectedIssue ? new EditIssueCommand(selectedIssue, this.issueController) : undefined,
       selectedIssue ? new DeleteIssueCommand(selectedIssue, this.issueController) : undefined,
     ];
-  }
-
-  private handleIssueFocus(issue: IIssue, index: number) {
-    if (this.props.onSelectedIssueChange)
-      this.props.onSelectedIssueChange(issue);
-
-    this.setState({
-      isFocused: true,
-      selectedIssueIndex: index,
-    });
-  }
-
-  private handleIssueDoubleClick(issue: IIssue, index: number) {
-    this.issueController.editIssue(issue);
   }
 
   private handleIssueListKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -98,19 +85,38 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     }
   }
 
+  private handleIssueListFocus() {
+    this.setState({
+      isFocused: true,
+    });
+  }
+
   private handleIssueListBlur() {
     this.setState({
       isFocused: false,
     });
   }
 
+  private handleIssueClick(issue: IIssue, index: number) {
+    if (this.props.onSelectedIssueChange)
+      this.props.onSelectedIssueChange(issue);
+
+    this.setState({
+      selectedIssueIndex: index,
+    });
+  }
+
+  private handleIssueDoubleClick(issue: IIssue, index: number) {
+    this.issueController.editIssue(issue);
+  }
+
   render() {
     return (
-      <div className={classNames('issue-list component', { focused: this.state.isFocused })} onKeyDown={this.handleIssueListKeyDown} onBlur={this.handleIssueListBlur}>
+      <div className={classNames('issue-list component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleIssueListKeyDown} onFocus={this.handleIssueListFocus} onBlur={this.handleIssueListBlur}>
         {
           this.props.issues.map((issue, index) => {
             return (
-              <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} tabIndex={0} onFocus={this.handleIssueFocus.bind(null, issue, index)} onDoubleClick={this.handleIssueDoubleClick.bind(null, issue, index)} key={issue.id}>
+              <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} onClick={this.handleIssueClick.bind(null, issue, index)} onDoubleClick={this.handleIssueDoubleClick.bind(null, issue, index)} key={issue.id}>
                 <span className="sid">{issue.sid}</span>
                 <span className="title">{issue.title}</span>
                 {
