@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ICommandProvider, ICommand } from '../../commands';
+import { ICommandProvider } from '../../commands';
 import { IIssue } from '../../application';
 import { ServiceManager } from '../../services';
 import IssueDetail from '../issue-detail';
@@ -7,6 +7,7 @@ import IssueList from '../issue-list';
 import MasterPage from '../master-page';
 import Button from '../button';
 import Icon from '../icon';
+import NewTaskCommand from './new-task-command';
 
 require('./index.less');
 
@@ -22,6 +23,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private application = ServiceManager.Instance.getApplication();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private issueController = ServiceManager.Instance.getIssueController();
+  private taskController = ServiceManager.Instance.getTaskController();
 
   constructor() {
     super();
@@ -60,7 +62,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   getCommands() {
-    return [] as ICommand[];
+    return [
+      new NewTaskCommand(this.state.selectedIssue),
+    ];
   }
 
   private async handleApplicationIssuesAdd({ issue }: { issue: IIssue }) {
@@ -86,6 +90,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private handleNewTaskButtonClick() {
+    this.taskController.addTask(this.state.selectedIssue);
   }
 
   private handleRefreshButtonClick() {

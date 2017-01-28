@@ -9,6 +9,7 @@ import IssuesPortal from '../issues-portal';
 import MilestonesPage from '../milestones-page';
 import ProjectsPage from '../projects-page';
 import SearchPortal from '../search-portal';
+import TasksPortal from '../tasks-portal';
 import WindowsPortal from '../windows-portal';
 
 interface IMainProps {
@@ -41,6 +42,7 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
         <CommandsPortal />
         <SearchPortal />
         <IssuesPortal />
+        <TasksPortal />
         <Router history={browserHistory}>
           <Route path="/" component={IssuesPage}/>
           <Route path="/milestones" component={MilestonesPage}/>

@@ -5,6 +5,9 @@ import { IIssueModule, IssueModule } from './issue';
 import { IIssuePriorityModule, IssuePriorityModule } from './issue-priority';
 import { IIssueStateModule, IssueStateModule } from './issue-state';
 import { IIssueTypeModule, IssueTypeModule } from './issue-type';
+import { ITaskModule, TaskModule } from './task';
+import { ITaskStateModule, TaskStateModule } from './task-state';
+import { ITaskTypeModule, TaskTypeModule } from './task-type';
 import { IProjectModule, ProjectModule } from './project';
 import { IUserModule, UserModule } from './user';
 
@@ -24,6 +27,9 @@ export class Application extends EventEmitter implements IApplication {
   issueStates: IIssueStateModule;
   issueTypes: IIssueTypeModule;
   issues: IIssueModule;
+  taskStates: ITaskStateModule;
+  taskTypes: ITaskTypeModule;
+  tasks: ITaskModule;
 
   constructor({ address }: IApplicationConfig) {
     super();
@@ -37,6 +43,9 @@ export class Application extends EventEmitter implements IApplication {
     this.issueStates = new IssueStateModule(client);
     this.issueTypes = new IssueTypeModule(client);
     this.issues = new IssueModule(client);
+    this.taskStates = new TaskStateModule(client);
+    this.taskTypes = new TaskTypeModule(client);
+    this.tasks = new TaskModule(client);
   }
 
   isInitialized() {
@@ -93,6 +102,9 @@ export class Application extends EventEmitter implements IApplication {
       this.issueStates.load(),
       this.issueTypes.load(),
       this.issues.load(),
+      this.taskStates.load(),
+      this.taskTypes.load(),
+      this.tasks.load(),
     ]);
 
     this.isLoadedState = true;

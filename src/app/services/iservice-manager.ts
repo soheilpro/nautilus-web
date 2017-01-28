@@ -2,6 +2,7 @@ import { IActionManager } from '../actions';
 import { IApplication } from '../application';
 import { ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
+import { ITaskController } from '../tasks';
 import { IWindowManager } from '../windows';
 
 export interface IServiceManager {
@@ -15,4 +16,6 @@ export interface IServiceManager {
   getWindowManager(): IWindowManager;
   setIssueController(issueController: IIssueController): void;
   getIssueController(): IIssueController;
+  setTaskController(taskController: ITaskController): void;
+  getTaskController(): ITaskController;
 }

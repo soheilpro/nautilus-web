@@ -7,4 +7,7 @@ export * from './issue-state';
 export * from './issue-type';
 export * from './issue';
 export * from './project';
+export * from './task-state';
+export * from './task-type';
+export * from './task';
 export * from './user';
