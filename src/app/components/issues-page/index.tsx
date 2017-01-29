@@ -66,7 +66,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   getCommands() {
     return [
-      new NewTaskCommand(this.state.selectedIssue),
+      !!this.state.selectedIssue ? new NewTaskCommand(this.state.selectedIssue) : undefined,
     ];
   }
 
@@ -122,7 +122,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
         <div className="issues-page component">
           <div className="action-bar">
             <Button onClick={this.handleNewIssueButtonClick}><Icon name="plus" position="before" /> New Issue</Button>
-            <Button onClick={this.handleNewTaskButtonClick}><Icon name="plus" position="before" /> New Task</Button>
+            <Button onClick={this.handleNewTaskButtonClick} enabled={!!this.state.selectedIssue}><Icon name="plus" position="before" /> New Task</Button>
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="row container">

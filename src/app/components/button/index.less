@@ -16,6 +16,12 @@
     background-color: lighten(@primary, 5%);
   }
 
+  &:disabled {
+    background-color: lighten(desaturate(@primary, 100%), 30%);
+    border-color: lighten(desaturate(@primary, 100%), 30%);
+    cursor: default;
+  }
+
   &.secondary {
     border-color: @darkgray;
     background-color: @white;
@@ -23,6 +29,11 @@
 
     &:hover {
       color: @primary;
+    }
+
+    &:disabled {
+      color: lighten(desaturate(@text, 100%), 30%);
+      cursor: default;
     }
   }
 
@@ -33,6 +44,12 @@
 
     &:hover {
       background-color: lighten(@danger, 5%);
+    }
+
+    &:disabled {
+      background-color: lighten(desaturate(@danger, 100%), 30%);
+      border-color: lighten(desaturate(@danger, 100%), 30%);
+      cursor: default;
     }
   }
 }

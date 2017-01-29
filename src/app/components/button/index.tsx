@@ -5,6 +5,7 @@ require('./index.less');
 
 interface IButtonProps {
   type?: 'primary' | 'secondary' | 'submit' | 'destructive';
+  enabled?: boolean;
   autoFocus?: boolean;
   form?: string;
   className?: string;
@@ -17,6 +18,7 @@ interface IButtonState {
 export default class Button extends React.Component<IButtonProps, IButtonState> {
   static defaultProps = {
     type: 'primary',
+    enabled: true,
   };
 
   constructor() {
@@ -32,7 +34,7 @@ export default class Button extends React.Component<IButtonProps, IButtonState> 
 
   render() {
     return (
-      <button className={classNames('button component', this.props.type, this.props.className)} autoFocus={this.props.autoFocus} form={this.props.form} onClick={this.handleButtonClick}>{this.props.children}</button>
+      <button className={classNames('button component', this.props.type, this.props.className)} disabled={!this.props.enabled} autoFocus={this.props.autoFocus} form={this.props.form} onClick={this.handleButtonClick}>{this.props.children}</button>
     );
   }
 };
