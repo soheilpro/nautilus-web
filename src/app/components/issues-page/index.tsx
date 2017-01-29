@@ -49,8 +49,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   async componentDidMount() {
+    let issues = await this.application.issues.getAll();
+
     this.setState({
-      issues: await this.application.issues.getAll(),
+      issues: issues,
+      selectedIssue: issues[0],
     });
   }
 
@@ -70,18 +73,29 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private async handleApplicationIssuesAdd({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
+      selectedIssue: issue,
     });
   }
 
   private async handleApplicationIssuesUpdate({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
+      selectedIssue: issue,
     });
   }
 
   private async handleApplicationIssuesDelete({ issue }: { issue: IIssue }) {
+    let issues = await this.application.issues.getAll();
+    let issueIndex = this.state.issues.indexOf(issue);
+
+    if (issueIndex > issues.length - 1)
+      issueIndex = issues.length - 1;
+    else if (issueIndex < 0)
+      issueIndex = 0;
+
     this.setState({
-      issues: await this.application.issues.getAll(),
+      issues: issues,
+      selectedIssue: issues[issueIndex],
     });
   }
 
@@ -113,7 +127,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           </div>
           <div className="row container">
             <div className="list">
-              <IssueList issues={this.state.issues} onSelectedIssueChange={this.handleIssueListSelectedIssueChange} />
+              <IssueList issues={this.state.issues} selectedIssue={this.state.selectedIssue} onSelectedIssueChange={this.handleIssueListSelectedIssueChange} />
             </div>
             <div className="detail">
               {

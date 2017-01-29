@@ -15,6 +15,7 @@ require('./index.less');
 
 interface IIssueListProps {
   issues?: IIssue[];
+  selectedIssue?: IIssue;
   onSelectedIssueChange?(issue: IIssue): void;
 }
 
@@ -27,7 +28,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
   private commandManager = ServiceManager.Instance.getCommandManager();
   private issueController = ServiceManager.Instance.getIssueController();
 
-  constructor() {
+  constructor(props: IIssueListProps) {
     super();
 
     this.handleIssueListKeyDown = this.handleIssueListKeyDown.bind(this);
@@ -36,11 +37,19 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     this.handleIssueClick = this.handleIssueClick.bind(this);
     this.handleIssueDoubleClick = this.handleIssueDoubleClick.bind(this);
 
-    this.state = {};
+    this.state = {
+      selectedIssueIndex: props.issues.indexOf(props.selectedIssue),
+    };
   }
 
   componentWillMount() {
     this.commandManager.registerCommandProvider(this);
+  }
+
+  componentWillReceiveProps(nextProps: IIssueListProps) {
+    this.setState({
+      selectedIssueIndex: nextProps.issues.indexOf(nextProps.selectedIssue),
+    });
   }
 
   componentWillUnmount() {
