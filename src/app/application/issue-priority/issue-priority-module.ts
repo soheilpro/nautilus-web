@@ -17,7 +17,7 @@ export class IssuePriorityModule extends BaseModule implements IIssuePriorityMod
   }
 
   getAll() {
-    return this.issuePriorities;
+    return this.issuePriorities.slice();
   }
 
   get(IssuePriority: IIssuePriority) {

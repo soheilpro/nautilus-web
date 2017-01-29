@@ -17,7 +17,7 @@ export class IssueModule extends BaseModule implements IIssueModule {
   }
 
   getAll() {
-    return Promise.resolve(this.issues);
+    return Promise.resolve(this.issues.slice());
   }
 
   search(query: string) {

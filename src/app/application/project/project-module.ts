@@ -16,7 +16,7 @@ export class ProjectModule extends BaseModule implements IProjectModule {
   }
 
   getAll() {
-    return this.projects;
+    return this.projects.slice();
   }
 
   get(project: IProject) {

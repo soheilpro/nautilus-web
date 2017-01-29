@@ -17,7 +17,7 @@ export class TaskStateModule extends BaseModule implements ITaskStateModule {
   }
 
   getAll() {
-    return this.taskStates;
+    return this.taskStates.slice();
   }
 
   get(TaskState: ITaskState) {

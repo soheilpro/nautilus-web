@@ -17,7 +17,7 @@ export class TaskTypeModule extends BaseModule implements ITaskTypeModule {
   }
 
   getAll() {
-    return this.taskTypes;
+    return this.taskTypes.slice();
   }
 
   get(TaskType: ITaskType) {

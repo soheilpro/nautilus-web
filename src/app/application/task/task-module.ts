@@ -18,7 +18,7 @@ export class TaskModule extends BaseModule implements ITaskModule {
   }
 
   getAll() {
-    return Promise.resolve(this.tasks);
+    return Promise.resolve(this.tasks.slice());
   }
 
   search(query: string) {

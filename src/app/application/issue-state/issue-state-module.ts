@@ -17,7 +17,7 @@ export class IssueStateModule extends BaseModule implements IIssueStateModule {
   }
 
   getAll() {
-    return this.issueStates;
+    return this.issueStates.slice();
   }
 
   get(IssueState: IIssueState) {
