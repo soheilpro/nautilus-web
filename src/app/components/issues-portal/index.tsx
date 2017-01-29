@@ -79,6 +79,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
   deleteIssue(issue: IIssue) {
     this.deleteIssueWindow = {
       content: <DeleteIssueWindow issue={issue} onConfirm={_.partial(this.handleDeleteIssueWindowConfirm, issue)} onCloseRequest={this.handleDeleteIssueWindowCloseRequest} />,
+      isModal: true,
     };
 
     this.windowManager.showWindow(this.deleteIssueWindow);

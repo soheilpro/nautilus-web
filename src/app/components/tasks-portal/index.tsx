@@ -76,6 +76,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
   deleteTask(task: ITask) {
     this.deleteTaskWindow = {
       content: <DeleteTaskWindow task={task} onConfirm={_.partial(this.handleDeleteTaskWindowConfirm, task)} onCloseRequest={this.handleDeleteTaskWindowCloseRequest} />,
+      isModal: true,
     };
 
     this.windowManager.showWindow(this.deleteTaskWindow);
