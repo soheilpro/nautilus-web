@@ -99,6 +99,8 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
     this.commandsWindow = {
       content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
       top: 20,
+      closeOnBlur: true,
+      closeOnEsc: true,
     };
 
     this.windowManager.showWindow(this.commandsWindow);

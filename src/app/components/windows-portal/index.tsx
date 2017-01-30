@@ -58,6 +58,8 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     extendedWindow.zIndex = this.lastZIndex++;
     extendedWindow.top = extendedWindow.top || 120;
     extendedWindow.width = extendedWindow.width || 600;
+    extendedWindow.closeOnBlur = extendedWindow.closeOnBlur || window.modal;
+    extendedWindow.closeOnEsc = extendedWindow.closeOnEsc || window.modal;
     extendedWindow.elementToFocusOnClose = document.activeElement as HTMLElement;
 
     this.setState(state => ({
@@ -81,7 +83,8 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     if (event.which === KeyCode.Escape) {
       event.preventDefault();
 
-      this.closeWindow(window);
+      if (window.closeOnEsc)
+        this.closeWindow(window);
     }
   }
 
@@ -90,7 +93,7 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
   }
 
   private handleContainerBlur(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
-    if (window.isModal)
+    if (!window.closeOnBlur)
       return;
 
     setTimeout(() => {
@@ -109,7 +112,7 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
           return (
             <div key={window.key}>
               {
-                window.isModal ?
+                window.modal ?
                   <div className="overlay" tabIndex={0} onFocus={_.partial(this.handleOverlayFocus, window)}></div>
                   : null
               }

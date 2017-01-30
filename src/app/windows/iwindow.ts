@@ -2,5 +2,7 @@ export interface IWindow {
   content: any;
   top?: number;
   width?: number;
-  isModal?: boolean;
+  modal?: boolean;
+  closeOnBlur?: boolean;
+  closeOnEsc?: boolean;
 }

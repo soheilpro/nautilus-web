@@ -57,7 +57,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
     this.addTaskWindow = {
       content: <AddEditTaskWindow mode="add" onAdd={_.partial(this.handleAddTaskWindowAdd, issue)} onCloseRequest={this.handleAddTaskWindowCloseRequest} />,
       width: 800,
-      isModal: true,
+      modal: true,
     };
 
     this.windowManager.showWindow(this.addTaskWindow);
@@ -67,7 +67,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
     this.editTaskWindow = {
       content: <AddEditTaskWindow mode="edit" task={task} onUpdate={_.partial(this.handleEditTaskWindowUpdate, task)} onCloseRequest={this.handleEditTaskWindowCloseRequest} />,
       width: 800,
-      isModal: true,
+      modal: true,
     };
 
     this.windowManager.showWindow(this.editTaskWindow);
@@ -76,7 +76,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
   deleteTask(task: ITask) {
     this.deleteTaskWindow = {
       content: <DeleteTaskWindow task={task} onConfirm={_.partial(this.handleDeleteTaskWindowConfirm, task)} onCloseRequest={this.handleDeleteTaskWindowCloseRequest} />,
-      isModal: true,
+      modal: true,
     };
 
     this.windowManager.showWindow(this.deleteTaskWindow);

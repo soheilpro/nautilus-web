@@ -44,6 +44,8 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
     this.searchWindow = {
       content: <SearchWindow onIssueSelect={this.handleSearchWindowIssueSelect} />,
       top: 20,
+      closeOnBlur: true,
+      closeOnEsc: true,
     };
 
     this.windowManager.showWindow(this.searchWindow);

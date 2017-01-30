@@ -60,7 +60,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
     this.addIssueWindow = {
       content: <AddEditIssueWindow mode="add" onAdd={this.handleAddIssueWindowAdd} onCloseRequest={this.handleAddIssueWindowCloseRequest} />,
       width: 800,
-      isModal: true,
+      modal: true,
     };
 
     this.windowManager.showWindow(this.addIssueWindow);
@@ -70,7 +70,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
     this.editIssueWindow = {
       content: <AddEditIssueWindow mode="edit" issue={issue} onUpdate={_.partial(this.handleEditIssueWindowUpdate, issue)} onCloseRequest={this.handleEditIssueWindowCloseRequest} />,
       width: 800,
-      isModal: true,
+      modal: true,
     };
 
     this.windowManager.showWindow(this.editIssueWindow);
@@ -79,7 +79,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
   deleteIssue(issue: IIssue) {
     this.deleteIssueWindow = {
       content: <DeleteIssueWindow issue={issue} onConfirm={_.partial(this.handleDeleteIssueWindowConfirm, issue)} onCloseRequest={this.handleDeleteIssueWindowCloseRequest} />,
-      isModal: true,
+      modal: true,
     };
 
     this.windowManager.showWindow(this.deleteIssueWindow);
