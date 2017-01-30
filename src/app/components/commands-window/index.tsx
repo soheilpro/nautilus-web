@@ -36,20 +36,16 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      if (this.state.selectedCommandIndex < this.state.commands.length - 1) {
-        this.setState({
-          selectedCommandIndex: this.state.selectedCommandIndex + 1
-        });
-      }
+      this.setState({
+        selectedCommandIndex: this.state.selectedCommandIndex < this.state.commands.length - 1 ? this.state.selectedCommandIndex + 1 : 0,
+      });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      if (this.state.selectedCommandIndex > 0) {
-        this.setState({
-          selectedCommandIndex: this.state.selectedCommandIndex - 1
-        });
-      }
+      this.setState({
+        selectedCommandIndex: this.state.selectedCommandIndex > 0 ? this.state.selectedCommandIndex - 1 : this.state.commands.length - 1,
+      });
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
