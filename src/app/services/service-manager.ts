@@ -1,6 +1,7 @@
 import { IApplication } from '../application';
 import { IActionManager } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
+import { ISearchController } from '../search';
 import { IIssueController } from '../issues';
 import { ITaskController } from '../tasks';
 import { IWindowManager } from '../windows';
@@ -13,6 +14,7 @@ export class ServiceManager implements IServiceManager {
   private actionManager: IActionManager;
   private commandManager: ICommandManager;
   private commandController: ICommandController;
+  private searchController: ISearchController;
   private issueController: IIssueController;
   private taskController: ITaskController;
   private windowManager: IWindowManager;
@@ -47,6 +49,14 @@ export class ServiceManager implements IServiceManager {
 
   getCommandController() {
     return this.commandController;
+  }
+
+  setSearchController(searchController: ISearchController) {
+    this.searchController = searchController;
+  }
+
+  getSearchController() {
+    return this.searchController;
   }
 
   setIssueController(issueController: IIssueController) {

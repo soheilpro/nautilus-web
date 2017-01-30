@@ -1,10 +1,9 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
+import { ServiceManager } from '../../services';
 
 export default class SearchCommand extends BaseCommand {
-  constructor(private onExecute: Function) {
-    super();
-  }
+  private searchController = ServiceManager.Instance.getSearchController();
 
   get id() {
     return 'search';
@@ -19,6 +18,6 @@ export default class SearchCommand extends BaseCommand {
   }
 
   execute() {
-    this.onExecute();
+    this.searchController.showSearchWindow();
   }
 }

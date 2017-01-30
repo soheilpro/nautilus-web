@@ -1,6 +1,7 @@
 import { IActionManager } from '../actions';
 import { IApplication } from '../application';
 import { ICommandController, ICommandManager } from '../commands';
+import { ISearchController } from '../search';
 import { IIssueController } from '../issues';
 import { ITaskController } from '../tasks';
 import { IWindowManager } from '../windows';
@@ -16,6 +17,8 @@ export interface IServiceManager {
   getWindowManager(): IWindowManager;
   setCommandController(commandController: ICommandController): void;
   getCommandController(): ICommandController;
+  setSearchController(searchController: ISearchController): void;
+  getSearchController(): ISearchController;
   setIssueController(issueController: IIssueController): void;
   getIssueController(): IIssueController;
   setTaskController(taskController: ITaskController): void;
