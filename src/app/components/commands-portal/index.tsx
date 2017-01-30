@@ -107,8 +107,9 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
   }
 
   private handleCommandsWindowSelect(command: ICommand) {
-    this.windowManager.closeWindow(this.commandsWindow);
-    command.execute();
+    this.windowManager.closeWindow(this.commandsWindow, () => {
+      command.execute();
+    });
   }
 
   render() {

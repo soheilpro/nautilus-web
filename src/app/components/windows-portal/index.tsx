@@ -52,7 +52,7 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     ServiceManager.Instance.setWindowManager(undefined);
   }
 
-  showWindow(window: IWindow) {
+  showWindow(window: IWindow, callback?: () => any) {
     let extendedWindow: IExtendedWindow = window;
     extendedWindow.key = this.lastKey++;
     extendedWindow.zIndex = this.lastZIndex++;
@@ -65,14 +65,14 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
     this.setState(state => ({
       windows: state.windows.concat(extendedWindow),
       elementToFocus: null,
-    }));
+    }), callback);
   }
 
-  closeWindow(window: any) {
+  closeWindow(window: IExtendedWindow, callback?: () => any) {
     this.setState(state => ({
       windows: state.windows.filter(x => x !== window),
       elementToFocus: window.elementToFocusOnClose,
-    }));
+    }), callback);
   }
 
   private handleOverlayFocus(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
