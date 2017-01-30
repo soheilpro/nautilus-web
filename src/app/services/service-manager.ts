@@ -1,6 +1,6 @@
 import { IApplication } from '../application';
 import { IActionManager } from '../actions';
-import { ICommandManager } from '../commands';
+import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ITaskController } from '../tasks';
 import { IWindowManager } from '../windows';
@@ -12,6 +12,7 @@ export class ServiceManager implements IServiceManager {
   private application: IApplication;
   private actionManager: IActionManager;
   private commandManager: ICommandManager;
+  private commandController: ICommandController;
   private issueController: IIssueController;
   private taskController: ITaskController;
   private windowManager: IWindowManager;
@@ -38,6 +39,14 @@ export class ServiceManager implements IServiceManager {
 
   getCommandManager() {
     return this.commandManager;
+  }
+
+  setCommandController(commandController: ICommandController) {
+    this.commandController = commandController;
+  }
+
+  getCommandController() {
+    return this.commandController;
   }
 
   setIssueController(issueController: IIssueController) {

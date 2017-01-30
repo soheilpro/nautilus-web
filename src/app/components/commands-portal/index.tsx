@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ICommandProvider, ICommand } from '../../commands';
+import { ICommandProvider, ICommand, ICommandController } from '../../commands';
 import { KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
@@ -13,7 +13,7 @@ interface ICommandsPortalProps {
 interface ICommandsPortalState {
 }
 
-export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandProvider {
+export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowManager = ServiceManager.Instance.getWindowManager();
   private keyboardEvents: KeyboardEvent[] = [];
@@ -23,13 +23,13 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
     super();
 
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
-    this.handleViewCommandsCommandExecute = this.handleViewCommandsCommandExecute.bind(this);
     this.handleCommandsWindowSelect = this.handleCommandsWindowSelect.bind(this);
 
     this.state = {};
   }
 
   componentWillMount() {
+    ServiceManager.Instance.setCommandController(this);
     this.commandManager.registerCommandProvider(this);
     document.addEventListener('keydown', this.handleDocumentKeyDown);
   }
@@ -37,11 +37,23 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleDocumentKeyDown);
     this.commandManager.unregisterCommandProvider(this);
+    ServiceManager.Instance.setCommandController(undefined);
+  }
+
+  showCommandsWindow() {
+    this.commandsWindow = {
+      content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
+      top: 20,
+      closeOnBlur: true,
+      closeOnEsc: true,
+    };
+
+    this.windowManager.showWindow(this.commandsWindow);
   }
 
   getCommands() {
     return [
-      new ViewCommandsCommand(this.handleViewCommandsCommandExecute),
+      new ViewCommandsCommand(),
       new UndoCommand(),
     ];
   }
@@ -92,17 +104,6 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
         // Wait for more events
       }
     }
-  }
-
-  private handleViewCommandsCommandExecute() {
-    this.commandsWindow = {
-      content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
-      top: 20,
-      closeOnBlur: true,
-      closeOnEsc: true,
-    };
-
-    this.windowManager.showWindow(this.commandsWindow);
   }
 
   private handleCommandsWindowSelect(command: ICommand) {

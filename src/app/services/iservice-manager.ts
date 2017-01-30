@@ -1,6 +1,6 @@
 import { IActionManager } from '../actions';
 import { IApplication } from '../application';
-import { ICommandManager } from '../commands';
+import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ITaskController } from '../tasks';
 import { IWindowManager } from '../windows';
@@ -14,6 +14,8 @@ export interface IServiceManager {
   getCommandManager(): ICommandManager;
   setWindowManager(windowManager: IWindowManager): void;
   getWindowManager(): IWindowManager;
+  setCommandController(commandController: ICommandController): void;
+  getCommandController(): ICommandController;
   setIssueController(issueController: IIssueController): void;
   getIssueController(): IIssueController;
   setTaskController(taskController: ITaskController): void;

@@ -1,10 +1,9 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
+import { ServiceManager } from '../../services';
 
 export default class ViewCommandsCommand extends BaseCommand {
-  constructor(private onExecute: Function) {
-    super();
-  }
+  private commandController = ServiceManager.Instance.getCommandController();
 
   get id() {
     return 'view-commands';
@@ -23,6 +22,6 @@ export default class ViewCommandsCommand extends BaseCommand {
   }
 
   execute() {
-    this.onExecute();
+    this.commandController.showCommandsWindow();
   }
 }
