@@ -52,9 +52,8 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
   }
 
   private handleSearchWindowIssueSelect(issue: IIssue) {
-    // TODO
-
     this.windowManager.closeWindow(this.searchWindow);
+    // TODO
   }
 
   render() {
