@@ -66,7 +66,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   getCommands() {
     return [
-      !!this.state.selectedIssue ? new NewTaskCommand(this.state.selectedIssue) : undefined,
+      new NewTaskCommand(this.state.selectedIssue),
     ];
   }
 

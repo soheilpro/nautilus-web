@@ -10,12 +10,12 @@ export abstract class BaseCommand implements ICommand {
     return null;
   }
 
-  get isHidden() {
-    return false;
+  get visible() {
+    return true;
   }
 
-  get isDisabled() {
-    return false;
+  get enabled() {
+    return true;
   }
 
   abstract execute(): void;

@@ -22,6 +22,10 @@ export default class NewTaskCommand extends BaseCommand {
     return [{ keyCode: KeyCode.T }];
   }
 
+  get enabled() {
+    return !!this.issue;
+  }
+
   execute() {
     this.taskController.addTask(this.issue);
   }

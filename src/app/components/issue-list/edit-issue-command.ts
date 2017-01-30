@@ -11,7 +11,7 @@ export default class EditIssueCommand extends BaseCommand {
   }
 
   get id() {
-    return `edit-issue-${this.issue.id}`;
+    return 'edit-issue';
   }
 
   get name() {
@@ -20,6 +20,10 @@ export default class EditIssueCommand extends BaseCommand {
 
   get shortcut() {
     return [{ keyCode: KeyCode.Enter }];
+  }
+
+  get enabled() {
+    return !!this.issue;
   }
 
   execute() {

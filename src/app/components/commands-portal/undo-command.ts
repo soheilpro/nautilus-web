@@ -17,8 +17,8 @@ export default class UndoCommand extends BaseCommand {
     return [{ keyCode: KeyCode.Z }];
   }
 
-  get isDisabled() {
-    return this.actionManager.getActions().length === 0;
+  get enabled() {
+    return this.actionManager.getActions().length > 0;
   }
 
   execute() {

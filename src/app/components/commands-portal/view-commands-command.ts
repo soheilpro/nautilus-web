@@ -18,8 +18,8 @@ export default class ViewCommandsCommand extends BaseCommand {
     return [{ keyCode: KeyCode.P }];
   }
 
-  get isHidden() {
-    return true;
+  get visible() {
+    return false;
   }
 
   execute() {

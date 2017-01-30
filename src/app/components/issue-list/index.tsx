@@ -68,8 +68,8 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
     let selectedIssue = this.props.issues[this.state.selectedIssueIndex];
 
     return [
-      selectedIssue ? new EditIssueCommand(selectedIssue) : undefined,
-      selectedIssue ? new DeleteIssueCommand(selectedIssue) : undefined,
+      new EditIssueCommand(selectedIssue),
+      new DeleteIssueCommand(selectedIssue),
     ];
   }
 

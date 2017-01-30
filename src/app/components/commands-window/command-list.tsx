@@ -23,7 +23,8 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
   }
 
   private handleCommandClick(command: ICommand) {
-    this.props.onSelect(command);
+    if (command.enabled)
+      this.props.onSelect(command);
   }
 
   render() {
@@ -35,7 +36,7 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
               {
                 this.props.commands.map((command, index) => {
                   return (
-                    <a className={classNames('command', {'selected': index === this.props.selectedCommandIndex})} onClick={_.partial(this.handleCommandClick, command)} key={command.id}>
+                    <a className={classNames('command', {'disabled': !command.enabled, 'selected': index === this.props.selectedCommandIndex})} onClick={_.partial(this.handleCommandClick, command)} key={command.id}>
                       <span className="title">
                         {command.name}
                       </span>

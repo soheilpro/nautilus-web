@@ -52,7 +52,9 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
 
       if (this.state.commands.length > 0) {
         let command = this.state.commands[this.state.selectedCommandIndex];
-        this.props.onSelect(command);
+
+        if (command.enabled)
+          this.props.onSelect(command);
       }
     }
   }
@@ -67,7 +69,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
   }
 
   private filter(commands: ICommand[], query: string) {
-    return commands.filter(command => !command.isHidden && command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return commands.filter(command => command.visible && command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
   render() {

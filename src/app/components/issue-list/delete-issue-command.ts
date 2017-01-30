@@ -11,7 +11,7 @@ export default class DeleteIssueCommand extends BaseCommand {
   }
 
   get id() {
-    return `delete-issue-${this.issue.id}`;
+    return 'delete-issue';
   }
 
   get name() {
@@ -20,6 +20,10 @@ export default class DeleteIssueCommand extends BaseCommand {
 
   get shortcut() {
     return [{ keyCode: KeyCode.Delete }];
+  }
+
+  get enabled() {
+    return !!this.issue;
   }
 
   execute() {
