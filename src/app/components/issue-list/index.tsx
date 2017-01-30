@@ -16,6 +16,7 @@ require('./index.less');
 interface IIssueListProps {
   issues?: IIssue[];
   selectedIssue?: IIssue;
+  autoFocus?: boolean;
   onSelectedIssueChange?(issue: IIssue): void;
 }
 
@@ -27,6 +28,7 @@ interface IIssueListState {
 export default class IssueList extends React.Component<IIssueListProps, IIssueListState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private issueController = ServiceManager.Instance.getIssueController();
+  private componentElement: HTMLElement;
 
   constructor(props: IIssueListProps) {
     super();
@@ -44,6 +46,11 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
 
   componentWillMount() {
     this.commandManager.registerCommandProvider(this);
+  }
+
+  componentDidMount() {
+    if (this.props.autoFocus)
+      this.componentElement.focus();
   }
 
   componentWillReceiveProps(nextProps: IIssueListProps) {
@@ -121,7 +128,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
 
   render() {
     return (
-      <div className={classNames('issue-list component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleIssueListKeyDown} onFocus={this.handleIssueListFocus} onBlur={this.handleIssueListBlur}>
+      <div className={classNames('issue-list component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleIssueListKeyDown} onFocus={this.handleIssueListFocus} onBlur={this.handleIssueListBlur} ref={e => this.componentElement = e}>
         {
           this.props.issues.map((issue, index) => {
             return (
