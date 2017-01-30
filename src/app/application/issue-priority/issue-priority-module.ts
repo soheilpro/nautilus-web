@@ -21,6 +21,6 @@ export class IssuePriorityModule extends BaseModule implements IIssuePriorityMod
   }
 
   get(IssuePriority: IIssuePriority) {
-    return _.find(this.issuePriorities, entityComparer.bind(null, IssuePriority));
+    return _.find(this.issuePriorities, _.partial(entityComparer, IssuePriority));
   }
 }

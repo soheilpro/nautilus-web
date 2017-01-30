@@ -21,6 +21,6 @@ export class TaskTypeModule extends BaseModule implements ITaskTypeModule {
   }
 
   get(TaskType: ITaskType) {
-    return _.find(this.taskTypes, entityComparer.bind(null, TaskType));
+    return _.find(this.taskTypes, _.partial(entityComparer, TaskType));
   }
 }

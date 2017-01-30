@@ -1,6 +1,6 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
-import * as _ from 'underscore';
 
 require('./index.less');
 

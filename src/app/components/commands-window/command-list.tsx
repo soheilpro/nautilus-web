@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { ICommand } from '../../commands';
@@ -34,7 +35,7 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
               {
                 this.props.commands.map((command, index) => {
                   return (
-                    <a className={classNames('command', {'selected': index === this.props.selectedCommandIndex})} onClick={this.handleCommandClick.bind(null, command)} key={command.id}>
+                    <a className={classNames('command', {'selected': index === this.props.selectedCommandIndex})} onClick={_.partial(this.handleCommandClick, command)} key={command.id}>
                       <span className="title">
                         {command.name}
                       </span>

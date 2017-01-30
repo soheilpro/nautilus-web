@@ -21,6 +21,6 @@ export class IssueStateModule extends BaseModule implements IIssueStateModule {
   }
 
   get(IssueState: IIssueState) {
-    return _.find(this.issueStates, entityComparer.bind(null, IssueState));
+    return _.find(this.issueStates, _.partial(entityComparer, IssueState));
   }
 }

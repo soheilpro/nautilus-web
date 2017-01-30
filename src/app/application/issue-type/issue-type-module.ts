@@ -21,6 +21,6 @@ export class IssueTypeModule extends BaseModule implements IIssueTypeModule {
   }
 
   get(IssueType: IIssueType) {
-    return _.find(this.issueTypes, entityComparer.bind(null, IssueType));
+    return _.find(this.issueTypes, _.partial(entityComparer, IssueType));
   }
 }

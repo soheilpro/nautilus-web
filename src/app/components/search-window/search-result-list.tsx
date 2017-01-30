@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IIssue } from '../../application';
@@ -49,7 +50,7 @@ export default class SearchResultList extends React.Component<ISearchResultListP
               {
                 this.props.searchResults.map((searchResult, index) => {
                   return (
-                    <a className={classNames('search-result', {'selected': index === this.props.selectedSearchResultIndex})} onClick={this.handleSearchResultClick.bind(null, searchResult)} key={searchResult.key}>
+                    <a className={classNames('search-result', {'selected': index === this.props.selectedSearchResultIndex})} onClick={_.partial(this.handleSearchResultClick, searchResult)} key={searchResult.key}>
                       {this.renderSearchResult(searchResult)}
                     </a>
                   );

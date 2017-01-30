@@ -20,6 +20,6 @@ export class ProjectModule extends BaseModule implements IProjectModule {
   }
 
   get(project: IProject) {
-    return _.find(this.projects, entityComparer.bind(null, project));
+    return _.find(this.projects, _.partial(entityComparer, project));
   }
 }

@@ -20,6 +20,6 @@ export class UserModule extends BaseModule implements IUserModule {
   }
 
   get(user: IUser) {
-    return _.find(this.users, entityComparer.bind(null, user));
+    return _.find(this.users, _.partial(entityComparer, user));
   }
 }

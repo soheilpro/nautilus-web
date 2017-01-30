@@ -21,6 +21,6 @@ export class TaskStateModule extends BaseModule implements ITaskStateModule {
   }
 
   get(TaskState: ITaskState) {
-    return _.find(this.taskStates, entityComparer.bind(null, TaskState));
+    return _.find(this.taskStates, _.partial(entityComparer, TaskState));
   }
 }

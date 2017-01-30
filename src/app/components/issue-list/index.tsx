@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IIssue } from '../../application';
@@ -132,7 +133,7 @@ export default class IssueList extends React.Component<IIssueListProps, IIssueLi
         {
           this.props.issues.map((issue, index) => {
             return (
-              <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} onClick={this.handleIssueClick.bind(null, issue, index)} onDoubleClick={this.handleIssueDoubleClick.bind(null, issue, index)} key={issue.id}>
+              <div className={classNames('issue', { selected: this.state.selectedIssueIndex === index })} onClick={_.partial(this.handleIssueClick, issue, index)} onDoubleClick={_.partial(this.handleIssueDoubleClick, issue, index)} key={issue.id}>
                 <span className="sid">{issue.sid}</span>
                 <span className="title">{issue.title}</span>
                 {
