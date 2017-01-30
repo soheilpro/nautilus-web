@@ -43,7 +43,7 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
   getCommands() {
     return [
       new ViewCommandsCommand(this.handleViewCommandsCommandExecute),
-      new UndoCommand(this.actionManager),
+      new UndoCommand(),
     ];
   }
 

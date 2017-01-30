@@ -1,10 +1,12 @@
 import { IIssue } from '../../application';
 import { BaseCommand } from '../../commands';
-import { IIssueController } from '../../issues';
 import { KeyCode } from '../../keyboard';
+import { ServiceManager } from '../../services';
 
 export default class DeleteIssueCommand extends BaseCommand {
-  constructor(private issue: IIssue, private issueController: IIssueController) {
+  private issueController = ServiceManager.Instance.getIssueController();
+
+  constructor(private issue: IIssue) {
     super();
   }
 

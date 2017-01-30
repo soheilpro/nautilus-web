@@ -1,11 +1,9 @@
-import { IActionManager } from '../../actions';
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
+import { ServiceManager } from '../../services';
 
 export default class UndoCommand extends BaseCommand {
-  constructor(private actionManager: IActionManager) {
-    super();
-  }
+  private actionManager = ServiceManager.Instance.getActionManager();
 
   get id() {
     return 'undo';
