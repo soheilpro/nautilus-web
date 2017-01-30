@@ -1,7 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import { ITask, ITaskChange, IIssue } from '../../application';
-import { ICommandProvider, ICommand } from '../../commands';
 import { ITaskController } from '../../tasks';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
@@ -17,10 +16,9 @@ interface ITasksPortalProps {
 interface ITasksPortalState {
 }
 
-export default class TasksPortal extends React.Component<ITasksPortalProps, ITasksPortalState> implements ICommandProvider, ITaskController {
+export default class TasksPortal extends React.Component<ITasksPortalProps, ITasksPortalState> implements ITaskController {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
-  private commandManager = ServiceManager.Instance.getCommandManager();
   private windowManager = ServiceManager.Instance.getWindowManager();
   private addTaskWindow: IWindow;
   private editTaskWindow: IWindow;
@@ -41,16 +39,10 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
 
   componentWillMount() {
     ServiceManager.Instance.setTaskController(this);
-    this.commandManager.registerCommandProvider(this);
   }
 
   componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
     ServiceManager.Instance.setTaskController(undefined);
-  }
-
-  getCommands() {
-    return [] as ICommand[];
   }
 
   addTask(issue: IIssue) {

@@ -14,7 +14,6 @@ interface ICommandsPortalState {
 }
 
 export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandProvider {
-  private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowManager = ServiceManager.Instance.getWindowManager();
   private keyboardEvents: KeyboardEvent[] = [];
