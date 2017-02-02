@@ -14,15 +14,15 @@ interface IExtendedWindow extends IWindow {
 
 require('./index.less');
 
-interface IWindowsPortalProps {
+interface IWindowControllerProps {
 }
 
-interface IWindowsPortalState {
+interface IWindowControllerState {
   windows?: IExtendedWindow[];
   elementToFocus?: HTMLElement;
 }
 
-export default class WindowsPortal extends React.Component<IWindowsPortalProps, IWindowsPortalState> implements IWindowController {
+export default class WindowController extends React.Component<IWindowControllerProps, IWindowControllerState> implements IWindowController {
   private lastKey = 0;
   private lastZIndex = 1000;
 
@@ -106,7 +106,7 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
 
   render() {
     return (
-      <div className="windows-portal component">
+      <div className="window-controller component">
       {
         this.state.windows.map((window, index) => {
           return (

@@ -7,13 +7,13 @@ import { IWindow } from '../../windows';
 import SearchWindow from '../search-window';
 import SearchCommand from './search-command';
 
-interface ISearchPortalProps {
+interface ISearchControllerProps {
 }
 
-interface ISearchPortalState {
+interface ISearchControllerState {
 }
 
-export default class SearchPortal extends React.Component<ISearchPortalProps, ISearchPortalState> implements ISearchController, ICommandProvider {
+export default class SearchController extends React.Component<ISearchControllerProps, ISearchControllerState> implements ISearchController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private searchWindow: IWindow;
@@ -60,7 +60,7 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
 
   render() {
     return (
-      <div className="search-portal component">
+      <div className="search-controller component">
       </div>
     );
   }

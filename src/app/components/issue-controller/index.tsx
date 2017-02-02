@@ -12,13 +12,13 @@ import AddIssueAction from './add-issue-action';
 import UpdateIssueAction from './update-issue-action';
 import DeleteIssueAction from './delete-issue-action';
 
-interface IIssuesPortalProps {
+interface IIssueControllerProps {
 }
 
-interface IIssuesPortalState {
+interface IIssueControllerState {
 }
 
-export default class IssuesPortal extends React.Component<IIssuesPortalProps, IIssuesPortalState> implements ICommandProvider, IIssueController {
+export default class IssueController extends React.Component<IIssueControllerProps, IIssueControllerState> implements IIssueController, ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
@@ -114,7 +114,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
 
   render() {
     return (
-      <div className="issues-portal component">
+      <div className="issue-controller component">
       </div>
     );
   }

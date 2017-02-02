@@ -2,15 +2,15 @@ import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
-import ViewIssuesCommand from './view-issues-command';
-import CommandsPortal from '../commands-portal';
+import CommandController from '../command-controller';
+import IssueController from '../issue-controller';
+import SearchController from '../search-controller';
+import TaskController from '../task-controller';
+import WindowController from '../window-controller';
 import IssuesPage from '../issues-page';
-import IssuesPortal from '../issues-portal';
 import MilestonesPage from '../milestones-page';
 import ProjectsPage from '../projects-page';
-import SearchPortal from '../search-portal';
-import TasksPortal from '../tasks-portal';
-import WindowsPortal from '../windows-portal';
+import ViewIssuesCommand from './view-issues-command';
 
 interface IMainProps {
 }
@@ -38,11 +38,11 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
   render() {
     return (
       <div>
-        <WindowsPortal />
-        <CommandsPortal />
-        <SearchPortal />
-        <IssuesPortal />
-        <TasksPortal />
+        <WindowController />
+        <CommandController />
+        <SearchController />
+        <IssueController />
+        <TaskController />
         <Router history={browserHistory}>
           <Route path="/" component={IssuesPage}/>
           <Route path="/milestones" component={MilestonesPage}/>

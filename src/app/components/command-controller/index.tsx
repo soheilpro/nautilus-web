@@ -7,13 +7,13 @@ import ViewCommandsCommand from './view-commands-command';
 import CommandsWindow from '../commands-window';
 import UndoCommand from './undo-command';
 
-interface ICommandsPortalProps {
+interface ICommandControllerProps {
 }
 
-interface ICommandsPortalState {
+interface ICommandControllerState {
 }
 
-export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandController, ICommandProvider {
+export default class CommandController extends React.Component<ICommandControllerProps, ICommandControllerState> implements ICommandController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private keyboardEvents: KeyboardEvent[] = [];
@@ -114,7 +114,7 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
 
   render() {
     return (
-      <div className="commands-portal component">
+      <div className="command-controller component">
       </div>
     );
   }

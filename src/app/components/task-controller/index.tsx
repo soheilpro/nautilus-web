@@ -10,13 +10,13 @@ import AddTaskAction from './add-task-action';
 import UpdateTaskAction from './update-task-action';
 import DeleteTaskAction from './delete-task-action';
 
-interface ITasksPortalProps {
+interface ITaskControllerProps {
 }
 
-interface ITasksPortalState {
+interface ITaskControllerState {
 }
 
-export default class TasksPortal extends React.Component<ITasksPortalProps, ITasksPortalState> implements ITaskController {
+export default class TaskController extends React.Component<ITaskControllerProps, ITaskControllerState> implements ITaskController {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private windowController = ServiceManager.Instance.getWindowController();
@@ -103,7 +103,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
 
   render() {
     return (
-      <div className="tasks-portal component">
+      <div className="task-controller component">
       </div>
     );
   }
