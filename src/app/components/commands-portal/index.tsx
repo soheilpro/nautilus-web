@@ -15,7 +15,7 @@ interface ICommandsPortalState {
 
 export default class CommandsPortal extends React.Component<ICommandsPortalProps, ICommandsPortalState> implements ICommandController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private windowManager = ServiceManager.Instance.getWindowManager();
+  private windowController = ServiceManager.Instance.getWindowController();
   private keyboardEvents: KeyboardEvent[] = [];
   private commandsWindow: IWindow;
 
@@ -48,7 +48,7 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
       closeOnEsc: true,
     };
 
-    this.windowManager.showWindow(this.commandsWindow);
+    this.windowController.showWindow(this.commandsWindow);
   }
 
   getCommands() {
@@ -107,7 +107,7 @@ export default class CommandsPortal extends React.Component<ICommandsPortalProps
   }
 
   private handleCommandsWindowSelect(command: ICommand) {
-    this.windowManager.closeWindow(this.commandsWindow, () => {
+    this.windowController.closeWindow(this.commandsWindow, () => {
       command.execute();
     });
   }

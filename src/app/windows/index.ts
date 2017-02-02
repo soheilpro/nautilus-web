@@ -1,2 +1,2 @@
 export * from './iwindow';
-export * from './iwindow-manager';
+export * from './iwindow-controller';

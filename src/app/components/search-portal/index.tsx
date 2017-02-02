@@ -15,7 +15,7 @@ interface ISearchPortalState {
 
 export default class SearchPortal extends React.Component<ISearchPortalProps, ISearchPortalState> implements ISearchController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private windowManager = ServiceManager.Instance.getWindowManager();
+  private windowController = ServiceManager.Instance.getWindowController();
   private searchWindow: IWindow;
 
   constructor() {
@@ -44,7 +44,7 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
       closeOnEsc: true,
     };
 
-    this.windowManager.showWindow(this.searchWindow);
+    this.windowController.showWindow(this.searchWindow);
   }
 
   getCommands() {
@@ -54,7 +54,7 @@ export default class SearchPortal extends React.Component<ISearchPortalProps, IS
   }
 
   private handleSearchWindowIssueSelect(issue: IIssue) {
-    this.windowManager.closeWindow(this.searchWindow);
+    this.windowController.closeWindow(this.searchWindow);
     // TODO
   }
 

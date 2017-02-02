@@ -22,7 +22,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private windowManager = ServiceManager.Instance.getWindowManager();
+  private windowController = ServiceManager.Instance.getWindowController();
   private addIssueWindow: IWindow;
   private editIssueWindow: IWindow;
   private deleteIssueWindow: IWindow;
@@ -63,7 +63,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
       modal: true,
     };
 
-    this.windowManager.showWindow(this.addIssueWindow);
+    this.windowController.showWindow(this.addIssueWindow);
   }
 
   editIssue(issue: IIssue) {
@@ -73,7 +73,7 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
       modal: true,
     };
 
-    this.windowManager.showWindow(this.editIssueWindow);
+    this.windowController.showWindow(this.editIssueWindow);
   }
 
   deleteIssue(issue: IIssue) {
@@ -82,34 +82,34 @@ export default class IssuesPortal extends React.Component<IIssuesPortalProps, II
       modal: true,
     };
 
-    this.windowManager.showWindow(this.deleteIssueWindow);
+    this.windowController.showWindow(this.deleteIssueWindow);
   }
 
   private handleAddIssueWindowAdd(issue: IIssue) {
     this.actionManager.execute(new AddIssueAction(issue, this.application));
-    this.windowManager.closeWindow(this.addIssueWindow);
+    this.windowController.closeWindow(this.addIssueWindow);
   }
 
   private handleAddIssueWindowCloseRequest() {
-    this.windowManager.closeWindow(this.addIssueWindow);
+    this.windowController.closeWindow(this.addIssueWindow);
   }
 
   private handleEditIssueWindowUpdate(issue: IIssue, issueChange: IIssueChange) {
     this.actionManager.execute(new UpdateIssueAction(issue, issueChange, this.application));
-    this.windowManager.closeWindow(this.editIssueWindow);
+    this.windowController.closeWindow(this.editIssueWindow);
   }
 
   private handleEditIssueWindowCloseRequest() {
-    this.windowManager.closeWindow(this.editIssueWindow);
+    this.windowController.closeWindow(this.editIssueWindow);
   }
 
   private handleDeleteIssueWindowConfirm(issue: IIssue) {
     this.actionManager.execute(new DeleteIssueAction(issue, this.application));
-    this.windowManager.closeWindow(this.deleteIssueWindow);
+    this.windowController.closeWindow(this.deleteIssueWindow);
   }
 
   private handleDeleteIssueWindowCloseRequest() {
-    this.windowManager.closeWindow(this.deleteIssueWindow);
+    this.windowController.closeWindow(this.deleteIssueWindow);
   }
 
   render() {

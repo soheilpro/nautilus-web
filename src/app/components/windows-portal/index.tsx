@@ -2,7 +2,7 @@ import * as _ from 'underscore';
 import * as React from 'react';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
-import { IWindow, IWindowManager } from '../../windows';
+import { IWindow, IWindowController } from '../../windows';
 
 interface IExtendedWindow extends IWindow {
   key?: number;
@@ -22,7 +22,7 @@ interface IWindowsPortalState {
   elementToFocus?: HTMLElement;
 }
 
-export default class WindowsPortal extends React.Component<IWindowsPortalProps, IWindowsPortalState> implements IWindowManager {
+export default class WindowsPortal extends React.Component<IWindowsPortalProps, IWindowsPortalState> implements IWindowController {
   private lastKey = 0;
   private lastZIndex = 1000;
 
@@ -40,7 +40,7 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
   }
 
   componentWillMount() {
-    ServiceManager.Instance.setWindowManager(this);
+    ServiceManager.Instance.setWindowController(this);
   }
 
   componentDidUpdate() {
@@ -49,7 +49,7 @@ export default class WindowsPortal extends React.Component<IWindowsPortalProps, 
   }
 
   componentWillUnmount() {
-    ServiceManager.Instance.setWindowManager(undefined);
+    ServiceManager.Instance.setWindowController(undefined);
   }
 
   showWindow(window: IWindow, callback?: () => any) {

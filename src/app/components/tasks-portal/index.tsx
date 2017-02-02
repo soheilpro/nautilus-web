@@ -19,7 +19,7 @@ interface ITasksPortalState {
 export default class TasksPortal extends React.Component<ITasksPortalProps, ITasksPortalState> implements ITaskController {
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
-  private windowManager = ServiceManager.Instance.getWindowManager();
+  private windowController = ServiceManager.Instance.getWindowController();
   private addTaskWindow: IWindow;
   private editTaskWindow: IWindow;
   private deleteTaskWindow: IWindow;
@@ -52,7 +52,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
       modal: true,
     };
 
-    this.windowManager.showWindow(this.addTaskWindow);
+    this.windowController.showWindow(this.addTaskWindow);
   }
 
   editTask(task: ITask) {
@@ -62,7 +62,7 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
       modal: true,
     };
 
-    this.windowManager.showWindow(this.editTaskWindow);
+    this.windowController.showWindow(this.editTaskWindow);
   }
 
   deleteTask(task: ITask) {
@@ -71,34 +71,34 @@ export default class TasksPortal extends React.Component<ITasksPortalProps, ITas
       modal: true,
     };
 
-    this.windowManager.showWindow(this.deleteTaskWindow);
+    this.windowController.showWindow(this.deleteTaskWindow);
   }
 
   private handleAddTaskWindowAdd(issue: IIssue, task: ITask) {
     this.actionManager.execute(new AddTaskAction(task, issue, this.application));
-    this.windowManager.closeWindow(this.addTaskWindow);
+    this.windowController.closeWindow(this.addTaskWindow);
   }
 
   private handleAddTaskWindowCloseRequest() {
-    this.windowManager.closeWindow(this.addTaskWindow);
+    this.windowController.closeWindow(this.addTaskWindow);
   }
 
   private handleEditTaskWindowUpdate(task: ITask, taskChange: ITaskChange) {
     this.actionManager.execute(new UpdateTaskAction(task, taskChange, this.application));
-    this.windowManager.closeWindow(this.editTaskWindow);
+    this.windowController.closeWindow(this.editTaskWindow);
   }
 
   private handleEditTaskWindowCloseRequest() {
-    this.windowManager.closeWindow(this.editTaskWindow);
+    this.windowController.closeWindow(this.editTaskWindow);
   }
 
   private handleDeleteTaskWindowConfirm(task: ITask) {
     this.actionManager.execute(new DeleteTaskAction(task, this.application));
-    this.windowManager.closeWindow(this.deleteTaskWindow);
+    this.windowController.closeWindow(this.deleteTaskWindow);
   }
 
   private handleDeleteTaskWindowCloseRequest() {
-    this.windowManager.closeWindow(this.deleteTaskWindow);
+    this.windowController.closeWindow(this.deleteTaskWindow);
   }
 
   render() {
