@@ -26,6 +26,10 @@ export default class WindowController extends React.Component<IWindowControllerP
   private lastKey = 0;
   private lastZIndex = 1000;
 
+  private get commandController() {
+    return ServiceManager.Instance.getCommandController();
+  }
+
   constructor() {
     super();
 
@@ -66,6 +70,9 @@ export default class WindowController extends React.Component<IWindowControllerP
       windows: state.windows.concat(extendedWindow),
       elementToFocus: null,
     }), callback);
+
+    if (window.modal)
+      this.commandController.disableCommandShortcuts();
   }
 
   closeWindow(window: IExtendedWindow, callback?: () => any) {
@@ -73,6 +80,9 @@ export default class WindowController extends React.Component<IWindowControllerP
       windows: state.windows.filter(x => x !== window),
       elementToFocus: window.elementToFocusOnClose,
     }), callback);
+
+    if (window.modal)
+      this.commandController.enableCommandShortcuts();
   }
 
   private handleOverlayFocus(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {

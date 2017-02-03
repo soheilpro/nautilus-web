@@ -16,6 +16,7 @@ interface ICommandControllerState {
 export default class CommandController extends React.Component<ICommandControllerProps, ICommandControllerState> implements ICommandController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
+  private commandShortcutsDisabledCounter: number = 0;
   private keyboardEvents: KeyboardEvent[] = [];
   private commandsWindow: IWindow;
 
@@ -40,6 +41,14 @@ export default class CommandController extends React.Component<ICommandControlle
     ServiceManager.Instance.setCommandController(undefined);
   }
 
+  disableCommandShortcuts() {
+    this.commandShortcutsDisabledCounter++;
+  }
+
+  enableCommandShortcuts() {
+    this.commandShortcutsDisabledCounter--;
+  }
+
   showCommandsWindow() {
     this.commandsWindow = {
       content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
@@ -59,6 +68,9 @@ export default class CommandController extends React.Component<ICommandControlle
   }
 
   private handleDocumentKeyDown(event: KeyboardEvent) {
+    if (this.commandShortcutsDisabledCounter > 0)
+      return;
+
     if (isInputEvent(event))
       return;
 
