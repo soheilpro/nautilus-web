@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { IProject, ITaskState, ITaskType, ITask, ITaskChange, IUser } from '../../application';
+import { ITaskState, ITaskType, ITask, ITaskChange, IUser } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
-import ProjectDropdown from '../project-dropdown';
 import TaskTypeDropdown from '../task-type-dropdown';
 import TaskStateDropdown from '../task-state-dropdown';
 import UserDropdown from '../user-dropdown';
@@ -20,7 +19,6 @@ interface IAddEditTaskWindowProps {
 
 interface IAddEditTaskWindowState {
   title?: string;
-  project?: IProject;
   type?: ITaskType;
   state?: ITaskState;
   assignedTo?: IUser;
@@ -33,7 +31,6 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleTitleInputChange = this.handleTitleInputChange.bind(this);
-    this.handleProjectDropdownChange = this.handleProjectDropdownChange.bind(this);
     this.handleTypeInputChange = this.handleTypeInputChange.bind(this);
     this.handleStateInputChange = this.handleStateInputChange.bind(this);
     this.handleAssignedToInputChange = this.handleAssignedToInputChange.bind(this);
@@ -43,7 +40,6 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
 
     if (props.task) {
       this.state.title = props.task.title;
-      this.state.project = props.task.project;
       this.state.type = props.task.type;
       this.state.state = props.task.state;
       this.state.assignedTo = props.task.assignedTo;
@@ -62,7 +58,6 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
           description: this.state.description,
           state: this.state.state,
           assignedTo: this.state.assignedTo,
-          project: this.state.project,
         };
 
         this.props.onAdd(task);
@@ -75,7 +70,6 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
           description: this.state.description || null,
           state: this.state.state || null,
           assignedTo: this.state.assignedTo || null,
-          project: this.state.project || null,
         };
 
         this.props.onUpdate(taskChange);
@@ -86,12 +80,6 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
   private handleTitleInputChange(value: string) {
     this.setState({
       title: value,
-    });
-  }
-
-  private handleProjectDropdownChange(value: IProject) {
-    this.setState({
-      project: value,
     });
   }
 
@@ -142,14 +130,6 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
               </div>
               <div className="value">
                 <Input className="title" value={this.state.title} autoFocus={true} selectOnFocus={true} onChange={this.handleTitleInputChange} />
-              </div>
-            </div>
-            <div className="field">
-              <div className="label">
-                Project:
-              </div>
-              <div className="value">
-                <ProjectDropdown className="project" project={this.state.project} onChange={this.handleProjectDropdownChange} />
               </div>
             </div>
             <div className="field">
