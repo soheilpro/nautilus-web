@@ -106,7 +106,8 @@ export default class CommandController extends React.Component<ICommandControlle
 
       // Fully matching command
       if (command.shortcut.length === this.keyboardEvents.length) {
-        command.execute();
+        if (command.enabled)
+          command.execute();
 
         event.preventDefault();
         this.keyboardEvents = [];
