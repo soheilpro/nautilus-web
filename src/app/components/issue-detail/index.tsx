@@ -3,14 +3,14 @@ import { IIssue } from '../../application';
 
 require('./index.less');
 
-interface IssueDetailProps {
+interface IIssueDetailProps {
   issue: IIssue;
 }
 
 interface IIssueDetailState {
 }
 
-export default class IssueDetail extends React.Component<IssueDetailProps, IIssueDetailState> {
+export default class IssueDetail extends React.Component<IIssueDetailProps, IIssueDetailState> {
   render() {
     return (
       <div className="issue-detail component">

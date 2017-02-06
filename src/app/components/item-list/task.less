@@ -1,0 +1,31 @@
+@import '../../assets/stylesheets/common';
+
+.task.component {
+  display: flex;
+
+  .arrow {
+    margin-left: 15px;
+
+    &:before {
+      content: '\21b3';
+      color: @darkgray;
+    }
+  }
+
+  .type {
+    margin-left: 10px;
+  }
+
+  .title {
+    margin-left: 10px;
+    width: 100%;
+  }
+
+  .state {
+    margin-left: 20px;
+  }
+
+  .assigned-to {
+    margin-left: 20px;
+  }
+}

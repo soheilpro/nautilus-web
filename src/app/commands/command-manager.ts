@@ -19,7 +19,8 @@ export class CommandManager implements ICommandManager {
 
     for (let commandProvider of this.commandProviders)
       for (let command of commandProvider.getCommands())
-        commands.push(command);
+        if (command)
+          commands.push(command);
 
     return commands;
   }

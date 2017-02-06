@@ -21,7 +21,7 @@ export class IssueModule extends BaseModule implements IIssueModule {
   }
 
   search(query: string) {
-    let issues = this.issues.filter(item => item.title && item.title.indexOf(query) !== -1);
+    let issues = this.issues.filter(issue => issue.title && issue.title.indexOf(query) !== -1);
 
     return Promise.resolve(issues);
   }

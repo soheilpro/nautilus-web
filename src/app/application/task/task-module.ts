@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import { IClient } from '../../sdk';
+import { entityComparer } from '../entity-comparer';
 import { BaseModule } from '../base-module';
 import { IIssue } from '../issue';
 import { ITask } from './itask';
@@ -21,8 +22,14 @@ export class TaskModule extends BaseModule implements ITaskModule {
     return Promise.resolve(this.tasks.slice());
   }
 
+  getAllForIssues(issues: IIssue[]) {
+    let tasks = this.tasks.filter(task => issues.some(issue => entityComparer(task.parent, issue)));
+
+    return Promise.resolve(tasks);
+  }
+
   search(query: string) {
-    let tasks = this.tasks.filter(item => item.title && item.title.indexOf(query) !== -1);
+    let tasks = this.tasks.filter(task => task.title && task.title.indexOf(query) !== -1);
 
     return Promise.resolve(tasks);
   }
