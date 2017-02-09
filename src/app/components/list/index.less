@@ -1,0 +1,18 @@
+@import '../../assets/stylesheets/common';
+
+.list.component {
+  .item {
+    border-bottom: 1px solid @gray;
+    padding: 5px 7px;
+
+    &.selected {
+      background-color: #f6f6f6;
+    }
+  }
+
+  &.focused {
+    .item.selected {
+      background-color: #e9e9e9;
+    }
+  }
+}

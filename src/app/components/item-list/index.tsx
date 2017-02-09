@@ -1,10 +1,9 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import * as classNames from 'classnames';
-import { IItem } from '../../application';
-import { KeyCode } from '../../keyboard';
+import { IItem, IIssue, ITask, isIssue, isTask } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
+import List from '../list';
 import Issue from './issue';
 import Task from './task';
 import EditIssueCommand from './edit-issue-command';
@@ -15,34 +14,33 @@ import DeleteTaskCommand from './delete-task-command';
 require('./index.less');
 
 interface IItemListProps {
-  items?: IItem[];
+  issues?: IIssue[];
+  tasks?: ITask[];
   selectedItem?: IItem;
   autoFocus?: boolean;
-  onSelectedItemChange?(item: IItem): void;
+  onItemSelect?(item: IItem): void;
 }
 
 interface IItemListState {
-  isFocused?: boolean;
-  selectedItemIndex?: number;
+  items?: IItem[];
+  selectedItem?: IItem;
 }
 
 export default class ItemList extends React.Component<IItemListProps, IItemListState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private issueController = ServiceManager.Instance.getIssueController();
   private taskController = ServiceManager.Instance.getTaskController();
-  private componentElement: HTMLElement;
 
   constructor(props: IItemListProps) {
     super();
 
-    this.handleItemListKeyDown = this.handleItemListKeyDown.bind(this);
-    this.handleItemListFocus = this.handleItemListFocus.bind(this);
-    this.handleItemListBlur = this.handleItemListBlur.bind(this);
-    this.handleItemClick = this.handleItemClick.bind(this);
-    this.handleItemDoubleClick = this.handleItemDoubleClick.bind(this);
+    this.handleItemSelect = this.handleItemSelect.bind(this);
+    this.handleItemAction = this.handleItemAction.bind(this);
+    this.renderItem = this.renderItem.bind(this);
 
     this.state = {
-      selectedItemIndex: props.items.indexOf(props.selectedItem),
+      items: this.combineAndSortItems(props.issues, props.tasks),
+      selectedItem: props.selectedItem,
     };
   }
 
@@ -50,14 +48,10 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     this.commandManager.registerCommandProvider(this);
   }
 
-  componentDidMount() {
-    if (this.props.autoFocus)
-      this.componentElement.focus();
-  }
-
   componentWillReceiveProps(nextProps: IItemListProps) {
     this.setState({
-      selectedItemIndex: nextProps.items.indexOf(nextProps.selectedItem),
+      items: this.combineAndSortItems(nextProps.issues, nextProps.tasks),
+      selectedItem: nextProps.selectedItem,
     });
   }
 
@@ -66,81 +60,83 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   }
 
   getCommands() {
-    let selectedItem = this.props.items[this.state.selectedItemIndex];
+    let selectedItem = this.state.selectedItem;
 
     return [
-      selectedItem && selectedItem.kind === 'issue' ? new EditIssueCommand(selectedItem) : undefined,
-      selectedItem && selectedItem.kind === 'issue' ? new DeleteIssueCommand(selectedItem) : undefined,
-      selectedItem && selectedItem.kind === 'task' ? new EditTaskCommand(selectedItem) : undefined,
-      selectedItem && selectedItem.kind === 'task' ? new DeleteTaskCommand(selectedItem) : undefined,
+      isIssue(selectedItem) ? new EditIssueCommand(selectedItem) : undefined,
+      isIssue(selectedItem) ? new DeleteIssueCommand(selectedItem) : undefined,
+      isTask(selectedItem) ? new EditTaskCommand(selectedItem) : undefined,
+      isTask(selectedItem) ? new DeleteTaskCommand(selectedItem) : undefined,
     ];
   }
 
-  private handleItemListKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (event.which === KeyCode.DownArrow) {
-      event.preventDefault();
+  private handleItemSelect(item: IItem) {
+    if (this.props.onItemSelect)
+      this.props.onItemSelect(item);
 
-      if (this.state.selectedItemIndex < this.props.items.length - 1) {
-        let selectedItemIndex = this.state.selectedItemIndex + 1;
-
-        this.setState({
-          selectedItemIndex: selectedItemIndex,
-        });
-
-        this.props.onSelectedItemChange(this.props.items[selectedItemIndex]);
-      }
-    }
-    else if (event.which === KeyCode.UpArrow) {
-      event.preventDefault();
-
-      if (this.state.selectedItemIndex > 0) {
-        let selectedItemIndex = this.state.selectedItemIndex - 1;
-
-        this.setState({
-          selectedItemIndex: selectedItemIndex,
-        });
-
-        this.props.onSelectedItemChange(this.props.items[selectedItemIndex]);
-      }
-    }
-  }
-
-  private handleItemListFocus() {
     this.setState({
-      isFocused: true,
+      selectedItem: item,
     });
   }
 
-  private handleItemListBlur() {
-    this.setState({
-      isFocused: false,
-    });
-  }
-
-  private handleItemClick(item: IItem, index: number) {
-    if (this.props.onSelectedItemChange)
-      this.props.onSelectedItemChange(item);
-
-    this.setState({
-      selectedItemIndex: index,
-    });
-  }
-
-  private handleItemDoubleClick(item: IItem, index: number) {
-    if (item.kind === 'issue')
+  private handleItemAction(item: IItem) {
+    if (isIssue(item))
       return this.issueController.editIssue(item);
 
-    if (item.kind === 'task')
+    if (isTask(item))
       return this.taskController.editTask(item);
 
     throw new Error('Not supported.');
   }
 
+  private combineAndSortItems(issues: IIssue[], tasks: ITask[]) {
+    let items = issues.concat(tasks);
+
+    items.sort((x: IItem, y: IItem) => {
+      let xNodes = [] as IItem[];
+
+      if (x.parent)
+        xNodes.push(_.find(items, item => item.id === x.parent.id));
+
+      xNodes.reverse();
+      xNodes.push(x);
+
+      let yNodes = [] as IItem[];
+
+      if (y.parent)
+        yNodes.push(_.find(items, item => item.id === y.parent.id));
+
+      yNodes.reverse();
+      yNodes.push(y);
+
+      for (let i = 0; ; i++) {
+        let xNode = xNodes[i];
+        let yNode = yNodes[i];
+
+        if (!xNode && !yNode)
+          return 0;
+
+        if (!xNode)
+          return -1;
+
+        if (!yNode)
+          return 1;
+
+        let result = xNode.sid.localeCompare(yNode.sid) * -1;
+
+        if (result !== 0)
+          return result;
+      }
+    });
+
+    return items;
+  }
+
   renderItem(item: IItem) {
-    if (item.kind === 'issue')
+    if (isIssue(item))
       return <Issue issue={item} />;
 
-    if (item.kind === 'task')
+    if (isTask(item))
       return <Task task={item} />;
 
     throw new Error('Not supported.');
@@ -148,16 +144,8 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
   render() {
     return (
-      <div className={classNames('item-list component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleItemListKeyDown} onFocus={this.handleItemListFocus} onBlur={this.handleItemListBlur} ref={e => this.componentElement = e}>
-        {
-          this.props.items.map((item, index) => {
-            return (
-              <div className={classNames('item', { selected: this.state.selectedItemIndex === index })} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id}>
-                {this.renderItem(item)}
-              </div>
-            );
-          })
-        }
+      <div className="item-list component">
+        <List items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={this.props.autoFocus} renderItem={this.renderItem} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} />
       </div>
     );
   }

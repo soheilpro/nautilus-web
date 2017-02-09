@@ -1,7 +1,7 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import { ICommandProvider } from '../../commands';
-import { IItem, IIssue, ITask } from '../../application';
+import { IItem, IIssue, ITask, asIssue, isIssue, isTask } from '../../application';
 import { ServiceManager } from '../../services';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
@@ -19,8 +19,7 @@ interface IIssuesPageProps {
 interface IIssuesPageState {
   issues?: IIssue[];
   tasks?: ITask[];
-  selectedIssue?: IIssue;
-  selectedTask?: ITask;
+  selectedItem?: IItem;
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
@@ -41,7 +40,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleNewIssueButtonClick = this.handleNewIssueButtonClick.bind(this);
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
-    this.handleItemListSelectedItemChange = this.handleItemListSelectedItemChange.bind(this);
+    this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
 
     this.state = {
       issues: [],
@@ -66,8 +65,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.setState({
       issues: issues,
       tasks: tasks,
-      selectedIssue: _.last(issues),
-      selectedTask: null,
+      selectedItem: _.last(issues),
     });
   }
 
@@ -83,23 +81,21 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   getCommands() {
     return [
-      new NewTaskCommand(this.state.selectedIssue),
+      new NewTaskCommand(asIssue(this.state.selectedItem)),
     ];
   }
 
   private async handleApplicationIssuesAdd({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
-      selectedIssue: issue,
-      selectedTask: null,
+      selectedItem: issue,
     });
   }
 
   private async handleApplicationIssuesUpdate({ issue }: { issue: IIssue }) {
     this.setState({
       issues: await this.application.issues.getAll(),
-      selectedIssue: issue,
-      selectedTask: null,
+      selectedItem: issue,
     });
   }
 
@@ -114,24 +110,21 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
     this.setState({
       issues: issues,
-      selectedIssue: issues[issueIndex],
-      selectedTask: null,
+      selectedItem: issues[issueIndex],
     });
   }
 
   private async handleApplicationTasksAdd({ task }: { task: ITask }) {
     this.setState({
       tasks: await this.application.tasks.getAll(),
-      selectedTask: task,
-      selectedIssue: null,
+      selectedItem: task,
     });
   }
 
   private async handleApplicationTasksUpdate({ task }: { task: ITask }) {
     this.setState({
       tasks: await this.application.tasks.getAll(),
-      selectedTask: task,
-      selectedIssue: null,
+      selectedItem: task,
     });
   }
 
@@ -146,8 +139,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
     this.setState({
       tasks: tasks,
-      selectedTask: tasks[taskIndex],
-      selectedIssue: null,
+      selectedItem: tasks[taskIndex],
     });
   }
 
@@ -156,86 +148,40 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private handleNewTaskButtonClick() {
-    this.taskController.addTask(this.state.selectedIssue);
+    this.taskController.addTask(asIssue(this.state.selectedItem));
   }
 
   private handleRefreshButtonClick() {
   }
 
-  private handleItemListSelectedItemChange(item: IIssue) {
+  private handleItemListItemSelect(item: IIssue) {
     this.setState({
-      selectedIssue: item.kind === 'issue' ? item : null,
-      selectedTask: item.kind === 'task' ? item : null,
+      selectedItem: item,
     });
-  }
-
-  private getSortedItems() {
-    let items = this.state.issues.concat(this.state.tasks);
-
-    items.sort((x: IItem, y: IItem) => {
-      let xNodes = [] as IItem[];
-
-      if (x.parent)
-        xNodes.push(_.find(items, item => item.id === x.parent.id));
-
-      xNodes.reverse();
-      xNodes.push(x);
-
-      let yNodes = [] as IItem[];
-
-      if (y.parent)
-        yNodes.push(_.find(items, item => item.id === y.parent.id));
-
-      yNodes.reverse();
-      yNodes.push(y);
-
-      for (let i = 0; ; i++) {
-        let xNode = xNodes[i];
-        let yNode = yNodes[i];
-
-        if (!xNode && !yNode)
-          return 0;
-
-        if (!xNode)
-          return -1;
-
-        if (!yNode)
-          return 1;
-
-        let result = xNode.sid.localeCompare(yNode.sid) * -1;
-
-        if (result !== 0)
-          return result;
-      }
-    });
-
-    return items;
   }
 
   render() {
-    let items = this.getSortedItems();
-
     return (
       <MasterPage>
         <div className="issues-page component">
           <div className="action-bar">
             <Button onClick={this.handleNewIssueButtonClick}><Icon name="plus" position="before" /> New Issue</Button>
-            <Button onClick={this.handleNewTaskButtonClick} enabled={!!this.state.selectedIssue}><Icon name="plus" position="before" /> New Task</Button>
+            <Button onClick={this.handleNewTaskButtonClick} enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</Button>
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="row container">
             <div className="list">
-              <ItemList items={items} selectedItem={this.state.selectedIssue || this.state.selectedTask} autoFocus={true} onSelectedItemChange={this.handleItemListSelectedItemChange} />
+              <ItemList issues={this.state.issues} tasks={this.state.tasks} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />
             </div>
             <div className="detail">
               {
-                this.state.selectedIssue ?
-                  <IssueDetail issue={this.state.selectedIssue} />
+                isIssue(this.state.selectedItem) ?
+                  <IssueDetail issue={this.state.selectedItem} />
                   : null
               }
               {
-                this.state.selectedTask ?
-                  <TaskDetail task={this.state.selectedTask} />
+                isTask(this.state.selectedItem) ?
+                  <TaskDetail task={this.state.selectedItem} />
                   : null
               }
             </div>
