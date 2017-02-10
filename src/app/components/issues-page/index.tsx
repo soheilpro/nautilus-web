@@ -56,7 +56,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
     this.setState({
       items: items,
-      selectedItem: _.last(items),
+      selectedItem: _.last(items.filter(isIssue)),
     });
   }
 

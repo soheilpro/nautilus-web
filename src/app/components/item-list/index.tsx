@@ -90,28 +90,30 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   }
 
   private sortItems(items: IItem[]) {
-    items = items.slice();
+    let findItemById = _.memoize((id: string) => {
+      return _.find(items, item => item.id === id);
+    });
 
-    items.sort((x: IItem, y: IItem) => {
-      let xNodes = [] as IItem[];
+    let getParents = (item: IItem): IItem[] => {
+      if (!item.parent)
+        return [];
 
-      if (x.parent)
-        xNodes.push(_.find(items, item => item.id === x.parent.id));
+      let parent = findItemById(item.parent.id);
 
-      xNodes.reverse();
-      xNodes.push(x);
+      return getParents(parent).concat(parent);
+    };
 
-      let yNodes = [] as IItem[];
+    let itemsWithPath = items.map(item => {
+      return {
+        item: item,
+        path: getParents(item).concat(item).map(item => item.sid),
+      };
+    });
 
-      if (y.parent)
-        yNodes.push(_.find(items, item => item.id === y.parent.id));
-
-      yNodes.reverse();
-      yNodes.push(y);
-
+    itemsWithPath.sort((x, y) => {
       for (let i = 0; ; i++) {
-        let xNode = xNodes[i];
-        let yNode = yNodes[i];
+        let xNode = x.path[i];
+        let yNode = y.path[i];
 
         if (!xNode && !yNode)
           return 0;
@@ -122,14 +124,14 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
         if (!yNode)
           return 1;
 
-        let result = -1 * xNode.sid.localeCompare(yNode.sid);
+        let result = -1 * xNode.localeCompare(yNode);
 
         if (result !== 0)
           return result;
       }
     });
 
-    return items;
+    return itemsWithPath.map(itemWithPath => itemWithPath.item);
   }
 
   renderItem(item: IItem) {
