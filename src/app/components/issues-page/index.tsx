@@ -88,17 +88,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleApplicationItemsDelete({ item }: { item: IItem }) {
-    let items = await this.application.items.getAll();
-    let itemIndex = this.state.items.indexOf(item);
-
-    if (itemIndex > items.length - 1)
-      itemIndex = items.length - 1;
-    else if (itemIndex < 0)
-      itemIndex = 0;
-
     this.setState({
-      items: items,
-      selectedItem: items[itemIndex],
+      items: await this.application.items.getAll(),
+      selectedItem: undefined,
     });
   }
 

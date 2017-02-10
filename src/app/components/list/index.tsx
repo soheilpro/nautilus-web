@@ -47,8 +47,29 @@ export default class List extends React.Component<IListProps, IListState> {
   }
 
   componentWillReceiveProps(nextProps: IListProps) {
+    let selectedItem = nextProps.selectedItem;
+
+    if (!selectedItem) {
+
+      // Handle deleted item
+      if (nextProps.items.indexOf(this.state.selectedItem) === -1) {
+        let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
+
+        if (selectedItemIndex > nextProps.items.length - 1)
+          selectedItemIndex = nextProps.items.length - 1;
+        else if (selectedItemIndex < 0)
+          selectedItemIndex = 0;
+
+        selectedItem = nextProps.items[selectedItemIndex];
+
+        if (selectedItem)
+          if (nextProps.onItemSelect)
+            nextProps.onItemSelect(selectedItem);
+      }
+    }
+
     this.setState({
-      selectedItem: nextProps.selectedItem,
+      selectedItem: selectedItem,
     });
   }
 
