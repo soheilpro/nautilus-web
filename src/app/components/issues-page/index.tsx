@@ -11,6 +11,7 @@ import Button from '../button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IIssuesPageProps {
@@ -121,7 +122,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   render() {
     return (
       <MasterPage>
-        <div className="issues-page component">
+        <div className="issues-page-component">
           <div className="action-bar">
             <Button onClick={this.handleNewIssueButtonClick}><Icon name="plus" position="before" /> New Issue</Button>
             <Button onClick={this.handleNewTaskButtonClick} enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</Button>

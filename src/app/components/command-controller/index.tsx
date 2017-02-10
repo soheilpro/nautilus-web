@@ -127,7 +127,7 @@ export default class CommandController extends React.Component<ICommandControlle
 
   render() {
     return (
-      <div className="command-controller component">
+      <div className="command-controller-component">
       </div>
     );
   }

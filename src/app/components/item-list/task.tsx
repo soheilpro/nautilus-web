@@ -4,6 +4,7 @@ import TaskTypeField from '../task-type-field';
 import TaskStateField from '../task-state-field';
 import UserField from '../user-field';
 
+require('../../assets/stylesheets/base.less');
 require('./task.less');
 
 interface ITaskProps {
@@ -16,7 +17,7 @@ interface ITaskState {
 export default class Task extends React.Component<ITaskProps, ITaskState> {
   render() {
     return (
-      <div className="task component">
+      <div className="task-component">
         <span className="sid">{this.props.task.sid}</span>
         <span className="arrow"></span>
         {

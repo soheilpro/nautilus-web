@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IIssuePriority } from '../../application';
 import { ServiceManager } from '../../services';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IIssuePriorityFieldProps {
@@ -21,7 +22,7 @@ export default class IssuePriorityField extends React.Component<IIssuePriorityFi
     let issuePriority = this.application.issuePriorities.get(this.props.issuePriority);
 
     return (
-      <div className="issue-priority-field component">
+      <div className="issue-priority-field-component">
         {issuePriority.title}
       </div>
     );

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IProject } from '../../application';
 import { ServiceManager } from '../../services';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IProjectFieldProps {
@@ -21,7 +22,7 @@ export default class ProjectField extends React.Component<IProjectFieldProps, IP
     let project = this.application.projects.get(this.props.project);
 
     return (
-      <div className="project-field component">
+      <div className="project-field-component">
         {project.name}
       </div>
     );

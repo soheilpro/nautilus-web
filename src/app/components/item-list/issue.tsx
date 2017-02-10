@@ -5,6 +5,7 @@ import IssueTypeField from '../issue-type-field';
 import IssuePriorityField from '../issue-priority-field';
 import IssueStateField from '../issue-state-field';
 
+require('../../assets/stylesheets/base.less');
 require('./issue.less');
 
 interface IIssueProps {
@@ -17,7 +18,7 @@ interface IIssueState {
 export default class Issue extends React.Component<IIssueProps, IIssueState> {
   render() {
     return (
-      <div className="issue component">
+      <div className="issue-component">
         <span className="sid">{this.props.issue.sid}</span>
         <span className="title">{this.props.issue.title}</span>
         {

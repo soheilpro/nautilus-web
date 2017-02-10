@@ -2,6 +2,7 @@ import * as React from 'react';
 import Header from '../header';
 import Navigation from '../navigation';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IMasterPageProps {
@@ -13,7 +14,7 @@ interface IMasterPageState {
 export default class MasterPage extends React.Component<IMasterPageProps, IMasterPageState> {
   render() {
     return (
-      <div className="master-page component">
+      <div className="master-page-component">
         <div className="header">
           <Header />
         </div>

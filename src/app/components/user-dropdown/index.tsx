@@ -39,7 +39,7 @@ export default class UserDropdown extends React.Component<IUserDropdownProps, IU
 
   render() {
     return (
-      <Dropdown className={classNames('user-type-dropdown component', this.props.className)} selectedItem={this.props.user} items={this.state.users} displayProperty="name" onChange={this.handleDropdownChange} />
+      <Dropdown className={classNames('user-type-dropdown-component', this.props.className)} selectedItem={this.props.user} items={this.state.users} displayProperty="name" onChange={this.handleDropdownChange} />
     );
   }
 };

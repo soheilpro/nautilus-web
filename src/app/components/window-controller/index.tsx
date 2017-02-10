@@ -12,6 +12,7 @@ interface IExtendedWindow extends IWindow {
   elementToFocusOnClose?: HTMLElement;
 }
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IWindowControllerProps {
@@ -116,7 +117,7 @@ export default class WindowController extends React.Component<IWindowControllerP
 
   render() {
     return (
-      <div className="window-controller component">
+      <div className="window-controller-component">
       {
         this.state.windows.map((window, index) => {
           return (

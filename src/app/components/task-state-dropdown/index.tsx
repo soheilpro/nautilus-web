@@ -39,7 +39,7 @@ export default class TaskStateDropdown extends React.Component<ITaskStateDropdow
 
   render() {
     return (
-      <Dropdown className={classNames('task-state-dropdown component', this.props.className)} selectedItem={this.props.taskState} items={this.state.taskStates} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Dropdown className={classNames('task-state-dropdown-component', this.props.className)} selectedItem={this.props.taskState} items={this.state.taskStates} displayProperty="title" onChange={this.handleDropdownChange} />
     );
   }
 };

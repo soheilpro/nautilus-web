@@ -4,6 +4,7 @@ import * as classNames from 'classnames';
 import { IIssue } from '../../application';
 import { ISearchResult } from './isearch-result';
 
+require('../../assets/stylesheets/base.less');
 require('./search-result-list.less');
 
 interface ISearchResultListProps {
@@ -43,7 +44,7 @@ export default class SearchResultList extends React.Component<ISearchResultListP
 
   render() {
     return (
-      <div className="search-result-list component">
+      <div className="search-result-list-component">
         {
           this.props.searchResults.length > 0 ?
             <div className="search-results">

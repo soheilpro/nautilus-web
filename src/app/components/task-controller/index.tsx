@@ -103,7 +103,7 @@ export default class TaskController extends React.Component<ITaskControllerProps
 
   render() {
     return (
-      <div className="task-controller component">
+      <div className="task-controller-component">
       </div>
     );
   }

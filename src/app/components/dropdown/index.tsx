@@ -2,6 +2,7 @@ import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IDropdownItem {
@@ -36,7 +37,7 @@ export default class Dropdown extends React.Component<IDropdownProps, IDropdownS
 
   render() {
     return (
-      <select className={classNames('dropdown component', this.props.className)} value={this.props.selectedItem ? this.props.selectedItem.id : ''} onChange={this.handleSelectChange}>
+      <select className={classNames('dropdown-component', this.props.className)} value={this.props.selectedItem ? this.props.selectedItem.id : ''} onChange={this.handleSelectChange}>
         <option></option>
         {
           this.props.items.map(item => {

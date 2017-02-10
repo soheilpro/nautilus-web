@@ -39,7 +39,7 @@ export default class IssuePriorityDropdown extends React.Component<IIssuePriorit
 
   render() {
     return (
-      <Dropdown className={classNames('issue-priority-dropdown component', this.props.className)} selectedItem={this.props.issuePriority} items={this.state.issuePriorities} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Dropdown className={classNames('issue-priority-dropdown-component', this.props.className)} selectedItem={this.props.issuePriority} items={this.state.issuePriorities} displayProperty="title" onChange={this.handleDropdownChange} />
     );
   }
 };

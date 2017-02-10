@@ -3,6 +3,7 @@ import { ServiceManager } from '../../services';
 import Input from '../input';
 import Button from '../button';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface ILoginProps {
@@ -65,7 +66,7 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
 
   render() {
     return (
-      <div className="login component">
+      <div className="login-component">
         <div className="container">
             <div className="title">nautilus</div>
             <form onSubmit={this.handleFormSubmit}>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IInputProps {
@@ -56,9 +57,9 @@ export default class Input extends React.Component<IInputProps, IInputState> {
   render() {
     return (
       this.props.multiline ?
-        <textarea className={classNames('input component', this.props.className)} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onFocus={this.handleTextAreaFocus} onChange={this.handleTextAreaChange} />
+        <textarea className={classNames('input-component', this.props.className)} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onFocus={this.handleTextAreaFocus} onChange={this.handleTextAreaChange} />
         :
-        <input className={classNames('input component', this.props.className)} type={this.props.secret ? 'password' : 'text'} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onFocus={this.handleInputFocus} onChange={this.handleInputChange} />
+        <input className={classNames('input-component', this.props.className)} type={this.props.secret ? 'password' : 'text'} value={this.props.value} placeholder={this.props.placeholder} autoFocus={this.props.autoFocus} onFocus={this.handleInputFocus} onChange={this.handleInputChange} />
     );
   }
 };

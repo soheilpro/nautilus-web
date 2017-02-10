@@ -60,7 +60,7 @@ export default class SearchController extends React.Component<ISearchControllerP
 
   render() {
     return (
-      <div className="search-controller component">
+      <div className="search-controller-component">
       </div>
     );
   }

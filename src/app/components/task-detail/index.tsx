@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ITask } from '../../application';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface ITaskDetailProps {
@@ -13,7 +14,7 @@ interface ITaskDetailState {
 export default class TaskDetail extends React.Component<ITaskDetailProps, ITaskDetailState> {
   render() {
     return (
-      <div className="task-detail component">
+      <div className="task-detail-component">
         <div className="header">Task #{this.props.task.sid}</div>
       </div>
     );

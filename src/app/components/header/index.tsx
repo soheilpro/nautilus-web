@@ -3,6 +3,7 @@ import { IndexLink } from 'react-router';
 import { ServiceManager } from '../../services';
 import Avatar from '../avatar';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IHeaderProps {
@@ -18,7 +19,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     let user = this.application.users.get(this.application.getSession().user);
 
     return (
-      <div className="header component">
+      <div className="header-component">
         <div className="row">
           <div className="main">
             <IndexLink className="title" to="/">nautilus</IndexLink>

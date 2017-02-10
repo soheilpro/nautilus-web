@@ -15,7 +15,7 @@ interface IDeleteIssueWindowState {
 export default class DeleteIssueWindow extends React.Component<IDeleteIssueWindowProps, IDeleteIssueWindowState> {
   render() {
     return (
-      <Window className="delete-issue-window component">
+      <Window className="delete-issue-window-component">
         <WindowHeader>Delete Issue</WindowHeader>
         <WindowContent>
           Are you sure you want to delete issue #{this.props.issue.sid}?

@@ -7,6 +7,7 @@ import TaskStateDropdown from '../task-state-dropdown';
 import UserDropdown from '../user-dropdown';
 import Button from '../button';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IAddEditTaskWindowProps {
@@ -109,7 +110,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
 
   render() {
     return (
-      <Window className="add-edit-task-window component">
+      <Window className="add-edit-task-window-component">
         <WindowHeader>
           {
             this.props.mode === 'add' ?

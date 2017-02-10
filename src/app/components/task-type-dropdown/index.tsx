@@ -39,7 +39,7 @@ export default class TaskTypeDropdown extends React.Component<ITaskTypeDropdownP
 
   render() {
     return (
-      <Dropdown className={classNames('task-type-dropdown component', this.props.className)} selectedItem={this.props.taskType} items={this.state.taskTypes} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Dropdown className={classNames('task-type-dropdown-component', this.props.className)} selectedItem={this.props.taskType} items={this.state.taskTypes} displayProperty="title" onChange={this.handleDropdownChange} />
     );
   }
 };

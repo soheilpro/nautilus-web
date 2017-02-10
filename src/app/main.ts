@@ -6,8 +6,6 @@ import { CommandManager } from './commands';
 import { ServiceManager } from './services';
 import App from './components/app';
 
-require('./assets/stylesheets/main.less');
-
 ServiceManager.Instance = new ServiceManager();
 
 let application = new Application({ address: 'http://localhost:3000' });

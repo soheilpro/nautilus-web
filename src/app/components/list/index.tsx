@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IItemListProps {
@@ -104,7 +105,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
   render() {
     return (
-      <div className={classNames('list component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleListKeyDown} onFocus={this.handleListFocus} onBlur={this.handleListBlur} ref={e => this.componentElement = e}>
+      <div className={classNames('list-component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleListKeyDown} onFocus={this.handleListFocus} onBlur={this.handleListBlur} ref={e => this.componentElement = e}>
         {
           this.props.items.map((item, index) => {
             return (

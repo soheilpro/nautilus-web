@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+require('../../assets/stylesheets/base.less');
 require ('./search-guide.less');
 
 interface ISearchGuideProps {
@@ -11,7 +12,7 @@ interface ISearchGuideState {
 export default class SearchGuide extends React.Component<ISearchGuideProps, ISearchGuideState> {
   render() {
     return (
-      <div className="search-guide component">
+      <div className="search-guide-component">
         <div className="header">Examples:</div>
         <div className="example">
           <div className="query">api</div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ITaskType } from '../../application';
 import { ServiceManager } from '../../services';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface ITaskTypeFieldProps {
@@ -21,7 +22,7 @@ export default class TaskTypeField extends React.Component<ITaskTypeFieldProps, 
     let taskType = this.application.taskTypes.get(this.props.taskType);
 
     return (
-      <div className="task-type-field component">
+      <div className="task-type-field-component">
         {taskType.title}
       </div>
     );

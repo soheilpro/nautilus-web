@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Input from '../input';
 
+require('../../assets/stylesheets/base.less');
 require('./search-options.less');
 
 interface ISearchOptionsProps {
@@ -31,7 +32,7 @@ export default class SearchOptions extends React.Component<ISearchOptionsProps, 
 
   render() {
     return (
-      <div className="search-options component">
+      <div className="search-options-component">
         <Input className="query" placeholder="Search issues, milestones, projects, users..." value={this.state.query} autoFocus={this.props.autoFocus} onChange={this.handleQueryChange} />
       </div>
     );

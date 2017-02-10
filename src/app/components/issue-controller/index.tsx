@@ -114,7 +114,7 @@ export default class IssueController extends React.Component<IIssueControllerPro
 
   render() {
     return (
-      <div className="issue-controller component">
+      <div className="issue-controller-component">
       </div>
     );
   }

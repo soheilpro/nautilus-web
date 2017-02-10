@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Input from '../input';
 
+require('../../assets/stylesheets/base.less');
 require('./command-search.less');
 
 interface ICommandSearchProps {
@@ -31,7 +32,7 @@ export default class CommandSearch extends React.Component<ICommandSearchProps, 
 
   render() {
     return (
-      <div className="command-search component">
+      <div className="command-search-component">
         <Input className="query" placeholder="Search commands" value={this.state.query} autoFocus={this.props.autoFocus} onChange={this.handleQueryChange} />
       </div>
     );

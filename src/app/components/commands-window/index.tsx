@@ -6,6 +6,7 @@ import Window from '../window';
 import CommandList from './command-list';
 import CommandSearch from './command-search';
 
+require('../../assets/stylesheets/base.less');
 require ('./index.less');
 
 interface ICommandsWindowProps {
@@ -74,7 +75,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
 
   render() {
     return (
-      <Window className="commands-window component">
+      <Window className="commands-window-component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <div className="filter">
             <CommandSearch autoFocus={true} onQueryChange={this.handleCommandSearchQueryChange} />

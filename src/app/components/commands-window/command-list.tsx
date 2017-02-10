@@ -4,6 +4,7 @@ import * as classNames from 'classnames';
 import { ICommand } from '../../commands';
 import Shortcut from '../shortcut';
 
+require('../../assets/stylesheets/base.less');
 require('./command-list.less');
 
 interface ICommandListProps {
@@ -29,7 +30,7 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
 
   render() {
     return (
-      <div className="command-list component">
+      <div className="command-list-component">
         {
           this.props.commands.length > 0 ?
             <div className="commands">

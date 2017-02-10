@@ -8,6 +8,7 @@ import IssueTypeDropdown from '../issue-type-dropdown';
 import IssueStateDropdown from '../issue-state-dropdown';
 import Button from '../button';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IAddEditIssueWindowProps {
@@ -121,7 +122,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
 
   render() {
     return (
-      <Window className="add-edit-issue-window component">
+      <Window className="add-edit-issue-window-component">
         <WindowHeader>
           {
             this.props.mode === 'add' ?

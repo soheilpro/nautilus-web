@@ -11,6 +11,7 @@ import DeleteIssueCommand from './delete-issue-command';
 import EditTaskCommand from './edit-task-command';
 import DeleteTaskCommand from './delete-task-command';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IItemListProps {
@@ -143,7 +144,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
   render() {
     return (
-      <div className="item-list component">
+      <div className="item-list-component">
         <List items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={this.props.autoFocus} renderItem={this.renderItem} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} />
       </div>
     );

@@ -39,7 +39,7 @@ export default class IssueTypeDropdown extends React.Component<IIssueTypeDropdow
 
   render() {
     return (
-      <Dropdown className={classNames('issue-type-dropdown component', this.props.className)} selectedItem={this.props.issueType} items={this.state.issueTypes} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Dropdown className={classNames('issue-type-dropdown-component', this.props.className)} selectedItem={this.props.issueType} items={this.state.issueTypes} displayProperty="title" onChange={this.handleDropdownChange} />
     );
   }
 };

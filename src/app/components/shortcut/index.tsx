@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { KeyName, IShortcut } from '../../keyboard';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IShortcutProps {
@@ -16,7 +17,7 @@ export default class Shortcut extends React.Component<IShortcutProps, IShortcutS
       return null;
 
     return (
-      <div className="shortcut component">
+      <div className="shortcut-component">
         {
           this.props.shortcut.map((keyCombination, index) => {
             return (

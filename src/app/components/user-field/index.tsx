@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IUser } from '../../application';
 import { ServiceManager } from '../../services';
 
+require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IUserFieldProps {
@@ -21,7 +22,7 @@ export default class UserField extends React.Component<IUserFieldProps, IUserFie
     let user = this.application.users.get(this.props.user);
 
     return (
-      <div className="task-assigned-to-field component">
+      <div className="task-assigned-to-field-component">
         {user.name}
       </div>
     );

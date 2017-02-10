@@ -15,7 +15,7 @@ interface IDeleteTaskWindowState {
 export default class DeleteTaskWindow extends React.Component<IDeleteTaskWindowProps, IDeleteTaskWindowState> {
   render() {
     return (
-      <Window className="delete-task-window component">
+      <Window className="delete-task-window-component">
         <WindowHeader>Delete Task</WindowHeader>
         <WindowContent>
           Are you sure you want to delete task #{this.props.task.sid}?

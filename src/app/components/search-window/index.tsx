@@ -8,6 +8,7 @@ import SearchGuide from './search-guide';
 import SearchOptions from './search-options';
 import SearchResultList from './search-result-list';
 
+require('../../assets/stylesheets/base.less');
 require ('./index.less');
 
 interface ISearchWindowProps {
@@ -113,7 +114,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
 
   render() {
     return (
-      <Window className="search-window component">
+      <Window className="search-window-component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <div className="options">
             <SearchOptions autoFocus={true} onQueryChange={this.handleOptionsQueryChange} />

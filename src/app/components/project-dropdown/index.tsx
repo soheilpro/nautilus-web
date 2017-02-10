@@ -39,7 +39,7 @@ export default class ProjectDropdown extends React.Component<IProjectDropdownPro
 
   render() {
     return (
-      <Dropdown className={classNames('project-dropdown component', this.props.className)} selectedItem={this.props.project} items={this.state.projects} displayProperty="name" onChange={this.handleDropdownChange} />
+      <Dropdown className={classNames('project-dropdown-component', this.props.className)} selectedItem={this.props.project} items={this.state.projects} displayProperty="name" onChange={this.handleDropdownChange} />
     );
   }
 };
