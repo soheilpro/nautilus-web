@@ -1,6 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, IIssue, ITask, isIssue, isTask } from '../../application';
+import { IItem, isIssue, isTask } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import List from '../list';

@@ -6,24 +6,28 @@ import { KeyCode } from '../../keyboard';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IItemListProps {
-  items: any[];
-  selectedItem?: any;
+interface IListItem {
+  id?: string;
+};
+
+interface IListProps {
+  items: IListItem[];
+  selectedItem?: IListItem;
   autoFocus?: boolean;
-  renderItem(item: any, index: number): JSX.Element;
-  onItemSelect?(item: any): void;
-  onItemAction?(item: any): void;
+  renderItem(item: IListItem, index: number): JSX.Element;
+  onItemSelect?(item: IListItem): void;
+  onItemAction?(item: IListItem): void;
 }
 
-interface IItemListState {
+interface IListState {
   isFocused?: boolean;
-  selectedItemIndex?: number;
+  selectedItem?: IListItem;
 }
 
-export default class ItemList extends React.Component<IItemListProps, IItemListState> {
+export default class List extends React.Component<IListProps, IListState> {
   private componentElement: HTMLElement;
 
-  constructor(props: IItemListProps) {
+  constructor(props: IListProps) {
     super();
 
     this.handleListKeyDown = this.handleListKeyDown.bind(this);
@@ -33,7 +37,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     this.handleItemDoubleClick = this.handleItemDoubleClick.bind(this);
 
     this.state = {
-      selectedItemIndex: props.items.indexOf(props.selectedItem),
+      selectedItem: props.selectedItem,
     };
   }
 
@@ -42,9 +46,9 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
       this.componentElement.focus();
   }
 
-  componentWillReceiveProps(nextProps: IItemListProps) {
+  componentWillReceiveProps(nextProps: IListProps) {
     this.setState({
-      selectedItemIndex: nextProps.items.indexOf(nextProps.selectedItem),
+      selectedItem: nextProps.selectedItem,
     });
   }
 
@@ -52,27 +56,31 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      if (this.state.selectedItemIndex < this.props.items.length - 1) {
-        let selectedItemIndex = this.state.selectedItemIndex + 1;
+      let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
+
+      if (selectedItemIndex < this.props.items.length - 1) {
+        let selectedItem = this.props.items[selectedItemIndex + 1];
 
         this.setState({
-          selectedItemIndex: selectedItemIndex,
+          selectedItem: selectedItem,
         });
 
-        this.props.onItemSelect(this.props.items[selectedItemIndex]);
+        this.props.onItemSelect(selectedItem);
       }
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      if (this.state.selectedItemIndex > 0) {
-        let selectedItemIndex = this.state.selectedItemIndex - 1;
+      let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
+
+      if (selectedItemIndex > 0) {
+        let selectedItem = this.props.items[selectedItemIndex - 1];
 
         this.setState({
-          selectedItemIndex: selectedItemIndex,
+          selectedItem: selectedItem,
         });
 
-        this.props.onItemSelect(this.props.items[selectedItemIndex]);
+        this.props.onItemSelect(selectedItem);
       }
     }
   }
@@ -89,16 +97,16 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     });
   }
 
-  private handleItemClick(item: any, index: number) {
+  private handleItemClick(item: IListItem, index: number) {
     if (this.props.onItemSelect)
       this.props.onItemSelect(item);
 
     this.setState({
-      selectedItemIndex: index,
+      selectedItem: item,
     });
   }
 
-  private handleItemDoubleClick(item: any, index: number) {
+  private handleItemDoubleClick(item: IListItem, index: number) {
     if (this.props.onItemAction)
       this.props.onItemAction(item);
   }
@@ -109,7 +117,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
         {
           this.props.items.map((item, index) => {
             return (
-              <div className={classNames('item', { selected: this.state.selectedItemIndex === index })} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id}>
+              <div className={classNames('item', { selected: this.state.selectedItem === item })} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id}>
                 {this.props.renderItem(item, index)}
               </div>
             );
