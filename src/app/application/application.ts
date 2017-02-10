@@ -1,11 +1,10 @@
 import EventEmitter = require('wolfy87-eventemitter');
 import { Client, IClient, ISession } from '../sdk';
 import { IApplication } from './iapplication';
-import { IIssueModule, IssueModule } from './issue';
+import { IItemModule, ItemModule } from './item';
 import { IIssuePriorityModule, IssuePriorityModule } from './issue-priority';
 import { IIssueStateModule, IssueStateModule } from './issue-state';
 import { IIssueTypeModule, IssueTypeModule } from './issue-type';
-import { ITaskModule, TaskModule } from './task';
 import { ITaskStateModule, TaskStateModule } from './task-state';
 import { ITaskTypeModule, TaskTypeModule } from './task-type';
 import { IProjectModule, ProjectModule } from './project';
@@ -23,13 +22,12 @@ export class Application extends EventEmitter implements IApplication {
 
   users: IUserModule;
   projects: IProjectModule;
+  items: IItemModule;
   issuePriorities: IIssuePriorityModule;
   issueStates: IIssueStateModule;
   issueTypes: IIssueTypeModule;
-  issues: IIssueModule;
   taskStates: ITaskStateModule;
   taskTypes: ITaskTypeModule;
-  tasks: ITaskModule;
 
   constructor({ address }: IApplicationConfig) {
     super();
@@ -39,13 +37,12 @@ export class Application extends EventEmitter implements IApplication {
     this.client = client;
     this.users = new UserModule(client);
     this.projects = new ProjectModule(client);
+    this.items = new ItemModule(client);
     this.issuePriorities = new IssuePriorityModule(client);
     this.issueStates = new IssueStateModule(client);
     this.issueTypes = new IssueTypeModule(client);
-    this.issues = new IssueModule(client);
     this.taskStates = new TaskStateModule(client);
     this.taskTypes = new TaskTypeModule(client);
-    this.tasks = new TaskModule(client);
   }
 
   isInitialized() {
@@ -98,13 +95,12 @@ export class Application extends EventEmitter implements IApplication {
     await Promise.all([
       this.users.load(),
       this.projects.load(),
+      this.items.load(),
       this.issuePriorities.load(),
       this.issueStates.load(),
       this.issueTypes.load(),
-      this.issues.load(),
       this.taskStates.load(),
       this.taskTypes.load(),
-      this.tasks.load(),
     ]);
 
     this.isLoadedState = true;

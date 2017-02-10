@@ -7,10 +7,10 @@ export default class AddTaskAction extends BaseAction {
   }
 
   async execute() {
-    this.task = await this.application.tasks.add(this.task, this.issue);
+    this.task = await this.application.items.addTask(this.task, this.issue);
   }
 
   undo() {
-    this.application.tasks.delete(this.task);
+    this.application.items.deleteTask(this.task);
   }
 }

@@ -7,7 +7,7 @@ export default class UpdateTaskAction extends BaseAction {
   }
 
   async execute() {
-    this.task = await this.application.tasks.update(this.task.id, this.taskChange);
+    this.task = await this.application.items.updateTask(this.task.id, this.taskChange);
   }
 
   undo() {

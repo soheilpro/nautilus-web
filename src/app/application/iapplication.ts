@@ -1,9 +1,8 @@
 import { ISession } from '../sdk';
-import { IIssueModule } from './issue';
+import { IItemModule } from './item';
 import { IIssuePriorityModule } from './issue-priority';
 import { IIssueStateModule } from './issue-state';
 import { IIssueTypeModule } from './issue-type';
-import { ITaskModule } from './task';
 import { ITaskStateModule } from './task-state';
 import { ITaskTypeModule } from './task-type';
 import { IProjectModule } from './project';
@@ -22,11 +21,10 @@ export interface IApplication extends EventEmitter {
 
   users: IUserModule;
   projects: IProjectModule;
+  items: IItemModule;
   issuePriorities: IIssuePriorityModule;
   issueStates: IIssueStateModule;
   issueTypes: IIssueTypeModule;
-  issues: IIssueModule;
   taskStates: ITaskStateModule;
   taskTypes: ITaskTypeModule;
-  tasks: ITaskModule;
 }

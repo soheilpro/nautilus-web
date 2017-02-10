@@ -14,8 +14,7 @@ import DeleteTaskCommand from './delete-task-command';
 require('./index.less');
 
 interface IItemListProps {
-  issues?: IIssue[];
-  tasks?: ITask[];
+  items?: IItem[];
   selectedItem?: IItem;
   autoFocus?: boolean;
   onItemSelect?(item: IItem): void;
@@ -39,7 +38,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     this.renderItem = this.renderItem.bind(this);
 
     this.state = {
-      items: this.combineAndSortItems(props.issues, props.tasks),
+      items: this.sortItems(props.items),
       selectedItem: props.selectedItem,
     };
   }
@@ -50,7 +49,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
   componentWillReceiveProps(nextProps: IItemListProps) {
     this.setState({
-      items: this.combineAndSortItems(nextProps.issues, nextProps.tasks),
+      items: this.sortItems(nextProps.items),
       selectedItem: nextProps.selectedItem,
     });
   }
@@ -89,8 +88,8 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     throw new Error('Not supported.');
   }
 
-  private combineAndSortItems(issues: IIssue[], tasks: ITask[]) {
-    let items = issues.concat(tasks);
+  private sortItems(items: IItem[]) {
+    items = items.slice();
 
     items.sort((x: IItem, y: IItem) => {
       let xNodes = [] as IItem[];
@@ -122,7 +121,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
         if (!yNode)
           return 1;
 
-        let result = xNode.sid.localeCompare(yNode.sid) * -1;
+        let result = -1 * xNode.sid.localeCompare(yNode.sid);
 
         if (result !== 0)
           return result;

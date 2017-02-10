@@ -96,7 +96,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
   }
 
   private async search(query: string) {
-    let issues = await this.application.issues.search(query);
+    let issues = await this.application.items.searchIssues(query);
 
     return issues.map(issue => {
       return {
