@@ -5,23 +5,23 @@ import * as classNames from 'classnames';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IDropdownItem {
+interface ISelectItem {
   id?: string;
   [key: string]: any;
 }
 
-interface IDropdownProps {
-  items: IDropdownItem[];
-  selectedItem: IDropdownItem;
+interface ISelectProps {
+  items: ISelectItem[];
+  selectedItem: ISelectItem;
   displayProperty: string;
   className?: string;
-  onChange(item: IDropdownItem): void;
+  onChange(item: ISelectItem): void;
 }
 
-interface IDropdownState {
+interface ISelectState {
 }
 
-export default class Dropdown extends React.Component<IDropdownProps, IDropdownState> {
+export default class Select extends React.Component<ISelectProps, ISelectState> {
   constructor() {
     super();
 
@@ -37,7 +37,7 @@ export default class Dropdown extends React.Component<IDropdownProps, IDropdownS
 
   render() {
     return (
-      <select className={classNames('dropdown-component', this.props.className)} value={this.props.selectedItem ? this.props.selectedItem.id : ''} onChange={this.handleSelectChange}>
+      <select className={classNames('select-component', this.props.className)} value={this.props.selectedItem ? this.props.selectedItem.id : ''} onChange={this.handleSelectChange}>
         <option></option>
         {
           this.props.items.map(item => {

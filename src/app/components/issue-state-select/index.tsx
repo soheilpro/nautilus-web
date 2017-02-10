@@ -2,25 +2,25 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { IIssueState } from '../../application';
 import { ServiceManager } from '../../services';
-import Dropdown from '../dropdown';
+import Select from '../select';
 
-interface IIssueStateDropdownProps {
+interface IIssueStateSelectProps {
   issueState: IIssueState;
   className?: string;
   onChange(issueState: IIssueState): void;
 }
 
-interface IIssueStateDropdownState {
+interface IIssueStateSelectState {
   issueStates?: IIssueState[];
 }
 
-export default class IssueStateDropdown extends React.Component<IIssueStateDropdownProps, IIssueStateDropdownState> {
+export default class IssueStateSelect extends React.Component<IIssueStateSelectProps, IIssueStateSelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
     super();
 
-    this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
 
     this.state = {
       issueStates: [],
@@ -33,13 +33,13 @@ export default class IssueStateDropdown extends React.Component<IIssueStateDropd
     });
   }
 
-  private handleDropdownChange(issueState: IIssueState) {
+  private handleSelectChange(issueState: IIssueState) {
     this.props.onChange(issueState);
   }
 
   render() {
     return (
-      <Dropdown className={classNames('issue-state-dropdown-component', this.props.className)} selectedItem={this.props.issueState} items={this.state.issueStates} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Select className={classNames('issue-state-select-component', this.props.className)} selectedItem={this.props.issueState} items={this.state.issueStates} displayProperty="title" onChange={this.handleSelectChange} />
     );
   }
 };

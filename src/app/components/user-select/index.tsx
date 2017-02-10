@@ -2,25 +2,25 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { IUser } from '../../application';
 import { ServiceManager } from '../../services';
-import Dropdown from '../dropdown';
+import Select from '../select';
 
-interface IUserDropdownProps {
+interface IUserSelectProps {
   user: IUser;
   className?: string;
   onChange(user: IUser): void;
 }
 
-interface IUserDropdownState {
+interface IUserSelectState {
   users?: IUser[];
 }
 
-export default class UserDropdown extends React.Component<IUserDropdownProps, IUserDropdownState> {
+export default class UserSelect extends React.Component<IUserSelectProps, IUserSelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
     super();
 
-    this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
 
     this.state = {
       users: [],
@@ -33,13 +33,13 @@ export default class UserDropdown extends React.Component<IUserDropdownProps, IU
     });
   }
 
-  private handleDropdownChange(user: IUser) {
+  private handleSelectChange(user: IUser) {
     this.props.onChange(user);
   }
 
   render() {
     return (
-      <Dropdown className={classNames('user-type-dropdown-component', this.props.className)} selectedItem={this.props.user} items={this.state.users} displayProperty="name" onChange={this.handleDropdownChange} />
+      <Select className={classNames('user-select-component', this.props.className)} selectedItem={this.props.user} items={this.state.users} displayProperty="name" onChange={this.handleSelectChange} />
     );
   }
 };

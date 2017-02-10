@@ -2,10 +2,10 @@ import * as React from 'react';
 import { IProject, IIssuePriority, IIssueState, IIssueType, IIssue, IIssueChange } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
-import ProjectDropdown from '../project-dropdown';
-import IssuePriorityDropdown from '../issue-priority-dropdown';
-import IssueTypeDropdown from '../issue-type-dropdown';
-import IssueStateDropdown from '../issue-state-dropdown';
+import ProjectSelect from '../project-select';
+import IssuePrioritySelect from '../issue-priority-select';
+import IssueTypeSelect from '../issue-type-select';
+import IssueStateSelect from '../issue-state-select';
 import Button from '../button';
 
 require('../../assets/stylesheets/base.less');
@@ -34,7 +34,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleTitleInputChange = this.handleTitleInputChange.bind(this);
-    this.handleProjectDropdownChange = this.handleProjectDropdownChange.bind(this);
+    this.handleProjectSelectChange = this.handleProjectSelectChange.bind(this);
     this.handleTypeInputChange = this.handleTypeInputChange.bind(this);
     this.handlePriorityInputChange = this.handlePriorityInputChange.bind(this);
     this.handleStateInputChange = this.handleStateInputChange.bind(this);
@@ -90,7 +90,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
     });
   }
 
-  private handleProjectDropdownChange(value: IProject) {
+  private handleProjectSelectChange(value: IProject) {
     this.setState({
       project: value,
     });
@@ -150,7 +150,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 Project:
               </div>
               <div className="value">
-                <ProjectDropdown className="project" project={this.state.project} onChange={this.handleProjectDropdownChange} />
+                <ProjectSelect className="project" project={this.state.project} onChange={this.handleProjectSelectChange} />
               </div>
             </div>
             <div className="field">
@@ -158,7 +158,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 Type:
               </div>
               <div className="value">
-                <IssueTypeDropdown className="issue-type" issueType={this.state.type} onChange={this.handleTypeInputChange} />
+                <IssueTypeSelect className="issue-type" issueType={this.state.type} onChange={this.handleTypeInputChange} />
               </div>
             </div>
             <div className="field">
@@ -166,7 +166,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 Priority:
               </div>
               <div className="value">
-                <IssuePriorityDropdown className="issue-priority" issuePriority={this.state.priority} onChange={this.handlePriorityInputChange} />
+                <IssuePrioritySelect className="issue-priority" issuePriority={this.state.priority} onChange={this.handlePriorityInputChange} />
               </div>
             </div>
             <div className="field">
@@ -174,7 +174,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 State:
               </div>
               <div className="value">
-                <IssueStateDropdown className="issue-state" issueState={this.state.state} onChange={this.handleStateInputChange} />
+                <IssueStateSelect className="issue-state" issueState={this.state.state} onChange={this.handleStateInputChange} />
               </div>
             </div>
             <div className="field">

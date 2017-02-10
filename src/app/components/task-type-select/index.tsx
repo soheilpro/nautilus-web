@@ -2,25 +2,25 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { ITaskType } from '../../application';
 import { ServiceManager } from '../../services';
-import Dropdown from '../dropdown';
+import Select from '../select';
 
-interface ITaskTypeDropdownProps {
+interface ITaskTypeSelectProps {
   taskType: ITaskType;
   className?: string;
   onChange(taskType: ITaskType): void;
 }
 
-interface ITaskTypeDropdownState {
+interface ITaskTypeSelectState {
   taskTypes?: ITaskType[];
 }
 
-export default class TaskTypeDropdown extends React.Component<ITaskTypeDropdownProps, ITaskTypeDropdownState> {
+export default class TaskTypeSelect extends React.Component<ITaskTypeSelectProps, ITaskTypeSelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
     super();
 
-    this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
 
     this.state = {
       taskTypes: [],
@@ -33,13 +33,13 @@ export default class TaskTypeDropdown extends React.Component<ITaskTypeDropdownP
     });
   }
 
-  private handleDropdownChange(taskType: ITaskType) {
+  private handleSelectChange(taskType: ITaskType) {
     this.props.onChange(taskType);
   }
 
   render() {
     return (
-      <Dropdown className={classNames('task-type-dropdown-component', this.props.className)} selectedItem={this.props.taskType} items={this.state.taskTypes} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Select className={classNames('task-type-select-component', this.props.className)} selectedItem={this.props.taskType} items={this.state.taskTypes} displayProperty="title" onChange={this.handleSelectChange} />
     );
   }
 };

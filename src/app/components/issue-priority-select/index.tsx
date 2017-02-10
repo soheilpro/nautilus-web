@@ -2,25 +2,25 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { IIssuePriority } from '../../application';
 import { ServiceManager } from '../../services';
-import Dropdown from '../dropdown';
+import Select from '../select';
 
-interface IIssuePriorityDropdownProps {
+interface IIssuePrioritySelectProps {
   issuePriority: IIssuePriority;
   className?: string;
   onChange(issuePriority: IIssuePriority): void;
 }
 
-interface IIssuePriorityDropdownState {
+interface IIssuePrioritySelectState {
   issuePriorities?: IIssuePriority[];
 }
 
-export default class IssuePriorityDropdown extends React.Component<IIssuePriorityDropdownProps, IIssuePriorityDropdownState> {
+export default class IssuePrioritySelect extends React.Component<IIssuePrioritySelectProps, IIssuePrioritySelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
     super();
 
-    this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
 
     this.state = {
       issuePriorities: [],
@@ -33,13 +33,13 @@ export default class IssuePriorityDropdown extends React.Component<IIssuePriorit
     });
   }
 
-  private handleDropdownChange(issuePriority: IIssuePriority) {
+  private handleSelectChange(issuePriority: IIssuePriority) {
     this.props.onChange(issuePriority);
   }
 
   render() {
     return (
-      <Dropdown className={classNames('issue-priority-dropdown-component', this.props.className)} selectedItem={this.props.issuePriority} items={this.state.issuePriorities} displayProperty="title" onChange={this.handleDropdownChange} />
+      <Select className={classNames('issue-priority-select-component', this.props.className)} selectedItem={this.props.issuePriority} items={this.state.issuePriorities} displayProperty="title" onChange={this.handleSelectChange} />
     );
   }
 };

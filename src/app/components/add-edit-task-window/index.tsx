@@ -2,9 +2,9 @@ import * as React from 'react';
 import { ITaskState, ITaskType, ITask, ITaskChange, IUser } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
-import TaskTypeDropdown from '../task-type-dropdown';
-import TaskStateDropdown from '../task-state-dropdown';
-import UserDropdown from '../user-dropdown';
+import TaskTypeSelect from '../task-type-select';
+import TaskStateSelect from '../task-state-select';
+import UserSelect from '../user-select';
 import Button from '../button';
 
 require('../../assets/stylesheets/base.less');
@@ -138,7 +138,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
                 Type:
               </div>
               <div className="value">
-                <TaskTypeDropdown className="task-type" taskType={this.state.type} onChange={this.handleTypeInputChange} />
+                <TaskTypeSelect className="task-type" taskType={this.state.type} onChange={this.handleTypeInputChange} />
               </div>
             </div>
             <div className="field">
@@ -146,7 +146,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
                 State:
               </div>
               <div className="value">
-                <TaskStateDropdown className="task-state" taskState={this.state.state} onChange={this.handleStateInputChange} />
+                <TaskStateSelect className="task-state" taskState={this.state.state} onChange={this.handleStateInputChange} />
               </div>
             </div>
             <div className="field">
@@ -154,7 +154,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
                 Assigned To:
               </div>
               <div className="value">
-                <UserDropdown className="assigned-to-state" user={this.state.assignedTo} onChange={this.handleAssignedToInputChange} />
+                <UserSelect className="assigned-to-state" user={this.state.assignedTo} onChange={this.handleAssignedToInputChange} />
               </div>
             </div>
             <div className="field">
