@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
+import IssueFilter from '../issue-filter';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
@@ -121,6 +122,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="row container">
+            <div className="filter">
+              <IssueFilter />
+            </div>
             <div className="list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />
             </div>
