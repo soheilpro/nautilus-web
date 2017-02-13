@@ -1,0 +1,41 @@
+@import '../../assets/stylesheets/common';
+
+.dropdown-component {
+  .button {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid @darkgray;
+    cursor: pointer;
+    user-select: none;
+
+    .caret {
+      margin-left: 10px;
+      color: @darkdarkgray;
+    }
+
+    &:hover {
+      color: @primary;
+
+      .caret {
+        color: @primary;
+      }
+    }
+  }
+
+  .content {
+    position: absolute;
+    margin-top: -1px;
+    margin-bottom: 20px;
+    z-index: 999;
+  }
+
+  &.open {
+    .button {
+      color: @primary;
+
+      .caret {
+        color: @primary;
+      }
+    }
+  }
+}
