@@ -22,12 +22,18 @@ export class KeyCombination {
   }
 
   static matchesSome(keyCombinations: IShortcut, events: KeyboardEvent[]) {
-    let min = Math.min(keyCombinations.length, events.length);
     let i: number;
 
-    for (i = 0; i < min; i++)
-      if (!this.matches(keyCombinations[i], events[i]))
+    for (i = 0; i < events.length; i++) {
+      let keyCombination = keyCombinations[i];
+      let event = events[i];
+
+      if (!keyCombination)
         break;
+
+      if (!this.matches(keyCombination, event))
+        return 0;
+    }
 
     return i;
   }
