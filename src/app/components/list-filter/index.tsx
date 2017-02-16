@@ -1,26 +1,32 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
+import * as NQL from '../../nql';
 import { KeyCode } from '../../keyboard';
 import Dropdown from '../dropdown';
 import Input from '../input';
 import Icon from '../icon';
 
 require('../../assets/stylesheets/base.less');
-require('./inclusion-filter-dropdown.less');
+require('./index.less');
 
 interface IFilterItem {
   id?: string;
   [key: string]: any;
 };
 
-interface IInclusionFilterDropdownProps {
+interface IListFilterDropdownProps {
   title: string;
   items: IFilterItem[];
   displayProperty: string;
+  queryItem: string;
+  queryItemType: string;
+  itemToQueryItem: (item: IFilterItem) => Object;
+  className?: string;
+  onChange(query: NQL.IExpression): void;
 }
 
-interface IInclusionFilterDropdownState {
+interface IListFilterDropdownState {
   items?: IFilterItem[];
   selectedItemIndex?: number;
   searchText?: string;
@@ -28,10 +34,13 @@ interface IInclusionFilterDropdownState {
   excludedItems?: IFilterItem[];
 }
 
-export default class InclusionFilterDropdown extends React.Component<IInclusionFilterDropdownProps, IInclusionFilterDropdownState> {
-  constructor(props: IInclusionFilterDropdownProps) {
+export default class ListFilterDropdown extends React.Component<IListFilterDropdownProps, IListFilterDropdownState> {
+  private dropdownComponent: Dropdown;
+
+  constructor(props: IListFilterDropdownProps) {
     super();
 
+    this.handleDropdownOpen = this.handleDropdownOpen.bind(this);
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
     this.handleItemExcludeClick = this.handleItemExcludeClick.bind(this);
@@ -46,9 +55,25 @@ export default class InclusionFilterDropdown extends React.Component<IInclusionF
     };
   }
 
-  componentWillReceiveProps(nextProps: IInclusionFilterDropdownProps) {
+  componentWillReceiveProps(nextProps: IListFilterDropdownProps) {
     this.setState({
       items: this.filterItems(this.props.items, this.state.searchText),
+    });
+  }
+
+  open() {
+    this.dropdownComponent.open();
+  }
+
+  close() {
+    this.dropdownComponent.close();
+  }
+
+  private handleDropdownOpen() {
+    this.setState({
+      items: this.props.items,
+      searchText: '',
+      selectedItemIndex: 0,
     });
   }
 
@@ -136,45 +161,77 @@ export default class InclusionFilterDropdown extends React.Component<IInclusionF
   }
 
   private includeItem(item: IFilterItem) {
+    let includedItems = [item];
+    let excludedItems: IFilterItem[] = [];
+
+    this.props.onChange(this.getExpression(includedItems, excludedItems));
+
     this.setState({
-      excludedItems: [],
-      includedItems: [item],
+      includedItems: includedItems,
+      excludedItems: excludedItems,
     });
   }
 
   private toggleItemExclude(item: IFilterItem) {
-    if (this.state.excludedItems.indexOf(item) === -1) {
-      this.setState({
-        excludedItems: this.state.excludedItems.concat(item),
-        includedItems: [],
-      });
-    }
-    else {
-      this.setState({
-        excludedItems: this.state.excludedItems.filter(x => x !== item),
-        includedItems: [],
-      });
-    }
+    let includedItems: IFilterItem[] = [];
+    let excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
+
+    this.props.onChange(this.getExpression(includedItems, excludedItems));
+
+    this.setState({
+      includedItems: includedItems,
+      excludedItems: excludedItems,
+    });
   }
 
   private toggleItemInclude(item: IFilterItem) {
-    if (this.state.includedItems.indexOf(item) === -1) {
-      this.setState({
-        excludedItems: [],
-        includedItems: this.state.includedItems.concat(item),
-      });
+    let includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item)
+    let excludedItems: IFilterItem[] = [];
+
+    this.props.onChange(this.getExpression(includedItems, excludedItems));
+
+    this.setState({
+      includedItems: includedItems,
+      excludedItems: excludedItems,
+    });
+  }
+
+  private getExpression(includedItems: IFilterItem[], excludedItems: IFilterItem[]): NQL.IExpression {
+    if (includedItems.length === 1) {
+      return new NQL.ComparisonExpression(
+        new NQL.LocalExpression(this.props.queryItem),
+        new NQL.ConstantExpression(this.props.itemToQueryItem(includedItems[0]), this.props.queryItemType),
+        '==');
     }
-    else {
-      this.setState({
-        excludedItems: [],
-        includedItems: this.state.includedItems.filter(x => x !== item),
-      });
+
+    if (includedItems.length > 1) {
+      return new NQL.ComparisonExpression(
+        new NQL.LocalExpression(this.props.queryItem),
+        new NQL.ListExpression(includedItems.map(item => new NQL.ConstantExpression(this.props.itemToQueryItem(item), this.props.queryItemType))),
+        'IN');
     }
+
+    if (excludedItems.length === 1) {
+      return new NQL.ComparisonExpression(
+        new NQL.LocalExpression(this.props.queryItem),
+        new NQL.ConstantExpression(this.props.itemToQueryItem(excludedItems[0]), this.props.queryItemType),
+        '!=');
+    }
+
+    if (excludedItems.length > 1) {
+      return new NQL.ComparisonExpression(
+        new NQL.LocalExpression(this.props.queryItem),
+        new NQL.ListExpression(excludedItems.map(item => new NQL.ConstantExpression(this.props.itemToQueryItem(item), this.props.queryItemType))),
+        'NOT IN');
+    }
+
+    return null;
   }
 
   render() {
     return (
-      <Dropdown className="inclusion-filter-dropdown-component" title={this.props.title}>
+      <Dropdown className={classNames('list-filter-component', this.props.className, { 'used': this.state.includedItems
+      .length > 0 || this.state.excludedItems.length > 0 })} title={this.props.title} onOpen={this.handleDropdownOpen} ref={e => this.dropdownComponent = e}>
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
           <div className="items">

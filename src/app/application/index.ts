@@ -1,5 +1,6 @@
 export * from '../sdk';
 export * from './application';
+export * from './as-entity';
 export * from './entity-comparer';
 export * from './iapplication';
 export * from './issue-priority';

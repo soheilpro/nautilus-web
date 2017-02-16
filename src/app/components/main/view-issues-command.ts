@@ -12,7 +12,10 @@ export default class ViewIssuesCommand extends BaseCommand {
   }
 
   get shortcut() {
-    return [{ keyCode: KeyCode.G }, { keyCode: KeyCode.I }];
+    return [
+      { keyCode: KeyCode.G },
+      { keyCode: KeyCode.I }
+    ];
   }
 
   execute() {

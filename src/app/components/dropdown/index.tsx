@@ -10,6 +10,8 @@ require('./index.less');
 interface IDropdownProps {
   title: string;
   className?: string;
+  onOpen?(): void;
+  onClose?(): void;
 }
 
 interface IDropdownState {
@@ -25,10 +27,29 @@ export default class Dropdown extends React.Component<IDropdownProps, IDropdownS
     this.state = {};
   }
 
-  private handleButtonClick() {
+  open() {
     this.setState({
-      isOpen: !this.state.isOpen,
+      isOpen: true,
     });
+
+    if (this.props.onOpen)
+      this.props.onOpen();
+  }
+
+  close() {
+    this.setState({
+      isOpen: false,
+    });
+
+    if (this.props.onClose)
+      this.props.onClose();
+  }
+
+  private handleButtonClick() {
+    if (!this.state.isOpen)
+      this.open();
+    else
+      this.close();
   }
 
   render() {
