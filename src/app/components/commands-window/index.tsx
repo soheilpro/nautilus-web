@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import { ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
@@ -14,12 +15,13 @@ interface ICommandsWindowProps {
 }
 
 interface ICommandsWindowState {
-  commands?: ICommand[];
+  filteredCommands?: ICommand[];
   selectedCommandIndex?: number;
 }
 
 export default class CommandsWindow extends React.Component<ICommandsWindowProps, ICommandsWindowState> {
   private commandManager = ServiceManager.Instance.getCommandManager();
+  private commands = _.sortBy(this.commandManager.getCommands(), command => command.name);
 
   constructor() {
     super();
@@ -28,7 +30,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
     this.handleCommandSearchQueryChange = this.handleCommandSearchQueryChange.bind(this);
 
     this.state = {
-      commands: this.filter(this.commandManager.getCommands(), ''),
+      filteredCommands: this.commands,
       selectedCommandIndex: 0,
     };
   }
@@ -38,21 +40,21 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
       event.preventDefault();
 
       this.setState({
-        selectedCommandIndex: this.state.selectedCommandIndex < this.state.commands.length - 1 ? this.state.selectedCommandIndex + 1 : 0,
+        selectedCommandIndex: this.state.selectedCommandIndex < this.state.filteredCommands.length - 1 ? this.state.selectedCommandIndex + 1 : 0,
       });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
       this.setState({
-        selectedCommandIndex: this.state.selectedCommandIndex > 0 ? this.state.selectedCommandIndex - 1 : this.state.commands.length - 1,
+        selectedCommandIndex: this.state.selectedCommandIndex > 0 ? this.state.selectedCommandIndex - 1 : this.state.filteredCommands.length - 1,
       });
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      if (this.state.commands.length > 0) {
-        let command = this.state.commands[this.state.selectedCommandIndex];
+      if (this.state.filteredCommands.length > 0) {
+        let command = this.state.filteredCommands[this.state.selectedCommandIndex];
 
         if (command.enabled)
           this.props.onSelect(command);
@@ -64,7 +66,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
     query = query.trim();
 
     this.setState({
-      commands: this.filter(this.commandManager.getCommands(), query),
+      filteredCommands: this.filter(this.commands, query),
       selectedCommandIndex: 0,
     });
   }
@@ -80,7 +82,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
           <div className="filter">
             <CommandSearch autoFocus={true} onQueryChange={this.handleCommandSearchQueryChange} />
           </div>
-          <CommandList commands={this.state.commands} selectedCommandIndex={this.state.selectedCommandIndex} onSelect={this.props.onSelect} />
+          <CommandList commands={this.state.filteredCommands} selectedCommandIndex={this.state.selectedCommandIndex} onSelect={this.props.onSelect} />
         </div>
       </Window>
     );
