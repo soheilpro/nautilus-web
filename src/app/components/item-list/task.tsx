@@ -21,20 +21,17 @@ export default class Task extends React.Component<ITaskProps, ITaskState> {
         <span className="sid">{this.props.task.sid}</span>
         <span className="arrow"></span>
         {
-          this.props.task.type ?
+          this.props.task.type &&
             <span className="type"><TaskTypeField taskType={this.props.task.type} /></span>
-            : null
         }
         <span className="title">{this.props.task.title}</span>
         {
-          this.props.task.state ?
+          this.props.task.state &&
             <span className="state"><TaskStateField taskState={this.props.task.state} /></span>
-            : null
         }
         {
-          this.props.task.assignedTo ?
+          this.props.task.assignedTo &&
             <span className="assigned-to"><UserField user={this.props.task.assignedTo} /></span>
-            : null
         }
       </div>
     );

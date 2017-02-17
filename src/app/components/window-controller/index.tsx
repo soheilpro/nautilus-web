@@ -86,9 +86,8 @@ export default class WindowController extends React.Component<IWindowControllerP
           return (
             <div key={window.key}>
               {
-                window.modal ?
+                window.modal &&
                   <div className="overlay"></div>
-                  : null
               }
               <WindowContainer top={window.top} width={window.width} onCloseRequest={_.partial(this.handleWindowContainerCloseRequest, window)} >
                 {window.content}

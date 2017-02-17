@@ -124,16 +124,8 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
     return (
       <Window className="add-edit-issue-window-component">
         <WindowHeader>
-          {
-            this.props.mode === 'add' ?
-            'New Issue'
-            : null
-          }
-          {
-            this.props.mode === 'edit' ?
-            `Edit Issue #${this.props.issue.sid}`
-            : null
-          }
+          { this.props.mode === 'add' && 'New Issue' }
+          { this.props.mode === 'edit' && `Edit Issue #${this.props.issue.sid}` }
         </WindowHeader>
         <WindowContent>
           <form className="form" id="addEditIssueForm" onSubmit={this.handleFormSubmit}>
@@ -190,14 +182,12 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
         <WindowActionBar>
           <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
           {
-            this.props.mode === 'add' ?
+            this.props.mode === 'add' &&
               <Button type="submit" form="addEditIssueForm">Add Issue</Button>
-              : null
           }
           {
-            this.props.mode === 'edit' ?
+            this.props.mode === 'edit' &&
               <Button type="submit" form="addEditIssueForm">Update Issue</Button>
-              : null
           }
         </WindowActionBar>
       </Window>

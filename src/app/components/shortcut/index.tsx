@@ -24,9 +24,8 @@ export default class Shortcut extends React.Component<IShortcutProps, IShortcutS
               <span key={index}>
                 <span className="key-combination">{KeyName[keyCombination.keyCode]}</span>
                 {
-                  index !== this.props.shortcut.length - 1 ?
+                  index !== this.props.shortcut.length - 1 &&
                     <span className="separator">,</span>
-                    : null
                 }
               </span>
             );

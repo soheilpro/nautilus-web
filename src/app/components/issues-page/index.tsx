@@ -130,14 +130,12 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             </div>
             <div className="detail">
               {
-                isIssue(this.state.selectedItem) ?
+                isIssue(this.state.selectedItem) &&
                   <IssueDetail issue={this.state.selectedItem} />
-                  : null
               }
               {
-                isTask(this.state.selectedItem) ?
+                isTask(this.state.selectedItem) &&
                   <TaskDetail task={this.state.selectedItem} />
-                  : null
               }
             </div>
           </div>

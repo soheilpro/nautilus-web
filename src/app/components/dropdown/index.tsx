@@ -66,13 +66,12 @@ export default class Dropdown extends React.Component<IDropdownProps, IDropdownS
           <Icon className="caret" name={this.state.isOpen ? 'caret-up' : 'caret-down'} />
         </div>
         {
-          this.state.isOpen ?
+          this.state.isOpen &&
             <WindowContainer position="absolute" blurCheckElement={this.rootElement} onCloseRequest={this.handleWindowContainerCloseRequest}>
               <Window className="window">
                 {this.props.children}
               </Window>
             </WindowContainer>
-            : null
         }
       </div>
     );

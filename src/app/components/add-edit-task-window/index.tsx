@@ -112,16 +112,8 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
     return (
       <Window className="add-edit-task-window-component">
         <WindowHeader>
-          {
-            this.props.mode === 'add' ?
-            'New Task'
-            : null
-          }
-          {
-            this.props.mode === 'edit' ?
-            `Edit Task #${this.props.task.sid}`
-            : null
-          }
+          { this.props.mode === 'add' && 'New Task' }
+          { this.props.mode === 'edit' && `Edit Task #${this.props.task.sid}` }
         </WindowHeader>
         <WindowContent>
           <form className="form" id="addEditTaskForm" onSubmit={this.handleFormSubmit}>
@@ -170,14 +162,12 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
         <WindowActionBar>
           <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
           {
-            this.props.mode === 'add' ?
+            this.props.mode === 'add' &&
               <Button type="submit" form="addEditTaskForm">Add Task</Button>
-              : null
           }
           {
-            this.props.mode === 'edit' ?
+            this.props.mode === 'edit' &&
               <Button type="submit" form="addEditTaskForm">Update Task</Button>
-              : null
           }
         </WindowActionBar>
       </Window>

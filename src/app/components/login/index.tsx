@@ -71,9 +71,8 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
             <div className="title">nautilus</div>
             <form onSubmit={this.handleFormSubmit}>
                 {
-                  this.state.error ?
+                  this.state.error &&
                     <div className="error">{this.state.error}</div>
-                    : null
                 }
                 <Input className="username" placeholder="Username" value={this.state.username} onChange={this.handleUsernameChange} />
                 <Input className="password" placeholder="Password" secret={true} value={this.state.password} onChange={this.handlePasswordChange} />
