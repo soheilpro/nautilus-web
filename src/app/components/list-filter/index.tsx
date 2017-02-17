@@ -155,7 +155,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     if (!text)
       return items;
 
-    text = text.toLowerCase();
+    text = text.toLowerCase().trim();
 
     return items.filter(item => item[this.props.displayProperty].toLowerCase().indexOf(text) !== -1);
   }
@@ -170,6 +170,8 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
       includedItems,
       excludedItems,
     });
+
+    this.close();
   }
 
   private toggleItemExclude(item: IFilterItem) {
