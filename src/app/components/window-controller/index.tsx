@@ -17,11 +17,11 @@ interface IWindowControllerProps {
 
 interface IWindowControllerState {
   windows?: IExtendedWindow[];
-  elementToFocus?: HTMLElement;
 }
 
 export default class WindowController extends React.Component<IWindowControllerProps, IWindowControllerState> implements IWindowController {
   private windowKeyCounter = 0;
+  private elementToFocus?: HTMLElement;
 
   private get commandController() {
     return ServiceManager.Instance.getCommandController();
@@ -42,8 +42,8 @@ export default class WindowController extends React.Component<IWindowControllerP
   }
 
   componentDidUpdate() {
-    if (this.state.elementToFocus)
-      this.state.elementToFocus.focus();
+    if (this.elementToFocus)
+      this.elementToFocus.focus();
   }
 
   componentWillUnmount() {
@@ -55,9 +55,10 @@ export default class WindowController extends React.Component<IWindowControllerP
     extendedWindow.key = this.windowKeyCounter++;
     extendedWindow.focusedElementOnOpen = document.activeElement as HTMLElement;
 
+    this.elementToFocus = null;
+
     this.setState(state => ({
       windows: state.windows.concat(extendedWindow),
-      elementToFocus: null,
     }), callback);
 
     if (window.modal)
@@ -65,9 +66,10 @@ export default class WindowController extends React.Component<IWindowControllerP
   }
 
   closeWindow(window: IExtendedWindow, callback?: () => any) {
+    this.elementToFocus = window.focusedElementOnOpen;
+
     this.setState(state => ({
       windows: state.windows.filter(x => x !== window),
-      elementToFocus: window.focusedElementOnOpen,
     }), callback);
 
     if (window.modal)
