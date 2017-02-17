@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 require('../../assets/stylesheets/base.less');
-require('./content.less');
+require('./window-content.less');
 
 interface IWindowContentProps {
 }

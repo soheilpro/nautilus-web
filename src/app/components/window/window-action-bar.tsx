@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 require('../../assets/stylesheets/base.less');
-require('./action-bar.less');
+require('./window-action-bar.less');
 
 interface IWindowActionBarProps {
 }

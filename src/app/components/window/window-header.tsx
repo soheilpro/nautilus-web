@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 require('../../assets/stylesheets/base.less');
-require('./header.less');
+require('./window-header.less');
 
 interface IWindowHeaderProps {
 }
