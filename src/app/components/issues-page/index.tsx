@@ -122,13 +122,13 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="row container">
-            <div className="filter">
+            <div className="issue-filter">
               <IssueFilter />
             </div>
-            <div className="list">
+            <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />
             </div>
-            <div className="detail">
+            <div className="item-detail">
               {
                 isIssue(this.state.selectedItem) &&
                   <IssueDetail issue={this.state.selectedItem} />

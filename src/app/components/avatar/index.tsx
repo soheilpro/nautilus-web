@@ -23,7 +23,7 @@ export default class Avatar extends React.Component<IAvatarProps, IAvatarState> 
 
     return (
       <div className="avatar-component">
-        <img src={`http://www.gravatar.com/avatar/${md5(this.props.user.email)}?s=${this.props.size * 2}&d=identicon`} width={this.props.size} height={this.props.size} />
+        <img className="image" src={`http://www.gravatar.com/avatar/${md5(this.props.user.email)}?s=${this.props.size * 2}&d=identicon`} width={this.props.size} height={this.props.size} />
       </div>
     );
   }
