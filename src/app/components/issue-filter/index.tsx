@@ -45,7 +45,7 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
     };
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     this.commandManager.registerCommandProvider(this);
   }
 
