@@ -21,6 +21,7 @@ export default class Window extends React.Component<IWindowProps, IWindowState> 
   }
 };
 
-export * from './header'
-export * from './content'
 export * from './action-bar'
+export * from './content'
+export * from './container'
+export * from './header'

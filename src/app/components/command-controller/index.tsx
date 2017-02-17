@@ -53,8 +53,7 @@ export default class CommandController extends React.Component<ICommandControlle
     this.commandsWindow = {
       content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
       top: 20,
-      closeOnBlur: true,
-      closeOnEsc: true,
+      width: 600,
     };
 
     this.windowController.showWindow(this.commandsWindow);

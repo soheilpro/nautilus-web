@@ -40,8 +40,7 @@ export default class SearchController extends React.Component<ISearchControllerP
     this.searchWindow = {
       content: <SearchWindow onIssueSelect={this.handleSearchWindowIssueSelect} />,
       top: 20,
-      closeOnBlur: true,
-      closeOnEsc: true,
+      width: 600,
     };
 
     this.windowController.showWindow(this.searchWindow);

@@ -48,6 +48,7 @@ export default class TaskController extends React.Component<ITaskControllerProps
   addTask(issue: IIssue) {
     this.addTaskWindow = {
       content: <AddEditTaskWindow mode="add" onAdd={_.partial(this.handleAddTaskWindowAdd, issue)} onCloseRequest={this.handleAddTaskWindowCloseRequest} />,
+      top: 120,
       width: 800,
       modal: true,
     };
@@ -58,6 +59,7 @@ export default class TaskController extends React.Component<ITaskControllerProps
   editTask(task: ITask) {
     this.editTaskWindow = {
       content: <AddEditTaskWindow mode="edit" task={task} onUpdate={_.partial(this.handleEditTaskWindowUpdate, task)} onCloseRequest={this.handleEditTaskWindowCloseRequest} />,
+      top: 120,
       width: 800,
       modal: true,
     };
@@ -68,6 +70,8 @@ export default class TaskController extends React.Component<ITaskControllerProps
   deleteTask(task: ITask) {
     this.deleteTaskWindow = {
       content: <DeleteTaskWindow task={task} onConfirm={_.partial(this.handleDeleteTaskWindowConfirm, task)} onCloseRequest={this.handleDeleteTaskWindowCloseRequest} />,
+      top: 120,
+      width: 600,
       modal: true,
     };
 

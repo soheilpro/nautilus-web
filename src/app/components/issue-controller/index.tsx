@@ -59,6 +59,7 @@ export default class IssueController extends React.Component<IIssueControllerPro
   addIssue() {
     this.addIssueWindow = {
       content: <AddEditIssueWindow mode="add" onAdd={this.handleAddIssueWindowAdd} onCloseRequest={this.handleAddIssueWindowCloseRequest} />,
+      top: 120,
       width: 800,
       modal: true,
     };
@@ -69,6 +70,7 @@ export default class IssueController extends React.Component<IIssueControllerPro
   editIssue(issue: IIssue) {
     this.editIssueWindow = {
       content: <AddEditIssueWindow mode="edit" issue={issue} onUpdate={_.partial(this.handleEditIssueWindowUpdate, issue)} onCloseRequest={this.handleEditIssueWindowCloseRequest} />,
+      top: 120,
       width: 800,
       modal: true,
     };
@@ -79,6 +81,8 @@ export default class IssueController extends React.Component<IIssueControllerPro
   deleteIssue(issue: IIssue) {
     this.deleteIssueWindow = {
       content: <DeleteIssueWindow issue={issue} onConfirm={_.partial(this.handleDeleteIssueWindowConfirm, issue)} onCloseRequest={this.handleDeleteIssueWindowCloseRequest} />,
+      top: 120,
+      width: 600,
       modal: true,
     };
 

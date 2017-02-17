@@ -1,19 +1,16 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import { IWindow, IWindowController } from '../../windows';
-
-interface IExtendedWindow extends IWindow {
-  key?: number;
-  zIndex?: number;
-  containerElement?: HTMLElement;
-  focusedElement?: HTMLElement;
-  elementToFocusOnClose?: HTMLElement;
-}
+import { WindowContainer } from '../window';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
+
+interface IExtendedWindow extends IWindow {
+  key?: number;
+  focusedElementOnOpen?: HTMLElement;
+}
 
 interface IWindowControllerProps {
 }
@@ -24,8 +21,7 @@ interface IWindowControllerState {
 }
 
 export default class WindowController extends React.Component<IWindowControllerProps, IWindowControllerState> implements IWindowController {
-  private lastKey = 0;
-  private lastZIndex = 1000;
+  private windowKeyCounter = 0;
 
   private get commandController() {
     return ServiceManager.Instance.getCommandController();
@@ -34,10 +30,7 @@ export default class WindowController extends React.Component<IWindowControllerP
   constructor() {
     super();
 
-    this.handleOverlayFocus = this.handleOverlayFocus.bind(this);
-    this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
-    this.handleContainerFocus = this.handleContainerFocus.bind(this);
-    this.handleContainerBlur = this.handleContainerBlur.bind(this);
+    this.handleWindowContainerCloseRequest = this.handleWindowContainerCloseRequest.bind(this);
 
     this.state = {
       windows: [],
@@ -59,13 +52,8 @@ export default class WindowController extends React.Component<IWindowControllerP
 
   showWindow(window: IWindow, callback?: () => any) {
     let extendedWindow: IExtendedWindow = window;
-    extendedWindow.key = this.lastKey++;
-    extendedWindow.zIndex = this.lastZIndex++;
-    extendedWindow.top = extendedWindow.top || 120;
-    extendedWindow.width = extendedWindow.width || 600;
-    extendedWindow.closeOnBlur = extendedWindow.closeOnBlur || window.modal;
-    extendedWindow.closeOnEsc = extendedWindow.closeOnEsc || window.modal;
-    extendedWindow.elementToFocusOnClose = document.activeElement as HTMLElement;
+    extendedWindow.key = this.windowKeyCounter++;
+    extendedWindow.focusedElementOnOpen = document.activeElement as HTMLElement;
 
     this.setState(state => ({
       windows: state.windows.concat(extendedWindow),
@@ -79,40 +67,15 @@ export default class WindowController extends React.Component<IWindowControllerP
   closeWindow(window: IExtendedWindow, callback?: () => any) {
     this.setState(state => ({
       windows: state.windows.filter(x => x !== window),
-      elementToFocus: window.elementToFocusOnClose,
+      elementToFocus: window.focusedElementOnOpen,
     }), callback);
 
     if (window.modal)
       this.commandController.enableCommandShortcuts();
   }
 
-  private handleOverlayFocus(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
-    window.focusedElement.focus();
-  }
-
-  private handleContainerKeyDown(window: IExtendedWindow, event: React.KeyboardEvent<HTMLDivElement>) {
-    if (event.which === KeyCode.Escape) {
-      event.preventDefault();
-
-      if (window.closeOnEsc)
-        this.closeWindow(window);
-    }
-  }
-
-  private handleContainerFocus(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
-    window.focusedElement = event.target as HTMLElement;
-  }
-
-  private handleContainerBlur(window: IExtendedWindow, event: React.FocusEvent<HTMLDivElement>) {
-    if (!window.closeOnBlur)
-      return;
-
-    setTimeout(() => {
-      if (window.containerElement.contains(document.activeElement))
-        return;
-
-      this.closeWindow(window);
-    }, 0);
+  private handleWindowContainerCloseRequest(window: IExtendedWindow) {
+    this.closeWindow(window);
   }
 
   render() {
@@ -124,12 +87,12 @@ export default class WindowController extends React.Component<IWindowControllerP
             <div key={window.key}>
               {
                 window.modal ?
-                  <div className="overlay" tabIndex={0} onFocus={_.partial(this.handleOverlayFocus, window)}></div>
+                  <div className="overlay"></div>
                   : null
               }
-              <div className="window-container" style={{ top: window.top, left: `calc(100% / 2 - ${window.width}px / 2)`, width: window.width, zIndex: window.zIndex }} tabIndex={0} onKeyDown={_.partial(this.handleContainerKeyDown, window)} onFocus={_.partial(this.handleContainerFocus, window)} onBlur={_.partial(this.handleContainerBlur, window)} ref={e => window.containerElement = e}>
+              <WindowContainer top={window.top} width={window.width} onCloseRequest={_.partial(this.handleWindowContainerCloseRequest, window)} >
                 {window.content}
-              </div>
+              </WindowContainer>
             </div>
           );
         })
