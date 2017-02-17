@@ -167,8 +167,8 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     this.props.onChange(this.getExpression(includedItems, excludedItems));
 
     this.setState({
-      includedItems: includedItems,
-      excludedItems: excludedItems,
+      includedItems,
+      excludedItems,
     });
   }
 
@@ -179,8 +179,8 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     this.props.onChange(this.getExpression(includedItems, excludedItems));
 
     this.setState({
-      includedItems: includedItems,
-      excludedItems: excludedItems,
+      includedItems,
+      excludedItems,
     });
   }
 
@@ -191,8 +191,8 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     this.props.onChange(this.getExpression(includedItems, excludedItems));
 
     this.setState({
-      includedItems: includedItems,
-      excludedItems: excludedItems,
+      includedItems,
+      excludedItems,
     });
   }
 

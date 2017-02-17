@@ -105,7 +105,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
     let itemsWithPath = items.map(item => {
       return {
-        item: item,
+        item,
         path: getParents(item).concat(item).map(item => item.sid),
       };
     });

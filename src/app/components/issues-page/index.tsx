@@ -56,7 +56,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     let items = await this.application.items.getAll();
 
     this.setState({
-      items: items,
+      items,
       selectedItem: _.last(items.filter(isIssue)),
     });
   }

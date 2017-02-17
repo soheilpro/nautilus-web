@@ -69,7 +69,7 @@ export default class List extends React.Component<IListProps, IListState> {
     }
 
     this.setState({
-      selectedItem: selectedItem,
+      selectedItem,
     });
   }
 
@@ -83,7 +83,7 @@ export default class List extends React.Component<IListProps, IListState> {
         let selectedItem = this.props.items[selectedItemIndex + 1];
 
         this.setState({
-          selectedItem: selectedItem,
+          selectedItem,
         });
 
         this.props.onItemSelect(selectedItem);
@@ -98,7 +98,7 @@ export default class List extends React.Component<IListProps, IListState> {
         let selectedItem = this.props.items[selectedItemIndex - 1];
 
         this.setState({
-          selectedItem: selectedItem,
+          selectedItem,
         });
 
         this.props.onItemSelect(selectedItem);
