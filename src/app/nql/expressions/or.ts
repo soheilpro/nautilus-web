@@ -5,7 +5,7 @@ export class OrExpression extends Expression {
     super();
   }
 
-  returnType(): string {
+  get returnType() {
     return 'Boolean';
   }
 

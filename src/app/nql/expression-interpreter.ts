@@ -1,4 +1,5 @@
-import { IExpression } from './expression';
+import * as _ from 'underscore';
+import { IExpression } from './iexpression';
 import { ExpressionVisitor } from './expression-visitor';
 import { AndExpression } from './expressions/and';
 import { CastExpression } from './expressions/cast';
@@ -10,20 +11,19 @@ import { MethodCallExpression } from './expressions/method-call';
 import { OrExpression } from './expressions/or';
 import { PropertyExpression } from './expressions/property';
 
-export interface IEvaluationContext {
-  types: [
-    {
-      name: string;
-      base?: string;
-    }
-  ];
+export interface IInterpreterContext {
+  types: {
+    name: string;
+    base?: string;
+  }[];
+
   locals: {
     [key: string]: any;
   };
 }
 
-export class ExpressionEvaluator extends ExpressionVisitor<any, IEvaluationContext> {
-  evaluate(expression: IExpression, context: IEvaluationContext): any {
+export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpreterContext> {
+  evaluate(expression: IExpression, context: IInterpreterContext): any {
     context.types.push({ name: 'Boolean' });
     context.types.push({ name: 'Number' });
     context.types.push({ name: 'String' });
@@ -32,7 +32,7 @@ export class ExpressionEvaluator extends ExpressionVisitor<any, IEvaluationConte
     return this.visit(expression, context);
   }
 
-  visitAnd(expression: AndExpression, context: IEvaluationContext): any {
+  visitAnd(expression: AndExpression, context: IInterpreterContext): any {
     for (let child of expression.children)
       if (!this.visit(child, context))
         return false;
@@ -40,20 +40,20 @@ export class ExpressionEvaluator extends ExpressionVisitor<any, IEvaluationConte
     return true;
   }
 
-  visitCast(expression: CastExpression, context: IEvaluationContext): any {
+  visitCast(expression: CastExpression, context: IInterpreterContext): any {
     return this.visit(expression.child, context);
   }
 
-  visitComparison(expression: ComparisonExpression, context: IEvaluationContext): any {
+  visitComparison(expression: ComparisonExpression, context: IInterpreterContext): any {
     let areEqual = (left: IExpression, right: IExpression) => {
-      let leftReturnType = context.types.filter(t => t.name === left.returnType())[0];
-      let rightReturnType = context.types.filter(t => t.name === right.returnType())[0];
+      let leftReturnType = _.find(context.types, type => type.name === left.returnType);
+      let rightReturnType = _.find(context.types, type => type.name === right.returnType);
 
       if (!leftReturnType)
-        throw new Error(`Unkown type '${left.returnType()}'.`);
+        throw new Error(`Unkown type '${left.returnType}'.`);
 
       if (!rightReturnType)
-        throw new Error(`Unkown type '${right.returnType()}'.`);
+        throw new Error(`Unkown type '${right.returnType}'.`);
 
       if (leftReturnType !== rightReturnType)
         throw new Error(`Cannot compare expressions of type '${leftReturnType}' and '${rightReturnType}'.`);
@@ -78,7 +78,7 @@ export class ExpressionEvaluator extends ExpressionVisitor<any, IEvaluationConte
     };
 
     let isIn = (left: IExpression, right: IExpression) => {
-      let rightReturnType = right.returnType();
+      let rightReturnType = right.returnType;
 
       if (rightReturnType !== 'List')
         throw new Error(`IN/NOT IN operators expect a List but got '${rightReturnType}' instead.`);
@@ -100,30 +100,30 @@ export class ExpressionEvaluator extends ExpressionVisitor<any, IEvaluationConte
         return !isIn(expression.left, expression.right);
 
       default:
-        throw new Error('Not Implemented');
+        throw new Error('Not supported.');
     }
   }
 
-  visitConstant(expression: ConstantExpression, context: IEvaluationContext): any {
+  visitConstant(expression: ConstantExpression, context: IInterpreterContext): any {
     return expression.value;
   }
 
-  visitList(expression: ListExpression, context: IEvaluationContext): any {
+  visitList(expression: ListExpression, context: IInterpreterContext): any {
     return expression.children.map(e => this.visit(e, context));
   }
 
-  visitLocal(expression: LocalExpression, context: IEvaluationContext): any {
+  visitLocal(expression: LocalExpression, context: IInterpreterContext): any {
     return context.locals[expression.name];
   }
 
-  visitMethodCall(expression: MethodCallExpression, context: IEvaluationContext): any {
+  visitMethodCall(expression: MethodCallExpression, context: IInterpreterContext): any {
     let targetValue = this.visit(expression.target, context);
     let argValues = expression.args.map(e => this.visit(e, context));
 
     return targetValue[expression.name].call(targetValue, argValues);
   }
 
-  visitOr(expression: OrExpression, context: IEvaluationContext): any {
+  visitOr(expression: OrExpression, context: IInterpreterContext): any {
     for (let child of expression.children)
       if (this.visit(child, context))
         return true;
@@ -131,7 +131,7 @@ export class ExpressionEvaluator extends ExpressionVisitor<any, IEvaluationConte
     return false;
   }
 
-  visitProperty(expression: PropertyExpression, context: IEvaluationContext): any {
+  visitProperty(expression: PropertyExpression, context: IInterpreterContext): any {
     let targetValue = this.visit(expression.target, context);
 
     return targetValue[expression.name];

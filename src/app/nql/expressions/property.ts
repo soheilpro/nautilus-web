@@ -5,11 +5,11 @@ export class PropertyExpression extends Expression {
     super();
   }
 
-  returnType(): string {
+  get returnType() {
     return 'Any';
   }
 
-  toString(): string {
+  toString() {
     return `${this.target.toString()}.${this.name}`;
   }
 }

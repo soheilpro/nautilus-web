@@ -1,4 +1,4 @@
-import { IExpression } from './expression';
+import { IExpression } from './iexpression';
 import { ExpressionVisitor } from './expression-visitor';
 import { AndExpression } from './expressions/and';
 import { CastExpression } from './expressions/cast';
@@ -161,6 +161,6 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
         value.args[1] as string
       );
 
-    throw new Error('Not Implemented');
+    throw new Error('Not supported.');
   }
 }

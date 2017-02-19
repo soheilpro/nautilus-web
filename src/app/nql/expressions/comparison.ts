@@ -5,11 +5,11 @@ export class ComparisonExpression extends Expression {
     super();
   }
 
-  returnType(): string {
+  get returnType() {
     return 'Boolean';
   }
 
-  toString(): string {
+  toString() {
     return `${this.left.toString()} ${this.operator} ${this.right.toString()}`;
   }
 }

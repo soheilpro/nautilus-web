@@ -5,11 +5,11 @@ export class MethodCallExpression extends Expression {
     super();
   }
 
-  returnType(): string {
+  get returnType() {
     return 'Any';
   }
 
-  toString(): string {
+  toString() {
     return `${this.target.toString()}.${this.name}(${this.args.map(e => e.toString()).join(',')})`;
   }
 }

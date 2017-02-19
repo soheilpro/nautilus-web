@@ -1,4 +1,4 @@
-import { IExpression } from './expression';
+import { IExpression } from './iexpression';
 import { ExpressionVisitor } from './expression-visitor';
 import { AndExpression } from './expressions/and';
 import { CastExpression } from './expressions/cast';

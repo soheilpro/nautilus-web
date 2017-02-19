@@ -1,4 +1,4 @@
-import { IExpression } from './expression';
+import { IExpression } from './iexpression';
 import { AndExpression } from './expressions/and';
 import { CastExpression } from './expressions/cast';
 import { ComparisonExpression } from './expressions/comparison';
@@ -42,7 +42,7 @@ export abstract class ExpressionVisitor<TResult, TContext> implements IExpressio
     if (expression instanceof PropertyExpression)
       return this.visitProperty(expression, context);
 
-    throw new Error('Not Implemented');
+    throw new Error('Not supported.');
   }
 
   abstract visitAnd(expression: AndExpression, context: TContext): TResult;

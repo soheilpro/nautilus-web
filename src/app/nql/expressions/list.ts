@@ -5,11 +5,11 @@ export class ListExpression extends Expression {
     super();
   }
 
-  returnType(): string {
+  get returnType() {
     return 'List';
   }
 
-  toString(): string {
+  toString() {
     return `[${this.children.map(e => e.toString()).join(', ')}]`;
   }
 }

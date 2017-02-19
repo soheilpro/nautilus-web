@@ -5,11 +5,11 @@ export class CastExpression extends Expression {
     super();
   }
 
-  returnType(): string {
+  get returnType() {
     return this.type;
   }
 
-  toString(): string {
+  toString() {
     return `(${this.type})(${this.child.toString()})`;
   }
 }
