@@ -24,10 +24,10 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
     this.typeSystem.registerTypes(types);
   }
 
-  compile(expression: IExpression): Function {
+  compile(expression: IExpression, args: string[]) {
     let context: IContext = {};
 
-    return new Function('locals', `return ${this.visit(expression, context)};`);
+    return new Function(...args, `return ${this.visit(expression, context)};`);
   }
 
   visitAnd(expression: AndExpression, context: IContext): string {
@@ -39,36 +39,66 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   visitComparison(expression: ComparisonExpression, context: IContext): string {
-    let leftReturnType = this.typeSystem.get(expression.left.returnType);
-    let rightReturnType = this.typeSystem.get(expression.right.returnType);
+    switch (expression.operator) {
+      case '==':
+      case '!=':
+        return this.visitComparisonEquality(expression.left, expression.right, expression.operator, context);
+
+      case 'IN':
+      case 'NOT IN':
+        return this.visitComparisonInclusion(expression.left, expression.right, expression.operator, context);
+
+      default:
+        throw new Error('Not supported.');
+    }
+  }
+
+  private visitComparisonEquality(left: IExpression, right: IExpression, operator: string, context: IContext): string {
+    let leftReturnType = this.typeSystem.getType(left.returnType);
+    let rightReturnType = this.typeSystem.getType(right.returnType);
 
     if (!leftReturnType)
-      throw new Error(`Unkown type '${expression.left.returnType}'.`);
+      throw new Error(`Unkown type '${left.returnType}'.`);
 
     if (!rightReturnType)
-      throw new Error(`Unkown type '${expression.right.returnType}'.`);
+      throw new Error(`Unkown type '${right.returnType}'.`);
 
     let commonReturnType = this.typeSystem.getCommonType(leftReturnType, rightReturnType);
 
     if (!commonReturnType)
       throw new Error(`Cannot compare expressions of type '${leftReturnType}' and '${rightReturnType}'.`);
 
-    let left = this.visit(expression.left, context);
-    let right = this.visit(expression.right, context);
+    let leftValue = this.visit(left, context);
+    let rightValue = this.visit(right, context);
+    let targetOperator: string;
 
-    let entityType = this.typeSystem.get('Entity');
-
-    if (this.typeSystem.isOfType(commonReturnType, entityType)) {
-      left = `(${left}).id`;
-      right = `(${right}).id`;
+    switch (operator) {
+      case '==': targetOperator = '==='; break;
+      case '!=': targetOperator = '!=='; break;
+      default: throw new Error('Not supported.');
     }
 
-    switch (expression.operator) {
-      case '==':
-        return `(${left} === ${right})`;
+    if (this.typeSystem.isOfType(commonReturnType, 'Entity'))
+      return `${leftValue} && ${rightValue} && (${leftValue}).id ${targetOperator} (${rightValue}).id`;
 
-      case '!=':
-        return `(${left} !== ${right})`;
+    return `${leftValue} ${targetOperator} ${rightValue}`;
+  }
+
+  private visitComparisonInclusion(left: IExpression, right: IExpression, operator: string, context: IContext): string {
+    let leftReturnType = this.typeSystem.getType(left.returnType);
+
+    if (!leftReturnType)
+      throw new Error(`Unkown type '${left.returnType}'.`);
+
+    if (!(right instanceof ListExpression))
+        throw new Error(`${operator} operator expects a List.`);
+
+    switch (operator) {
+      case 'IN':
+        return right.children.map(child => this.visitComparisonEquality(left, child, '==', context)).join(' || ');
+
+      case 'NOT IN':
+        return right.children.map(child => this.visitComparisonEquality(left, child, '!=', context)).join(' && ');
 
       default:
         throw new Error('Not supported.');
@@ -84,7 +114,7 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   visitLocal(expression: LocalExpression, context: IContext): string {
-    return `locals['${expression.name}']`;
+    return expression.name;
   }
 
   visitMethodCall(expression: MethodCallExpression, context: IContext): string {
@@ -103,6 +133,6 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
     let target = this.visit(expression.target, context);
     let name = expression.name;
 
-    return `(${target})['${name}']`;
+    return `(${target}).${name}`;
   }
 }

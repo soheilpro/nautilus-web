@@ -1,4 +1,5 @@
 import * as _ from 'underscore';
+import * as NQL from '../../nql';
 import { IClient, IItem, IItemChange } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
@@ -8,6 +9,7 @@ import { IIssueChange } from './iissue-change';
 import { ITask } from './itask';
 import { ITaskChange } from './itask-change';
 import { isIssue } from './is-issue';
+import ItemFilter from './item-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
   private items: IItem[];
@@ -20,8 +22,15 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.items = await this.client.items.getAll({});
   }
 
-  getAll() {
-    return Promise.resolve(this.items.slice());
+  getAll(query: NQL.Expression) {
+    if (!query)
+      return Promise.resolve(this.items.slice());
+
+    let itemFilter = new ItemFilter(this.application);
+    let predicate = itemFilter.getPredicate(query);
+    let items = this.items.filter(predicate);
+
+    return Promise.resolve(items);
   }
 
   searchIssues(query: string) {

@@ -1,4 +1,5 @@
 import { IItem } from '../../sdk';
+import * as NQL from '../../nql';
 import { IModule } from '../imodule';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
@@ -6,7 +7,7 @@ import { ITask } from './itask';
 import { ITaskChange } from './itask-change';
 
 export interface IItemModule extends IModule {
-  getAll(): Promise<IItem[]>;
+  getAll(query: NQL.Expression): Promise<IItem[]>;
   searchIssues(query: string): Promise<IIssue[]>;
   addIssue(issue: IIssue): Promise<IIssue>;
   addTask(task: ITask, issue: IIssue): Promise<ITask>;

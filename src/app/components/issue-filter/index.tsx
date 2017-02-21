@@ -13,7 +13,8 @@ interface IQueryObject {
 };
 
 interface IIssueFilterProps {
-  query?: NQL.Expression;
+  query: NQL.Expression;
+  onChange(query: NQL.Expression): void;
 }
 
 interface IIssueFilterState {
@@ -66,6 +67,8 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
     this.setState({
       queries: queries,
     });
+
+    this.props.onChange(this.getQuery(queries));
   }
 
   private getQuery(queries: IQueryObject) {

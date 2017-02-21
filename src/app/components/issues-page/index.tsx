@@ -40,6 +40,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleNewIssueButtonClick = this.handleNewIssueButtonClick.bind(this);
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
+    this.handleIssueFilterChange = this.handleIssueFilterChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
 
     this.state = {
@@ -55,7 +56,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   async componentDidMount() {
-    let items = await this.application.items.getAll();
+    let items = await this.application.items.getAll(null);
 
     this.setState({
       items,
@@ -78,21 +79,21 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(),
+      items: await this.application.items.getAll(null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsUpdate({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(),
+      items: await this.application.items.getAll(null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsDelete({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(),
+      items: await this.application.items.getAll(null),
       selectedItem: undefined,
     });
   }
@@ -106,6 +107,16 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private handleRefreshButtonClick() {
+  }
+
+  private async handleIssueFilterChange(query: NQL.Expression) {
+    let items = await this.application.items.getAll(query);
+
+    this.setState({
+      items,
+      selectedItem: _.last(items.filter(isIssue)),
+      issueFilterQuery: query,
+    });
   }
 
   private handleItemListItemSelect(item: IItem) {
@@ -125,7 +136,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           </div>
           <div className="row container">
             <div className="issue-filter">
-              <IssueFilter query={this.state.issueFilterQuery} />
+              <IssueFilter query={this.state.issueFilterQuery} onChange={this.handleIssueFilterChange} />
             </div>
             <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />

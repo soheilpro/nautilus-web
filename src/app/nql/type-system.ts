@@ -20,7 +20,7 @@ export default class TypeSystem implements ITypeSystem {
     this.types.push(...types);
   }
 
-  get(name: string) {
+  getType(name: string) {
     return _.find(this.types, type => type.name === name);
   }
 
@@ -39,8 +39,11 @@ export default class TypeSystem implements ITypeSystem {
     return hierarchy;
   }
 
-  isOfType(type: IType, baseType: IType) {
-    return this.getTypeHierarchy(type).some(_type => _type.name === baseType.name);
+  isOfType(type: IType, baseType: IType | string) {
+    if (typeof baseType === 'string')
+      baseType = this.getType(baseType);
+
+    return this.getTypeHierarchy(type).some(_type => _type.name === (baseType as IType).name);
   }
 
   getCommonType(type1: IType, type2: IType) {
