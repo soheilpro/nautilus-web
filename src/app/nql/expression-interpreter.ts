@@ -1,38 +1,44 @@
-import * as _ from 'underscore';
-import { IExpression } from './iexpression';
-import { ExpressionVisitor } from './expression-visitor';
 import { AndExpression } from './expressions/and';
 import { CastExpression } from './expressions/cast';
 import { ComparisonExpression } from './expressions/comparison';
 import { ConstantExpression } from './expressions/constant';
+import { ExpressionVisitor } from './expression-visitor';
+import { IExpression } from './iexpression';
+import { IType } from './itype';
 import { ListExpression } from './expressions/list';
 import { LocalExpression } from './expressions/local';
 import { MethodCallExpression } from './expressions/method-call';
 import { OrExpression } from './expressions/or';
 import { PropertyExpression } from './expressions/property';
+import * as _ from 'underscore';
+import TypeSystem from './type-system';
 
-export interface IInterpreterContext {
-  types: {
-    name: string;
-    base?: string;
-  }[];
-
-  locals: {
-    [key: string]: any;
-  };
+interface ILocals {
+  [key: string]: any;
 }
 
-export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpreterContext> {
-  evaluate(expression: IExpression, context: IInterpreterContext): any {
-    context.types.push({ name: 'Boolean' });
-    context.types.push({ name: 'Number' });
-    context.types.push({ name: 'String' });
-    context.types.push({ name: 'Entity' });
+export interface IInterpretationContext {
+  locals: ILocals;
+}
+
+export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpretationContext> {
+  private typeSystem = new TypeSystem();
+
+  constructor(types: IType[]) {
+    super();
+
+    this.typeSystem.registerTypes(types);
+  }
+
+  evaluate(expression: IExpression, locals: ILocals): Function {
+    let context: IInterpretationContext = {
+      locals
+    };
 
     return this.visit(expression, context);
   }
 
-  visitAnd(expression: AndExpression, context: IInterpreterContext): any {
+  visitAnd(expression: AndExpression, context: IInterpretationContext): any {
     for (let child of expression.children)
       if (!this.visit(child, context))
         return false;
@@ -40,14 +46,14 @@ export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpreterCo
     return true;
   }
 
-  visitCast(expression: CastExpression, context: IInterpreterContext): any {
+  visitCast(expression: CastExpression, context: IInterpretationContext): any {
     return this.visit(expression.child, context);
   }
 
-  visitComparison(expression: ComparisonExpression, context: IInterpreterContext): any {
+  visitComparison(expression: ComparisonExpression, context: IInterpretationContext): any {
     let areEqual = (left: IExpression, right: IExpression) => {
-      let leftReturnType = _.find(context.types, type => type.name === left.returnType);
-      let rightReturnType = _.find(context.types, type => type.name === right.returnType);
+      let leftReturnType = this.typeSystem.get(expression.left.returnType);
+      let rightReturnType = this.typeSystem.get(expression.right.returnType);
 
       if (!leftReturnType)
         throw new Error(`Unkown type '${left.returnType}'.`);
@@ -55,23 +61,26 @@ export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpreterCo
       if (!rightReturnType)
         throw new Error(`Unkown type '${right.returnType}'.`);
 
-      if (leftReturnType !== rightReturnType)
+      let commonReturnType = this.typeSystem.getCommonType(leftReturnType, rightReturnType);
+
+      if (!commonReturnType)
         throw new Error(`Cannot compare expressions of type '${leftReturnType}' and '${rightReturnType}'.`);
 
-      let returnType = leftReturnType;
-      let leftValue = this.visit(left, context);
-      let rightValue = this.visit(right, context);
+      let leftValue = this.visit(expression.left, context);
+      let rightValue = this.visit(expression.right, context);
 
-      if (returnType.name === 'Boolean')
+      if (commonReturnType.name === 'Boolean')
         return leftValue === rightValue;
 
-      if (returnType.name === 'Number')
+      if (commonReturnType.name === 'Number')
         return leftValue === rightValue;
 
-      if (returnType.name === 'String')
+      if (commonReturnType.name === 'String')
         return leftValue === rightValue;
 
-      if (returnType.name === 'Entity' || returnType.base === 'Entity')
+      let entityType = this.typeSystem.get('Entity');
+
+      if (this.typeSystem.isOfType(commonReturnType, entityType))
         return leftValue && rightValue && leftValue.id === rightValue.id;
 
       return false;
@@ -104,26 +113,26 @@ export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpreterCo
     }
   }
 
-  visitConstant(expression: ConstantExpression, context: IInterpreterContext): any {
+  visitConstant(expression: ConstantExpression, context: IInterpretationContext): any {
     return expression.value;
   }
 
-  visitList(expression: ListExpression, context: IInterpreterContext): any {
+  visitList(expression: ListExpression, context: IInterpretationContext): any {
     return expression.children.map(e => this.visit(e, context));
   }
 
-  visitLocal(expression: LocalExpression, context: IInterpreterContext): any {
+  visitLocal(expression: LocalExpression, context: IInterpretationContext): any {
     return context.locals[expression.name];
   }
 
-  visitMethodCall(expression: MethodCallExpression, context: IInterpreterContext): any {
+  visitMethodCall(expression: MethodCallExpression, context: IInterpretationContext): any {
     let targetValue = this.visit(expression.target, context);
     let argValues = expression.args.map(e => this.visit(e, context));
 
     return targetValue[expression.name].call(targetValue, argValues);
   }
 
-  visitOr(expression: OrExpression, context: IInterpreterContext): any {
+  visitOr(expression: OrExpression, context: IInterpretationContext): any {
     for (let child of expression.children)
       if (this.visit(child, context))
         return true;
@@ -131,7 +140,7 @@ export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpreterCo
     return false;
   }
 
-  visitProperty(expression: PropertyExpression, context: IInterpreterContext): any {
+  visitProperty(expression: PropertyExpression, context: IInterpretationContext): any {
     let targetValue = this.visit(expression.target, context);
 
     return targetValue[expression.name];
