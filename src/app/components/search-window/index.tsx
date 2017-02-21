@@ -41,7 +41,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
         break;
 
       default:
-        throw new Error('Not implemented.');
+        throw new Error('Not supported.');
     }
   }
 
