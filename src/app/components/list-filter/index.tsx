@@ -19,9 +19,11 @@ interface IListFilterDropdownProps {
   title: string;
   items: IFilterItem[];
   displayProperty: string;
+  query?: NQL.Expression;
   queryItem: string;
   queryItemType: string;
   itemToQueryItem: (item: IFilterItem) => Object;
+  itemComparer: (item1: IFilterItem, item2: IFilterItem) => boolean;
   className?: string;
   onChange(query: NQL.IExpression): void;
 }
@@ -47,17 +49,24 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     this.handleItemIncludeClick = this.handleItemIncludeClick.bind(this);
     this.handleItemTitleClick = this.handleItemTitleClick.bind(this);
 
+    let { includedItems, excludedItems } = this.parseQuery(props.query, props);
+
     this.state = {
       items: props.items,
       selectedItemIndex: 0,
-      includedItems: [],
-      excludedItems: [],
+      includedItems,
+      excludedItems,
     };
   }
 
   componentWillReceiveProps(nextProps: IListFilterDropdownProps) {
+    let { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
+
     this.setState({
       items: this.filterItems(this.props.items, this.state.searchText),
+      selectedItemIndex: 0,
+      includedItems,
+      excludedItems,
     });
   }
 
@@ -164,7 +173,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     let includedItems = [item];
     let excludedItems: IFilterItem[] = [];
 
-    this.props.onChange(this.getExpression(includedItems, excludedItems));
+    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props));
 
     this.setState({
       includedItems,
@@ -178,7 +187,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     let includedItems: IFilterItem[] = [];
     let excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
 
-    this.props.onChange(this.getExpression(includedItems, excludedItems));
+    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props));
 
     this.setState({
       includedItems,
@@ -187,10 +196,10 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
   }
 
   private toggleItemInclude(item: IFilterItem) {
-    let includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item)
+    let includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item);
     let excludedItems: IFilterItem[] = [];
 
-    this.props.onChange(this.getExpression(includedItems, excludedItems));
+    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props));
 
     this.setState({
       includedItems,
@@ -198,36 +207,117 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     });
   }
 
-  private getExpression(includedItems: IFilterItem[], excludedItems: IFilterItem[]): NQL.IExpression {
+  private getQuery(includedItems: IFilterItem[], excludedItems: IFilterItem[], props: IListFilterDropdownProps): NQL.IExpression {
     if (includedItems.length === 1) {
       return new NQL.ComparisonExpression(
-        new NQL.LocalExpression(this.props.queryItem),
-        new NQL.ConstantExpression(this.props.itemToQueryItem(includedItems[0]), this.props.queryItemType),
+        new NQL.LocalExpression(props.queryItem),
+        new NQL.ConstantExpression(props.itemToQueryItem(includedItems[0]), props.queryItemType),
         '==');
     }
 
     if (includedItems.length > 1) {
       return new NQL.ComparisonExpression(
-        new NQL.LocalExpression(this.props.queryItem),
-        new NQL.ListExpression(includedItems.map(item => new NQL.ConstantExpression(this.props.itemToQueryItem(item), this.props.queryItemType))),
+        new NQL.LocalExpression(props.queryItem),
+        new NQL.ListExpression(includedItems.map(item => new NQL.ConstantExpression(props.itemToQueryItem(item), props.queryItemType))),
         'IN');
     }
 
     if (excludedItems.length === 1) {
       return new NQL.ComparisonExpression(
-        new NQL.LocalExpression(this.props.queryItem),
-        new NQL.ConstantExpression(this.props.itemToQueryItem(excludedItems[0]), this.props.queryItemType),
+        new NQL.LocalExpression(props.queryItem),
+        new NQL.ConstantExpression(props.itemToQueryItem(excludedItems[0]), props.queryItemType),
         '!=');
     }
 
     if (excludedItems.length > 1) {
       return new NQL.ComparisonExpression(
-        new NQL.LocalExpression(this.props.queryItem),
-        new NQL.ListExpression(excludedItems.map(item => new NQL.ConstantExpression(this.props.itemToQueryItem(item), this.props.queryItemType))),
+        new NQL.LocalExpression(props.queryItem),
+        new NQL.ListExpression(excludedItems.map(item => new NQL.ConstantExpression(props.itemToQueryItem(item), props.queryItemType))),
         'NOT IN');
     }
 
     return null;
+  }
+
+  private parseQuery(query: NQL.Expression, props: IListFilterDropdownProps): { includedItems: IFilterItem[], excludedItems: IFilterItem[]} {
+    if (!query)
+      return {
+        includedItems: [],
+        excludedItems: [],
+      };
+
+    let comparisonQuery = query as NQL.ComparisonExpression;
+
+    if (comparisonQuery.operator === '==') {
+      let item = (comparisonQuery.right as NQL.ConstantExpression).value;
+
+      return {
+        includedItems: props.items.filter(x => props.itemComparer(x, item)),
+        excludedItems: [],
+      };
+    }
+
+    if (comparisonQuery.operator === 'IN') {
+      let items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
+
+      return {
+        includedItems: props.items.filter(x => items.some(item => props.itemComparer(item, x))),
+        excludedItems: [],
+      };
+    }
+
+    if (comparisonQuery.operator === '!=') {
+      let item = (comparisonQuery.right as NQL.ConstantExpression).value;
+
+      return {
+        includedItems: [],
+        excludedItems: props.items.filter(x => props.itemComparer(x, item)),
+      };
+    }
+
+    if (comparisonQuery.operator === 'NOT IN') {
+      let items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
+
+      return {
+        includedItems: [],
+        excludedItems: props.items.filter(x => items.some(item => props.itemComparer(item, x))),
+      };
+    }
+
+    throw new Error('Not supported.');
+  }
+
+  static canParseQuery(query: NQL.Expression, queryItem: string, queryItemType: string) {
+    if (!(query instanceof NQL.ComparisonExpression))
+      return false;
+
+    if (!(query.left instanceof NQL.LocalExpression))
+      return false;
+
+    if (query.left.name !== queryItem)
+      return false;
+
+    if (query.operator === '==' || query.operator === '!=') {
+      if (!(query.right instanceof NQL.ConstantExpression))
+        return false;
+
+      if (query.right.returnType !== queryItemType)
+        return false;
+
+      return true;
+    }
+
+    if (query.operator === 'IN' || query.operator === 'NOT IN') {
+      if (!(query.right instanceof NQL.ListExpression))
+        return false;
+
+      if (!query.right.children.every(child => child instanceof NQL.ConstantExpression && child.returnType === queryItemType))
+        return false;
+
+      return true;
+    }
+
+    return false;
   }
 
   render() {

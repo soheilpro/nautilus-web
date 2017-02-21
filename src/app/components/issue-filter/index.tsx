@@ -1,101 +1,96 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { ICommandProvider } from '../../commands';
-import { ServiceManager } from '../../services';
 import Expression from '../expression';
-import ProjectFilter from '../project-filter';
+import IssueProjectFilter from '../issue-project-filter';
 import IssueTypeFilter from '../issue-type-filter';
-import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
-import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IFilterQueryObject {
+interface IQueryObject {
   [key: string]: NQL.Expression;
 };
 
 interface IIssueFilterProps {
+  query?: NQL.Expression;
 }
 
 interface IIssueFilterState {
-  filterQueries?: IFilterQueryObject;
-  isProjectFilterOpen?: boolean;
-  isTypeFilterOpen?: boolean;
+  queries?: IQueryObject;
 }
 
-export default class IssueFilter extends React.Component<IIssueFilterProps, IIssueFilterState> implements ICommandProvider {
-  private commandManager = ServiceManager.Instance.getCommandManager();
-  private projectFilterComponent: ProjectFilter;
-  private issueTypeComponent: IssueTypeFilter;
+export default class IssueFilter extends React.Component<IIssueFilterProps, IIssueFilterState> {
+  private filters = [
+    { key: 'project', Component: IssueProjectFilter },
+    { key: 'type',    Component: IssueTypeFilter },
+  ];
 
-  constructor() {
+  constructor(props: IIssueFilterProps) {
     super();
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
-    this.handleFilterIssuesByProjectCommandExecute = this.handleFilterIssuesByProjectCommandExecute.bind(this);
-    this.handleFilterIssuesByTypeCommandExecute = this.handleFilterIssuesByTypeCommandExecute.bind(this);
 
     this.state = {
-      filterQueries: { // Required for proper sorting
-        project: null,
-        issueType: null,
-      },
+      queries: this.getQueryObject(props.query) || {},
     };
   }
 
-  async componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
-  }
+  private getQueryObject(query: NQL.Expression) {
+    if (!query)
+      return null;
 
-  componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
-  }
+    let children = (query as NQL.AndExpression).children.slice();
+    let queries: IQueryObject = {};
 
-  getCommands() {
-    return [
-      new FilterIssuesByProjectCommand(this.handleFilterIssuesByProjectCommandExecute),
-      new FilterIssuesByTypeCommand(this.handleFilterIssuesByTypeCommandExecute),
-    ];
+    for (let child of children) {
+      for (let filter of this.filters) {
+        if (filter.Component.canParseQuery(child)) {
+          queries[filter.key] = child;
+          break;
+        }
+      }
+    }
+
+    return queries;
   }
 
   private handleFilterChange(key: string, query: NQL.IExpression) {
+    let queries = _.clone(this.state.queries);
+
+    if (query)
+      queries[key] = query;
+    else
+      delete queries[key];
+
     this.setState({
-      filterQueries: _.assign(this.state.filterQueries, { [key]: query }),
+      queries: queries,
     });
   }
 
-  private handleFilterIssuesByProjectCommandExecute() {
-    this.projectFilterComponent.open();
-  }
+  private getQuery(queries: IQueryObject) {
+    let queryValues = _.values(queries);
 
-  private handleFilterIssuesByTypeCommandExecute() {
-    this.issueTypeComponent.open();
-  }
-
-  private getFilterQuery(filterQueries: IFilterQueryObject) {
-    let filterQueryValues = _.values(filterQueries).filter(query => query !== null);
-
-    if (filterQueryValues.length === 0)
+    if (queryValues.length === 0)
       return null;
 
-    return new NQL.AndExpression(filterQueryValues);
+    return new NQL.AndExpression(queryValues);
   }
 
   render() {
     return (
       <div className="issue-filter-component">
         <div className="text">
-          <Expression expression={this.getFilterQuery(this.state.filterQueries)} />
+          <Expression expression={this.getQuery(this.state.queries)} />
         </div>
         <div className="filters">
-          <div className="filter">
-            <ProjectFilter onChange={_.partial(this.handleFilterChange, 'project')} ref={e => this.projectFilterComponent = e} />
-          </div>
-          <div className="filter">
-            <IssueTypeFilter onChange={_.partial(this.handleFilterChange, 'type')} ref={e => this.issueTypeComponent = e} />
-          </div>
+          {
+            this.filters.map(filter => {
+              return (
+                <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} ref={null} children={null} key={filter.key} />
+              );
+            })
+          }
         </div>
       </div>
     );

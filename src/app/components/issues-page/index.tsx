@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
@@ -21,6 +22,7 @@ interface IIssuesPageProps {
 interface IIssuesPageState {
   items?: IItem[];
   selectedItem?: IItem;
+  issueFilterQuery?: NQL.Expression;
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
@@ -123,7 +125,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           </div>
           <div className="row container">
             <div className="issue-filter">
-              <IssueFilter />
+              <IssueFilter query={this.state.issueFilterQuery} />
             </div>
             <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />

@@ -1,21 +1,21 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { IIssueType, asEntity, entityComparer } from '../../application';
+import { IProject, asEntity, entityComparer } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ListFilter from '../list-filter';
-import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
+import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 
-interface IIssueTypeFilterProps {
+interface IProjectFilterProps {
   query?: NQL.Expression;
   onChange(query: NQL.IExpression): void;
 }
 
-interface IIssueTypeFilterState {
-  issueTypes?: IIssueType[];
+interface IProjectFilterState {
+  projects?: IProject[];
 }
 
-export default class IssueTypeFilter extends React.Component<IIssueTypeFilterProps, IIssueTypeFilterState> implements ICommandProvider {
+export default class ProjectFilter extends React.Component<IProjectFilterProps, IProjectFilterState> implements ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private listFilterComponent: ListFilter;
@@ -27,7 +27,7 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
     this.close = this.close.bind(this);
 
     this.state = {
-      issueTypes: [],
+      projects: [],
     };
   }
 
@@ -37,7 +37,7 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
 
   async componentDidMount() {
     this.setState({
-      issueTypes: this.application.issueTypes.getAll(),
+      projects: this.application.projects.getAll(),
     });
   }
 
@@ -47,7 +47,7 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
 
   getCommands() {
     return [
-      new FilterIssuesByTypeCommand(this.open),
+      new FilterIssuesByProjectCommand(this.open),
     ];
   }
 
@@ -60,12 +60,12 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
   }
 
   static canParseQuery(query: NQL.Expression) {
-    return ListFilter.canParseQuery(query, 'type', 'IssueType');
+    return ListFilter.canParseQuery(query, 'project', 'Project');
   }
 
   render() {
     return (
-      <ListFilter className="filter" title="Type" items={this.state.issueTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="IssueType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
+      <ListFilter className="filter" title="Project" items={this.state.projects} displayProperty="name" query={this.props.query} queryItem="project" queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
     );
   }
 };
