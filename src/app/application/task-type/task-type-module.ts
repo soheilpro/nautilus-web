@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import { IClient } from '../../sdk';
+import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';
 import { ITaskType } from './itask-type';
@@ -8,7 +9,7 @@ import { ITaskTypeModule } from './itask-type-module';
 export class TaskTypeModule extends BaseModule implements ITaskTypeModule {
   private taskTypes: ITaskType[];
 
-  constructor(private client: IClient) {
+  constructor(private application: IApplication, private client: IClient) {
     super();
   }
 

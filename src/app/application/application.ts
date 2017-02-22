@@ -35,14 +35,14 @@ export class Application extends EventEmitter implements IApplication {
     let client = new Client({ address: address });
 
     this.client = client;
-    this.users = new UserModule(client);
-    this.projects = new ProjectModule(client);
-    this.items = new ItemModule(client);
-    this.issuePriorities = new IssuePriorityModule(client);
-    this.issueStates = new IssueStateModule(client);
-    this.issueTypes = new IssueTypeModule(client);
-    this.taskStates = new TaskStateModule(client);
-    this.taskTypes = new TaskTypeModule(client);
+    this.users = new UserModule(this, client);
+    this.projects = new ProjectModule(this, client);
+    this.items = new ItemModule(this, client);
+    this.issuePriorities = new IssuePriorityModule(this, client);
+    this.issueStates = new IssueStateModule(this, client);
+    this.issueTypes = new IssueTypeModule(this, client);
+    this.taskStates = new TaskStateModule(this, client);
+    this.taskTypes = new TaskTypeModule(this, client);
   }
 
   isInitialized() {

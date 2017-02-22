@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import { IClient, IProject } from '../../sdk';
+import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';
 import { IProjectModule } from './iproject-module';
@@ -7,7 +8,7 @@ import { IProjectModule } from './iproject-module';
 export class ProjectModule extends BaseModule implements IProjectModule {
   private projects: IProject[];
 
-  constructor(private client: IClient) {
+  constructor(private application: IApplication, private client: IClient) {
     super();
   }
 

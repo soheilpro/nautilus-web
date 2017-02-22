@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import { IClient, IItem, IItemChange } from '../../sdk';
+import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
 import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
@@ -11,7 +12,7 @@ import { isIssue } from './is-issue';
 export class ItemModule extends BaseModule implements IItemModule {
   private items: IItem[];
 
-  constructor(private client: IClient) {
+  constructor(private application: IApplication, private client: IClient) {
     super();
   }
 

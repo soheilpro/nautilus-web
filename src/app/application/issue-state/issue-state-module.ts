@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import { IClient } from '../../sdk';
+import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';
 import { IIssueState } from './iissue-state';
@@ -8,7 +9,7 @@ import { IIssueStateModule } from './iissue-state-module';
 export class IssueStateModule extends BaseModule implements IIssueStateModule {
   private issueStates: IIssueState[];
 
-  constructor(private client: IClient) {
+  constructor(private application: IApplication, private client: IClient) {
     super();
   }
 

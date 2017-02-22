@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import { IClient } from '../../sdk';
+import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';
 import { ITaskState } from './itask-state';
@@ -8,7 +9,7 @@ import { ITaskStateModule } from './itask-state-module';
 export class TaskStateModule extends BaseModule implements ITaskStateModule {
   private taskStates: ITaskState[];
 
-  constructor(private client: IClient) {
+  constructor(private application: IApplication, private client: IClient) {
     super();
   }
 
