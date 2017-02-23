@@ -50,6 +50,12 @@ export default class FilterSet extends React.Component<IFilterSetProps, IFilterS
     };
   }
 
+  componentWillReceiveProps(nextProps: IFilterSetProps) {
+    this.state = {
+      queries: this.getQueryObject(nextProps.query) || {},
+    };
+  }
+
   showFilter(key: string) {
     this.dropdownComponents[key].open();
   }

@@ -13,6 +13,7 @@ import MasterPage from '../master-page';
 import Button from '../button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
+import ClearFiltersCommand from './clear-filters-command';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -45,6 +46,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleIssueFilterSetChange = this.handleIssueFilterSetChange.bind(this);
     this.handleTaskFilterSetChange = this.handleTaskFilterSetChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
+    this.handleClearFiltersCommandExecute = this.handleClearFiltersCommandExecute.bind(this);
 
     this.state = {
       items: [],
@@ -77,6 +79,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   getCommands() {
     return [
       new NewTaskCommand(asIssue(this.state.selectedItem)),
+      new ClearFiltersCommand(this.handleClearFiltersCommandExecute),
     ];
   }
 
@@ -135,6 +138,17 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private handleItemListItemSelect(item: IItem) {
     this.setState({
       selectedItem: item,
+    });
+  }
+
+  private async handleClearFiltersCommandExecute() {
+    let items = await this.application.items.getAll(null, null);
+
+    this.setState({
+      items,
+      selectedItem: _.last(items.filter(isIssue)),
+      issueFilterQuery: null,
+      taskFilterQuery: null,
     });
   }
 

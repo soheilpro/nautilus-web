@@ -27,7 +27,7 @@ export default class TaskFilterSet extends React.Component<ITaskFilterSetProps, 
   constructor() {
     super();
 
-    this.handleFilterTasksCommand = this.handleFilterTasksCommand.bind(this);
+    this.handleFilterTasksCommandExecute = this.handleFilterTasksCommandExecute.bind(this);
   }
 
   componentWillMount() {
@@ -40,11 +40,11 @@ export default class TaskFilterSet extends React.Component<ITaskFilterSetProps, 
 
   getCommands() {
     return [
-      new FilterTasksByTypeCommand(_.partial(this.handleFilterTasksCommand, 'type')),
+      new FilterTasksByTypeCommand(_.partial(this.handleFilterTasksCommandExecute, 'type')),
     ];
   }
 
-  private handleFilterTasksCommand(key: string) {
+  private handleFilterTasksCommandExecute(key: string) {
     this.filterSetComponent.showFilter(key);
   }
 

@@ -30,7 +30,7 @@ export default class IssueFilterSet extends React.Component<IIssueFilterSetProps
   constructor() {
     super();
 
-    this.handleFilterIssuesCommand = this.handleFilterIssuesCommand.bind(this);
+    this.handleFilterIssuesCommandExecute = this.handleFilterIssuesCommandExecute.bind(this);
   }
 
   componentWillMount() {
@@ -43,12 +43,12 @@ export default class IssueFilterSet extends React.Component<IIssueFilterSetProps
 
   getCommands() {
     return [
-      new FilterIssuesByProjectCommand(_.partial(this.handleFilterIssuesCommand, 'project')),
-      new FilterIssuesByTypeCommand(_.partial(this.handleFilterIssuesCommand, 'type')),
+      new FilterIssuesByProjectCommand(_.partial(this.handleFilterIssuesCommandExecute, 'project')),
+      new FilterIssuesByTypeCommand(_.partial(this.handleFilterIssuesCommandExecute, 'type')),
     ];
   }
 
-  private handleFilterIssuesCommand(key: string) {
+  private handleFilterIssuesCommandExecute(key: string) {
     this.filterSetComponent.showFilter(key);
   }
 
