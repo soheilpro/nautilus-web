@@ -37,7 +37,7 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
 
   async componentDidMount() {
     this.setState({
-      issueTypes: this.application.itemTypes.getAllIssueTypes(),
+      issueTypes: this.application.itemTypes.getAll('issue'),
     });
   }
 

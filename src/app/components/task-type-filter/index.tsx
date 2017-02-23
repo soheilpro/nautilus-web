@@ -37,7 +37,7 @@ export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps
 
   async componentDidMount() {
     this.setState({
-      taskTypes: this.application.itemTypes.getAllTaskTypes(),
+      taskTypes: this.application.itemTypes.getAll('task'),
     });
   }
 

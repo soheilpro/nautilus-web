@@ -17,16 +17,8 @@ export class ItemStateModule extends BaseModule implements IItemStateModule {
     this.itemStates = await this.client.itemStates.getAll({});
   }
 
-  getAll() {
-    return this.itemStates.slice();
-  }
-
-  getAllIssueStates() {
-    return this.itemStates.filter(itemState => itemState.itemKind === 'issue');
-  }
-
-  getAllTaskStates() {
-    return this.itemStates.filter(itemState => itemState.itemKind === 'task');
+  getAll(itemKind: string) {
+    return this.itemStates.filter(itemState => itemState.itemKind === itemKind);
   }
 
   get(ItemState: IItemState) {

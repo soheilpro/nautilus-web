@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ITask } from '../../application';
-import TaskTypeField from '../task-type-field';
-import TaskStateField from '../task-state-field';
+import ItemTypeField from '../item-type-field';
+import ItemStateField from '../item-state-field';
 import UserField from '../user-field';
 
 require('../../assets/stylesheets/base.less');
@@ -22,12 +22,12 @@ export default class Task extends React.Component<ITaskProps, ITaskState> {
         <span className="arrow"></span>
         {
           this.props.task.type &&
-            <span className="type"><TaskTypeField taskType={this.props.task.type} /></span>
+            <span className="type"><ItemTypeField itemType={this.props.task.type} /></span>
         }
         <span className="title">{this.props.task.title}</span>
         {
           this.props.task.state &&
-            <span className="state"><TaskStateField taskState={this.props.task.state} /></span>
+            <span className="state"><ItemStateField itemState={this.props.task.state} /></span>
         }
         {
           this.props.task.assignedTo &&

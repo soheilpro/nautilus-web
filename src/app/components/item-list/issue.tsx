@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
 import ProjectField from '../project-field';
-import IssueTypeField from '../issue-type-field';
-import IssuePriorityField from '../issue-priority-field';
-import IssueStateField from '../issue-state-field';
+import ItemTypeField from '../item-type-field';
+import ItemPriorityField from '../item-priority-field';
+import ItemStateField from '../item-state-field';
 
 require('../../assets/stylesheets/base.less');
 require('./issue.less');
@@ -27,15 +27,15 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
         }
         {
           this.props.issue.type &&
-            <span className="type"><IssueTypeField issueType={this.props.issue.type} /></span>
+            <span className="type"><ItemTypeField itemType={this.props.issue.type} /></span>
         }
         {
           this.props.issue.priority &&
-            <span className="priority"><IssuePriorityField issuePriority={this.props.issue.priority} /></span>
+            <span className="priority"><ItemPriorityField itemPriority={this.props.issue.priority} /></span>
         }
         {
           this.props.issue.state &&
-            <span className="state"><IssueStateField issueState={this.props.issue.state} /></span>
+            <span className="state"><ItemStateField itemState={this.props.issue.state} /></span>
         }
       </div>
     );

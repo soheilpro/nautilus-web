@@ -2,8 +2,8 @@ import * as React from 'react';
 import { IItemState, IItemType, ITask, ITaskChange, IUser } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
-import TaskTypeSelect from '../task-type-select';
-import TaskStateSelect from '../task-state-select';
+import ItemTypeSelect from '../item-type-select';
+import ItemStateSelect from '../item-state-select';
 import UserSelect from '../user-select';
 import Button from '../button';
 
@@ -130,7 +130,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
                 Type:
               </div>
               <div className="value">
-                <TaskTypeSelect className="task-type" taskType={this.state.type} onChange={this.handleTypeInputChange} />
+                <ItemTypeSelect className="type" itemKind="task" itemType={this.state.type} onChange={this.handleTypeInputChange} />
               </div>
             </div>
             <div className="field">
@@ -138,7 +138,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
                 State:
               </div>
               <div className="value">
-                <TaskStateSelect className="task-state" taskState={this.state.state} onChange={this.handleStateInputChange} />
+                <ItemStateSelect className="state" itemKind="task" itemState={this.state.state} onChange={this.handleStateInputChange} />
               </div>
             </div>
             <div className="field">

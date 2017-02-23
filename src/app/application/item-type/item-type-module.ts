@@ -17,16 +17,8 @@ export class ItemTypeModule extends BaseModule implements IItemTypeModule {
     this.itemTypes = await this.client.itemTypes.getAll({});
   }
 
-  getAll() {
-    return this.itemTypes.slice();
-  }
-
-  getAllIssueTypes() {
-    return this.itemTypes.filter(itemType => itemType.itemKind === 'issue');
-  }
-
-  getAllTaskTypes() {
-    return this.itemTypes.filter(itemType => itemType.itemKind === 'task');
+  getAll(itemKind: string) {
+    return this.itemTypes.filter(itemType => itemType.itemKind === itemKind);
   }
 
   get(ItemType: IItemType) {

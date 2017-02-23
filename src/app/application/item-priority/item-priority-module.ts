@@ -17,16 +17,8 @@ export class ItemPriorityModule extends BaseModule implements IItemPriorityModul
     this.itemPriorities = await this.client.itemPriorities.getAll({});
   }
 
-  getAll() {
-    return this.itemPriorities.slice();
-  }
-
-  getAllIssuePriorities() {
-    return this.itemPriorities.filter(itemPriority => itemPriority.itemKind === 'issue');
-  }
-
-  getAllTaskPriorities() {
-    return this.itemPriorities.filter(itemPriority => itemPriority.itemKind === 'task');
+  getAll(itemKind: string) {
+    return this.itemPriorities.filter(itemPriority => itemPriority.itemKind === itemKind);
   }
 
   get(ItemPriority: IItemPriority) {

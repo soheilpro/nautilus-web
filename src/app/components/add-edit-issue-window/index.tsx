@@ -3,9 +3,9 @@ import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange } 
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
-import IssuePrioritySelect from '../issue-priority-select';
-import IssueTypeSelect from '../issue-type-select';
-import IssueStateSelect from '../issue-state-select';
+import ItemPrioritySelect from '../item-priority-select';
+import ItemTypeSelect from '../item-type-select';
+import ItemStateSelect from '../item-state-select';
 import Button from '../button';
 
 require('../../assets/stylesheets/base.less');
@@ -150,7 +150,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 Type:
               </div>
               <div className="value">
-                <IssueTypeSelect className="issue-type" issueType={this.state.type} onChange={this.handleTypeInputChange} />
+                <ItemTypeSelect className="type" itemKind="issue" itemType={this.state.type} onChange={this.handleTypeInputChange} />
               </div>
             </div>
             <div className="field">
@@ -158,7 +158,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 Priority:
               </div>
               <div className="value">
-                <IssuePrioritySelect className="issue-priority" issuePriority={this.state.priority} onChange={this.handlePriorityInputChange} />
+                <ItemPrioritySelect className="priority" itemKind="issue" itemPriority={this.state.priority} onChange={this.handlePriorityInputChange} />
               </div>
             </div>
             <div className="field">
@@ -166,7 +166,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 State:
               </div>
               <div className="value">
-                <IssueStateSelect className="issue-state" issueState={this.state.state} onChange={this.handleStateInputChange} />
+                <ItemStateSelect className="state" itemKind="issue" itemState={this.state.state} onChange={this.handleStateInputChange} />
               </div>
             </div>
             <div className="field">
