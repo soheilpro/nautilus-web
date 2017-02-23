@@ -20,6 +20,6 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
     if (['type'].some(name => name === expression.name))
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('task'), expression.name), 'ItemType');
 
-    return super.visitLocal(expression, context);
+    throw new Error('Not supported.');
   }
 }
