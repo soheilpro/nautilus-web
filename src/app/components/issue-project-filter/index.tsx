@@ -1,10 +1,8 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IProject, asEntity, entityComparer } from '../../application';
-import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ListFilter from '../list-filter';
-import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 
 interface IProjectFilterProps {
   query?: NQL.Expression;
@@ -15,9 +13,8 @@ interface IProjectFilterState {
   projects?: IProject[];
 }
 
-export default class ProjectFilter extends React.Component<IProjectFilterProps, IProjectFilterState> implements ICommandProvider {
+export default class ProjectFilter extends React.Component<IProjectFilterProps, IProjectFilterState> {
   private application = ServiceManager.Instance.getApplication();
-  private commandManager = ServiceManager.Instance.getCommandManager();
   private listFilterComponent: ListFilter;
 
   constructor() {
@@ -31,24 +28,10 @@ export default class ProjectFilter extends React.Component<IProjectFilterProps, 
     };
   }
 
-  componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
-  }
-
   async componentDidMount() {
     this.setState({
       projects: this.application.projects.getAll(),
     });
-  }
-
-  componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
-  }
-
-  getCommands() {
-    return [
-      new FilterIssuesByProjectCommand(this.open),
-    ];
   }
 
   open() {

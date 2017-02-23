@@ -1,10 +1,8 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IItemType, asEntity, entityComparer } from '../../application';
-import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ListFilter from '../list-filter';
-import FilterTasksByTypeCommand from './filter-tasks-by-type-command';
 
 interface ITaskTypeFilterProps {
   query?: NQL.Expression;
@@ -15,9 +13,8 @@ interface ITaskTypeFilterState {
   taskTypes?: IItemType[];
 }
 
-export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps, ITaskTypeFilterState> implements ICommandProvider {
+export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps, ITaskTypeFilterState> {
   private application = ServiceManager.Instance.getApplication();
-  private commandManager = ServiceManager.Instance.getCommandManager();
   private listFilterComponent: ListFilter;
 
   constructor() {
@@ -31,24 +28,10 @@ export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps
     };
   }
 
-  componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
-  }
-
   async componentDidMount() {
     this.setState({
       taskTypes: this.application.itemTypes.getAll('task'),
     });
-  }
-
-  componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
-  }
-
-  getCommands() {
-    return [
-      new FilterTasksByTypeCommand(this.open),
-    ];
   }
 
   open() {

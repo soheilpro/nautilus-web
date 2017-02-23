@@ -1,6 +1,8 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
+import { ICommandProvider, ICommand } from '../../commands';
+import { ServiceManager } from '../../services';
 import Expression from '../expression';
 import TaskTypeFilter from '../task-type-filter';
 
@@ -20,7 +22,9 @@ interface ITaskFilterState {
   queries?: IQueryObject;
 }
 
-export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskFilterState> {
+export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskFilterState> implements ICommandProvider {
+  private commandManager = ServiceManager.Instance.getCommandManager();
+
   private filters = [
     { key: 'type',    Component: TaskTypeFilter },
   ];
@@ -33,6 +37,18 @@ export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskF
     this.state = {
       queries: this.getQueryObject(props.query) || {},
     };
+  }
+
+  componentWillMount() {
+    this.commandManager.registerCommandProvider(this);
+  }
+
+  componentWillUnmount() {
+    this.commandManager.unregisterCommandProvider(this);
+  }
+
+  getCommands() {
+    return [] as ICommand[];
   }
 
   private getQueryObject(query: NQL.Expression) {

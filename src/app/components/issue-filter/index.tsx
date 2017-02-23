@@ -1,6 +1,8 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
+import { ICommandProvider, ICommand } from '../../commands';
+import { ServiceManager } from '../../services';
 import Expression from '../expression';
 import IssueProjectFilter from '../issue-project-filter';
 import IssueTypeFilter from '../issue-type-filter';
@@ -21,7 +23,9 @@ interface IIssueFilterState {
   queries?: IQueryObject;
 }
 
-export default class IssueFilter extends React.Component<IIssueFilterProps, IIssueFilterState> {
+export default class IssueFilter extends React.Component<IIssueFilterProps, IIssueFilterState> implements ICommandProvider {
+  private commandManager = ServiceManager.Instance.getCommandManager();
+
   private filters = [
     { key: 'project', Component: IssueProjectFilter },
     { key: 'type',    Component: IssueTypeFilter },
@@ -35,6 +39,18 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
     this.state = {
       queries: this.getQueryObject(props.query) || {},
     };
+  }
+
+  componentWillMount() {
+    this.commandManager.registerCommandProvider(this);
+  }
+
+  componentWillUnmount() {
+    this.commandManager.unregisterCommandProvider(this);
+  }
+
+  getCommands() {
+    return [] as ICommand[];
   }
 
   private getQueryObject(query: NQL.Expression) {

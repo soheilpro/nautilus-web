@@ -1,10 +1,8 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IItemType, asEntity, entityComparer } from '../../application';
-import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ListFilter from '../list-filter';
-import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
 
 interface IIssueTypeFilterProps {
   query?: NQL.Expression;
@@ -15,9 +13,8 @@ interface IIssueTypeFilterState {
   issueTypes?: IItemType[];
 }
 
-export default class IssueTypeFilter extends React.Component<IIssueTypeFilterProps, IIssueTypeFilterState> implements ICommandProvider {
+export default class IssueTypeFilter extends React.Component<IIssueTypeFilterProps, IIssueTypeFilterState> {
   private application = ServiceManager.Instance.getApplication();
-  private commandManager = ServiceManager.Instance.getCommandManager();
   private listFilterComponent: ListFilter;
 
   constructor() {
@@ -31,24 +28,10 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
     };
   }
 
-  componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
-  }
-
   async componentDidMount() {
     this.setState({
       issueTypes: this.application.itemTypes.getAll('issue'),
     });
-  }
-
-  componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
-  }
-
-  getCommands() {
-    return [
-      new FilterIssuesByTypeCommand(this.open),
-    ];
   }
 
   open() {
