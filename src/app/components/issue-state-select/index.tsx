@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IIssueState } from '../../application';
+import { IItemState } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IIssueStateSelectProps {
-  issueState: IIssueState;
+  issueState: IItemState;
   className?: string;
-  onChange(issueState: IIssueState): void;
+  onChange(issueState: IItemState): void;
 }
 
 interface IIssueStateSelectState {
-  issueStates?: IIssueState[];
+  issueStates?: IItemState[];
 }
 
 export default class IssueStateSelect extends React.Component<IIssueStateSelectProps, IIssueStateSelectState> {
@@ -29,11 +29,11 @@ export default class IssueStateSelect extends React.Component<IIssueStateSelectP
 
   componentDidMount() {
     this.setState({
-      issueStates: this.application.issueStates.getAll(),
+      issueStates: this.application.itemStates.getAllIssueStates(),
     });
   }
 
-  private handleSelectChange(issueState: IIssueState) {
+  private handleSelectChange(issueState: IItemState) {
     this.props.onChange(issueState);
   }
 

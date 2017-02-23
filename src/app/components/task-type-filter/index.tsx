@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { ITaskType, asEntity, entityComparer } from '../../application';
+import { IItemType, asEntity, entityComparer } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ListFilter from '../list-filter';
@@ -12,7 +12,7 @@ interface ITaskTypeFilterProps {
 }
 
 interface ITaskTypeFilterState {
-  taskTypes?: ITaskType[];
+  taskTypes?: IItemType[];
 }
 
 export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps, ITaskTypeFilterState> implements ICommandProvider {
@@ -37,7 +37,7 @@ export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps
 
   async componentDidMount() {
     this.setState({
-      taskTypes: this.application.taskTypes.getAll(),
+      taskTypes: this.application.itemTypes.getAllTaskTypes(),
     });
   }
 
@@ -60,12 +60,12 @@ export default class TaskTypeFilter extends React.Component<ITaskTypeFilterProps
   }
 
   static canParseQuery(query: NQL.Expression) {
-    return ListFilter.canParseQuery(query, 'type', 'TaskType');
+    return ListFilter.canParseQuery(query, 'type', 'ItemType');
   }
 
   render() {
     return (
-      <ListFilter className="filter" title="Type" items={this.state.taskTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="TaskType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
+      <ListFilter className="filter" title="Type" items={this.state.taskTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="ItemType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
     );
   }
 };

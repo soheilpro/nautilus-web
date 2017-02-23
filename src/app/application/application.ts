@@ -2,11 +2,9 @@ import EventEmitter = require('wolfy87-eventemitter');
 import { Client, IClient, ISession } from '../sdk';
 import { IApplication } from './iapplication';
 import { IItemModule, ItemModule } from './item';
-import { IIssuePriorityModule, IssuePriorityModule } from './issue-priority';
-import { IIssueStateModule, IssueStateModule } from './issue-state';
-import { IIssueTypeModule, IssueTypeModule } from './issue-type';
-import { ITaskStateModule, TaskStateModule } from './task-state';
-import { ITaskTypeModule, TaskTypeModule } from './task-type';
+import { IItemPriorityModule, ItemPriorityModule } from './item-priority';
+import { IItemStateModule, ItemStateModule } from './item-state';
+import { IItemTypeModule, ItemTypeModule } from './item-type';
 import { IProjectModule, ProjectModule } from './project';
 import { IUserModule, UserModule } from './user';
 
@@ -23,11 +21,9 @@ export class Application extends EventEmitter implements IApplication {
   users: IUserModule;
   projects: IProjectModule;
   items: IItemModule;
-  issuePriorities: IIssuePriorityModule;
-  issueStates: IIssueStateModule;
-  issueTypes: IIssueTypeModule;
-  taskStates: ITaskStateModule;
-  taskTypes: ITaskTypeModule;
+  itemPriorities: IItemPriorityModule;
+  itemStates: IItemStateModule;
+  itemTypes: IItemTypeModule;
 
   constructor({ address }: IApplicationConfig) {
     super();
@@ -38,11 +34,9 @@ export class Application extends EventEmitter implements IApplication {
     this.users = new UserModule(this, client);
     this.projects = new ProjectModule(this, client);
     this.items = new ItemModule(this, client);
-    this.issuePriorities = new IssuePriorityModule(this, client);
-    this.issueStates = new IssueStateModule(this, client);
-    this.issueTypes = new IssueTypeModule(this, client);
-    this.taskStates = new TaskStateModule(this, client);
-    this.taskTypes = new TaskTypeModule(this, client);
+    this.itemPriorities = new ItemPriorityModule(this, client);
+    this.itemStates = new ItemStateModule(this, client);
+    this.itemTypes = new ItemTypeModule(this, client);
   }
 
   isInitialized() {
@@ -96,11 +90,9 @@ export class Application extends EventEmitter implements IApplication {
       this.users.load(),
       this.projects.load(),
       this.items.load(),
-      this.issuePriorities.load(),
-      this.issueStates.load(),
-      this.issueTypes.load(),
-      this.taskStates.load(),
-      this.taskTypes.load(),
+      this.itemPriorities.load(),
+      this.itemStates.load(),
+      this.itemTypes.load(),
     ]);
 
     this.isLoadedState = true;

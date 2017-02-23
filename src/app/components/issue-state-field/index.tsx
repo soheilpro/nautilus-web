@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { IIssueState } from '../../application';
+import { IItemState } from '../../application';
 import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IIssueStateFieldProps {
-  issueState: IIssueState;
+  issueState: IItemState;
 }
 
 interface IIssueStateFieldState {
@@ -19,7 +19,7 @@ export default class IssueStateField extends React.Component<IIssueStateFieldPro
     if (!this.props.issueState)
       return null;
 
-    let issueState = this.application.issueStates.get(this.props.issueState);
+    let issueState = this.application.itemStates.get(this.props.issueState);
 
     return (
       <div className="issue-state-field-component">

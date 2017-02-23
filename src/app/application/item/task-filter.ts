@@ -6,7 +6,7 @@ export default class TaskFilter {
     let normalizedQuery = new QueryNormalizer().tranform(query, null);
 
     let types =  [
-      { name: 'TaskType', base: 'Entity' },
+      { name: 'ItemType', base: 'Entity' },
     ];
 
     let compiler = new NQL.ExpressionCompiler(types);
@@ -18,7 +18,7 @@ export default class TaskFilter {
 class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
   visitLocal(expression: NQL.LocalExpression, context: {}) {
     if (['type'].some(name => name === expression.name))
-      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('task'), expression.name), 'TaskType');
+      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('task'), expression.name), 'ItemType');
 
     return super.visitLocal(expression, context);
   }

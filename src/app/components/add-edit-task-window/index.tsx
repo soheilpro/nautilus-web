@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ITaskState, ITaskType, ITask, ITaskChange, IUser } from '../../application';
+import { IItemState, IItemType, ITask, ITaskChange, IUser } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import TaskTypeSelect from '../task-type-select';
@@ -20,8 +20,8 @@ interface IAddEditTaskWindowProps {
 
 interface IAddEditTaskWindowState {
   title?: string;
-  type?: ITaskType;
-  state?: ITaskState;
+  type?: IItemType;
+  state?: IItemState;
   assignedTo?: IUser;
   description?: string;
 }
@@ -84,19 +84,19 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
     });
   }
 
-  private handleTypeInputChange(value: ITaskType) {
+  private handleTypeInputChange(value: IItemType) {
     this.setState({
       type: value,
     });
   }
 
-  private handleStateInputChange(value: ITaskState) {
+  private handleStateInputChange(value: IItemState) {
     this.setState({
       state: value,
     });
   }
 
-  private handleAssignedToInputChange(value: ITaskState) {
+  private handleAssignedToInputChange(value: IItemState) {
     this.setState({
       assignedTo: value,
     });

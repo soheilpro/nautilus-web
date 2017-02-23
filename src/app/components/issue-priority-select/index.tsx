@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IIssuePriority } from '../../application';
+import { IItemPriority } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IIssuePrioritySelectProps {
-  issuePriority: IIssuePriority;
+  issuePriority: IItemPriority;
   className?: string;
-  onChange(issuePriority: IIssuePriority): void;
+  onChange(issuePriority: IItemPriority): void;
 }
 
 interface IIssuePrioritySelectState {
-  issuePriorities?: IIssuePriority[];
+  issuePriorities?: IItemPriority[];
 }
 
 export default class IssuePrioritySelect extends React.Component<IIssuePrioritySelectProps, IIssuePrioritySelectState> {
@@ -29,11 +29,11 @@ export default class IssuePrioritySelect extends React.Component<IIssuePriorityS
 
   componentDidMount() {
     this.setState({
-      issuePriorities: this.application.issuePriorities.getAll(),
+      issuePriorities: this.application.itemPriorities.getAllIssuePriorities(),
     });
   }
 
-  private handleSelectChange(issuePriority: IIssuePriority) {
+  private handleSelectChange(issuePriority: IItemPriority) {
     this.props.onChange(issuePriority);
   }
 

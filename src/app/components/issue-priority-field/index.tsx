@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { IIssuePriority } from '../../application';
+import { IItemPriority } from '../../application';
 import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IIssuePriorityFieldProps {
-  issuePriority: IIssuePriority;
+  issuePriority: IItemPriority;
 }
 
 interface IIssuePriorityFieldState {
@@ -19,7 +19,7 @@ export default class IssuePriorityField extends React.Component<IIssuePriorityFi
     if (!this.props.issuePriority)
       return null;
 
-    let issuePriority = this.application.issuePriorities.get(this.props.issuePriority);
+    let issuePriority = this.application.itemPriorities.get(this.props.issuePriority);
 
     return (
       <div className="issue-priority-field-component">

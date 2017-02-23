@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IIssueType } from '../../application';
+import { IItemType } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IIssueTypeSelectProps {
-  issueType: IIssueType;
+  issueType: IItemType;
   className?: string;
-  onChange(issueType: IIssueType): void;
+  onChange(issueType: IItemType): void;
 }
 
 interface IIssueTypeSelectState {
-  issueTypes?: IIssueType[];
+  issueTypes?: IItemType[];
 }
 
 export default class IssueTypeSelect extends React.Component<IIssueTypeSelectProps, IIssueTypeSelectState> {
@@ -29,11 +29,11 @@ export default class IssueTypeSelect extends React.Component<IIssueTypeSelectPro
 
   componentDidMount() {
     this.setState({
-      issueTypes: this.application.issueTypes.getAll(),
+      issueTypes: this.application.itemTypes.getAllIssueTypes(),
     });
   }
 
-  private handleSelectChange(issueType: IIssueType) {
+  private handleSelectChange(issueType: IItemType) {
     this.props.onChange(issueType);
   }
 

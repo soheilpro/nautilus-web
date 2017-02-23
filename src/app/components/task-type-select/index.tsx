@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { ITaskType } from '../../application';
+import { IItemType } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface ITaskTypeSelectProps {
-  taskType: ITaskType;
+  taskType: IItemType;
   className?: string;
-  onChange(taskType: ITaskType): void;
+  onChange(taskType: IItemType): void;
 }
 
 interface ITaskTypeSelectState {
-  taskTypes?: ITaskType[];
+  taskTypes?: IItemType[];
 }
 
 export default class TaskTypeSelect extends React.Component<ITaskTypeSelectProps, ITaskTypeSelectState> {
@@ -29,11 +29,11 @@ export default class TaskTypeSelect extends React.Component<ITaskTypeSelectProps
 
   componentDidMount() {
     this.setState({
-      taskTypes: this.application.taskTypes.getAll(),
+      taskTypes: this.application.itemTypes.getAllTaskTypes(),
     });
   }
 
-  private handleSelectChange(taskType: ITaskType) {
+  private handleSelectChange(taskType: IItemType) {
     this.props.onChange(taskType);
   }
 

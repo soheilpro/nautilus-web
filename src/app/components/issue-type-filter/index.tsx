@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { IIssueType, asEntity, entityComparer } from '../../application';
+import { IItemType, asEntity, entityComparer } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ListFilter from '../list-filter';
@@ -12,7 +12,7 @@ interface IIssueTypeFilterProps {
 }
 
 interface IIssueTypeFilterState {
-  issueTypes?: IIssueType[];
+  issueTypes?: IItemType[];
 }
 
 export default class IssueTypeFilter extends React.Component<IIssueTypeFilterProps, IIssueTypeFilterState> implements ICommandProvider {
@@ -37,7 +37,7 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
 
   async componentDidMount() {
     this.setState({
-      issueTypes: this.application.issueTypes.getAll(),
+      issueTypes: this.application.itemTypes.getAllIssueTypes(),
     });
   }
 
@@ -60,12 +60,12 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
   }
 
   static canParseQuery(query: NQL.Expression) {
-    return ListFilter.canParseQuery(query, 'type', 'IssueType');
+    return ListFilter.canParseQuery(query, 'type', 'ItemType');
   }
 
   render() {
     return (
-      <ListFilter className="filter" title="Type" items={this.state.issueTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="IssueType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
+      <ListFilter className="filter" title="Type" items={this.state.issueTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="ItemType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
     );
   }
 };

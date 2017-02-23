@@ -33,11 +33,8 @@ export default class HTMLExpressionFormatter extends NQL.ExpressionVisitor<strin
     if (expression.type === 'Project')
       title = this.application.projects.get(expression.value).name;
 
-    if (expression.type === 'IssueType')
-      title = this.application.issueTypes.get(expression.value).title;
-
-    if (expression.type === 'TaskType')
-      title = this.application.taskTypes.get(expression.value).title;
+    if (expression.type === 'ItemType')
+      title = this.application.itemTypes.get(expression.value).title;
 
     return `<span class="expression expression-constant"><span class="${expression.type.toLowerCase()}">${title}</span></span>`;
   }

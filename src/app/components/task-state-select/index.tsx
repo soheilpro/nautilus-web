@@ -1,17 +1,17 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { ITaskState } from '../../application';
+import { IItemState } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface ITaskStateSelectProps {
-  taskState: ITaskState;
+  taskState: IItemState;
   className?: string;
-  onChange(taskState: ITaskState): void;
+  onChange(taskState: IItemState): void;
 }
 
 interface ITaskStateSelectState {
-  taskStates?: ITaskState[];
+  taskStates?: IItemState[];
 }
 
 export default class TaskStateSelect extends React.Component<ITaskStateSelectProps, ITaskStateSelectState> {
@@ -29,11 +29,11 @@ export default class TaskStateSelect extends React.Component<ITaskStateSelectPro
 
   componentDidMount() {
     this.setState({
-      taskStates: this.application.taskStates.getAll(),
+      taskStates: this.application.itemStates.getAllTaskStates(),
     });
   }
 
-  private handleSelectChange(taskState: ITaskState) {
+  private handleSelectChange(taskState: IItemState) {
     this.props.onChange(taskState);
   }
 

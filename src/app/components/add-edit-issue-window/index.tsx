@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IProject, IIssuePriority, IIssueState, IIssueType, IIssue, IIssueChange } from '../../application';
+import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
@@ -22,9 +22,9 @@ interface IAddEditIssueWindowProps {
 interface IAddEditIssueWindowState {
   title?: string;
   project?: IProject;
-  type?: IIssueType;
-  priority?: IIssuePriority;
-  state?: IIssueState;
+  type?: IItemType;
+  priority?: IItemPriority;
+  state?: IItemState;
   description?: string;
 }
 
@@ -96,19 +96,19 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
     });
   }
 
-  private handleTypeInputChange(value: IIssueType) {
+  private handleTypeInputChange(value: IItemType) {
     this.setState({
       type: value,
     });
   }
 
-  private handlePriorityInputChange(value: IIssuePriority) {
+  private handlePriorityInputChange(value: IItemPriority) {
     this.setState({
       priority: value,
     });
   }
 
-  private handleStateInputChange(value: IIssueState) {
+  private handleStateInputChange(value: IItemState) {
     this.setState({
       state: value,
     });

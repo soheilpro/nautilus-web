@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ITaskState } from '../../application';
+import { IItemState } from '../../application';
 import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface ITaskStateFieldProps {
-  taskState: ITaskState;
+  taskState: IItemState;
 }
 
 interface ITaskStateFieldState {
@@ -19,7 +19,7 @@ export default class TaskStateField extends React.Component<ITaskStateFieldProps
     if (!this.props.taskState)
       return null;
 
-    let taskState = this.application.taskStates.get(this.props.taskState);
+    let taskState = this.application.itemStates.get(this.props.taskState);
 
     return (
       <div className="task-state-field-component">

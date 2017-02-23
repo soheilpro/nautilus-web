@@ -6,7 +6,7 @@ export default class IssueFilter {
     let normalizedQuery = new QueryNormalizer().tranform(query, null);
 
     let types =  [
-      { name: 'IssueType', base: 'Entity' },
+      { name: 'ItemType', base: 'Entity' },
       { name: 'Project', base: 'Entity' },
     ];
 
@@ -22,7 +22,7 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'Project');
 
     if (['type'].some(name => name === expression.name))
-      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'IssueType');
+      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'ItemType');
 
     return super.visitLocal(expression, context);
   }
