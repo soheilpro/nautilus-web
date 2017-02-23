@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import * as NQL from '../../nql';
 import { KeyCode } from '../../keyboard';
-import Dropdown from '../dropdown';
 import Input from '../input';
 import Icon from '../icon';
 
@@ -16,7 +15,6 @@ interface IFilterItem {
 };
 
 interface IListFilterDropdownProps {
-  title: string;
   items: IFilterItem[];
   displayProperty: string;
   query?: NQL.Expression;
@@ -24,7 +22,6 @@ interface IListFilterDropdownProps {
   queryItemType: string;
   itemToQueryItem: (item: IFilterItem) => Object;
   itemComparer: (item1: IFilterItem, item2: IFilterItem) => boolean;
-  className?: string;
   onChange(query: NQL.IExpression): void;
 }
 
@@ -37,13 +34,10 @@ interface IListFilterDropdownState {
 }
 
 export default class ListFilterDropdown extends React.Component<IListFilterDropdownProps, IListFilterDropdownState> {
-  private dropdownComponent: Dropdown;
-
   constructor(props: IListFilterDropdownProps) {
     super();
 
-    this.handleDropdownOpen = this.handleDropdownOpen.bind(this);
-    this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
     this.handleItemExcludeClick = this.handleItemExcludeClick.bind(this);
     this.handleItemIncludeClick = this.handleItemIncludeClick.bind(this);
@@ -63,30 +57,13 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     let { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
 
     this.setState({
-      items: this.filterItems(this.props.items, this.state.searchText),
-      selectedItemIndex: 0,
+      items: this.filterItems(nextProps.items, this.state.searchText),
       includedItems,
       excludedItems,
     });
   }
 
-  open() {
-    this.dropdownComponent.open();
-  }
-
-  close() {
-    this.dropdownComponent.close();
-  }
-
-  private handleDropdownOpen() {
-    this.setState({
-      items: this.props.items,
-      searchText: '',
-      selectedItemIndex: 0,
-    });
-  }
-
-  private handleContainerKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
@@ -179,8 +156,6 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
       includedItems,
       excludedItems,
     });
-
-    this.close();
   }
 
   private toggleItemExclude(item: IFilterItem) {
@@ -322,31 +297,28 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
 
   render() {
     return (
-      <Dropdown className={classNames('list-filter-component', this.props.className, { 'used': this.state.includedItems
-      .length > 0 || this.state.excludedItems.length > 0 })} title={this.props.title} onOpen={this.handleDropdownOpen} ref={e => this.dropdownComponent = e}>
-        <div className="container" onKeyDown={this.handleContainerKeyDown}>
-          <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
-          <div className="items">
-            {
-              this.state.items.map((item, index) => {
-                return (
-                  <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} key={item.id}>
-                    <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" onClick={_.partial(this.handleItemExcludeClick, item)}>
-                      <Icon name="minus-square" />
-                    </a>
-                    <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" onClick={_.partial(this.handleItemIncludeClick, item)}>
-                      <Icon name="plus-square" />
-                    </a>
-                    <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
-                      {item[this.props.displayProperty]}
-                    </a>
-                  </div>
-                );
-              })
-            }
-          </div>
+      <div className="list-filter-component" onKeyDown={this.handleKeyDown}>
+        <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
+        <div className="items">
+          {
+            this.state.items.map((item, index) => {
+              return (
+                <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} key={item.id}>
+                  <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" onClick={_.partial(this.handleItemExcludeClick, item)}>
+                    <Icon name="minus-square" />
+                  </a>
+                  <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" onClick={_.partial(this.handleItemIncludeClick, item)}>
+                    <Icon name="plus-square" />
+                  </a>
+                  <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
+                    {item[this.props.displayProperty]}
+                  </a>
+                </div>
+              );
+            })
+          }
         </div>
-      </Dropdown>
+      </div>
     );
   }
 };

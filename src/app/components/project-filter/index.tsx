@@ -15,31 +15,19 @@ interface IProjectFilterState {
 
 export default class ProjectFilter extends React.Component<IProjectFilterProps, IProjectFilterState> {
   private application = ServiceManager.Instance.getApplication();
-  private listFilterComponent: ListFilter;
 
   constructor() {
     super();
-
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
 
     this.state = {
       projects: [],
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.setState({
       projects: this.application.projects.getAll(),
     });
-  }
-
-  open() {
-    this.listFilterComponent.open();
-  }
-
-  close() {
-    this.listFilterComponent.close();
   }
 
   static canParseQuery(query: NQL.Expression) {
@@ -48,7 +36,7 @@ export default class ProjectFilter extends React.Component<IProjectFilterProps, 
 
   render() {
     return (
-      <ListFilter className="filter" title="Project" items={this.state.projects} displayProperty="name" query={this.props.query} queryItem="project" queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
+      <ListFilter items={this.state.projects} displayProperty="name" query={this.props.query} queryItem="project" queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
     );
   }
 };

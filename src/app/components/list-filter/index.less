@@ -1,65 +1,55 @@
 @import '../../assets/stylesheets/common';
 
 .list-filter-component {
-  .container {
-    padding: 10px;
+  .search-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-    .search-input {
-      width: 100%;
-      margin-bottom: 10px;
-    }
+  .items {
+    .item {
+      display: block;
+      padding: 0 6px;
 
-    .items {
-      .item {
-        display: block;
-        padding: 0 6px;
-
-        .exclude {
-          margin-right: 5px;
-          color: @darkgray;
-
-          &:hover {
-            color: lighten(@red, 5%);
-          }
-
-          &.selected {
-            color: @red;
-          }
-        }
-
-        .include {
-          margin-right: 5px;
-          color: @darkgray;
-
-          &:hover {
-            color: lighten(@green, 5%);
-          }
-
-          &.selected {
-            color: @green;
-          }
-        }
-
-        .title {
-          display: inline-block;
-          padding: 1px 0;
-          text-decoration: none;
-        }
+      .exclude {
+        margin-right: 5px;
+        color: @darkgray;
 
         &:hover {
-          background-color: @lightgray;
+          color: lighten(@red, 5%);
         }
 
         &.selected {
-          background-color: @lightgray;
+          color: @red;
         }
       }
-    }
-  }
 
-  &.used {
-    .button {
-      font-weight: bold;
+      .include {
+        margin-right: 5px;
+        color: @darkgray;
+
+        &:hover {
+          color: lighten(@green, 5%);
+        }
+
+        &.selected {
+          color: @green;
+        }
+      }
+
+      .title {
+        display: inline-block;
+        padding: 1px 0;
+        text-decoration: none;
+      }
+
+      &:hover {
+        background-color: @lightgray;
+      }
+
+      &.selected {
+        background-color: @lightgray;
+      }
     }
   }
 }

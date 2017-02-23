@@ -16,31 +16,19 @@ interface IIssueTypeFilterState {
 
 export default class IssueTypeFilter extends React.Component<IIssueTypeFilterProps, IIssueTypeFilterState> {
   private application = ServiceManager.Instance.getApplication();
-  private listFilterComponent: ListFilter;
 
   constructor() {
     super();
-
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
 
     this.state = {
       itemTypes: [],
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.setState({
       itemTypes: this.application.itemTypes.getAll(this.props.itemKind),
     });
-  }
-
-  open() {
-    this.listFilterComponent.open();
-  }
-
-  close() {
-    this.listFilterComponent.close();
   }
 
   static canParseQuery(query: NQL.Expression) {
@@ -49,7 +37,7 @@ export default class IssueTypeFilter extends React.Component<IIssueTypeFilterPro
 
   render() {
     return (
-      <ListFilter className="filter" title="Type" items={this.state.itemTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="ItemType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} ref={e => this.listFilterComponent = e} />
+      <ListFilter items={this.state.itemTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="ItemType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
     );
   }
 };

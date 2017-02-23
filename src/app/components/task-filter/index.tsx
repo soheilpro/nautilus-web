@@ -4,6 +4,7 @@ import * as NQL from '../../nql';
 import { ItemKind } from '../../application';
 import { ICommandProvider, ICommand } from '../../commands';
 import { ServiceManager } from '../../services';
+import Dropdown from '../dropdown';
 import Expression from '../expression';
 import ItemTypeFilter from '../item-type-filter';
 
@@ -27,7 +28,7 @@ export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskF
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   private filters = [
-    { key: 'type', Component: ItemTypeFilter, props: { itemKind: 'task' as ItemKind } },
+    { key: 'type', title: 'Type', Component: ItemTypeFilter, props: { itemKind: 'task' as ItemKind } },
   ];
 
   constructor(props: ITaskFilterProps) {
@@ -105,7 +106,11 @@ export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskF
           {
             this.filters.map(filter => {
               return (
-                <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} ref={null} children={null} key={filter.key} />
+                <Dropdown className="filter" title={filter.title} key={filter.key}>
+                  <div className="container">
+                    <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} ref={null} children={null} />
+                  </div>
+                </Dropdown>
               );
             })
           }
