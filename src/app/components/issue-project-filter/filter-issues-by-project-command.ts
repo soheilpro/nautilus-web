@@ -4,7 +4,6 @@ import { KeyCode } from '../../keyboard';
 export default class FilterIssueByProjectCommand extends BaseCommand {
   constructor(private onExecute: () => void) {
     super();
-
   }
 
   get id() {
