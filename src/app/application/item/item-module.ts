@@ -9,7 +9,10 @@ import { IIssueChange } from './iissue-change';
 import { ITask } from './itask';
 import { ITaskChange } from './itask-change';
 import { isIssue } from './is-issue';
-import ItemFilter from './item-filter';
+import { isTask } from './is-task';
+import { entityComparer } from '../entity-comparer';
+import IssueFilter from './issue-filter';
+import TaskFilter from './task-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
   private items: IItem[];
@@ -22,13 +25,24 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.items = await this.client.items.getAll({});
   }
 
-  getAll(query: NQL.Expression) {
-    if (!query)
-      return Promise.resolve(this.items.slice());
+  getAll(issueQuery: NQL.Expression, taskQuery: NQL.Expression) {
+    let issues = this.items.filter(isIssue);
 
-    let itemFilter = new ItemFilter(this.application);
-    let predicate = itemFilter.getPredicate(query);
-    let items = this.items.filter(predicate);
+    if (issueQuery) {
+      let itemFilter = new IssueFilter();
+      let predicate = itemFilter.getPredicate(issueQuery);
+      issues = issues.filter(predicate);
+    }
+
+    let tasks = this.items.filter(isTask).filter(task => issues.some(issue => entityComparer(task.parent, issue)));
+
+    if (taskQuery) {
+      let itemFilter = new TaskFilter();
+      let predicate = itemFilter.getPredicate(taskQuery);
+      tasks = tasks.filter(predicate);
+    }
+
+    let items = issues.concat(tasks);
 
     return Promise.resolve(items);
   }

@@ -30,23 +30,14 @@ export default class HTMLExpressionFormatter extends NQL.ExpressionVisitor<strin
   visitConstant(expression: NQL.ConstantExpression, context: {}) {
     let title: string;
 
-    // if (expression.type === 'Milestone')
-    //   title = this.application.getMilestoneById((expression.value as IEntity).id).getFullTitle();
-
     if (expression.type === 'Project')
       title = this.application.projects.get(expression.value).name;
 
     if (expression.type === 'IssueType')
       title = this.application.issueTypes.get(expression.value).title;
 
-    // if (expression.type === 'ItemPriority')
-    //   title = this.application.getItemPriorityById((expression.value as IEntity).id).title;
-
-    // if (expression.type === 'ItemState')
-    //   title = this.application.getItemStateById((expression.value as IEntity).id).title;
-
-    // if (expression.type === 'User')
-    //   title = this.application.getUserById((expression.value as IEntity).id).name;
+    if (expression.type === 'TaskType')
+      title = this.application.taskTypes.get(expression.value).title;
 
     return `<span class="expression expression-constant"><span class="${expression.type.toLowerCase()}">${title}</span></span>`;
   }

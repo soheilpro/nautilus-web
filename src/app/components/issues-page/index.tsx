@@ -5,6 +5,7 @@ import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
 import IssueFilter from '../issue-filter';
+import TaskFilter from '../task-filter';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
@@ -23,6 +24,7 @@ interface IIssuesPageState {
   items?: IItem[];
   selectedItem?: IItem;
   issueFilterQuery?: NQL.Expression;
+  taskFilterQuery?: NQL.Expression;
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
@@ -41,6 +43,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
     this.handleIssueFilterChange = this.handleIssueFilterChange.bind(this);
+    this.handleTaskFilterChange = this.handleTaskFilterChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
 
     this.state = {
@@ -56,7 +59,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   async componentDidMount() {
-    let items = await this.application.items.getAll(null);
+    let items = await this.application.items.getAll(null, null);
 
     this.setState({
       items,
@@ -79,21 +82,21 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null),
+      items: await this.application.items.getAll(null, null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsUpdate({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null),
+      items: await this.application.items.getAll(null, null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsDelete({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null),
+      items: await this.application.items.getAll(null, null),
       selectedItem: undefined,
     });
   }
@@ -110,12 +113,22 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleIssueFilterChange(query: NQL.Expression) {
-    let items = await this.application.items.getAll(query);
+    let items = await this.application.items.getAll(query, this.state.taskFilterQuery);
 
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
       issueFilterQuery: query,
+    });
+  }
+
+  private async handleTaskFilterChange(query: NQL.Expression) {
+    let items = await this.application.items.getAll(this.state.issueFilterQuery, query);
+
+    this.setState({
+      items,
+      selectedItem: _.last(items.filter(isIssue)),
+      taskFilterQuery: query,
     });
   }
 
@@ -137,6 +150,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           <div className="row container">
             <div className="issue-filter">
               <IssueFilter query={this.state.issueFilterQuery} onChange={this.handleIssueFilterChange} />
+            </div>
+            <div className="task-filter">
+              <TaskFilter query={this.state.taskFilterQuery} onChange={this.handleTaskFilterChange} />
             </div>
             <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />
