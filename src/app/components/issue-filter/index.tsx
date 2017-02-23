@@ -1,11 +1,12 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
+import { ItemKind } from '../../application';
 import { ICommandProvider, ICommand } from '../../commands';
 import { ServiceManager } from '../../services';
 import Expression from '../expression';
-import IssueProjectFilter from '../issue-project-filter';
-import IssueTypeFilter from '../issue-type-filter';
+import ProjectFilter from '../project-filter';
+import ItemTypeFilter from '../item-type-filter';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -27,8 +28,8 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   private filters = [
-    { key: 'project', Component: IssueProjectFilter },
-    { key: 'type',    Component: IssueTypeFilter },
+    { key: 'project', Component: ProjectFilter,  props: {} },
+    { key: 'type',    Component: ItemTypeFilter, props: { itemKind: 'issue' as ItemKind } },
   ];
 
   constructor(props: IIssueFilterProps) {
@@ -106,7 +107,7 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
           {
             this.filters.map(filter => {
               return (
-                <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} ref={null} children={null} key={filter.key} />
+                <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} ref={null} children={null} key={filter.key} />
               );
             })
           }

@@ -1,10 +1,11 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
+import { ItemKind } from '../../application';
 import { ICommandProvider, ICommand } from '../../commands';
 import { ServiceManager } from '../../services';
 import Expression from '../expression';
-import TaskTypeFilter from '../task-type-filter';
+import ItemTypeFilter from '../item-type-filter';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -26,7 +27,7 @@ export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskF
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   private filters = [
-    { key: 'type',    Component: TaskTypeFilter },
+    { key: 'type', Component: ItemTypeFilter, props: { itemKind: 'task' as ItemKind } },
   ];
 
   constructor(props: ITaskFilterProps) {
@@ -104,7 +105,7 @@ export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskF
           {
             this.filters.map(filter => {
               return (
-                <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} ref={null} children={null} key={filter.key} />
+                <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} ref={null} children={null} key={filter.key} />
               );
             })
           }
