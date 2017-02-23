@@ -7,7 +7,7 @@ import ListFilter from '../list-filter';
 interface IIssueTypeFilterProps {
   itemKind: ItemKind;
   query?: NQL.Expression;
-  onChange(query: NQL.IExpression): void;
+  onChange(query: NQL.IExpression, done: boolean): void;
 }
 
 interface IIssueTypeFilterState {

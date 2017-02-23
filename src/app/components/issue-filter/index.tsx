@@ -29,8 +29,8 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   private filters = [
-    { key: 'project', title: 'Project', Component: ProjectFilter,  props: {} },
-    { key: 'type',    title: 'Type',    Component: ItemTypeFilter, props: { itemKind: 'issue' as ItemKind } },
+    { key: 'project', title: 'Project', dropdown: null as Dropdown, Component: ProjectFilter,  props: {} },
+    { key: 'type',    title: 'Type',    dropdown: null as Dropdown, Component: ItemTypeFilter, props: { itemKind: 'issue' as ItemKind } },
   ];
 
   constructor(props: IIssueFilterProps) {
@@ -74,7 +74,7 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
     return queries;
   }
 
-  private handleFilterChange(key: string, query: NQL.IExpression) {
+  private handleFilterChange(key: string, query: NQL.IExpression, done: boolean) {
     let queries = _.clone(this.state.queries);
 
     if (query)
@@ -85,6 +85,9 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
     this.setState({
       queries: queries,
     });
+
+    if (done)
+      _.find(this.filters, filter => filter.key === key).dropdown.close();
 
     this.props.onChange(this.getQuery(queries));
   }
@@ -108,7 +111,7 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
           {
             this.filters.map(filter => {
               return (
-                <Dropdown className="filter" title={filter.title} key={filter.key}>
+                <Dropdown className="filter" title={filter.title} ref={e => filter.dropdown = e} key={filter.key}>
                   <div className="container">
                     <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} ref={null} children={null} />
                   </div>

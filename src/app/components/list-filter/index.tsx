@@ -22,7 +22,7 @@ interface IListFilterDropdownProps {
   queryItemType: string;
   itemToQueryItem: (item: IFilterItem) => Object;
   itemComparer: (item1: IFilterItem, item2: IFilterItem) => boolean;
-  onChange(query: NQL.IExpression): void;
+  onChange(query: NQL.IExpression, done: boolean): void;
 }
 
 interface IListFilterDropdownState {
@@ -150,7 +150,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     let includedItems = [item];
     let excludedItems: IFilterItem[] = [];
 
-    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props));
+    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), true);
 
     this.setState({
       includedItems,
@@ -162,7 +162,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     let includedItems: IFilterItem[] = [];
     let excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
 
-    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props));
+    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false);
 
     this.setState({
       includedItems,
@@ -174,7 +174,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     let includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item);
     let excludedItems: IFilterItem[] = [];
 
-    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props));
+    this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false);
 
     this.setState({
       includedItems,
