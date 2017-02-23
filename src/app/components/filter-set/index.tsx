@@ -1,8 +1,8 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as classNames from 'classnames';
 import * as NQL from '../../nql';
 import Dropdown from '../dropdown';
-import Expression from '../expression';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -27,20 +27,20 @@ interface IQueryObject {
   [key: string]: NQL.Expression;
 };
 
-interface IFilterProps {
+interface IFilterSetProps {
   filters: IFilterDefinition[];
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface IFilterState {
+interface IFilterSetState {
   queries?: IQueryObject;
 }
 
-export default class Filter extends React.Component<IFilterProps, IFilterState> {
+export default class FilterSet extends React.Component<IFilterSetProps, IFilterSetState> {
   private dropdownComponents: { [key: string]: Dropdown } = {};
 
-  constructor(props: IFilterProps) {
+  constructor(props: IFilterSetProps) {
     super();
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -102,15 +102,12 @@ export default class Filter extends React.Component<IFilterProps, IFilterState> 
 
   render() {
     return (
-      <div className="filter-component">
-        <div className="text">
-          <Expression expression={this.getQuery(this.state.queries)} />
-        </div>
+      <div className="filter-set-component">
         <div className="filters">
           {
             this.props.filters.map(filter => {
               return (
-                <Dropdown className="filter" title={filter.title} ref={e => this.dropdownComponents[filter.key] = e} key={filter.key}>
+                <Dropdown className={classNames('filter', { 'active': !!this.state.queries[filter.key] })} title={filter.title} ref={e => this.dropdownComponents[filter.key] = e} key={filter.key}>
                   <div className="container">
                     <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} />
                   </div>

@@ -4,21 +4,21 @@ import * as NQL from '../../nql';
 import { ItemKind } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
-import Filter, { IFilterDefinition } from '../filter';
+import FilterSet, { IFilterDefinition } from '../filter-set';
 import ItemTypeFilter from '../item-type-filter';
 import FilterTasksByTypeCommand from './filter-tasks-by-type-command';
 
-interface ITaskFilterProps {
+interface ITaskFilterSetProps {
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface ITaskFilterState {
+interface ITaskFilterSetState {
 }
 
-export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskFilterState> implements ICommandProvider {
+export default class TaskFilterSet extends React.Component<ITaskFilterSetProps, ITaskFilterSetState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private filterComponent: Filter;
+  private filterSetComponent: FilterSet;
 
   private filters: IFilterDefinition[] = [
     { key: 'type', title: 'Type', Component: ItemTypeFilter, props: { itemKind: 'task' as ItemKind } },
@@ -45,12 +45,12 @@ export default class TaskFilter extends React.Component<ITaskFilterProps, ITaskF
   }
 
   private handleFilterTasksCommand(key: string) {
-    this.filterComponent.showFilter(key);
+    this.filterSetComponent.showFilter(key);
   }
 
   render() {
     return (
-      <Filter filters={this.filters} query={this.props.query} onChange={this.props.onChange} ref={e => this.filterComponent = e} />
+      <FilterSet filters={this.filters} query={this.props.query} onChange={this.props.onChange} ref={e => this.filterSetComponent = e} />
     );
   }
 };

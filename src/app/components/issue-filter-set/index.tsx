@@ -4,23 +4,23 @@ import * as NQL from '../../nql';
 import { ItemKind } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
-import Filter, { IFilterDefinition } from '../filter';
+import FilterSet, { IFilterDefinition } from '../filter-set';
 import ProjectFilter from '../project-filter';
 import ItemTypeFilter from '../item-type-filter';
 import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
 
-interface IIssueFilterProps {
+interface IIssueFilterSetProps {
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface IIssueFilterState {
+interface IIssueFilterSetState {
 }
 
-export default class IssueFilter extends React.Component<IIssueFilterProps, IIssueFilterState> implements ICommandProvider {
+export default class IssueFilterSet extends React.Component<IIssueFilterSetProps, IIssueFilterSetState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private filterComponent: Filter;
+  private filterSetComponent: FilterSet;
 
   private filters: IFilterDefinition[] = [
     { key: 'project', title: 'Project', Component: ProjectFilter},
@@ -49,12 +49,12 @@ export default class IssueFilter extends React.Component<IIssueFilterProps, IIss
   }
 
   private handleFilterIssuesCommand(key: string) {
-    this.filterComponent.showFilter(key);
+    this.filterSetComponent.showFilter(key);
   }
 
   render() {
     return (
-      <Filter filters={this.filters} query={this.props.query} onChange={this.props.onChange} ref={e => this.filterComponent = e} />
+      <FilterSet filters={this.filters} query={this.props.query} onChange={this.props.onChange} ref={e => this.filterSetComponent = e} />
     );
   }
 };

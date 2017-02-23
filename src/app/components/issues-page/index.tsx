@@ -4,8 +4,8 @@ import * as NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
-import IssueFilter from '../issue-filter';
-import TaskFilter from '../task-filter';
+import IssueFilterSet from '../issue-filter-set';
+import TaskFilterSet from '../task-filter-set';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
@@ -42,8 +42,8 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleNewIssueButtonClick = this.handleNewIssueButtonClick.bind(this);
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
-    this.handleIssueFilterChange = this.handleIssueFilterChange.bind(this);
-    this.handleTaskFilterChange = this.handleTaskFilterChange.bind(this);
+    this.handleIssueFilterSetChange = this.handleIssueFilterSetChange.bind(this);
+    this.handleTaskFilterSetChange = this.handleTaskFilterSetChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
 
     this.state = {
@@ -112,7 +112,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private handleRefreshButtonClick() {
   }
 
-  private async handleIssueFilterChange(query: NQL.Expression) {
+  private async handleIssueFilterSetChange(query: NQL.Expression) {
     let items = await this.application.items.getAll(query, this.state.taskFilterQuery);
 
     this.setState({
@@ -122,7 +122,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleTaskFilterChange(query: NQL.Expression) {
+  private async handleTaskFilterSetChange(query: NQL.Expression) {
     let items = await this.application.items.getAll(this.state.issueFilterQuery, query);
 
     this.setState({
@@ -148,11 +148,26 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="row container">
-            <div className="issue-filter">
-              <IssueFilter query={this.state.issueFilterQuery} onChange={this.handleIssueFilterChange} />
-            </div>
-            <div className="task-filter">
-              <TaskFilter query={this.state.taskFilterQuery} onChange={this.handleTaskFilterChange} />
+            <div className="filter-sets">
+              <div className="table">
+                <div className="filter-set table-row">
+                  <div className="title table-cell">
+                    Filter Issues:
+                  </div>
+                  <div className="table-cell">
+                    <IssueFilterSet query={this.state.issueFilterQuery} onChange={this.handleIssueFilterSetChange} />
+                  </div>
+                </div>
+                <div className="separator"></div>
+                <div className="filter-set table-row">
+                  <div className="title table-cell">
+                    Filter Tasks:
+                  </div>
+                  <div className="table-cell">
+                    <TaskFilterSet query={this.state.taskFilterQuery} onChange={this.handleTaskFilterSetChange} />
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />

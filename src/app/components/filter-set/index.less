@@ -1,19 +1,18 @@
 @import '../../assets/stylesheets/common';
 
-.filter-component {
-  padding: 10px;
-  border: 1px solid @darkgray;
-
-  .text {
-    margin-bottom: 10px;
-  }
-
+.filter-set-component {
   .filters {
     .filter {
       margin-right: 10px;
 
       .container {
         padding: 10px;
+      }
+
+      &.active {
+        .button {
+          border-bottom: 1px solid @primary;
+        }
       }
     }
   }

@@ -1,3 +1,5 @@
+@import '../../assets/stylesheets/common';
+
 .issues-page-component {
   .action-bar {
     margin-bottom: 20px;
@@ -8,12 +10,20 @@
   }
 
   .container {
-    .issue-filter {
+    .filter-sets {
+      padding: 10px;
+      border: 1px solid @darkgray;
       margin-bottom: 20px;
-    }
 
-    .task-filter {
-      margin-bottom: 20px;
+      .separator {
+        margin-bottom: 10px;
+      }
+
+      .filter-set {
+        .title {
+          padding-right: 10px;
+        }
+      }
     }
 
     .item-list {
