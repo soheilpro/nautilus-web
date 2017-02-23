@@ -1,8 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { ICommandProvider, ICommand } from '../../commands';
-import { ServiceManager } from '../../services';
 import Dropdown from '../dropdown';
 import Expression from '../expression';
 
@@ -39,8 +37,7 @@ interface IFilterState {
   queries?: IQueryObject;
 }
 
-export default class Filter extends React.Component<IFilterProps, IFilterState> implements ICommandProvider {
-  private commandManager = ServiceManager.Instance.getCommandManager();
+export default class Filter extends React.Component<IFilterProps, IFilterState> {
   private dropdownComponents: { [key: string]: Dropdown } = {};
 
   constructor(props: IFilterProps) {
@@ -53,16 +50,8 @@ export default class Filter extends React.Component<IFilterProps, IFilterState> 
     };
   }
 
-  componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
-  }
-
-  componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
-  }
-
-  getCommands() {
-    return [] as ICommand[];
+  showFilter(key: string) {
+    this.dropdownComponents[key].open();
   }
 
   private getQueryObject(query: NQL.Expression) {
