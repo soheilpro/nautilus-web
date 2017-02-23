@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IItemPriority } from '../../application';
+import { ItemKind, IItemPriority } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IItemPrioritySelectProps {
-  itemKind: string;
+  itemKind: ItemKind;
   itemPriority: IItemPriority;
   className?: string;
   onChange(itemPriority: IItemPriority): void;

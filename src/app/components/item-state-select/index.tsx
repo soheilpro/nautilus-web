@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IItemState } from '../../application';
+import { ItemKind, IItemState } from '../../application';
 import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IItemStateSelectProps {
-  itemKind: string;
+  itemKind: ItemKind;
   itemState: IItemState;
   className?: string;
   onChange(itemState: IItemState): void;
