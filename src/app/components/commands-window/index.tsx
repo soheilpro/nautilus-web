@@ -30,7 +30,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
     this.handleCommandSearchQueryChange = this.handleCommandSearchQueryChange.bind(this);
 
     this.state = {
-      filteredCommands: this.commands,
+      filteredCommands: this.filterCommands(this.commands, ''),
       selectedCommandIndex: 0,
     };
   }
@@ -66,12 +66,12 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
     query = query.trim();
 
     this.setState({
-      filteredCommands: this.filter(this.commands, query),
+      filteredCommands: this.filterCommands(this.commands, query),
       selectedCommandIndex: 0,
     });
   }
 
-  private filter(commands: ICommand[], query: string) {
+  private filterCommands(commands: ICommand[], query: string) {
     return commands.filter(command => command.visible && command.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
 
