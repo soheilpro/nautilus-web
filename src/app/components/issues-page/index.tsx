@@ -161,28 +161,28 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button onClick={this.handleNewTaskButtonClick} enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</Button>
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
-          <div className="row container">
-            <div className="filter-sets">
-              <div className="table">
-                <div className="filter-set table-row">
-                  <div className="title table-cell">
-                    Filter Issues:
-                  </div>
-                  <div className="table-cell">
-                    <IssueFilterSet query={this.state.issueFilterQuery} onChange={this.handleIssueFilterSetChange} />
-                  </div>
+          <div className="filter-sets">
+            <div className="table">
+              <div className="filter-set table-row">
+                <div className="title table-cell">
+                  Filter Issues:
                 </div>
-                <div className="separator"></div>
-                <div className="filter-set table-row">
-                  <div className="title table-cell">
-                    Filter Tasks:
-                  </div>
-                  <div className="table-cell">
-                    <TaskFilterSet query={this.state.taskFilterQuery} onChange={this.handleTaskFilterSetChange} />
-                  </div>
+                <div className="table-cell">
+                  <IssueFilterSet query={this.state.issueFilterQuery} onChange={this.handleIssueFilterSetChange} />
+                </div>
+              </div>
+              <div className="separator"></div>
+              <div className="filter-set table-row">
+                <div className="title table-cell">
+                  Filter Tasks:
+                </div>
+                <div className="table-cell">
+                  <TaskFilterSet query={this.state.taskFilterQuery} onChange={this.handleTaskFilterSetChange} />
                 </div>
               </div>
             </div>
+          </div>
+          <div className="items row">
             <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />
             </div>
