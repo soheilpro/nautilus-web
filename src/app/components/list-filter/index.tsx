@@ -14,7 +14,7 @@ interface IFilterItem {
   [key: string]: any;
 };
 
-interface IListFilterDropdownProps {
+interface IListFilterProps {
   items: IFilterItem[];
   displayProperty: string;
   query?: NQL.Expression;
@@ -25,7 +25,7 @@ interface IListFilterDropdownProps {
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
-interface IListFilterDropdownState {
+interface IListFilterState {
   items?: IFilterItem[];
   selectedItemIndex?: number;
   searchText?: string;
@@ -33,8 +33,8 @@ interface IListFilterDropdownState {
   excludedItems?: IFilterItem[];
 }
 
-export default class ListFilterDropdown extends React.Component<IListFilterDropdownProps, IListFilterDropdownState> {
-  constructor(props: IListFilterDropdownProps) {
+export default class ListFilter extends React.Component<IListFilterProps, IListFilterState> {
+  constructor(props: IListFilterProps) {
     super();
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -53,7 +53,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     };
   }
 
-  componentWillReceiveProps(nextProps: IListFilterDropdownProps) {
+  componentWillReceiveProps(nextProps: IListFilterProps) {
     let { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
 
     this.setState({
@@ -182,7 +182,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     });
   }
 
-  private getQuery(includedItems: IFilterItem[], excludedItems: IFilterItem[], props: IListFilterDropdownProps): NQL.IExpression {
+  private getQuery(includedItems: IFilterItem[], excludedItems: IFilterItem[], props: IListFilterProps): NQL.IExpression {
     if (includedItems.length === 1) {
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
@@ -214,7 +214,7 @@ export default class ListFilterDropdown extends React.Component<IListFilterDropd
     return null;
   }
 
-  private parseQuery(query: NQL.Expression, props: IListFilterDropdownProps): { includedItems: IFilterItem[], excludedItems: IFilterItem[]} {
+  private parseQuery(query: NQL.Expression, props: IListFilterProps): { includedItems: IFilterItem[], excludedItems: IFilterItem[]} {
     if (!query)
       return {
         includedItems: [],
