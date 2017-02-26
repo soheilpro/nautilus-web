@@ -1,11 +1,13 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as uuid from 'uuid';
 import * as NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
 import IssueFilterSet from '../issue-filter-set';
 import TaskFilterSet from '../task-filter-set';
+import ConfigurationManager from '../configuration-manager';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
@@ -18,6 +20,21 @@ import ClearFiltersCommand from './clear-filters-command';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
+interface IViewConfiguration {
+  issues: {
+    filterQuery?: NQL.Expression;
+  };
+  tasks: {
+    filterQuery?: NQL.Expression;
+  };
+}
+
+interface ISavedViewConfiguration {
+  id: string;
+  name: string;
+  configuration: IViewConfiguration;
+}
+
 interface IIssuesPageProps {
 }
 
@@ -26,6 +43,7 @@ interface IIssuesPageState {
   selectedItem?: IItem;
   issueFilterQuery?: NQL.Expression;
   taskFilterQuery?: NQL.Expression;
+  savedConfigurations?: ISavedViewConfiguration[];
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
@@ -45,11 +63,16 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
     this.handleIssueFilterSetChange = this.handleIssueFilterSetChange.bind(this);
     this.handleTaskFilterSetChange = this.handleTaskFilterSetChange.bind(this);
+    this.handleConfigurationManagerReset = this.handleConfigurationManagerReset.bind(this);
+    this.handleConfigurationManagerSave = this.handleConfigurationManagerSave.bind(this);
+    this.handleConfigurationManagerDelete = this.handleConfigurationManagerDelete.bind(this);
+    this.handleConfigurationManagerSelect = this.handleConfigurationManagerSelect.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
     this.handleClearFiltersCommandExecute = this.handleClearFiltersCommandExecute.bind(this);
 
     this.state = {
       items: [],
+      savedConfigurations: [],
     };
   }
 
@@ -141,6 +164,44 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
+  private async handleConfigurationManagerReset() {
+    let items = await this.application.items.getAll(null, null);
+
+    this.setState({
+      items,
+      selectedItem: _.last(items.filter(isIssue)),
+      issueFilterQuery: null,
+      taskFilterQuery: null,
+    });
+  }
+
+  private async handleConfigurationManagerSave(configuration: IViewConfiguration, name: string) {
+    this.setState({
+      savedConfigurations: this.state.savedConfigurations.concat({
+        id: uuid(),
+        name: name,
+        configuration: configuration,
+      }),
+    });
+  }
+
+  private async handleConfigurationManagerDelete(savedConfiguration: ISavedViewConfiguration) {
+    this.setState({
+      savedConfigurations: this.state.savedConfigurations.filter(x => x !== savedConfiguration),
+    });
+  }
+
+  private async handleConfigurationManagerSelect(savedConfiguration: ISavedViewConfiguration) {
+    let items = await this.application.items.getAll(savedConfiguration.configuration.issues.filterQuery, savedConfiguration.configuration.tasks.filterQuery);
+
+    this.setState({
+      items,
+      selectedItem: _.last(items.filter(isIssue)),
+      issueFilterQuery: savedConfiguration.configuration.issues.filterQuery,
+      taskFilterQuery: savedConfiguration.configuration.tasks.filterQuery,
+    });
+  }
+
   private async handleClearFiltersCommandExecute() {
     let items = await this.application.items.getAll(null, null);
 
@@ -152,6 +213,20 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
+  private getCurrentConfiguration(): IViewConfiguration {
+    if (!this.state.issueFilterQuery && !this.state.taskFilterQuery)
+      return null;
+
+    return {
+      issues: {
+        filterQuery: this.state.issueFilterQuery,
+      },
+      tasks: {
+        filterQuery: this.state.taskFilterQuery,
+      },
+    };
+  }
+
   render() {
     return (
       <MasterPage>
@@ -161,8 +236,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button onClick={this.handleNewTaskButtonClick} enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</Button>
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
-          <div className="filter-sets">
-            <div className="table">
+          <div className="view row">
+            <div className="configuration-manager">
+              <ConfigurationManager currentConfiguration={this.getCurrentConfiguration()} savedConfigurations={this.state.savedConfigurations} onReset={this.handleConfigurationManagerReset} onSave={this.handleConfigurationManagerSave} onDelete={this.handleConfigurationManagerDelete} onSelect={this.handleConfigurationManagerSelect} />
+            </div>
+            <div className="filters table">
               <div className="filter-set table-row">
                 <div className="title table-cell">
                   Filter Issues:

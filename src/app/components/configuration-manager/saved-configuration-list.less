@@ -1,0 +1,46 @@
+@import '../../assets/stylesheets/common';
+
+.saved-configuration-list-component {
+  padding: 10px;
+
+  .search-input {
+    min-width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .saved-configurations {
+    .saved-configuration {
+      display: block;
+
+      .remove {
+        float: left;
+        margin-left: 5px;
+        margin-right: 5px;
+        color: @darkgray;
+
+        &:hover {
+          color: lighten(@red, 5%);
+        }
+
+        &.selected {
+          color: @red;
+        }
+      }
+
+      .name {
+        display: block;
+        padding: 1px 0;
+        text-decoration: none;
+        color: @text;
+      }
+
+      &:hover {
+        background-color: @lightgray;
+      }
+
+      &.selected {
+        background-color: @lightgray;
+      }
+    }
+  }
+}

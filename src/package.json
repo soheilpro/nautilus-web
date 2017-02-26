@@ -18,6 +18,7 @@
     "react-router": "^3.0.0",
     "typescript": "^2.1.5",
     "underscore": "^1.8.3",
+    "uuid": "^3.0.1",
     "wolfy87-eventemitter": "^5.1.0"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "@types/react-dom": "^0.14.19",
     "@types/react-router": "^2.0.41",
     "@types/underscore": "^1.7.36",
+    "@types/uuid": "^2.0.29",
     "@types/wolfy87-eventemitter": "^4.2.31",
     "awesome-typescript-loader": "^3.0.0-beta.17",
     "buno": "^1.0.0",
