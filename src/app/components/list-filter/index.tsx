@@ -304,10 +304,10 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
             this.state.items.map((item, index) => {
               return (
                 <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} key={item.id}>
-                  <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" onClick={_.partial(this.handleItemExcludeClick, item)}>
+                  <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
                     <Icon name="minus-square" />
                   </a>
-                  <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" onClick={_.partial(this.handleItemIncludeClick, item)}>
+                  <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
                     <Icon name="plus-square" />
                   </a>
                   <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
