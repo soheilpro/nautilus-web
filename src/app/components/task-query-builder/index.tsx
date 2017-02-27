@@ -4,24 +4,24 @@ import * as NQL from '../../nql';
 import { ItemKind } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
-import FilterSet, { IFilterDefinition } from '../filter-set';
-import ItemTypeFilter from '../item-type-filter';
+import AndQueryBuilder, { IQueryBuilder } from '../and-query-builder';
+import ItemTypeQueryBuilder from '../item-type-query-builder';
 import FilterTasksByTypeCommand from './filter-tasks-by-type-command';
 
-interface ITaskFilterSetProps {
+interface ITaskQueryBuilderProps {
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface ITaskFilterSetState {
+interface ITaskQueryBuilderState {
 }
 
-export default class TaskFilterSet extends React.Component<ITaskFilterSetProps, ITaskFilterSetState> implements ICommandProvider {
+export default class TaskQueryBuilder extends React.Component<ITaskQueryBuilderProps, ITaskQueryBuilderState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private filterSetComponent: FilterSet;
+  private andQueryBuilderComponent: AndQueryBuilder;
 
-  private filters: IFilterDefinition[] = [
-    { key: 'type', title: 'Type', Component: ItemTypeFilter, props: { itemKind: 'task' as ItemKind } },
+  private queryBuilders: IQueryBuilder[] = [
+    { key: 'type', title: 'Type', Component: ItemTypeQueryBuilder, props: { itemKind: 'task' as ItemKind } },
   ];
 
   constructor() {
@@ -45,12 +45,12 @@ export default class TaskFilterSet extends React.Component<ITaskFilterSetProps, 
   }
 
   private handleFilterTasksCommandExecute(key: string) {
-    this.filterSetComponent.showFilter(key);
+    this.andQueryBuilderComponent.showFilter(key);
   }
 
   render() {
     return (
-      <FilterSet filters={this.filters} query={this.props.query} onChange={this.props.onChange} ref={e => this.filterSetComponent = e} />
+      <AndQueryBuilder queryBuilders={this.queryBuilders} query={this.props.query} onChange={this.props.onChange} ref={e => this.andQueryBuilderComponent = e} />
     );
   }
 };

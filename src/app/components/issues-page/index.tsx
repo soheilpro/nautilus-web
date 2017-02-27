@@ -5,8 +5,8 @@ import * as NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
-import IssueFilterSet from '../issue-filter-set';
-import TaskFilterSet from '../task-filter-set';
+import IssueQueryBuilder from '../issue-query-builder';
+import TaskQueryBuilder from '../task-query-builder';
 import ConfigurationManager from '../configuration-manager';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
@@ -61,8 +61,8 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleNewIssueButtonClick = this.handleNewIssueButtonClick.bind(this);
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
-    this.handleIssueFilterSetChange = this.handleIssueFilterSetChange.bind(this);
-    this.handleTaskFilterSetChange = this.handleTaskFilterSetChange.bind(this);
+    this.handleIssueQueryBuilderChange = this.handleIssueQueryBuilderChange.bind(this);
+    this.handleTaskQueryBuilderChange = this.handleTaskQueryBuilderChange.bind(this);
     this.handleConfigurationManagerReset = this.handleConfigurationManagerReset.bind(this);
     this.handleConfigurationManagerSave = this.handleConfigurationManagerSave.bind(this);
     this.handleConfigurationManagerDelete = this.handleConfigurationManagerDelete.bind(this);
@@ -138,7 +138,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private handleRefreshButtonClick() {
   }
 
-  private async handleIssueFilterSetChange(query: NQL.Expression) {
+  private async handleIssueQueryBuilderChange(query: NQL.Expression) {
     let items = await this.application.items.getAll(query, this.state.taskFilterQuery);
 
     this.setState({
@@ -148,7 +148,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleTaskFilterSetChange(query: NQL.Expression) {
+  private async handleTaskQueryBuilderChange(query: NQL.Expression) {
     let items = await this.application.items.getAll(this.state.issueFilterQuery, query);
 
     this.setState({
@@ -240,22 +240,22 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <div className="configuration-manager">
               <ConfigurationManager currentConfiguration={this.getCurrentConfiguration()} savedConfigurations={this.state.savedConfigurations} onReset={this.handleConfigurationManagerReset} onSave={this.handleConfigurationManagerSave} onDelete={this.handleConfigurationManagerDelete} onSelect={this.handleConfigurationManagerSelect} />
             </div>
-            <div className="filters table">
-              <div className="filter-set table-row">
+            <div className="query-builders table">
+              <div className="query-builder table-row">
                 <div className="title table-cell">
                   Filter Issues:
                 </div>
                 <div className="table-cell">
-                  <IssueFilterSet query={this.state.issueFilterQuery} onChange={this.handleIssueFilterSetChange} />
+                  <IssueQueryBuilder query={this.state.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} />
                 </div>
               </div>
               <div className="separator"></div>
-              <div className="filter-set table-row">
+              <div className="query-builder table-row">
                 <div className="title table-cell">
                   Filter Tasks:
                 </div>
                 <div className="table-cell">
-                  <TaskFilterSet query={this.state.taskFilterQuery} onChange={this.handleTaskFilterSetChange} />
+                  <TaskQueryBuilder query={this.state.taskFilterQuery} onChange={this.handleTaskQueryBuilderChange} />
                 </div>
               </div>
             </div>

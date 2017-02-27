@@ -7,19 +7,19 @@ import Dropdown from '../dropdown';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IFilterComponentProps {
+interface IQueryBuilderProps {
   query?: NQL.Expression;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
-declare class FilterComponent extends React.Component<IFilterComponentProps, {}> {
+declare class QueryBuilder extends React.Component<IQueryBuilderProps, {}> {
   static canParseQuery(query: NQL.Expression): void;
 }
 
-export interface IFilterDefinition {
+export interface IQueryBuilder {
   key: string;
   title: string;
-  Component: typeof FilterComponent;
+  Component: typeof QueryBuilder;
   props?: Object;
 }
 
@@ -27,20 +27,20 @@ interface IQueryObject {
   [key: string]: NQL.Expression;
 };
 
-interface IFilterSetProps {
-  filters: IFilterDefinition[];
+interface IAndQueryBuilderProps {
+  queryBuilders: IQueryBuilder[];
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface IFilterSetState {
+interface IAndQueryBuilderState {
   queries?: IQueryObject;
 }
 
-export default class FilterSet extends React.Component<IFilterSetProps, IFilterSetState> {
+export default class AndQueryBuilder extends React.Component<IAndQueryBuilderProps, IAndQueryBuilderState> {
   private dropdownComponents: { [key: string]: Dropdown } = {};
 
-  constructor(props: IFilterSetProps) {
+  constructor(props: IAndQueryBuilderProps) {
     super();
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -50,7 +50,7 @@ export default class FilterSet extends React.Component<IFilterSetProps, IFilterS
     };
   }
 
-  componentWillReceiveProps(nextProps: IFilterSetProps) {
+  componentWillReceiveProps(nextProps: IAndQueryBuilderProps) {
     this.state = {
       queries: this.getQueryObject(nextProps.query) || {},
     };
@@ -68,9 +68,9 @@ export default class FilterSet extends React.Component<IFilterSetProps, IFilterS
     let queries: IQueryObject = {};
 
     for (let child of children) {
-      for (let filter of this.props.filters) {
-        if (filter.Component.canParseQuery(child)) {
-          queries[filter.key] = child;
+      for (let queryBuilder of this.props.queryBuilders) {
+        if (queryBuilder.Component.canParseQuery(child)) {
+          queries[queryBuilder.key] = child;
           break;
         }
       }
@@ -108,14 +108,14 @@ export default class FilterSet extends React.Component<IFilterSetProps, IFilterS
 
   render() {
     return (
-      <div className="filter-set-component">
-        <div className="filters">
+      <div className="and-query-builder-component">
+        <div className="query-builders">
           {
-            this.props.filters.map(filter => {
+            this.props.queryBuilders.map(queryBuilder => {
               return (
-                <Dropdown className={classNames('filter', { 'active': !!this.state.queries[filter.key] })} title={filter.title} ref={e => this.dropdownComponents[filter.key] = e} key={filter.key}>
+                <Dropdown className={classNames('query-builder', { 'active': !!this.state.queries[queryBuilder.key] })} title={queryBuilder.title} ref={e => this.dropdownComponents[queryBuilder.key] = e} key={queryBuilder.key}>
                   <div className="container">
-                    <filter.Component query={this.state.queries[filter.key]} onChange={_.partial(this.handleFilterChange, filter.key)} {...filter.props} />
+                    <queryBuilder.Component query={this.state.queries[queryBuilder.key]} onChange={_.partial(this.handleFilterChange, queryBuilder.key)} {...queryBuilder.props} />
                   </div>
                 </Dropdown>
               );

@@ -2,18 +2,18 @@ import * as React from 'react';
 import * as NQL from '../../nql';
 import { IProject, asEntity, entityComparer } from '../../application';
 import { ServiceManager } from '../../services';
-import ListFilter from '../list-filter';
+import ListQueryBuilder from '../list-query-builder';
 
-interface IProjectFilterProps {
+interface IProjectQueryBuilderProps {
   query?: NQL.Expression;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
-interface IProjectFilterState {
+interface IProjectQueryBuilderState {
   projects?: IProject[];
 }
 
-export default class ProjectFilter extends React.Component<IProjectFilterProps, IProjectFilterState> {
+export default class ProjectQueryBuilder extends React.Component<IProjectQueryBuilderProps, IProjectQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
@@ -31,12 +31,12 @@ export default class ProjectFilter extends React.Component<IProjectFilterProps, 
   }
 
   static canParseQuery(query: NQL.Expression) {
-    return ListFilter.canParseQuery(query, 'project', 'Project');
+    return ListQueryBuilder.canParseQuery(query, 'project', 'Project');
   }
 
   render() {
     return (
-      <ListFilter items={this.state.projects} displayProperty="name" query={this.props.query} queryItem="project" queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
+      <ListQueryBuilder items={this.state.projects} displayProperty="name" query={this.props.query} queryItem="project" queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
     );
   }
 };

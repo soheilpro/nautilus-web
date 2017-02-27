@@ -4,27 +4,27 @@ import * as NQL from '../../nql';
 import { ItemKind } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
-import FilterSet, { IFilterDefinition } from '../filter-set';
-import ProjectFilter from '../project-filter';
-import ItemTypeFilter from '../item-type-filter';
+import AndQueryBuilder, { IQueryBuilder } from '../and-query-builder';
+import ProjectQueryBuilder from '../project-query-builder';
+import ItemTypeQueryBuilder from '../item-type-query-builder';
 import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
 
-interface IIssueFilterSetProps {
+interface IIssueQueryBuilderProps {
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface IIssueFilterSetState {
+interface IIssueQueryBuilderState {
 }
 
-export default class IssueFilterSet extends React.Component<IIssueFilterSetProps, IIssueFilterSetState> implements ICommandProvider {
+export default class IssueQueryBuilder extends React.Component<IIssueQueryBuilderProps, IIssueQueryBuilderState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private filterSetComponent: FilterSet;
+  private andQueryBuilderComponent: AndQueryBuilder;
 
-  private filters: IFilterDefinition[] = [
-    { key: 'project', title: 'Project', Component: ProjectFilter},
-    { key: 'type',    title: 'Type',    Component: ItemTypeFilter, props: { itemKind: 'issue' as ItemKind } },
+  private queryBuilders: IQueryBuilder[] = [
+    { key: 'project', title: 'Project', Component: ProjectQueryBuilder},
+    { key: 'type',    title: 'Type',    Component: ItemTypeQueryBuilder, props: { itemKind: 'issue' as ItemKind } },
   ];
 
   constructor() {
@@ -49,12 +49,12 @@ export default class IssueFilterSet extends React.Component<IIssueFilterSetProps
   }
 
   private handleFilterIssuesCommandExecute(key: string) {
-    this.filterSetComponent.showFilter(key);
+    this.andQueryBuilderComponent.showFilter(key);
   }
 
   render() {
     return (
-      <FilterSet filters={this.filters} query={this.props.query} onChange={this.props.onChange} ref={e => this.filterSetComponent = e} />
+      <AndQueryBuilder queryBuilders={this.queryBuilders} query={this.props.query} onChange={this.props.onChange} ref={e => this.andQueryBuilderComponent = e} />
     );
   }
 };

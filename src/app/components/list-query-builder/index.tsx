@@ -9,32 +9,32 @@ import Icon from '../icon';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IFilterItem {
+interface IItem {
   id?: string;
   [key: string]: any;
 };
 
-interface IListFilterProps {
-  items: IFilterItem[];
+interface IListQueryBuilderProps {
+  items: IItem[];
   displayProperty: string;
   query?: NQL.Expression;
   queryItem: string;
   queryItemType: string;
-  itemToQueryItem: (item: IFilterItem) => Object;
-  itemComparer: (item1: IFilterItem, item2: IFilterItem) => boolean;
+  itemToQueryItem: (item: IItem) => Object;
+  itemComparer: (item1: IItem, item2: IItem) => boolean;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
-interface IListFilterState {
-  items?: IFilterItem[];
+interface IListQueryBuilderState {
+  items?: IItem[];
   selectedItemIndex?: number;
   searchText?: string;
-  includedItems?: IFilterItem[];
-  excludedItems?: IFilterItem[];
+  includedItems?: IItem[];
+  excludedItems?: IItem[];
 }
 
-export default class ListFilter extends React.Component<IListFilterProps, IListFilterState> {
-  constructor(props: IListFilterProps) {
+export default class ListQueryBuilder extends React.Component<IListQueryBuilderProps, IListQueryBuilderState> {
+  constructor(props: IListQueryBuilderProps) {
     super();
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -53,7 +53,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     };
   }
 
-  componentWillReceiveProps(nextProps: IListFilterProps) {
+  componentWillReceiveProps(nextProps: IListQueryBuilderProps) {
     let { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
 
     this.setState({
@@ -113,7 +113,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private handleItemExcludeClick(item: IFilterItem) {
+  private handleItemExcludeClick(item: IItem) {
     this.toggleItemExclude(item);
 
     this.setState({
@@ -121,7 +121,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private handleItemIncludeClick(item: IFilterItem) {
+  private handleItemIncludeClick(item: IItem) {
     this.toggleItemInclude(item);
 
     this.setState({
@@ -129,7 +129,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private handleItemTitleClick(item: IFilterItem) {
+  private handleItemTitleClick(item: IItem) {
     this.includeItem(item);
 
     this.setState({
@@ -137,7 +137,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private filterItems(items: IFilterItem[], text: string) {
+  private filterItems(items: IItem[], text: string) {
     if (!text)
       return items;
 
@@ -146,9 +146,9 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     return items.filter(item => item[this.props.displayProperty].toLowerCase().indexOf(text) !== -1);
   }
 
-  private includeItem(item: IFilterItem) {
+  private includeItem(item: IItem) {
     let includedItems = [item];
-    let excludedItems: IFilterItem[] = [];
+    let excludedItems: IItem[] = [];
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), true);
 
@@ -158,8 +158,8 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private toggleItemExclude(item: IFilterItem) {
-    let includedItems: IFilterItem[] = [];
+  private toggleItemExclude(item: IItem) {
+    let includedItems: IItem[] = [];
     let excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false);
@@ -170,9 +170,9 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private toggleItemInclude(item: IFilterItem) {
+  private toggleItemInclude(item: IItem) {
     let includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item);
-    let excludedItems: IFilterItem[] = [];
+    let excludedItems: IItem[] = [];
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false);
 
@@ -182,7 +182,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     });
   }
 
-  private getQuery(includedItems: IFilterItem[], excludedItems: IFilterItem[], props: IListFilterProps): NQL.IExpression {
+  private getQuery(includedItems: IItem[], excludedItems: IItem[], props: IListQueryBuilderProps): NQL.IExpression {
     if (includedItems.length === 1) {
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
@@ -214,7 +214,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
     return null;
   }
 
-  private parseQuery(query: NQL.Expression, props: IListFilterProps): { includedItems: IFilterItem[], excludedItems: IFilterItem[]} {
+  private parseQuery(query: NQL.Expression, props: IListQueryBuilderProps): { includedItems: IItem[], excludedItems: IItem[]} {
     if (!query)
       return {
         includedItems: [],
@@ -297,7 +297,7 @@ export default class ListFilter extends React.Component<IListFilterProps, IListF
 
   render() {
     return (
-      <div className="list-filter-component" onKeyDown={this.handleKeyDown}>
+      <div className="list-query-builder-component" onKeyDown={this.handleKeyDown}>
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
         <div className="items">
           {
