@@ -8,11 +8,10 @@
 
   .items {
     .item {
-      display: block;
-      padding: 0 6px;
+      display: flex;
 
       .exclude {
-        margin-right: 5px;
+        padding: 2px 3px;
         color: @darkgray;
 
         &:hover {
@@ -25,7 +24,7 @@
       }
 
       .include {
-        margin-right: 5px;
+        padding: 2px 6px 2px 3px;
         color: @darkgray;
 
         &:hover {
@@ -38,18 +37,23 @@
       }
 
       .title {
-        display: inline-block;
-        padding: 1px 0;
+        flex: 1;
+        padding: 2px 6px;
         text-decoration: none;
         color: @text;
       }
 
       &:hover {
-        background-color: @lightgray;
+        .title {
+          background-color: @lightgray;
+        }
       }
 
       &.selected {
-        background-color: @lightgray;
+        .title {
+          background-color: @primary;
+          color: @white;
+        }
       }
     }
   }

@@ -104,7 +104,7 @@ export default class SavedConfigurationList extends React.Component<ISavedConfig
             this.state.savedConfigurations.map((savedConfiguration, index) => {
               return (
                 <div className={classNames('saved-configuration', 'row', {'selected': index === this.state.selectedSavedConfigurationIndex})} key={savedConfiguration.id}>
-                  <a className="remove" href="#" onClick={_.partial(this.handleSaveConfigurationDeleteClick, savedConfiguration)}>
+                  <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleSaveConfigurationDeleteClick, savedConfiguration)}>
                     <Icon name="remove" />
                   </a>
                   <a className="name" href="#" onClick={_.partial(this.handleSaveConfigurationTitleClick, savedConfiguration)}>

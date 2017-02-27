@@ -10,12 +10,10 @@
 
   .saved-configurations {
     .saved-configuration {
-      display: block;
+      display: flex;
 
       .remove {
-        float: left;
-        margin-left: 5px;
-        margin-right: 5px;
+        padding: 2px 6px 2px 3px;
         color: @darkgray;
 
         &:hover {
@@ -28,18 +26,23 @@
       }
 
       .name {
-        display: block;
-        padding: 1px 0;
+        flex: 1;
+        padding: 2px 6px;
         text-decoration: none;
         color: @text;
       }
 
       &:hover {
-        background-color: @lightgray;
+        .name {
+          background-color: @lightgray;
+        }
       }
 
       &.selected {
-        background-color: @lightgray;
+        .name {
+          background-color: @primary;
+          color: @white;
+        }
       }
     }
   }
