@@ -299,7 +299,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     return (
       <div className="list-query-builder-component" onKeyDown={this.handleKeyDown}>
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
-        <div className="items">
+        <div className="item-list">
           {
             this.state.items.map((item, index) => {
               return (
