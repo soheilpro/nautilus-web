@@ -8,12 +8,14 @@
     margin-bottom: 10px;
   }
 
-  .saved-configurations {
+  .saved-configuration-list {
     .saved-configuration {
-      display: flex;
+      display: block;
 
       .remove {
-        padding: 2px 6px 2px 3px;
+        float: left;
+        margin-left: 5px;
+        margin-right: 5px;
         color: @darkgray;
 
         &:hover {
@@ -26,23 +28,18 @@
       }
 
       .name {
-        flex: 1;
-        padding: 2px 6px;
+        display: block;
+        padding: 1px 0;
         text-decoration: none;
         color: @text;
       }
 
       &:hover {
-        .name {
-          background-color: @lightgray;
-        }
+        background-color: @lightgray;
       }
 
       &.selected {
-        .name {
-          background-color: @primary;
-          color: @white;
-        }
+        background-color: @lightgray;
       }
     }
   }

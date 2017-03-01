@@ -4,10 +4,14 @@ import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
 import Input from '../input';
 import Icon from '../icon';
-import { ISavedConfiguration } from './isaved-configuration';
 
 require('../../assets/stylesheets/base.less');
 require('./saved-configuration-list.less');
+
+export interface ISavedConfiguration {
+  id: string;
+  name: string;
+}
 
 interface ISavedConfigurationListProps {
   savedConfigurations: ISavedConfiguration[];
@@ -27,8 +31,8 @@ export default class SavedConfigurationList extends React.Component<ISavedConfig
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
-    this.handleSaveConfigurationDeleteClick = this.handleSaveConfigurationDeleteClick.bind(this);
-    this.handleSaveConfigurationTitleClick = this.handleSaveConfigurationTitleClick.bind(this);
+    this.handleSaveSettingsDeleteClick = this.handleSaveSettingsDeleteClick.bind(this);
+    this.handleSaveSettingsTitleClick = this.handleSaveSettingsTitleClick.bind(this);
 
     this.state = {
       savedConfigurations: props.savedConfigurations,
@@ -78,11 +82,11 @@ export default class SavedConfigurationList extends React.Component<ISavedConfig
     });
   }
 
-  private handleSaveConfigurationDeleteClick(savedConfiguration: ISavedConfiguration) {
+  private handleSaveSettingsDeleteClick(savedConfiguration: ISavedConfiguration) {
     this.props.onDelete(savedConfiguration);
   }
 
-  private handleSaveConfigurationTitleClick(savedConfiguration: ISavedConfiguration) {
+  private handleSaveSettingsTitleClick(savedConfiguration: ISavedConfiguration) {
     this.props.onSelect(savedConfiguration);
   }
 
@@ -99,15 +103,15 @@ export default class SavedConfigurationList extends React.Component<ISavedConfig
     return (
       <div className="saved-configuration-list-component" onKeyDown={this.handleKeyDown}>
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
-        <div className="saved-configurations">
+        <div className="saved-configuration-list">
           {
             this.state.savedConfigurations.map((savedConfiguration, index) => {
               return (
                 <div className={classNames('saved-configuration', 'row', {'selected': index === this.state.selectedSavedConfigurationIndex})} key={savedConfiguration.id}>
-                  <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleSaveConfigurationDeleteClick, savedConfiguration)}>
+                  <a className="remove" href="#" onClick={_.partial(this.handleSaveSettingsDeleteClick, savedConfiguration)}>
                     <Icon name="remove" />
                   </a>
-                  <a className="name" href="#" onClick={_.partial(this.handleSaveConfigurationTitleClick, savedConfiguration)}>
+                  <a className="name" href="#" onClick={_.partial(this.handleSaveSettingsTitleClick, savedConfiguration)}>
                     {savedConfiguration.name}
                   </a>
                 </div>
