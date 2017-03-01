@@ -1,5 +1,6 @@
 import EventEmitter = require('wolfy87-eventemitter');
 import { Client, IClient, ISession } from '../sdk';
+import { ServiceManager } from '../services';
 import { IApplication } from './iapplication';
 import { IItemModule, ItemModule } from './item';
 import { IItemPriorityModule, ItemPriorityModule } from './item-priority';
@@ -13,6 +14,7 @@ export interface IApplicationConfig {
 }
 
 export class Application extends EventEmitter implements IApplication {
+  private localStorage = ServiceManager.Instance.getLocalStorage();
   private client: IClient;
   private session: ISession;
   private isInitializedState: boolean;
@@ -44,7 +46,7 @@ export class Application extends EventEmitter implements IApplication {
   }
 
   initialize() {
-    let session = this.loadSession();
+    let session = this.localStorage.get('session') as ISession;
 
     if (session) {
       this.session = session;
@@ -65,7 +67,7 @@ export class Application extends EventEmitter implements IApplication {
     let session = await this.client.sessions.create(username, password);
 
     if (session) {
-      this.saveSession(session);
+      this.localStorage.set('session', session);
 
       this.session = session;
       this.client.session = session;
@@ -98,18 +100,5 @@ export class Application extends EventEmitter implements IApplication {
     this.isLoadedState = true;
 
     this.emit('load');
-  }
-
-  private loadSession(): ISession {
-    let item = localStorage.getItem('session');
-
-    if (!item)
-      return undefined;
-
-    return JSON.parse(item);
-  }
-
-  private saveSession(session: ISession) {
-    localStorage.setItem('session', JSON.stringify(session));
   }
 }
