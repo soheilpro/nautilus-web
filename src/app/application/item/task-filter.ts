@@ -1,4 +1,4 @@
-import NQL from '../../nql';
+import * as NQL from '../../nql';
 import { ITask } from './itask';
 
 export default class TaskFilter {

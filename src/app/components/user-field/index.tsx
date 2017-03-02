@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { IUser } from '../../application';
 import { ServiceManager } from '../../services';
 

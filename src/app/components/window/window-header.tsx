@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 require('../../assets/stylesheets/base.less');
 require('./window-header.less');

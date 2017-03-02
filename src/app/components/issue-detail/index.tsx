@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { IIssue } from '../../application';
 
 require('../../assets/stylesheets/base.less');

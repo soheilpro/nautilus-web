@@ -1,5 +1,5 @@
-import React from 'react';
-import classNames from 'classnames';
+import * as React from 'react';
+import * as classNames from 'classnames';
 
 require('../../../node_modules/font-awesome/less/font-awesome.less');
 require('../../assets/stylesheets/base.less');

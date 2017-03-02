@@ -1,5 +1,5 @@
-import _ from 'underscore';
-import React from 'react';
+import * as _ from 'underscore';
+import * as React from 'react';
 import { IItem, isIssue, isTask } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';

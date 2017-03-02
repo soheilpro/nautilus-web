@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ITask } from '../../application';
 import ItemTypeField from '../item-type-field';
 import ItemStateField from '../item-state-field';

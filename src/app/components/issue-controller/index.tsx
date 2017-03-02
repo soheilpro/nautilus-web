@@ -1,5 +1,5 @@
-import _ from 'underscore';
-import React from 'react';
+import * as _ from 'underscore';
+import * as React from 'react';
 import { IIssue, IIssueChange } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { IIssueController } from '../../issues';

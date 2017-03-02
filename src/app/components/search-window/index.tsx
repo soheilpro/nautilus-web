@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';

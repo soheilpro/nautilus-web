@@ -1,7 +1,7 @@
-import _ from 'underscore';
-import React from 'react';
-import classNames from 'classnames';
-import NQL from '../../nql';
+import * as _ from 'underscore';
+import * as React from 'react';
+import * as classNames from 'classnames';
+import * as NQL from '../../nql';
 import Dropdown from '../dropdown';
 
 require('../../assets/stylesheets/base.less');

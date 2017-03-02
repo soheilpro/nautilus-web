@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import * as _ from 'underscore';
 import { IClient } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';

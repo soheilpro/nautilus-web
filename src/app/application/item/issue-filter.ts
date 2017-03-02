@@ -1,4 +1,4 @@
-import NQL from '../../nql';
+import * as NQL from '../../nql';
 import { IIssue } from './iissue';
 
 export default class IssueFilter {

@@ -1,5 +1,5 @@
-import React from 'react';
-import NQL from '../../nql';
+import * as React from 'react';
+import * as NQL from '../../nql';
 import { ItemKind, IItemType, asEntity, entityComparer } from '../../application';
 import { ServiceManager } from '../../services';
 import ListQueryBuilder from '../list-query-builder';

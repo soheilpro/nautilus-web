@@ -1,5 +1,5 @@
-import _ from 'underscore';
-import NQL from '../../nql';
+import * as _ from 'underscore';
+import * as NQL from '../../nql';
 import { IClient, IItem, IItemChange } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';

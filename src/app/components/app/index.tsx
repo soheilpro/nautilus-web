@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ServiceManager } from '../../services';
 import Login from '../login';
 import Main from '../main';

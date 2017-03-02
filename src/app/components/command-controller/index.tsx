@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ICommandProvider, ICommand, ICommandController } from '../../commands';
 import { KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';

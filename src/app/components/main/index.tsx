@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
