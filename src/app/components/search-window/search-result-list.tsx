@@ -29,7 +29,7 @@ export default class SearchResultList extends React.Component<ISearchResultListP
 
   private renderSearchResult(searchResult: ISearchResult) {
     if (searchResult.type === 'Issue') {
-      let issue = searchResult.item as IIssue;
+      const issue = searchResult.item as IIssue;
 
       return (
         <div className="issue">

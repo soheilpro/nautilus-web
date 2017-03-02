@@ -40,7 +40,7 @@ export default class Input extends React.Component<IInputProps, IInputState> {
   }
 
   private handleInputChange(event: React.FormEvent<HTMLInputElement>) {
-    let value = (event.target as HTMLInputElement).value;
+    const value = (event.target as HTMLInputElement).value;
 
     this.props.onChange(value);
   }
@@ -51,7 +51,7 @@ export default class Input extends React.Component<IInputProps, IInputState> {
   }
 
   private handleTextAreaChange(event: React.FormEvent<HTMLTextAreaElement>) {
-    let value = (event.target as HTMLTextAreaElement).value;
+    const value = (event.target as HTMLTextAreaElement).value;
 
     this.props.onChange(value);
   }

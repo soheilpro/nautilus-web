@@ -3,13 +3,13 @@ import { ITask } from './itask';
 
 export default class TaskFilter {
   getPredicate(query: NQL.IExpression): (task: ITask) => boolean {
-    let normalizedQuery = new QueryNormalizer().tranform(query, null);
+    const normalizedQuery = new QueryNormalizer().tranform(query, null);
 
-    let types =  [
+    const types =  [
       { name: 'ItemType', base: 'Entity' },
     ];
 
-    let compiler = new NQL.ExpressionCompiler(types);
+    const compiler = new NQL.ExpressionCompiler(types);
 
     return compiler.compile(normalizedQuery, ['task']) as any;
   }

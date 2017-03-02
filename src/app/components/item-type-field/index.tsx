@@ -19,7 +19,7 @@ export default class ItemTypeField extends React.Component<IItemTypeFieldProps, 
     if (!this.props.itemType)
       return null;
 
-    let itemType = this.application.itemTypes.get(this.props.itemType);
+    const itemType = this.application.itemTypes.get(this.props.itemType);
 
     return (
       <div className="item-type-field-component">

@@ -77,10 +77,10 @@ export default class List extends React.Component<IListProps, IListState> {
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
+      const selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
 
       if (selectedItemIndex < this.props.items.length - 1) {
-        let selectedItem = this.props.items[selectedItemIndex + 1];
+        const selectedItem = this.props.items[selectedItemIndex + 1];
 
         this.setState({
           selectedItem,
@@ -92,10 +92,10 @@ export default class List extends React.Component<IListProps, IListState> {
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
+      const selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
 
       if (selectedItemIndex > 0) {
-        let selectedItem = this.props.items[selectedItemIndex - 1];
+        const selectedItem = this.props.items[selectedItemIndex - 1];
 
         this.setState({
           selectedItem,

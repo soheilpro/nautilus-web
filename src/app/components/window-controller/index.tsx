@@ -51,7 +51,7 @@ export default class WindowController extends React.Component<IWindowControllerP
   }
 
   showWindow(window: IWindow, callback?: () => any) {
-    let extendedWindow: IExtendedWindow = window;
+    const extendedWindow: IExtendedWindow = window;
     extendedWindow.key = this.windowKeyCounter++;
     extendedWindow.focusedElementOnOpen = document.activeElement as HTMLElement;
 

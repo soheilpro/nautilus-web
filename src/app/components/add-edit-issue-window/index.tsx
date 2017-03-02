@@ -57,7 +57,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
 
     switch (this.props.mode) {
       case 'add':
-        let issue: IIssue = {
+        const issue: IIssue = {
           type: this.state.type,
           title: this.state.title,
           description: this.state.description,
@@ -70,7 +70,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
         break;
 
       case 'edit':
-        let issueChange: IIssueChange = {
+        const issueChange: IIssueChange = {
           type: this.state.type || null,
           title: this.state.title || null,
           description: this.state.description || null,

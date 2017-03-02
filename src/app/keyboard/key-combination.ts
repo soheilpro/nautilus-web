@@ -25,8 +25,8 @@ export class KeyCombination {
     let i: number;
 
     for (i = 0; i < events.length; i++) {
-      let keyCombination = keyCombinations[i];
-      let event = events[i];
+      const keyCombination = keyCombinations[i];
+      const event = events[i];
 
       if (!keyCombination)
         break;

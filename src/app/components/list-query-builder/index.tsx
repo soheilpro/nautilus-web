@@ -43,7 +43,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     this.handleItemIncludeClick = this.handleItemIncludeClick.bind(this);
     this.handleItemTitleClick = this.handleItemTitleClick.bind(this);
 
-    let { includedItems, excludedItems } = this.parseQuery(props.query, props);
+    const { includedItems, excludedItems } = this.parseQuery(props.query, props);
 
     this.state = {
       items: props.items,
@@ -54,7 +54,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
   }
 
   componentWillReceiveProps(nextProps: IListQueryBuilderProps) {
-    let { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
+    const { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
 
     this.setState({
       items: this.filterItems(nextProps.items, this.state.searchText),
@@ -85,21 +85,21 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     else if (event.which === KeyCode.Dash) {
       event.preventDefault();
 
-      let selectedItem = this.state.items[this.state.selectedItemIndex];
+      const selectedItem = this.state.items[this.state.selectedItemIndex];
 
       this.toggleItemExclude(selectedItem);
     }
     else if (event.which === KeyCode.Equals) {
       event.preventDefault();
 
-      let selectedItem = this.state.items[this.state.selectedItemIndex];
+      const selectedItem = this.state.items[this.state.selectedItemIndex];
 
       this.toggleItemInclude(selectedItem);
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      let selectedItem = this.state.items[this.state.selectedItemIndex];
+      const selectedItem = this.state.items[this.state.selectedItemIndex];
 
       this.includeItem(selectedItem);
     }
@@ -147,8 +147,8 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
   }
 
   private includeItem(item: IItem) {
-    let includedItems = [item];
-    let excludedItems: IItem[] = [];
+    const includedItems = [item];
+    const excludedItems: IItem[] = [];
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), true);
 
@@ -159,8 +159,8 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
   }
 
   private toggleItemExclude(item: IItem) {
-    let includedItems: IItem[] = [];
-    let excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
+    const includedItems: IItem[] = [];
+    const excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false);
 
@@ -171,8 +171,8 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
   }
 
   private toggleItemInclude(item: IItem) {
-    let includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item);
-    let excludedItems: IItem[] = [];
+    const includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item);
+    const excludedItems: IItem[] = [];
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false);
 
@@ -221,10 +221,10 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
         excludedItems: [],
       };
 
-    let comparisonQuery = query as NQL.ComparisonExpression;
+    const comparisonQuery = query as NQL.ComparisonExpression;
 
     if (comparisonQuery.operator === '==') {
-      let item = (comparisonQuery.right as NQL.ConstantExpression).value;
+      const item = (comparisonQuery.right as NQL.ConstantExpression).value;
 
       return {
         includedItems: props.items.filter(x => props.itemComparer(x, item)),
@@ -233,7 +233,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     }
 
     if (comparisonQuery.operator === 'IN') {
-      let items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
+      const items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
 
       return {
         includedItems: props.items.filter(x => items.some(item => props.itemComparer(item, x))),
@@ -242,7 +242,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     }
 
     if (comparisonQuery.operator === '!=') {
-      let item = (comparisonQuery.right as NQL.ConstantExpression).value;
+      const item = (comparisonQuery.right as NQL.ConstantExpression).value;
 
       return {
         includedItems: [],
@@ -251,7 +251,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     }
 
     if (comparisonQuery.operator === 'NOT IN') {
-      let items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
+      const items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
 
       return {
         includedItems: [],

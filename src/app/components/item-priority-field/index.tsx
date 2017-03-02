@@ -19,7 +19,7 @@ export default class ItemPriorityField extends React.Component<IItemPriorityFiel
     if (!this.props.itemPriority)
       return null;
 
-    let itemPriority = this.application.itemPriorities.get(this.props.itemPriority);
+    const itemPriority = this.application.itemPriorities.get(this.props.itemPriority);
 
     return (
       <div className="item-priority-field-component">

@@ -29,8 +29,8 @@ export default class Select extends React.Component<ISelectProps, ISelectState> 
   }
 
   private handleSelectChange(event: React.FormEvent<HTMLSelectElement>) {
-    let value = (event.target as HTMLSelectElement).value;
-    let item = _.find(this.props.items, item => item.id === value);
+    const value = (event.target as HTMLSelectElement).value;
+    const item = _.find(this.props.items, item => item.id === value);
 
     this.props.onChange(item);
   }

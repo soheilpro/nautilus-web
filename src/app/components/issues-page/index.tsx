@@ -75,7 +75,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   async componentDidMount() {
-    let items = await this.application.items.getAll(null, null);
+    const items = await this.application.items.getAll(null, null);
 
     this.setState({
       items,
@@ -136,7 +136,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleIssueViewConfigurationChange(configuration: IConfiguration) {
-    let items = await this.application.items.getAll(configuration.issueFilterQuery, configuration.taskFilterQuery);
+    const items = await this.application.items.getAll(configuration.issueFilterQuery, configuration.taskFilterQuery);
 
     this.setState({
       items,
@@ -147,11 +147,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleIssueViewConfigurationSaveConfiguration(savedConfiguration: ISavedConfiguration) {
-    let savedConfigurations = this.state.savedConfigurations.concat(savedConfiguration);
+    const savedConfigurations = this.state.savedConfigurations.concat(savedConfiguration);
 
-    let expressionObjectConverter = new NQL.ExpressionObjectConverter();
+    const expressionObjectConverter = new NQL.ExpressionObjectConverter();
 
-    let xxx = savedConfigurations.map(savedConfiguration => ({
+    const xxx = savedConfigurations.map(savedConfiguration => ({
       id: savedConfiguration.id,
       name: savedConfiguration.name,
       configuration: {
@@ -174,7 +174,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleClearFiltersCommandExecute() {
-    let items = await this.application.items.getAll(null, null);
+    const items = await this.application.items.getAll(null, null);
 
     this.setState({
       items,

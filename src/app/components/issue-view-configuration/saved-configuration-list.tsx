@@ -68,7 +68,7 @@ export default class SavedConfigurationList extends React.Component<ISavedConfig
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      let selectedSavedConfiguration = this.state.savedConfigurations[this.state.selectedSavedConfigurationIndex];
+      const selectedSavedConfiguration = this.state.savedConfigurations[this.state.selectedSavedConfigurationIndex];
 
       this.props.onSelect(selectedSavedConfiguration);
     }

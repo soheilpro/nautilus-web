@@ -10,15 +10,15 @@ export class CommandManager implements ICommandManager {
   }
 
   unregisterCommandProvider(commandProvider: ICommandProvider) {
-    let index = this.commandProviders.indexOf(commandProvider);
+    const index = this.commandProviders.indexOf(commandProvider);
     this.commandProviders.splice(index, 1);
   }
 
   getCommands() {
-    let commands: ICommand[] = [];
+    const commands: ICommand[] = [];
 
-    for (let commandProvider of this.commandProviders)
-      for (let command of commandProvider.getCommands())
+    for (const commandProvider of this.commandProviders)
+      for (const command of commandProvider.getCommands())
         if (command)
           commands.push(command);
 

@@ -19,7 +19,7 @@ export default class ItemStateField extends React.Component<IItemStateFieldProps
     if (!this.props.itemState)
       return null;
 
-    let itemState = this.application.itemStates.get(this.props.itemState);
+    const itemState = this.application.itemStates.get(this.props.itemState);
 
     return (
       <div className="item-state-field-component">

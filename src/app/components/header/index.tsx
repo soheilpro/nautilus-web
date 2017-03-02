@@ -16,7 +16,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
   private application = ServiceManager.Instance.getApplication();
 
   render() {
-    let user = this.application.users.get(this.application.getSession().user);
+    const user = this.application.users.get(this.application.getSession().user);
 
     return (
       <div className="header-component">

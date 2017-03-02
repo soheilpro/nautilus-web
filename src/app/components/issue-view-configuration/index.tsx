@@ -68,7 +68,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private async handleIssueQueryBuilderChange(query: NQL.Expression) {
-    let configuration: IConfiguration = {
+    const configuration: IConfiguration = {
       issueFilterQuery: query,
       taskFilterQuery: this.state.taskFilterQuery,
     };
@@ -81,7 +81,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private async handleTaskQueryBuilderChange(query: NQL.Expression) {
-    let configuration: IConfiguration = {
+    const configuration: IConfiguration = {
       issueFilterQuery: this.state.issueFilterQuery,
       taskFilterQuery: query,
     };
@@ -94,7 +94,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private handleResetButtonClick() {
-    let configuration: IConfiguration = {
+    const configuration: IConfiguration = {
       issueFilterQuery: null,
       taskFilterQuery: null,
     };
@@ -121,7 +121,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   private handleSavePromptWindowConfirm(value: string) {
     this.windowController.closeWindow(this.promptWindow);
 
-    let savedConfiguration = {
+    const savedConfiguration = {
       id: uuid(),
       name: value,
       configuration: this.props.currentConfiguration,

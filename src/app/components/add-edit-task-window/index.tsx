@@ -53,7 +53,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
 
     switch (this.props.mode) {
       case 'add':
-        let task: ITask = {
+        const task: ITask = {
           type: this.state.type,
           title: this.state.title,
           description: this.state.description,
@@ -65,7 +65,7 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
         break;
 
       case 'edit':
-        let taskChange: ITaskChange = {
+        const taskChange: ITaskChange = {
           type: this.state.type || null,
           title: this.state.title || null,
           description: this.state.description || null,

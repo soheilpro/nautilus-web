@@ -19,7 +19,7 @@ export default class ProjectField extends React.Component<IProjectFieldProps, IP
     if (!this.props.project)
       return null;
 
-    let project = this.application.projects.get(this.props.project);
+    const project = this.application.projects.get(this.props.project);
 
     return (
       <div className="project-field-component">

@@ -18,7 +18,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   abstract changeToParams(change: TChange): Object;
 
   getAll(filter: TFilter): Promise<TEntity[]> {
-    let options = {
+    const options = {
       method: 'GET',
       path: this.basePath(),
       params: this.filterToParams(filter)
@@ -28,7 +28,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   }
 
   get(filter: TFilter): Promise<TEntity> {
-    let options = {
+    const options = {
       method: 'GET',
       path: this.basePath(),
       params: this.filterToParams(filter)
@@ -38,7 +38,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   }
 
   insert(entity: TEntity): Promise<TEntity> {
-    let options = {
+    const options = {
       method: 'POST',
       path: this.basePath(),
       params: this.entityToParams(entity)
@@ -48,7 +48,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   }
 
   update(id: string, change: TChange): Promise<TEntity> {
-    let options = {
+    const options = {
       method: 'PATCH',
       path: this.basePath() + '/' + id,
       params: this.changeToParams(change)
@@ -58,7 +58,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   }
 
   delete(id: string): Promise<void> {
-    let options = {
+    const options = {
       method: 'DELETE',
       path: this.basePath() + '/' + id
     };
@@ -67,7 +67,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   }
 
   protected invoke(options: {method: string, path: string; params?: Object}): Promise<any> {
-    let config: AxiosRequestConfig = {
+    const config: AxiosRequestConfig = {
       method: options.method,
       url: this.client.address + options.path,
       data: _.pick(options.params, (value: any) => value !== undefined),
@@ -83,7 +83,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
 
     return new Promise(async (resolve, reject) => {
       try {
-        let result = await axios.request(config);
+        const result = await axios.request(config);
         resolve(result.data.data);
       }
       catch (error) {
@@ -106,7 +106,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
     if (!entities)
       return undefined;
 
-    let result = entities.map<IEntity>(this.toId.bind(this));
+    const result = entities.map<IEntity>(this.toId.bind(this));
 
     if (result.length === 0)
       return undefined;

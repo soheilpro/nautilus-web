@@ -64,7 +64,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
       event.preventDefault();
 
       if (this.state.searchResults.length > 0) {
-        let searchResult = this.state.searchResults[this.state.selectedSearchResultIndex];
+        const searchResult = this.state.searchResults[this.state.selectedSearchResultIndex];
         this.onSearchResultSelect(searchResult);
       }
     }
@@ -83,8 +83,8 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
       return;
     }
 
-    let counter = this.counter;
-    let searchResults = await this.search(query);
+    const counter = this.counter;
+    const searchResults = await this.search(query);
 
     // Display results only if no other search has been performed in the meantime
     if (counter !== this.counter)
@@ -97,7 +97,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
   }
 
   private async search(query: string) {
-    let issues = await this.application.items.searchIssues(query);
+    const issues = await this.application.items.searchIssues(query);
 
     return issues.map(issue => {
       return {

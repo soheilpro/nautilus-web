@@ -54,7 +54,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
       event.preventDefault();
 
       if (this.state.filteredCommands.length > 0) {
-        let command = this.state.filteredCommands[this.state.selectedCommandIndex];
+        const command = this.state.filteredCommands[this.state.selectedCommandIndex];
 
         if (command.enabled)
           this.props.onSelect(command);

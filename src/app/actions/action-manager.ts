@@ -14,7 +14,7 @@ export class ActionManager implements IActionManager {
   }
 
   undo(): void {
-    let lastAction = this.actions.pop();
+    const lastAction = this.actions.pop();
     lastAction.undo();
   }
 }

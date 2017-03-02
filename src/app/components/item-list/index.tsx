@@ -60,7 +60,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   }
 
   getCommands() {
-    let selectedItem = this.state.selectedItem;
+    const selectedItem = this.state.selectedItem;
 
     return [
       isIssue(selectedItem) ? new EditIssueCommand(selectedItem) : undefined,
@@ -90,20 +90,20 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   }
 
   private sortItems(items: IItem[]) {
-    let findItemById = _.memoize((id: string) => {
+    const findItemById = _.memoize((id: string) => {
       return _.find(items, item => item.id === id);
     });
 
-    let getParents = (item: IItem): IItem[] => {
+    const getParents = (item: IItem): IItem[] => {
       if (!item.parent)
         return [];
 
-      let parent = findItemById(item.parent.id);
+      const parent = findItemById(item.parent.id);
 
       return getParents(parent).concat(parent);
     };
 
-    let itemsWithPath = items.map(item => {
+    const itemsWithPath = items.map(item => {
       return {
         item,
         path: getParents(item).concat(item).map(item => item.sid),
@@ -112,8 +112,8 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
     itemsWithPath.sort((x, y) => {
       for (let i = 0; ; i++) {
-        let xNode = x.path[i];
-        let yNode = y.path[i];
+        const xNode = x.path[i];
+        const yNode = y.path[i];
 
         if (!xNode && !yNode)
           return 0;
@@ -124,7 +124,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
         if (!yNode)
           return 1;
 
-        let result = -1 * xNode.localeCompare(yNode);
+        const result = -1 * xNode.localeCompare(yNode);
 
         if (result !== 0)
           return result;

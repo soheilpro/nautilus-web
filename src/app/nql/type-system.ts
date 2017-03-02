@@ -25,7 +25,7 @@ export default class TypeSystem implements ITypeSystem {
   }
 
   getTypeHierarchy(type: IType) {
-    let hierarchy: IType[] = [];
+    const hierarchy: IType[] = [];
 
     while (type) {
       hierarchy.push(type);
@@ -47,11 +47,11 @@ export default class TypeSystem implements ITypeSystem {
   }
 
   getCommonType(type1: IType, type2: IType) {
-    let type1Hierarchy = this.getTypeHierarchy(type1);
-    let type2Hierarchy = this.getTypeHierarchy(type2);
+    const type1Hierarchy = this.getTypeHierarchy(type1);
+    const type2Hierarchy = this.getTypeHierarchy(type2);
 
-    for (let t1 of type1Hierarchy)
-      for (let t2 of type2Hierarchy)
+    for (const t1 of type1Hierarchy)
+      for (const t2 of type2Hierarchy)
         if (t1 === t2)
           return t1;
 

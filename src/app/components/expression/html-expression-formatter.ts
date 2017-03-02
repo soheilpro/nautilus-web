@@ -28,15 +28,17 @@ export default class HTMLExpressionFormatter extends NQL.ExpressionVisitor<strin
   }
 
   visitConstant(expression: NQL.ConstantExpression, context: {}) {
-    let title: string;
+    return `<span class="expression expression-constant"><span class="${expression.type.toLowerCase()}">${this.titleForContant(expression)}</span></span>`;
+  }
 
+  private titleForContant(expression: NQL.ConstantExpression) {
     if (expression.type === 'Project')
-      title = this.application.projects.get(expression.value).name;
+      return this.application.projects.get(expression.value).name;
 
     if (expression.type === 'ItemType')
-      title = this.application.itemTypes.get(expression.value).title;
+      return this.application.itemTypes.get(expression.value).title;
 
-    return `<span class="expression expression-constant"><span class="${expression.type.toLowerCase()}">${title}</span></span>`;
+    throw new Error('Not supported.');
   }
 
   visitList(expression: NQL.ListExpression, context: {}) {

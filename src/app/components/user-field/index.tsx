@@ -19,7 +19,7 @@ export default class UserField extends React.Component<IUserFieldProps, IUserFie
     if (!this.props.user)
       return null;
 
-    let user = this.application.users.get(this.props.user);
+    const user = this.application.users.get(this.props.user);
 
     return (
       <div className="task-assigned-to-field-component">

@@ -9,23 +9,23 @@ import App from './components/app';
 
 ServiceManager.Instance = new ServiceManager();
 
-let sessionStorage = new SessionStorage();
+const sessionStorage = new SessionStorage();
 ServiceManager.Instance.setSessionStorage(sessionStorage);
 
-let localStorage = new LocalStorage();
+const localStorage = new LocalStorage();
 ServiceManager.Instance.setLocalStorage(localStorage);
 
-let roamingStorage = new RoamingStorage();
+const roamingStorage = new RoamingStorage();
 ServiceManager.Instance.setRoamingStorage(roamingStorage);
 
-let application = new Application({ address: 'http://localhost:3000' });
+const application = new Application({ address: 'http://localhost:3000' });
 application.initialize();
 ServiceManager.Instance.setApplication(application);
 
-let actionManager = new ActionManager();
+const actionManager = new ActionManager();
 ServiceManager.Instance.setActionManager(actionManager);
 
-let commandManager = new CommandManager();
+const commandManager = new CommandManager();
 ServiceManager.Instance.setCommandManager(commandManager);
 
 ReactDOM.render(

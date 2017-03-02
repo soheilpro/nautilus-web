@@ -6,7 +6,7 @@ export class LocalStorage implements IStorage {
   }
 
   get(key: string) {
-    let data = window.localStorage.getItem(key);
+    const data = window.localStorage.getItem(key);
 
     if (!data)
       return undefined;

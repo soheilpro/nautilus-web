@@ -33,7 +33,7 @@ export class UserService extends ServiceBase<IUser, IUserFilter, IUserChange> im
   }
 
   getUserPermissions(user: IUser): Promise<IUserPermission[]> {
-    let options = {
+    const options = {
       method: 'GET',
       path: `${this.basePath()}/${user.id}/permissions`
     };

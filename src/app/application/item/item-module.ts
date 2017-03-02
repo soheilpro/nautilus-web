@@ -29,29 +29,29 @@ export class ItemModule extends BaseModule implements IItemModule {
     let issues = this.items.filter(isIssue);
 
     if (issueQuery) {
-      let itemFilter = new IssueFilter();
-      let predicate = itemFilter.getPredicate(issueQuery);
+      const itemFilter = new IssueFilter();
+      const predicate = itemFilter.getPredicate(issueQuery);
       issues = issues.filter(predicate);
     }
 
     let tasks = this.items.filter(item => isTask(item) && issues.some(issue => entityComparer(item.parent, issue)));
 
     if (taskQuery) {
-      let itemFilter = new TaskFilter();
-      let predicate = itemFilter.getPredicate(taskQuery);
+      const itemFilter = new TaskFilter();
+      const predicate = itemFilter.getPredicate(taskQuery);
       tasks = tasks.filter(predicate);
 
       // Remove issues that are not parent of any tasks
       issues = issues.filter(issue => tasks.some(task => entityComparer(task.parent, issue)));
     }
 
-    let items = issues.concat(tasks);
+    const items = issues.concat(tasks);
 
     return Promise.resolve(items);
   }
 
   searchIssues(query: string) {
-    let items = this.items.filter(item => isIssue(item) && item.title && item.title.indexOf(query) !== -1);
+    const items = this.items.filter(item => isIssue(item) && item.title && item.title.indexOf(query) !== -1);
 
     return Promise.resolve(items);
   }
@@ -79,7 +79,7 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   private async update(itemId: string, itemChange: IItemChange) {
-    let item = await this.client.items.update(itemId, itemChange);
+    const item = await this.client.items.update(itemId, itemChange);
 
     this.items[_.findIndex(this.items, item => item.id === itemId)] = item;
 

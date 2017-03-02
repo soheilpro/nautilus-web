@@ -55,7 +55,7 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
       });
     }
 
-    let session = await this.application.logIn(this.state.username, this.state.password);
+    const session = await this.application.logIn(this.state.username, this.state.password);
 
     if (!session) {
       this.setState({

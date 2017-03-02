@@ -84,8 +84,8 @@ export default class CommandController extends React.Component<ICommandControlle
     }
 
     // Find (fully of partially) matching commands
-    let matchingCommands: ICommand[] = [];
-    for (let command of this.commandManager.getCommands()) {
+    const matchingCommands: ICommand[] = [];
+    for (const command of this.commandManager.getCommands()) {
       if (!command.shortcut)
         continue;
 
@@ -101,7 +101,7 @@ export default class CommandController extends React.Component<ICommandControlle
     }
     // One matching command
     else if (matchingCommands.length === 1) {
-      let command = matchingCommands[0];
+      const command = matchingCommands[0];
 
       // Fully matching command
       if (command.shortcut.length === this.keyboardEvents.length) {

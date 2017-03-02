@@ -19,7 +19,7 @@ export default class Avatar extends React.Component<IAvatarProps, IAvatarState> 
   };
 
   render() {
-    let md5: any = blueimpmd5;
+    const md5: any = blueimpmd5;
 
     return (
       <div className="avatar-component">

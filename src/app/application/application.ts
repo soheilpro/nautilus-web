@@ -30,7 +30,7 @@ export class Application extends EventEmitter implements IApplication {
   constructor({ address }: IApplicationConfig) {
     super();
 
-    let client = new Client({ address: address });
+    const client = new Client({ address: address });
 
     this.client = client;
     this.users = new UserModule(this, client);
@@ -46,7 +46,7 @@ export class Application extends EventEmitter implements IApplication {
   }
 
   initialize() {
-    let session = this.localStorage.get('session') as ISession;
+    const session = this.localStorage.get('session') as ISession;
 
     if (session) {
       this.session = session;
@@ -64,7 +64,7 @@ export class Application extends EventEmitter implements IApplication {
   }
 
   async logIn(username: string, password: string): Promise<ISession> {
-    let session = await this.client.sessions.create(username, password);
+    const session = await this.client.sessions.create(username, password);
 
     if (session) {
       this.localStorage.set('session', session);

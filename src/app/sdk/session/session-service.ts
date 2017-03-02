@@ -22,7 +22,7 @@ export class SessionService extends ServiceBase<ISession, ISessionFilter, ISessi
   }
 
   create(username: string, password: string): Promise<ISession> {
-    let options = {
+    const options = {
       method: 'POST',
       path: this.basePath(),
       params: {

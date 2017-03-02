@@ -25,7 +25,7 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   compile(expression: IExpression, args: string[]) {
-    let context: IContext = {};
+    const context: IContext = {};
 
     return new Function(...args, `return ${this.visit(expression, context)};`);
   }
@@ -54,8 +54,8 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   private visitComparisonEquality(left: IExpression, right: IExpression, operator: string, context: IContext): string {
-    let leftReturnType = this.typeSystem.getType(left.returnType);
-    let rightReturnType = this.typeSystem.getType(right.returnType);
+    const leftReturnType = this.typeSystem.getType(left.returnType);
+    const rightReturnType = this.typeSystem.getType(right.returnType);
 
     if (!leftReturnType)
       throw new Error(`Unkown type '${left.returnType}'.`);
@@ -63,29 +63,33 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
     if (!rightReturnType)
       throw new Error(`Unkown type '${right.returnType}'.`);
 
-    let commonReturnType = this.typeSystem.getCommonType(leftReturnType, rightReturnType);
+    const commonReturnType = this.typeSystem.getCommonType(leftReturnType, rightReturnType);
 
     if (!commonReturnType)
       throw new Error(`Cannot compare expressions of type '${leftReturnType}' and '${rightReturnType}'.`);
 
-    let leftValue = this.visit(left, context);
-    let rightValue = this.visit(right, context);
-    let targetOperator: string;
-
-    switch (operator) {
-      case '==': targetOperator = '==='; break;
-      case '!=': targetOperator = '!=='; break;
-      default: throw new Error('Not supported.');
-    }
+    const leftValue = this.visit(left, context);
+    const rightValue = this.visit(right, context);
+    const operatorValue = this.javaScriptOperatorFromComparisonOperator(operator);
 
     if (this.typeSystem.isOfType(commonReturnType, 'Entity'))
-      return `${leftValue} && ${rightValue} && (${leftValue}).id ${targetOperator} (${rightValue}).id`;
+      return `${leftValue} && ${rightValue} && (${leftValue}).id ${operatorValue} (${rightValue}).id`;
 
-    return `${leftValue} ${targetOperator} ${rightValue}`;
+    return `${leftValue} ${operatorValue} ${rightValue}`;
+  }
+
+  private javaScriptOperatorFromComparisonOperator(operator: string) {
+      if (operator === '==')
+        return '===';
+
+      if (operator === '!=')
+        return '!==';
+
+      throw new Error('Not supported.');
   }
 
   private visitComparisonInclusion(left: IExpression, right: IExpression, operator: string, context: IContext): string {
-    let leftReturnType = this.typeSystem.getType(left.returnType);
+    const leftReturnType = this.typeSystem.getType(left.returnType);
 
     if (!leftReturnType)
       throw new Error(`Unkown type '${left.returnType}'.`);
@@ -118,9 +122,9 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   visitMethodCall(expression: MethodCallExpression, context: IContext): string {
-    let target = this.visit(expression.target, context);
-    let name = expression.name;
-    let args = expression.args.map(e => this.visit(e, context));
+    const target = this.visit(expression.target, context);
+    const name = expression.name;
+    const args = expression.args.map(e => this.visit(e, context));
 
     return `(${target}).${name}(${args.join(',')})`;
   }
@@ -130,8 +134,8 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   visitProperty(expression: PropertyExpression, context: IContext): string {
-    let target = this.visit(expression.target, context);
-    let name = expression.name;
+    const target = this.visit(expression.target, context);
+    const name = expression.name;
 
     return `(${target}).${name}`;
   }

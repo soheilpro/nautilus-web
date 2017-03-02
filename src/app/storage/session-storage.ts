@@ -6,7 +6,7 @@ export class SessionStorage implements IStorage {
   }
 
   get(key: string) {
-    let data = window.sessionStorage.getItem(key);
+    const data = window.sessionStorage.getItem(key);
 
     if (!data)
       return undefined;

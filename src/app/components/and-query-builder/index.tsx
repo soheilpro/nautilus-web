@@ -64,11 +64,11 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
     if (!query)
       return null;
 
-    let children = (query as NQL.AndExpression).children.slice();
-    let queries: IQueryObject = {};
+    const children = (query as NQL.AndExpression).children.slice();
+    const queries: IQueryObject = {};
 
-    for (let child of children) {
-      for (let queryBuilder of this.props.queryBuilders) {
+    for (const child of children) {
+      for (const queryBuilder of this.props.queryBuilders) {
         if (queryBuilder.Component.canParseQuery(child)) {
           queries[queryBuilder.key] = child;
           break;
@@ -80,7 +80,7 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
   }
 
   private handleFilterChange(key: string, query: NQL.IExpression, done: boolean) {
-    let queries = _.clone(this.state.queries);
+    const queries = _.clone(this.state.queries);
 
     if (query)
       queries[key] = query;
@@ -98,7 +98,7 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
   }
 
   private getQuery(queries: IQueryObject) {
-    let queryValues = _.values(queries);
+    const queryValues = _.values(queries);
 
     if (queryValues.length === 0)
       return null;

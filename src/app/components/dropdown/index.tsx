@@ -36,9 +36,9 @@ export default class Dropdown extends React.Component<IDropdownProps, IDropdownS
     if (!this.windowContainerComponent)
       return;
 
-    let windowContainerElement = ReactDOM.findDOMNode(this.windowContainerComponent) as HTMLElement;
-    let windowContainerElementLeft = windowContainerElement.offsetLeft;
-    let windowContainerElementWidth = windowContainerElement.offsetWidth;
+    const windowContainerElement = ReactDOM.findDOMNode(this.windowContainerComponent) as HTMLElement;
+    const windowContainerElementLeft = windowContainerElement.offsetLeft;
+    const windowContainerElementWidth = windowContainerElement.offsetWidth;
 
     if (windowContainerElementLeft + windowContainerElementWidth <= window.innerWidth)
       return;

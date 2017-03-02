@@ -1,4 +1,4 @@
-export let KeyName: {[code: number]: string} = {
+export const KeyName: {[code: number]: string} = {
   8: 'Backspace',
   9: 'Tab',
   13: 'Enter',

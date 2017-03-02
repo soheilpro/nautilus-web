@@ -3,14 +3,14 @@ import { IIssue } from './iissue';
 
 export default class IssueFilter {
   getPredicate(query: NQL.IExpression): (item: IIssue) => boolean {
-    let normalizedQuery = new QueryNormalizer().tranform(query, null);
+    const normalizedQuery = new QueryNormalizer().tranform(query, null);
 
-    let types =  [
+    const types =  [
       { name: 'ItemType', base: 'Entity' },
       { name: 'Project', base: 'Entity' },
     ];
 
-    let compiler = new NQL.ExpressionCompiler(types);
+    const compiler = new NQL.ExpressionCompiler(types);
 
     return compiler.compile(normalizedQuery, ['issue']) as any;
   }
