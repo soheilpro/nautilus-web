@@ -10,17 +10,17 @@ import { MethodCallExpression } from './expressions/method-call';
 import { OrExpression } from './expressions/or';
 import { PropertyExpression } from './expressions/property';
 
-export interface IExpressionObject {
+export interface IExpressionJSON {
   type: string;
-  args: (IExpressionObject | IExpressionObject[] | string)[];
+  args: (IExpressionJSON | IExpressionJSON[] | string)[];
 }
 
-export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObject, {}> {
-  convert(expression: IExpression): IExpressionObject {
+export class ExpressionJSONConverter extends ExpressionVisitor<IExpressionJSON, {}> {
+  convert(expression: IExpression): IExpressionJSON {
     return this.visit(expression, null);
   }
 
-  visitAnd(expression: AndExpression, context: {}): IExpressionObject {
+  visitAnd(expression: AndExpression, context: {}): IExpressionJSON {
     return {
       type: 'And',
       args: [
@@ -29,7 +29,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitCast(expression: CastExpression, context: {}): IExpressionObject {
+  visitCast(expression: CastExpression, context: {}): IExpressionJSON {
     return {
       type: 'Cast',
       args: [
@@ -39,7 +39,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitComparison(expression: ComparisonExpression, context: {}): IExpressionObject {
+  visitComparison(expression: ComparisonExpression, context: {}): IExpressionJSON {
     return {
       type: 'Comparison',
       args: [
@@ -50,7 +50,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitConstant(expression: ConstantExpression, context: {}): IExpressionObject {
+  visitConstant(expression: ConstantExpression, context: {}): IExpressionJSON {
     return {
       type: 'Constant',
       args: [
@@ -60,7 +60,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitList(expression: ListExpression, context: {}): IExpressionObject {
+  visitList(expression: ListExpression, context: {}): IExpressionJSON {
     return {
       type: 'List',
       args: [
@@ -69,7 +69,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitLocal(expression: LocalExpression, context: {}): IExpressionObject {
+  visitLocal(expression: LocalExpression, context: {}): IExpressionJSON {
     return {
       type: 'Local',
       args: [
@@ -78,7 +78,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitMethodCall(expression: MethodCallExpression, context: {}): IExpressionObject {
+  visitMethodCall(expression: MethodCallExpression, context: {}): IExpressionJSON {
     return {
       type: 'MethodCall',
       args: [
@@ -89,7 +89,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitOr(expression: OrExpression, context: {}): IExpressionObject {
+  visitOr(expression: OrExpression, context: {}): IExpressionJSON {
     return {
       type: 'Or',
       args: [
@@ -98,7 +98,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  visitProperty(expression: PropertyExpression, context: {}): IExpressionObject {
+  visitProperty(expression: PropertyExpression, context: {}): IExpressionJSON {
     return {
       type: 'Property',
       args: [
@@ -108,22 +108,22 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
     };
   }
 
-  parse(value: IExpressionObject): IExpression {
+  parse(value: IExpressionJSON): IExpression {
     if (value.type === 'And')
       return new AndExpression(
-        (value.args[0] as IExpressionObject[]).map(o => this.parse(o))
+        (value.args[0] as IExpressionJSON[]).map(o => this.parse(o))
       );
 
     if (value.type === 'Cast')
       return new CastExpression(
-        this.parse(value.args[0] as IExpressionObject),
+        this.parse(value.args[0] as IExpressionJSON),
         value.args[1] as string
       );
 
     if (value.type === 'Comparison')
       return new ComparisonExpression(
-        this.parse(value.args[0] as IExpressionObject),
-        this.parse(value.args[1] as IExpressionObject),
+        this.parse(value.args[0] as IExpressionJSON),
+        this.parse(value.args[1] as IExpressionJSON),
         value.args[2] as string
       );
 
@@ -135,7 +135,7 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
 
     if (value.type === 'List')
       return new ListExpression(
-        (value.args[0] as IExpressionObject[]).map(o => this.parse(o))
+        (value.args[0] as IExpressionJSON[]).map(o => this.parse(o))
       );
 
     if (value.type === 'Local')
@@ -145,19 +145,19 @@ export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObje
 
     if (value.type === 'MethodCall')
       return new MethodCallExpression(
-        this.parse(value.args[0] as IExpressionObject),
+        this.parse(value.args[0] as IExpressionJSON),
         value.args[1] as string,
-        (value.args[2] as IExpressionObject[]).map(o => this.parse(o))
+        (value.args[2] as IExpressionJSON[]).map(o => this.parse(o))
       );
 
     if (value.type === 'Or')
       return new OrExpression(
-        (value.args[0] as IExpressionObject[]).map(o => this.parse(o))
+        (value.args[0] as IExpressionJSON[]).map(o => this.parse(o))
       );
 
     if (value.type === 'Property')
       return new PropertyExpression(
-        this.parse(value.args[0] as IExpressionObject),
+        this.parse(value.args[0] as IExpressionJSON),
         value.args[1] as string
       );
 

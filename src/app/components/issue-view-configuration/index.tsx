@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as uuid from 'uuid';
 import * as NQL from '../../nql';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
@@ -8,28 +7,19 @@ import Dropdown from '../dropdown';
 import PromptWindow from '../prompt-window';
 import IssueQueryBuilder from '../issue-query-builder';
 import TaskQueryBuilder from '../task-query-builder';
-import SavedConfigurationList from './saved-configuration-list';
+import ConfigurationList from './configuration-list';
+import { IConfiguration } from './iconfiguration';
+import { Configuration } from './configuration';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IConfiguration {
-  issueFilterQuery?: NQL.Expression;
-  taskFilterQuery?: NQL.Expression;
-}
-
-export interface ISavedConfiguration {
-  id: string;
-  name: string;
-  configuration: IConfiguration;
-}
-
 interface IIssueViewConfigurationProps {
   currentConfiguration?: IConfiguration;
-  savedConfigurations?: ISavedConfiguration[];
+  savedConfigurations?: IConfiguration[];
   onChange(configuration: IConfiguration): void;
-  onSaveConfiguration(savedConfiguration: ISavedConfiguration): void;
-  onDeleteSavedConfiguration(savedConfiguration: ISavedConfiguration): void;
+  onSaveConfiguration(configuration: IConfiguration): void;
+  onDeleteConfiguration(configuration: IConfiguration): void;
 }
 
 interface IIssueViewConfigurationState {
@@ -51,8 +41,8 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
     this.handleSavePromptWindowConfirm = this.handleSavePromptWindowConfirm.bind(this);
     this.handleSavePromptWindowCloseRequest = this.handleSavePromptWindowCloseRequest.bind(this);
-    this.handleSavedConfigurationListDelete = this.handleSavedConfigurationListDelete.bind(this);
-    this.handleSavedConfigurationListSelect = this.handleSavedConfigurationListSelect.bind(this);
+    this.handleConfigurationListDelete = this.handleConfigurationListDelete.bind(this);
+    this.handleConfigurationListSelect = this.handleConfigurationListSelect.bind(this);
 
     this.state = {
       issueFilterQuery: props.currentConfiguration.issueFilterQuery,
@@ -68,10 +58,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private async handleIssueQueryBuilderChange(query: NQL.Expression) {
-    const configuration: IConfiguration = {
-      issueFilterQuery: query,
-      taskFilterQuery: this.state.taskFilterQuery,
-    };
+    const configuration = Configuration.create(query, this.state.taskFilterQuery);
 
     this.props.onChange(configuration);
 
@@ -81,10 +68,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private async handleTaskQueryBuilderChange(query: NQL.Expression) {
-    const configuration: IConfiguration = {
-      issueFilterQuery: this.state.issueFilterQuery,
-      taskFilterQuery: query,
-    };
+    const configuration = Configuration.create(query, this.state.taskFilterQuery);
 
     this.props.onChange(configuration);
 
@@ -94,10 +78,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private handleResetButtonClick() {
-    const configuration: IConfiguration = {
-      issueFilterQuery: null,
-      taskFilterQuery: null,
-    };
+    const configuration = Configuration.create(null, null);
 
     this.props.onChange(configuration);
 
@@ -121,26 +102,23 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   private handleSavePromptWindowConfirm(value: string) {
     this.windowController.closeWindow(this.promptWindow);
 
-    const savedConfiguration = {
-      id: uuid(),
-      name: value,
-      configuration: this.props.currentConfiguration,
-    };
+    const configuration = Configuration.create(this.state.issueFilterQuery, this.state.taskFilterQuery);
+    configuration.name = value;
 
-    this.props.onSaveConfiguration(savedConfiguration);
+    this.props.onSaveConfiguration(configuration);
   }
 
   private handleSavePromptWindowCloseRequest() {
     this.windowController.closeWindow(this.promptWindow);
   }
 
-  private handleSavedConfigurationListDelete(savedConfiguration: ISavedConfiguration) {
-    this.props.onDeleteSavedConfiguration(savedConfiguration);
+  private handleConfigurationListDelete(configuration: IConfiguration) {
+    this.props.onDeleteConfiguration(configuration);
   }
 
-  private handleSavedConfigurationListSelect(savedConfiguration: ISavedConfiguration) {
+  private handleConfigurationListSelect(configuration: IConfiguration) {
     this.dropdownComponent.close();
-    this.props.onChange(savedConfiguration.configuration);
+    this.props.onChange(configuration);
   }
 
   render() {
@@ -175,10 +153,13 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
               <Button className="save" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
           }
           <Dropdown className="load" title="Load" ref={e => this.dropdownComponent = e}>
-            <SavedConfigurationList savedConfigurations={this.props.savedConfigurations} onDelete={this.handleSavedConfigurationListDelete} onSelect={this.handleSavedConfigurationListSelect} />
+            <ConfigurationList configurations={this.props.savedConfigurations} onDelete={this.handleConfigurationListDelete} onSelect={this.handleConfigurationListSelect} />
           </Dropdown>
         </div>
       </div>
     );
   }
 };
+
+export * from './iconfiguration';
+export * from './configuration';

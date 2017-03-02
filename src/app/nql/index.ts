@@ -1,6 +1,6 @@
 export * from './expression-compiler'
 export * from './expression-interpreter'
-export * from './expression-object-converter'
+export * from './expression-json-converter'
 export * from './expression-transformer'
 export * from './expression-visitor'
 export * from './expression'

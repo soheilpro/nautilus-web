@@ -13,20 +13,10 @@ import Button from '../button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
 import ClearFiltersCommand from './clear-filters-command';
+import { IConfiguration, Configuration } from '../issue-view-configuration';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
-
-interface IConfiguration {
-  issueFilterQuery?: NQL.Expression;
-  taskFilterQuery?: NQL.Expression;
-}
-
-interface ISavedConfiguration {
-  id: string;
-  name: string;
-  configuration: IConfiguration;
-}
 
 interface IIssuesPageProps {
 }
@@ -36,7 +26,7 @@ interface IIssuesPageState {
   selectedItem?: IItem;
   issueFilterQuery?: NQL.Expression;
   taskFilterQuery?: NQL.Expression;
-  savedConfigurations?: ISavedConfiguration[];
+  savedConfigurations?: IConfiguration[];
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
@@ -80,6 +70,12 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
+    });
+
+    const savedConfigurations = (await this.roamingStorage.get('issues.configurations', [])).map(x => Configuration.fromJSON(x));
+
+    this.setState({
+      savedConfigurations: savedConfigurations,
     });
   }
 
@@ -146,28 +142,17 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleIssueViewConfigurationSaveConfiguration(savedConfiguration: ISavedConfiguration) {
-    const savedConfigurations = this.state.savedConfigurations.concat(savedConfiguration);
+  private async handleIssueViewConfigurationSaveConfiguration(configuration: IConfiguration) {
+    const savedConfigurations = this.state.savedConfigurations.concat(configuration);
 
-    const expressionObjectConverter = new NQL.ExpressionObjectConverter();
-
-    const xxx = savedConfigurations.map(savedConfiguration => ({
-      id: savedConfiguration.id,
-      name: savedConfiguration.name,
-      configuration: {
-        issueFilterQuery: savedConfiguration.configuration.issueFilterQuery ? expressionObjectConverter.convert(savedConfiguration.configuration.issueFilterQuery) : undefined,
-        taskFilterQuery: savedConfiguration.configuration.taskFilterQuery ? expressionObjectConverter.convert(savedConfiguration.configuration.taskFilterQuery) : undefined,
-      },
-    }));
-
-    this.roamingStorage.set('issues.saved-configurations', xxx);
+    this.roamingStorage.set('issues.configurations', savedConfigurations.map(configuration => configuration.toJSON()));
 
     this.setState({
       savedConfigurations: savedConfigurations,
     });
   }
 
-  private async handleIssueViewConfigurationDeleteSavedConfiguration(savedConfiguration: ISavedConfiguration) {
+  private async handleIssueViewConfigurationDeleteSavedConfiguration(savedConfiguration: IConfiguration) {
     this.setState({
       savedConfigurations: this.state.savedConfigurations.filter(x => x !== savedConfiguration),
     });
@@ -185,10 +170,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private getCurrentConfiguration(): IConfiguration {
-    return {
-      issueFilterQuery: this.state.issueFilterQuery,
-      taskFilterQuery: this.state.taskFilterQuery,
-    };
+    return Configuration.create(this.state.issueFilterQuery, this.state.taskFilterQuery);
   }
 
   render() {
@@ -201,7 +183,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="view-settings row">
-            <IssueViewConfiguration currentConfiguration={this.getCurrentConfiguration()} savedConfigurations={this.state.savedConfigurations} onChange={this.handleIssueViewConfigurationChange} onSaveConfiguration={this.handleIssueViewConfigurationSaveConfiguration} onDeleteSavedConfiguration={this.handleIssueViewConfigurationDeleteSavedConfiguration} />
+            <IssueViewConfiguration currentConfiguration={this.getCurrentConfiguration()} savedConfigurations={this.state.savedConfigurations} onChange={this.handleIssueViewConfigurationChange} onSaveConfiguration={this.handleIssueViewConfigurationSaveConfiguration} onDeleteConfiguration={this.handleIssueViewConfigurationDeleteSavedConfiguration} />
           </div>
           <div className="items row">
             <div className="item-list">
