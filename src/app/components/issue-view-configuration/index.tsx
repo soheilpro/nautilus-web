@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as uuid from 'uuid';
 import * as NQL from '../../nql';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
@@ -28,7 +29,7 @@ interface IIssueViewConfigurationProps {
   currentConfiguration?: IConfiguration;
   savedConfigurations?: ISavedConfiguration[];
   onChange(configuration: IConfiguration): void;
-  onSaveConfiguration(configuration: IConfiguration, name: string): void;
+  onSaveConfiguration(savedConfiguration: ISavedConfiguration): void;
   onDeleteSavedConfiguration(savedConfiguration: ISavedConfiguration): void;
 }
 
@@ -120,7 +121,14 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
 
   private handleSavePromptWindowConfirm(value: string) {
     this.windowController.closeWindow(this.promptWindow);
-    this.props.onSaveConfiguration(this.props.currentConfiguration, value);
+
+    let savedConfiguration = {
+      id: uuid(),
+      name: value,
+      configuration: this.props.currentConfiguration,
+    };
+
+    this.props.onSaveConfiguration(savedConfiguration);
   }
 
   private handleSavePromptWindowCloseRequest() {

@@ -16,8 +16,8 @@ export interface IExpressionObject {
 }
 
 export class ExpressionObjectConverter extends ExpressionVisitor<IExpressionObject, {}> {
-  convert(expression: IExpression, context: {}): IExpressionObject {
-    return this.visit(expression, context);
+  convert(expression: IExpression): IExpressionObject {
+    return this.visit(expression, null);
   }
 
   visitAnd(expression: AndExpression, context: {}): IExpressionObject {

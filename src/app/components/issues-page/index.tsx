@@ -1,6 +1,5 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import * as uuid from 'uuid';
 import * as NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
@@ -41,6 +40,7 @@ interface IIssuesPageState {
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
+  private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private issueController = ServiceManager.Instance.getIssueController();
@@ -146,13 +146,24 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleIssueViewConfigurationSaveConfiguration(configuration: IConfiguration, name: string) {
+  private async handleIssueViewConfigurationSaveConfiguration(savedConfiguration: ISavedConfiguration) {
+    let savedConfigurations = this.state.savedConfigurations.concat(savedConfiguration);
+
+    let expressionObjectConverter = new NQL.ExpressionObjectConverter();
+
+    let xxx = savedConfigurations.map(savedConfiguration => ({
+      id: savedConfiguration.id,
+      name: savedConfiguration.name,
+      configuration: {
+        issueFilterQuery: savedConfiguration.configuration.issueFilterQuery ? expressionObjectConverter.convert(savedConfiguration.configuration.issueFilterQuery) : undefined,
+        taskFilterQuery: savedConfiguration.configuration.taskFilterQuery ? expressionObjectConverter.convert(savedConfiguration.configuration.taskFilterQuery) : undefined,
+      },
+    }));
+
+    this.roamingStorage.set('issues.saved-configurations', xxx);
+
     this.setState({
-      savedConfigurations: this.state.savedConfigurations.concat({
-        id: uuid(),
-        name: name,
-        configuration: configuration,
-      }),
+      savedConfigurations: savedConfigurations,
     });
   }
 
