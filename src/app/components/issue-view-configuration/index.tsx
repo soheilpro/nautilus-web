@@ -60,10 +60,10 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     };
   }
 
-  componentWillReceiveProps(nextProps: IIssueViewConfigurationProps) {
+  componentWillReceiveProps(props: IIssueViewConfigurationProps) {
     this.state = {
-      issueFilterQuery: nextProps.currentConfiguration.issueFilterQuery,
-      taskFilterQuery: nextProps.currentConfiguration.taskFilterQuery,
+      issueFilterQuery: props.currentConfiguration.issueFilterQuery,
+      taskFilterQuery: props.currentConfiguration.taskFilterQuery,
     };
   }
 

@@ -40,9 +40,9 @@ export default class SavedConfigurationList extends React.Component<ISavedConfig
     };
   }
 
-  componentWillReceiveProps(nextProps: ISavedConfigurationListProps) {
+  componentWillReceiveProps(props: ISavedConfigurationListProps) {
     this.state = {
-      savedConfigurations: nextProps.savedConfigurations,
+      savedConfigurations: props.savedConfigurations,
     };
   }
 

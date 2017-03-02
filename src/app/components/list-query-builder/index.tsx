@@ -53,11 +53,11 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     };
   }
 
-  componentWillReceiveProps(nextProps: IListQueryBuilderProps) {
-    const { includedItems, excludedItems } = this.parseQuery(nextProps.query, nextProps);
+  componentWillReceiveProps(props: IListQueryBuilderProps) {
+    const { includedItems, excludedItems } = this.parseQuery(props.query, props);
 
     this.setState({
-      items: this.filterItems(nextProps.items, this.state.searchText),
+      items: this.filterItems(props.items, this.state.searchText),
       includedItems,
       excludedItems,
     });

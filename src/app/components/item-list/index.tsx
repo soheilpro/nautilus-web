@@ -48,10 +48,10 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     this.commandManager.registerCommandProvider(this);
   }
 
-  componentWillReceiveProps(nextProps: IItemListProps) {
+  componentWillReceiveProps(props: IItemListProps) {
     this.setState({
-      items: this.sortItems(nextProps.items),
-      selectedItem: nextProps.selectedItem,
+      items: this.sortItems(props.items),
+      selectedItem: props.selectedItem,
     });
   }
 
