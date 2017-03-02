@@ -5,6 +5,6 @@ export interface IConfiguration {
   name: string;
   issueFilterQuery?: NQL.Expression;
   taskFilterQuery?: NQL.Expression;
-
+  isEmpty(): boolean;
   toJSON(): Object;
 }

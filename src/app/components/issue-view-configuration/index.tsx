@@ -15,16 +15,16 @@ require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IIssueViewConfigurationProps {
-  currentConfiguration?: IConfiguration;
+  configuration?: IConfiguration;
   savedConfigurations?: IConfiguration[];
   onChange(configuration: IConfiguration): void;
-  onSaveConfiguration(configuration: IConfiguration): void;
-  onDeleteConfiguration(configuration: IConfiguration): void;
+  onSavedConfigurationsChange(savedConfigurations: IConfiguration[]): void;
 }
 
 interface IIssueViewConfigurationState {
   issueFilterQuery?: NQL.Expression;
   taskFilterQuery?: NQL.Expression;
+  savedConfigurations?: IConfiguration[];
 }
 
 export default class IssueViewConfiguration extends React.Component<IIssueViewConfigurationProps, IIssueViewConfigurationState> {
@@ -45,20 +45,25 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.handleConfigurationListSelect = this.handleConfigurationListSelect.bind(this);
 
     this.state = {
-      issueFilterQuery: props.currentConfiguration.issueFilterQuery,
-      taskFilterQuery: props.currentConfiguration.taskFilterQuery,
+      issueFilterQuery: props.configuration ? props.configuration.issueFilterQuery : undefined,
+      taskFilterQuery: props.configuration ? props.configuration.taskFilterQuery : undefined,
+      savedConfigurations: props.savedConfigurations,
     };
   }
 
   componentWillReceiveProps(props: IIssueViewConfigurationProps) {
     this.state = {
-      issueFilterQuery: props.currentConfiguration.issueFilterQuery,
-      taskFilterQuery: props.currentConfiguration.taskFilterQuery,
+      issueFilterQuery: props.configuration ? props.configuration.issueFilterQuery : undefined,
+      taskFilterQuery: props.configuration ? props.configuration.taskFilterQuery : undefined,
+      savedConfigurations: props.savedConfigurations,
     };
   }
 
   private async handleIssueQueryBuilderChange(query: NQL.Expression) {
-    const configuration = Configuration.create(query, this.state.taskFilterQuery);
+    const configuration = Configuration.create({
+      issueFilterQuery: query,
+      taskFilterQuery: this.state.taskFilterQuery
+    });
 
     this.props.onChange(configuration);
 
@@ -68,7 +73,10 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private async handleTaskQueryBuilderChange(query: NQL.Expression) {
-    const configuration = Configuration.create(query, this.state.taskFilterQuery);
+    const configuration = Configuration.create({
+      issueFilterQuery: this.state.issueFilterQuery,
+      taskFilterQuery: query
+    });
 
     this.props.onChange(configuration);
 
@@ -78,9 +86,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private handleResetButtonClick() {
-    const configuration = Configuration.create(null, null);
-
-    this.props.onChange(configuration);
+    this.props.onChange(Configuration.create());
 
     this.setState({
       issueFilterQuery: null,
@@ -99,13 +105,22 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.windowController.showWindow(this.promptWindow);
   }
 
-  private handleSavePromptWindowConfirm(value: string) {
+  private handleSavePromptWindowConfirm(name: string) {
     this.windowController.closeWindow(this.promptWindow);
 
-    const configuration = Configuration.create(this.state.issueFilterQuery, this.state.taskFilterQuery);
-    configuration.name = value;
+    const configuration = Configuration.create({
+      name,
+      issueFilterQuery: this.state.issueFilterQuery,
+      taskFilterQuery: this.state.taskFilterQuery
+    });
 
-    this.props.onSaveConfiguration(configuration);
+    const savedConfigurations = this.state.savedConfigurations.concat(configuration);
+
+    this.props.onSavedConfigurationsChange(savedConfigurations);
+
+    this.setState({
+      savedConfigurations,
+    });
   }
 
   private handleSavePromptWindowCloseRequest() {
@@ -113,7 +128,13 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private handleConfigurationListDelete(configuration: IConfiguration) {
-    this.props.onDeleteConfiguration(configuration);
+    const savedConfigurations = this.state.savedConfigurations.filter(x => x !== configuration);
+
+    this.props.onSavedConfigurationsChange(savedConfigurations);
+
+    this.setState({
+      savedConfigurations,
+    });
   }
 
   private handleConfigurationListSelect(configuration: IConfiguration) {
@@ -130,7 +151,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
               Filter Issues:
             </div>
             <div className="table-cell">
-              <IssueQueryBuilder query={this.props.currentConfiguration.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} />
+              <IssueQueryBuilder query={this.state.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} />
             </div>
           </div>
           <div className="separator"></div>
@@ -139,21 +160,21 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
               Filter Tasks:
             </div>
             <div className="table-cell">
-              <TaskQueryBuilder query={this.props.currentConfiguration.taskFilterQuery} onChange={this.handleTaskQueryBuilderChange} />
+              <TaskQueryBuilder query={this.state.taskFilterQuery} onChange={this.handleTaskQueryBuilderChange} />
             </div>
           </div>
         </div>
         <div className="buttons">
           {
-            (this.props.currentConfiguration.issueFilterQuery || this.props.currentConfiguration.taskFilterQuery) &&
+            !this.props.configuration.isEmpty() &&
               <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
           }
           {
-            (this.props.currentConfiguration.issueFilterQuery || this.props.currentConfiguration.taskFilterQuery) &&
+            !this.props.configuration.isEmpty() &&
               <Button className="save" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
           }
           <Dropdown className="load" title="Load" ref={e => this.dropdownComponent = e}>
-            <ConfigurationList configurations={this.props.savedConfigurations} onDelete={this.handleConfigurationListDelete} onSelect={this.handleConfigurationListSelect} />
+            <ConfigurationList configurations={this.state.savedConfigurations} onDelete={this.handleConfigurationListDelete} onSelect={this.handleConfigurationListSelect} />
           </Dropdown>
         </div>
       </div>

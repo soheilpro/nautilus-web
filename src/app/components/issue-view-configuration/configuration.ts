@@ -8,6 +8,10 @@ export class Configuration implements IConfiguration {
   issueFilterQuery: NQL.Expression;
   taskFilterQuery: NQL.Expression;
 
+  isEmpty() {
+    return !this.issueFilterQuery && !this.taskFilterQuery;
+  }
+
   toJSON() {
     const expressionObjectConverter = new NQL.ExpressionJSONConverter();
 
@@ -31,9 +35,10 @@ export class Configuration implements IConfiguration {
     return configuration;
   }
 
-  static create(issueFilterQuery: NQL.Expression, taskFilterQuery: NQL.Expression) {
+  static create({ name, issueFilterQuery, taskFilterQuery }: { name?: string, issueFilterQuery?: NQL.Expression, taskFilterQuery?: NQL.Expression } = {}) {
     const configuration = new Configuration();
     configuration.id = uuid().replace(/-/g, '');
+    configuration.name = name;
     configuration.issueFilterQuery = issueFilterQuery;
     configuration.taskFilterQuery = taskFilterQuery;
 

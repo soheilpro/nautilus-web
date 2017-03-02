@@ -1,6 +1,5 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import * as NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
@@ -24,8 +23,7 @@ interface IIssuesPageProps {
 interface IIssuesPageState {
   items?: IItem[];
   selectedItem?: IItem;
-  issueFilterQuery?: NQL.Expression;
-  taskFilterQuery?: NQL.Expression;
+  configuration?: IConfiguration;
   savedConfigurations?: IConfiguration[];
 }
 
@@ -46,13 +44,13 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
     this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
     this.handleIssueViewConfigurationChange = this.handleIssueViewConfigurationChange.bind(this);
-    this.handleIssueViewConfigurationSaveConfiguration = this.handleIssueViewConfigurationSaveConfiguration.bind(this);
-    this.handleIssueViewConfigurationDeleteSavedConfiguration = this.handleIssueViewConfigurationDeleteSavedConfiguration.bind(this);
+    this.handleIssueViewConfigurationSavedConfigurationsChange = this.handleIssueViewConfigurationSavedConfigurationsChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
     this.handleClearFiltersCommandExecute = this.handleClearFiltersCommandExecute.bind(this);
 
     this.state = {
       items: [],
+      configuration: Configuration.create(),
       savedConfigurations: [],
     };
   }
@@ -137,24 +135,15 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
-      issueFilterQuery: configuration.issueFilterQuery,
-      taskFilterQuery: configuration.taskFilterQuery,
+      configuration,
     });
   }
 
-  private async handleIssueViewConfigurationSaveConfiguration(configuration: IConfiguration) {
-    const savedConfigurations = this.state.savedConfigurations.concat(configuration);
-
+  private async handleIssueViewConfigurationSavedConfigurationsChange(savedConfigurations: IConfiguration[]) {
     this.roamingStorage.set('issues.configurations', savedConfigurations.map(configuration => configuration.toJSON()));
 
     this.setState({
-      savedConfigurations: savedConfigurations,
-    });
-  }
-
-  private async handleIssueViewConfigurationDeleteSavedConfiguration(savedConfiguration: IConfiguration) {
-    this.setState({
-      savedConfigurations: this.state.savedConfigurations.filter(x => x !== savedConfiguration),
+      savedConfigurations,
     });
   }
 
@@ -164,13 +153,8 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
-      issueFilterQuery: null,
-      taskFilterQuery: null,
+      configuration: null,
     });
-  }
-
-  private getCurrentConfiguration(): IConfiguration {
-    return Configuration.create(this.state.issueFilterQuery, this.state.taskFilterQuery);
   }
 
   render() {
@@ -183,7 +167,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
           </div>
           <div className="view-settings row">
-            <IssueViewConfiguration currentConfiguration={this.getCurrentConfiguration()} savedConfigurations={this.state.savedConfigurations} onChange={this.handleIssueViewConfigurationChange} onSaveConfiguration={this.handleIssueViewConfigurationSaveConfiguration} onDeleteConfiguration={this.handleIssueViewConfigurationDeleteSavedConfiguration} />
+            <IssueViewConfiguration configuration={this.state.configuration} savedConfigurations={this.state.savedConfigurations} onChange={this.handleIssueViewConfigurationChange} onSavedConfigurationsChange={this.handleIssueViewConfigurationSavedConfigurationsChange} />
           </div>
           <div className="items row">
             <div className="item-list">
