@@ -3,7 +3,7 @@ import { IApplication } from '../application';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ISearchController } from '../search';
-import { IStorage, IAsyncStorage } from '../storage';
+import { IStorage } from '../storage';
 import { ITaskController } from '../tasks';
 import { IWindowController } from '../windows';
 
@@ -14,8 +14,8 @@ export interface IServiceManager {
   setLocalStorage(storage: IStorage): void;
   getLocalStorage(): IStorage;
 
-  setRoamingStorage(storage: IAsyncStorage): void;
-  getRoamingStorage(): IAsyncStorage;
+  setRoamingStorage(storage: IStorage): void;
+  getRoamingStorage(): IStorage;
 
   setApplication(application: IApplication): void;
   getApplication(): IApplication;

@@ -4,7 +4,7 @@ import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ISearchController } from '../search';
 import { IServiceManager } from './iservice-manager';
-import { IStorage, IAsyncStorage } from '../storage';
+import { IStorage } from '../storage';
 import { ITaskController } from '../tasks';
 import { IWindowController } from '../windows';
 
@@ -13,7 +13,7 @@ export class ServiceManager implements IServiceManager {
 
   private sessionStorage: IStorage;
   private localStorage: IStorage;
-  private roamingStorage: IAsyncStorage;
+  private roamingStorage: IStorage;
   private application: IApplication;
   private actionManager: IActionManager;
   private commandManager: ICommandManager;
@@ -39,11 +39,11 @@ export class ServiceManager implements IServiceManager {
     return this.localStorage;
   }
 
-  setRoamingStorage(storage: IAsyncStorage) {
+  setRoamingStorage(storage: IStorage) {
     this.roamingStorage = storage;
   }
 
-  getRoamingStorage(): IAsyncStorage {
+  getRoamingStorage(): IStorage {
     return this.roamingStorage;
   }
 

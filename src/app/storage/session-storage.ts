@@ -2,19 +2,19 @@ import { IStorage } from './istorage';
 
 export class SessionStorage implements IStorage {
   set(key: string, value: Object) {
-    window.sessionStorage.setItem(key, JSON.stringify(value));
+    return Promise.resolve(window.sessionStorage.setItem(key, JSON.stringify(value)));
   }
 
   get(key: string) {
     const data = window.sessionStorage.getItem(key);
 
     if (!data)
-      return undefined;
+      return Promise.resolve(undefined);
 
-    return JSON.parse(data);
+    return Promise.resolve(JSON.parse(data));
   }
 
   remove(key: string) {
-    window.sessionStorage.removeItem(key);
+    return Promise.resolve(window.sessionStorage.removeItem(key));
   }
 }

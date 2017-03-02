@@ -2,19 +2,19 @@ import { IStorage } from './istorage';
 
 export class LocalStorage implements IStorage {
   set(key: string, value: Object) {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    return Promise.resolve(window.localStorage.setItem(key, JSON.stringify(value)));
   }
 
   get(key: string) {
     const data = window.localStorage.getItem(key);
 
     if (!data)
-      return undefined;
+      return Promise.resolve(undefined);
 
-    return JSON.parse(data);
+    return Promise.resolve(JSON.parse(data));
   }
 
   remove(key: string) {
-    window.localStorage.removeItem(key);
+    return Promise.resolve(window.localStorage.removeItem(key));
   }
 }

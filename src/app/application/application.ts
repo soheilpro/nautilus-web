@@ -45,8 +45,8 @@ export class Application extends EventEmitter implements IApplication {
     return this.isInitializedState;
   }
 
-  initialize() {
-    const session = this.localStorage.get('session') as ISession;
+  async initialize() {
+    const session = await this.localStorage.get('session') as ISession;
 
     if (session) {
       this.session = session;
