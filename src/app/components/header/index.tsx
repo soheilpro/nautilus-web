@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IndexLink } from 'react-router';
 import { ServiceManager } from '../../services';
 import Avatar from '../avatar';

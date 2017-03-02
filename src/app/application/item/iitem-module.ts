@@ -1,5 +1,5 @@
 import { IItem } from '../../sdk';
-import * as NQL from '../../nql';
+import NQL from '../../nql';
 import { IModule } from '../imodule';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';

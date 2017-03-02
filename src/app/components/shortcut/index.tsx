@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { KeyName, IShortcut } from '../../keyboard';
 
 require('../../assets/stylesheets/base.less');

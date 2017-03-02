@@ -1,6 +1,6 @@
-import * as _ from 'underscore';
-import * as React from 'react';
-import * as NQL from '../../nql';
+import _ from 'underscore';
+import React from 'react';
+import NQL from '../../nql';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';

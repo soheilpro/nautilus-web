@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as NQL from '../../nql';
+import React from 'react';
+import NQL from '../../nql';
 import { ServiceManager } from '../../services';
 import HTMLExpressionFormatter from './html-expression-formatter';
 

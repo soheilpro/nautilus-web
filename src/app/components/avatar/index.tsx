@@ -1,5 +1,5 @@
-import * as React from 'react';
-import * as blueimpmd5 from 'blueimp-md5';
+import React from 'react';
+import blueimpmd5 from 'blueimp-md5';
 import { IUser } from '../../application';
 
 require('../../assets/stylesheets/base.less');

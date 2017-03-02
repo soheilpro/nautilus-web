@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import _ from 'underscore';
 import axios, { AxiosRequestConfig } from 'axios';
 import { IChange } from './ichange';
 import { IClient } from './iclient';

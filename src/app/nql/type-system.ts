@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import _ from 'underscore';
 import { IType } from './itype';
 import { ITypeSystem } from './itype-system';
 

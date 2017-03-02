@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IIssue } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ISearchController } from '../../search';

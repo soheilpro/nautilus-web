@@ -1,7 +1,6 @@
-import * as _ from 'underscore';
-import * as React from 'react';
-import * as uuid from 'uuid';
-import * as NQL from '../../nql';
+import React from 'react';
+import uuid from 'uuid';
+import NQL from '../../nql';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import Button from '../button';

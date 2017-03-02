@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { ITask } from '../../application';
 
 require('../../assets/stylesheets/base.less');

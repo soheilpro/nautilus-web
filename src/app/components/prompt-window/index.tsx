@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Button from '../button';
 import Input from '../input';

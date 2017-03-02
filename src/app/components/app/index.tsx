@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { ISession } from '../../application';
+import React from 'react';
 import { ServiceManager } from '../../services';
 import Login from '../login';
 import Main from '../main';

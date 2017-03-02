@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
-import * as React from 'react';
+import _ from 'underscore';
+import React from 'react';
 import { ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';

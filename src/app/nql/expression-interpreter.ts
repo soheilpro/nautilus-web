@@ -10,7 +10,6 @@ import { LocalExpression } from './expressions/local';
 import { MethodCallExpression } from './expressions/method-call';
 import { OrExpression } from './expressions/or';
 import { PropertyExpression } from './expressions/property';
-import * as _ from 'underscore';
 import TypeSystem from './type-system';
 
 interface ILocals {

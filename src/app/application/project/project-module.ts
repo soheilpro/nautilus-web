@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import _ from 'underscore';
 import { IClient, IProject } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
@@ -8,7 +8,7 @@ import { IProjectModule } from './iproject-module';
 export class ProjectModule extends BaseModule implements IProjectModule {
   private projects: IProject[];
 
-  constructor(private application: IApplication, private client: IClient) {
+  constructor(application: IApplication, private client: IClient) {
     super();
   }
 

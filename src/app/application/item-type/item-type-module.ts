@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import _ from 'underscore';
 import { IClient } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
@@ -9,7 +9,7 @@ import { IItemTypeModule } from './iitem-type-module';
 export class ItemTypeModule extends BaseModule implements IItemTypeModule {
   private itemTypes: IItemType[];
 
-  constructor(private application: IApplication, private client: IClient) {
+  constructor(application: IApplication, private client: IClient) {
     super();
   }
 

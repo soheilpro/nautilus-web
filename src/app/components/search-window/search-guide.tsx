@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 require('../../assets/stylesheets/base.less');
 require ('./search-guide.less');

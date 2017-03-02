@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';

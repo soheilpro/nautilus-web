@@ -1,6 +1,6 @@
-import * as _ from 'underscore';
-import * as React from 'react';
-import * as classNames from 'classnames';
+import _ from 'underscore';
+import React from 'react';
+import classNames from 'classnames';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');

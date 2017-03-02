@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
-import * as React from 'react';
+import _ from 'underscore';
+import React from 'react';
 import { ITask, ITaskChange, IIssue } from '../../application';
 import { ITaskController } from '../../tasks';
 import { ServiceManager } from '../../services';

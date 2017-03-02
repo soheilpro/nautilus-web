@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import _ from 'underscore';
 import { IClient } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
@@ -9,7 +9,7 @@ import { IItemPriorityModule } from './iitem-priority-module';
 export class ItemPriorityModule extends BaseModule implements IItemPriorityModule {
   private itemPriorities: IItemPriority[];
 
-  constructor(private application: IApplication, private client: IClient) {
+  constructor(application: IApplication, private client: IClient) {
     super();
   }
 

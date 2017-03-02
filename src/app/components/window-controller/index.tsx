@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
-import * as React from 'react';
+import _ from 'underscore';
+import React from 'react';
 import { ServiceManager } from '../../services';
 import { IWindow, IWindowController } from '../../windows';
 import { WindowContainer } from '../window';
