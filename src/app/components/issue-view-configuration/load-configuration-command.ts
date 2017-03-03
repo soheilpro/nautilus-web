@@ -1,24 +1,23 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
-export default class FilterTaskByTypeCommand extends BaseCommand {
+export default class LoadConfigurationCommand extends BaseCommand {
   constructor(private onExecute: () => void) {
     super();
   }
 
   get id() {
-    return 'filter-tasks-by-type';
+    return 'load-configuration';
   }
 
   get name() {
-    return 'Filter Tasks by Type';
+    return 'Configuration: Load';
   }
 
   get shortcut() {
     return [
-      { keyCode: KeyCode.F },
-      { keyCode: KeyCode.T },
-      { keyCode: KeyCode.T },
+      { keyCode: KeyCode.V },
+      { keyCode: KeyCode.L },
     ];
   }
 

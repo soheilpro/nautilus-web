@@ -11,7 +11,6 @@ import MasterPage from '../master-page';
 import CommandButton from '../command-button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
-import ResetConfigurationCommand from './reset-configuration-command';
 import { IConfiguration, Configuration } from '../issue-view-configuration';
 
 require('../../assets/stylesheets/base.less');
@@ -82,7 +81,6 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   getCommands() {
     return [
       new NewTaskCommand(asIssue(this.state.selectedItem)),
-      new ResetConfigurationCommand(this.handleResetConfigurationCommandExecute),
     ];
   }
 

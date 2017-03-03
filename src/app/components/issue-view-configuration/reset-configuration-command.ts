@@ -1,8 +1,9 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
+import { IConfiguration } from './iconfiguration';
 
 export default class ResetConfigurationCommand extends BaseCommand {
-  constructor(private onExecute: () => void) {
+  constructor(private configuration: IConfiguration, private onExecute: () => void) {
     super();
   }
 
@@ -11,14 +12,18 @@ export default class ResetConfigurationCommand extends BaseCommand {
   }
 
   get name() {
-    return 'Filters: Reset';
+    return 'Configuration: Reset';
   }
 
   get shortcut() {
     return [
-      { keyCode: KeyCode.F },
+      { keyCode: KeyCode.V },
       { keyCode: KeyCode.R },
     ];
+  }
+
+  get enabled() {
+    return !this.configuration.isEmpty();
   }
 
   execute() {

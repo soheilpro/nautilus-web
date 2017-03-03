@@ -56,7 +56,7 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
     };
   }
 
-  showFilter(key: string) {
+  open(key: string) {
     this.dropdownComponents[key].open();
   }
 
