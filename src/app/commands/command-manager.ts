@@ -10,8 +10,7 @@ export class CommandManager implements ICommandManager {
   }
 
   unregisterCommandProvider(commandProvider: ICommandProvider) {
-    const index = this.commandProviders.indexOf(commandProvider);
-    this.commandProviders.splice(index, 1);
+    this.commandProviders.splice(this.commandProviders.indexOf(commandProvider), 1);
   }
 
   getCommands() {
@@ -23,5 +22,16 @@ export class CommandManager implements ICommandManager {
           commands.push(command);
 
     return commands;
+  }
+
+  executeCommand(commandId: string) {
+    for (const command of this.getCommands()) {
+      if (command.id === commandId && command.enabled) {
+        command.execute();
+        return;
+      }
+    }
+
+    throw new Error(`Command not found: ${commandId}`);
   }
 }

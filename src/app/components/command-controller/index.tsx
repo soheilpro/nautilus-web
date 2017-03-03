@@ -106,7 +106,7 @@ export default class CommandController extends React.Component<ICommandControlle
       // Fully matching command
       if (command.shortcut.length === this.keyboardEvents.length) {
         if (command.enabled)
-          command.execute();
+          this.commandManager.executeCommand(command.id);
 
         event.preventDefault();
         this.keyboardEvents = [];
@@ -120,7 +120,7 @@ export default class CommandController extends React.Component<ICommandControlle
 
   private handleCommandPaletteWindowSelect(command: ICommand) {
     this.windowController.closeWindow(this.commandPaletteWindow, () => {
-      command.execute();
+      this.commandManager.executeCommand(command.id);
     });
   }
 
