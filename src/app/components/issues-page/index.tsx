@@ -8,7 +8,7 @@ import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
 import MasterPage from '../master-page';
-import Button from '../button';
+import CommandButton from '../command-button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
 import ResetConfigurationCommand from './reset-configuration-command';
@@ -31,8 +31,6 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private commandManager = ServiceManager.Instance.getCommandManager();
-  private issueController = ServiceManager.Instance.getIssueController();
-  private taskController = ServiceManager.Instance.getTaskController();
 
   constructor() {
     super();
@@ -40,9 +38,6 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleApplicationItemsAdd = this.handleApplicationItemsAdd.bind(this);
     this.handleApplicationItemsUpdate = this.handleApplicationItemsUpdate.bind(this);
     this.handleApplicationItemsDelete = this.handleApplicationItemsDelete.bind(this);
-    this.handleNewIssueButtonClick = this.handleNewIssueButtonClick.bind(this);
-    this.handleNewTaskButtonClick = this.handleNewTaskButtonClick.bind(this);
-    this.handleRefreshButtonClick = this.handleRefreshButtonClick.bind(this);
     this.handleIssueViewConfigurationChange = this.handleIssueViewConfigurationChange.bind(this);
     this.handleIssueViewConfigurationSavedConfigurationsChange = this.handleIssueViewConfigurationSavedConfigurationsChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
@@ -112,17 +107,6 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private handleNewIssueButtonClick() {
-    this.issueController.addIssue();
-  }
-
-  private handleNewTaskButtonClick() {
-    this.taskController.addTask(asIssue(this.state.selectedItem));
-  }
-
-  private handleRefreshButtonClick() {
-  }
-
   private handleItemListItemSelect(item: IItem) {
     this.setState({
       selectedItem: item,
@@ -162,9 +146,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
       <MasterPage>
         <div className="issues-page-component">
           <div className="action-bar">
-            <Button onClick={this.handleNewIssueButtonClick}><Icon name="plus" position="before" /> New Issue</Button>
-            <Button onClick={this.handleNewTaskButtonClick} enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</Button>
-            <Button type="secondary" onClick={this.handleRefreshButtonClick}><Icon name="refresh" /></Button>
+            <CommandButton commandId="new-issue"><Icon name="plus" position="before" /> New Issue</CommandButton>
+            <CommandButton commandId="new-task" enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</CommandButton>
+            <CommandButton commandId="refresh" type="secondary"><Icon name="refresh" /></CommandButton>
           </div>
           <div className="view-settings row">
             <IssueViewConfiguration configuration={this.state.configuration} savedConfigurations={this.state.savedConfigurations} onChange={this.handleIssueViewConfigurationChange} onSavedConfigurationsChange={this.handleIssueViewConfigurationSavedConfigurationsChange} />
