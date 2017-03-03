@@ -67,20 +67,16 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      if (this.state.selectedItemIndex < this.state.items.length - 1) {
-        this.setState({
-          selectedItemIndex: this.state.selectedItemIndex + 1,
-        });
-      }
+      this.setState({
+        selectedItemIndex: this.state.selectedItemIndex < this.state.items.length - 1 ? this.state.selectedItemIndex + 1 : 0,
+      });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      if (this.state.selectedItemIndex > 0) {
-        this.setState({
-          selectedItemIndex: this.state.selectedItemIndex - 1,
-        });
-      }
+      this.setState({
+        selectedItemIndex: this.state.selectedItemIndex > 0 ? this.state.selectedItemIndex - 1 : this.state.items.length - 1,
+      });
     }
     else if (event.which === KeyCode.Dash) {
       event.preventDefault();

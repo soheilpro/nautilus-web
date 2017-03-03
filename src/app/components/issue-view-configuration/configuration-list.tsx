@@ -46,20 +46,16 @@ export default class ConfigurationList extends React.Component<IConfigurationLis
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      if (this.state.selectedConfigurationIndex < this.state.configurations.length - 1) {
-        this.setState({
-          selectedConfigurationIndex: this.state.selectedConfigurationIndex + 1,
-        });
-      }
+      this.setState({
+        selectedConfigurationIndex: this.state.selectedConfigurationIndex < this.state.configurations.length - 1 ? this.state.selectedConfigurationIndex + 1 : 0,
+      });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      if (this.state.selectedConfigurationIndex > 0) {
-        this.setState({
-          selectedConfigurationIndex: this.state.selectedConfigurationIndex - 1,
-        });
-      }
+      this.setState({
+        selectedConfigurationIndex: this.state.selectedConfigurationIndex > 0 ? this.state.selectedConfigurationIndex - 1 : this.state.configurations.length - 1,
+      });
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
