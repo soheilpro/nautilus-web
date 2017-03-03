@@ -1,5 +1,5 @@
 export interface ICommandController {
-  showCommandsWindow(): void;
+  showCommandPaletteWindow(): void;
   disableCommandShortcuts(): void;
   enableCommandShortcuts(): void;
 }

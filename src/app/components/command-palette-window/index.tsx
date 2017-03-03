@@ -10,16 +10,16 @@ import CommandSearch from './command-search';
 require('../../assets/stylesheets/base.less');
 require ('./index.less');
 
-interface ICommandsWindowProps {
+interface ICommandPaletteWindowProps {
   onSelect(command: ICommand): void;
 }
 
-interface ICommandsWindowState {
+interface ICommandPaletteWindowState {
   filteredCommands?: ICommand[];
   selectedCommandIndex?: number;
 }
 
-export default class CommandsWindow extends React.Component<ICommandsWindowProps, ICommandsWindowState> {
+export default class CommandPaletteWindow extends React.Component<ICommandPaletteWindowProps, ICommandPaletteWindowState> {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private commands = _.sortBy(this.commandManager.getCommands(), command => command.name);
 
@@ -77,7 +77,7 @@ export default class CommandsWindow extends React.Component<ICommandsWindowProps
 
   render() {
     return (
-      <Window className="commands-window-component">
+      <Window className="command-palette-window-component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <div className="filter">
             <CommandSearch autoFocus={true} onQueryChange={this.handleCommandSearchQueryChange} />

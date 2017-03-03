@@ -2,15 +2,15 @@ import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 
-export default class ViewCommandsCommand extends BaseCommand {
+export default class ShowCommandPaletteCommand extends BaseCommand {
   private commandController = ServiceManager.Instance.getCommandController();
 
   get id() {
-    return 'view-commands';
+    return 'show-command-palette';
   }
 
   get name() {
-    return 'View Commands';
+    return 'Show Command Palette';
   }
 
   get shortcut() {
@@ -22,6 +22,6 @@ export default class ViewCommandsCommand extends BaseCommand {
   }
 
   execute() {
-    this.commandController.showCommandsWindow();
+    this.commandController.showCommandPaletteWindow();
   }
 }

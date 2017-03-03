@@ -3,8 +3,8 @@ import { ICommandProvider, ICommand, ICommandController } from '../../commands';
 import { KeyCombination, isInputEvent } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
-import ViewCommandsCommand from './view-commands-command';
-import CommandsWindow from '../commands-window';
+import CommandPaletteWindow from '../command-palette-window';
+import ShowCommandPaletteCommand from './show-command-palette-command';
 import UndoCommand from './undo-command';
 
 interface ICommandControllerProps {
@@ -18,13 +18,13 @@ export default class CommandController extends React.Component<ICommandControlle
   private windowController = ServiceManager.Instance.getWindowController();
   private commandShortcutsDisabledCounter: number = 0;
   private keyboardEvents: KeyboardEvent[] = [];
-  private commandsWindow: IWindow;
+  private commandPaletteWindow: IWindow;
 
   constructor() {
     super();
 
     this.handleDocumentKeyDown = this.handleDocumentKeyDown.bind(this);
-    this.handleCommandsWindowSelect = this.handleCommandsWindowSelect.bind(this);
+    this.handleCommandPaletteWindowSelect = this.handleCommandPaletteWindowSelect.bind(this);
 
     this.state = {};
   }
@@ -49,19 +49,19 @@ export default class CommandController extends React.Component<ICommandControlle
     this.commandShortcutsDisabledCounter--;
   }
 
-  showCommandsWindow() {
-    this.commandsWindow = {
-      content: <CommandsWindow onSelect={this.handleCommandsWindowSelect} />,
+  showCommandPaletteWindow() {
+    this.commandPaletteWindow = {
+      content: <CommandPaletteWindow onSelect={this.handleCommandPaletteWindowSelect} />,
       top: 20,
       width: 600,
     };
 
-    this.windowController.showWindow(this.commandsWindow);
+    this.windowController.showWindow(this.commandPaletteWindow);
   }
 
   getCommands() {
     return [
-      new ViewCommandsCommand(),
+      new ShowCommandPaletteCommand(),
       new UndoCommand(),
     ];
   }
@@ -118,8 +118,8 @@ export default class CommandController extends React.Component<ICommandControlle
     }
   }
 
-  private handleCommandsWindowSelect(command: ICommand) {
-    this.windowController.closeWindow(this.commandsWindow, () => {
+  private handleCommandPaletteWindowSelect(command: ICommand) {
+    this.windowController.closeWindow(this.commandPaletteWindow, () => {
       command.execute();
     });
   }
