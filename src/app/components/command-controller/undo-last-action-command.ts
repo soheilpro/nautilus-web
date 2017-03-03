@@ -2,11 +2,11 @@ import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 
-export default class UndoCommand extends BaseCommand {
+export default class UndoLastActionCommand extends BaseCommand {
   private actionManager = ServiceManager.Instance.getActionManager();
 
   get id() {
-    return 'undo';
+    return 'undo-last-action';
   }
 
   get name() {
