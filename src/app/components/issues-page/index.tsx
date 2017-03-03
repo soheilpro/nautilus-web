@@ -11,7 +11,7 @@ import MasterPage from '../master-page';
 import Button from '../button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
-import ClearFiltersCommand from './clear-filters-command';
+import ResetConfigurationCommand from './reset-configuration-command';
 import { IConfiguration, Configuration } from '../issue-view-configuration';
 
 require('../../assets/stylesheets/base.less');
@@ -46,7 +46,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleIssueViewConfigurationChange = this.handleIssueViewConfigurationChange.bind(this);
     this.handleIssueViewConfigurationSavedConfigurationsChange = this.handleIssueViewConfigurationSavedConfigurationsChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
-    this.handleClearFiltersCommandExecute = this.handleClearFiltersCommandExecute.bind(this);
+    this.handleResetConfigurationCommandExecute = this.handleResetConfigurationCommandExecute.bind(this);
 
     this.state = {
       items: [],
@@ -87,7 +87,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   getCommands() {
     return [
       new NewTaskCommand(asIssue(this.state.selectedItem)),
-      new ClearFiltersCommand(this.handleClearFiltersCommandExecute),
+      new ResetConfigurationCommand(this.handleResetConfigurationCommandExecute),
     ];
   }
 
@@ -147,13 +147,13 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleClearFiltersCommandExecute() {
+  private async handleResetConfigurationCommandExecute() {
     const items = await this.application.items.getAll(null, null);
 
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
-      configuration: null,
+      configuration: Configuration.create(),
     });
   }
 

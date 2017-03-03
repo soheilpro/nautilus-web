@@ -1,23 +1,23 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
-export default class FilterIssueByTypeCommand extends BaseCommand {
+export default class ResetConfigurationCommand extends BaseCommand {
   constructor(private onExecute: () => void) {
     super();
   }
 
   get id() {
-    return 'clear-filters';
+    return 'reset-configuration';
   }
 
   get name() {
-    return 'Clear Filters';
+    return 'Filters: Reset';
   }
 
   get shortcut() {
     return [
       { keyCode: KeyCode.F },
-      { keyCode: KeyCode.C },
+      { keyCode: KeyCode.R },
     ];
   }
 
