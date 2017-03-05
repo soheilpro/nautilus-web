@@ -27,8 +27,9 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
-    this.handleSaveSettingsDeleteClick = this.handleSaveSettingsDeleteClick.bind(this);
-    this.handleSaveSettingsTitleClick = this.handleSaveSettingsTitleClick.bind(this);
+    this.handleViewMouseEnter = this.handleViewMouseEnter.bind(this);
+    this.handleViewDeleteClick = this.handleViewDeleteClick.bind(this);
+    this.handleViewTitleClick = this.handleViewTitleClick.bind(this);
 
     this.state = {
       views: props.views,
@@ -74,11 +75,17 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
     });
   }
 
-  private handleSaveSettingsDeleteClick(view: IView) {
+  private handleViewMouseEnter(view: IView) {
+    this.setState({
+      selectedViewIndex: this.state.views.indexOf(view),
+    });
+  }
+
+  private handleViewDeleteClick(view: IView) {
     this.props.onDelete(view);
   }
 
-  private handleSaveSettingsTitleClick(view: IView) {
+  private handleViewTitleClick(view: IView) {
     this.props.onSelect(view);
   }
 
@@ -99,11 +106,11 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
           {
             this.state.views.map((view, index) => {
               return (
-                <div className={classNames('view', 'row', {'selected': index === this.state.selectedViewIndex})} key={view.id}>
-                  <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleSaveSettingsDeleteClick, view)}>
+                <div className={classNames('view', 'row', {'selected': index === this.state.selectedViewIndex})} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
+                  <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleViewDeleteClick, view)}>
                     <Icon name="remove" />
                   </a>
-                  <a className="name" href="#" onClick={_.partial(this.handleSaveSettingsTitleClick, view)}>
+                  <a className="name" href="#" onClick={_.partial(this.handleViewTitleClick, view)}>
                     {view.name}
                   </a>
                 </div>

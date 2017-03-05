@@ -39,6 +39,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+    this.handleItemMouseEnter = this.handleItemMouseEnter.bind(this);
     this.handleItemExcludeClick = this.handleItemExcludeClick.bind(this);
     this.handleItemIncludeClick = this.handleItemIncludeClick.bind(this);
     this.handleItemTitleClick = this.handleItemTitleClick.bind(this);
@@ -106,6 +107,12 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
       searchText: value,
       items: this.filterItems(this.props.items, value),
       selectedItemIndex: 0,
+    });
+  }
+
+  private handleItemMouseEnter(item: IItem) {
+    this.setState({
+      selectedItemIndex: this.state.items.indexOf(item),
     });
   }
 
@@ -299,7 +306,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
           {
             this.state.items.map((item, index) => {
               return (
-                <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} key={item.id}>
+                <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
                   <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
                     <Icon name="minus-square" />
                   </a>
