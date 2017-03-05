@@ -51,7 +51,7 @@ export default class CommandList extends React.Component<ICommandListProps, ICom
             </div>
             :
             <div className="no-commands-found">
-              No results found.
+              No commands found.
             </div>
         }
       </div>
