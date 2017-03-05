@@ -1,17 +1,17 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
-export default class LoadConfigurationCommand extends BaseCommand {
+export default class LoadViewCommand extends BaseCommand {
   constructor(private onExecute: () => void) {
     super();
   }
 
   get id() {
-    return 'load-configuration';
+    return 'load-view';
   }
 
   get name() {
-    return 'Configuration: Load';
+    return 'View: Load';
   }
 
   get shortcut() {

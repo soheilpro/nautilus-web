@@ -9,40 +9,40 @@ import Dropdown from '../dropdown';
 import PromptWindow from '../prompt-window';
 import IssueQueryBuilder from '../issue-query-builder';
 import TaskQueryBuilder from '../task-query-builder';
-import ConfigurationList from './configuration-list';
-import { IConfiguration } from './iconfiguration';
-import { Configuration } from './configuration';
+import ViewList from './view-list';
+import { IView } from './iview';
+import { View } from './view';
 import IssueProjectFilterCommand from './issue-project-filter-command';
 import IssueTypeFilterCommand from './issue-type-filter-command';
 import TaskTypeFilterCommand from './task-type-filter-command';
-import ResetConfigurationCommand from './reset-configuration-command';
-import SaveConfigurationCommand from './save-configuration-command';
-import LoadConfigurationCommand from './load-configuration-command';
+import ResetViewCommand from './reset-view-command';
+import SaveViewCommand from './save-view-command';
+import LoadViewCommand from './load-view-command';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IIssueViewConfigurationProps {
-  configuration?: IConfiguration;
-  savedConfigurations?: IConfiguration[];
-  onChange(configuration: IConfiguration): void;
-  onSavedConfigurationsChange(savedConfigurations: IConfiguration[]): void;
+interface IIssueViewViewProps {
+  view?: IView;
+  savedViews?: IView[];
+  onChange(view: IView): void;
+  onSavedViewsChange(savedViews: IView[]): void;
 }
 
-interface IIssueViewConfigurationState {
+interface IIssueViewViewState {
   issueFilterQuery?: NQL.Expression;
   taskFilterQuery?: NQL.Expression;
-  savedConfigurations?: IConfiguration[];
+  savedViews?: IView[];
 }
 
-export default class IssueViewConfiguration extends React.Component<IIssueViewConfigurationProps, IIssueViewConfigurationState> implements ICommandProvider {
+export default class IssueViewView extends React.Component<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private queryBuilderComponents: { [itemKind: string]: (IssueQueryBuilder | TaskQueryBuilder) } = {};
-  private savedConfigurationListDropdownComponent: Dropdown;
+  private savedViewListDropdownComponent: Dropdown;
   private promptWindow: IWindow;
 
-  constructor(props: IIssueViewConfigurationProps) {
+  constructor(props: IIssueViewViewProps) {
     super();
 
     this.handleIssueQueryBuilderChange = this.handleIssueQueryBuilderChange.bind(this);
@@ -51,17 +51,17 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
     this.handleSavePromptWindowConfirm = this.handleSavePromptWindowConfirm.bind(this);
     this.handleSavePromptWindowCloseRequest = this.handleSavePromptWindowCloseRequest.bind(this);
-    this.handleConfigurationListDelete = this.handleConfigurationListDelete.bind(this);
-    this.handleConfigurationListSelect = this.handleConfigurationListSelect.bind(this);
+    this.handleViewListDelete = this.handleViewListDelete.bind(this);
+    this.handleViewListSelect = this.handleViewListSelect.bind(this);
     this.handleOpenFilterCommandExecute = this.handleOpenFilterCommandExecute.bind(this);
-    this.handleResetConfigurationCommandExecute = this.handleResetConfigurationCommandExecute.bind(this);
-    this.handleSaveConfigurationCommandExecute = this.handleSaveConfigurationCommandExecute.bind(this);
-    this.handleLoadConfigurationCommandExecute = this.handleLoadConfigurationCommandExecute.bind(this);
+    this.handleResetViewCommandExecute = this.handleResetViewCommandExecute.bind(this);
+    this.handleSaveViewCommandExecute = this.handleSaveViewCommandExecute.bind(this);
+    this.handleLoadViewCommandExecute = this.handleLoadViewCommandExecute.bind(this);
 
     this.state = {
-      issueFilterQuery: props.configuration ? props.configuration.issueFilterQuery : undefined,
-      taskFilterQuery: props.configuration ? props.configuration.taskFilterQuery : undefined,
-      savedConfigurations: props.savedConfigurations,
+      issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
+      taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
+      savedViews: props.savedViews,
     };
   }
 
@@ -69,11 +69,11 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.commandManager.registerCommandProvider(this);
   }
 
-  componentWillReceiveProps(props: IIssueViewConfigurationProps) {
+  componentWillReceiveProps(props: IIssueViewViewProps) {
     this.state = {
-      issueFilterQuery: props.configuration ? props.configuration.issueFilterQuery : undefined,
-      taskFilterQuery: props.configuration ? props.configuration.taskFilterQuery : undefined,
-      savedConfigurations: props.savedConfigurations,
+      issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
+      taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
+      savedViews: props.savedViews,
     };
   }
 
@@ -82,7 +82,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   getCommands() {
-    const configuration = Configuration.create({
+    const view = View.create({
       issueFilterQuery: this.state.issueFilterQuery,
       taskFilterQuery: this.state.taskFilterQuery
     });
@@ -91,9 +91,9 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
       new IssueProjectFilterCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
       new IssueTypeFilterCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
       new TaskTypeFilterCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'type')),
-      new ResetConfigurationCommand(configuration, this.handleResetConfigurationCommandExecute),
-      new SaveConfigurationCommand(configuration, this.handleSaveConfigurationCommandExecute),
-      new LoadConfigurationCommand(this.handleLoadConfigurationCommandExecute),
+      new ResetViewCommand(view, this.handleResetViewCommandExecute),
+      new SaveViewCommand(view, this.handleSaveViewCommandExecute),
+      new LoadViewCommand(this.handleLoadViewCommandExecute),
     ];
   }
 
@@ -101,8 +101,8 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.queryBuilderComponents[itemKind].open(key);
   }
 
-  private handleResetConfigurationCommandExecute() {
-    this.props.onChange(Configuration.create());
+  private handleResetViewCommandExecute() {
+    this.props.onChange(View.create());
 
     this.setState({
       issueFilterQuery: null,
@@ -110,7 +110,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     });
   }
 
-  private handleSaveConfigurationCommandExecute() {
+  private handleSaveViewCommandExecute() {
     this.promptWindow = {
       content: <PromptWindow title="Save" placeholder="Name" confirmButtonText="Save" onConfirm={this.handleSavePromptWindowConfirm} onCloseRequest={this.handleSavePromptWindowCloseRequest} />,
       top: 120,
@@ -121,17 +121,17 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.windowController.showWindow(this.promptWindow);
   }
 
-  private handleLoadConfigurationCommandExecute() {
-    this.savedConfigurationListDropdownComponent.open();
+  private handleLoadViewCommandExecute() {
+    this.savedViewListDropdownComponent.open();
   }
 
   private async handleIssueQueryBuilderChange(query: NQL.Expression) {
-    const configuration = Configuration.create({
+    const view = View.create({
       issueFilterQuery: query,
       taskFilterQuery: this.state.taskFilterQuery
     });
 
-    this.props.onChange(configuration);
+    this.props.onChange(view);
 
     this.setState({
       issueFilterQuery: query,
@@ -139,12 +139,12 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private async handleTaskQueryBuilderChange(query: NQL.Expression) {
-    const configuration = Configuration.create({
+    const view = View.create({
       issueFilterQuery: this.state.issueFilterQuery,
       taskFilterQuery: query
     });
 
-    this.props.onChange(configuration);
+    this.props.onChange(view);
 
     this.setState({
       issueFilterQuery: query,
@@ -152,7 +152,7 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 
   private handleResetButtonClick() {
-    this.props.onChange(Configuration.create());
+    this.props.onChange(View.create());
 
     this.setState({
       issueFilterQuery: null,
@@ -174,18 +174,18 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   private handleSavePromptWindowConfirm(name: string) {
     this.windowController.closeWindow(this.promptWindow);
 
-    const configuration = Configuration.create({
+    const view = View.create({
       name,
       issueFilterQuery: this.state.issueFilterQuery,
       taskFilterQuery: this.state.taskFilterQuery
     });
 
-    const savedConfigurations = this.state.savedConfigurations.concat(configuration);
+    const savedViews = this.state.savedViews.concat(view);
 
-    this.props.onSavedConfigurationsChange(savedConfigurations);
+    this.props.onSavedViewsChange(savedViews);
 
     this.setState({
-      savedConfigurations,
+      savedViews,
     });
   }
 
@@ -193,24 +193,24 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
     this.windowController.closeWindow(this.promptWindow);
   }
 
-  private handleConfigurationListDelete(configuration: IConfiguration) {
-    const savedConfigurations = this.state.savedConfigurations.filter(x => x !== configuration);
+  private handleViewListDelete(view: IView) {
+    const savedViews = this.state.savedViews.filter(x => x !== view);
 
-    this.props.onSavedConfigurationsChange(savedConfigurations);
+    this.props.onSavedViewsChange(savedViews);
 
     this.setState({
-      savedConfigurations,
+      savedViews,
     });
   }
 
-  private handleConfigurationListSelect(configuration: IConfiguration) {
-    this.savedConfigurationListDropdownComponent.close();
-    this.props.onChange(configuration);
+  private handleViewListSelect(view: IView) {
+    this.savedViewListDropdownComponent.close();
+    this.props.onChange(view);
   }
 
   render() {
     return (
-      <div className="issue-view-configuration-component">
+      <div className="issue-view-settings-component">
         <div className="query-builders table">
           <div className="query-builder table-row">
             <div className="title table-cell">
@@ -232,15 +232,15 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
         </div>
         <div className="buttons">
           {
-            !this.props.configuration.isEmpty() &&
+            !this.props.view.isDefault() &&
               <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
           }
           {
-            !this.props.configuration.isEmpty() &&
+            !this.props.view.isDefault() &&
               <Button className="save" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
           }
-          <Dropdown className="load" title="Load" ref={e => this.savedConfigurationListDropdownComponent = e}>
-            <ConfigurationList configurations={this.state.savedConfigurations} onDelete={this.handleConfigurationListDelete} onSelect={this.handleConfigurationListSelect} />
+          <Dropdown className="load" title="Load" ref={e => this.savedViewListDropdownComponent = e}>
+            <ViewList views={this.state.savedViews} onDelete={this.handleViewListDelete} onSelect={this.handleViewListSelect} />
           </Dropdown>
         </div>
       </div>
@@ -248,5 +248,5 @@ export default class IssueViewConfiguration extends React.Component<IIssueViewCo
   }
 };
 
-export * from './iconfiguration';
-export * from './configuration';
+export * from './iview';
+export * from './view';

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { ICommandProvider } from '../../commands';
 import { IItem, isIssue, isTask, asIssue } from '../../application';
 import { ServiceManager } from '../../services';
-import IssueViewConfiguration from '../issue-view-configuration';
+import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
 import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
@@ -11,7 +11,6 @@ import MasterPage from '../master-page';
 import CommandButton from '../command-button';
 import Icon from '../icon';
 import NewTaskCommand from './new-task-command';
-import { IConfiguration, Configuration } from '../issue-view-configuration';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -22,8 +21,8 @@ interface IIssuesPageProps {
 interface IIssuesPageState {
   items?: IItem[];
   selectedItem?: IItem;
-  configuration?: IConfiguration;
-  savedConfigurations?: IConfiguration[];
+  view?: IView;
+  savedViews?: IView[];
 }
 
 export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
@@ -37,15 +36,14 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleApplicationItemsAdd = this.handleApplicationItemsAdd.bind(this);
     this.handleApplicationItemsUpdate = this.handleApplicationItemsUpdate.bind(this);
     this.handleApplicationItemsDelete = this.handleApplicationItemsDelete.bind(this);
-    this.handleIssueViewConfigurationChange = this.handleIssueViewConfigurationChange.bind(this);
-    this.handleIssueViewConfigurationSavedConfigurationsChange = this.handleIssueViewConfigurationSavedConfigurationsChange.bind(this);
+    this.handleIssueViewSettingsChange = this.handleIssueViewSettingsChange.bind(this);
+    this.handleIssueViewSettingsSavedViewsChange = this.handleIssueViewSettingsSavedViewsChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
-    this.handleResetConfigurationCommandExecute = this.handleResetConfigurationCommandExecute.bind(this);
 
     this.state = {
       items: [],
-      configuration: Configuration.create(),
-      savedConfigurations: [],
+      view: View.create(),
+      savedViews: [],
     };
   }
 
@@ -64,10 +62,10 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
       selectedItem: _.last(items.filter(isIssue)),
     });
 
-    const savedConfigurations = (await this.roamingStorage.get('issues.configurations', [])).map(x => Configuration.fromJSON(x));
+    const savedViews = (await this.roamingStorage.get('issues.views', [])).map(x => View.fromJSON(x));
 
     this.setState({
-      savedConfigurations: savedConfigurations,
+      savedViews: savedViews,
     });
   }
 
@@ -111,31 +109,21 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleIssueViewConfigurationChange(configuration: IConfiguration) {
-    const items = await this.application.items.getAll(configuration.issueFilterQuery, configuration.taskFilterQuery);
+  private async handleIssueViewSettingsChange(view: IView) {
+    const items = await this.application.items.getAll(view.issueFilterQuery, view.taskFilterQuery);
 
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
-      configuration,
+      view,
     });
   }
 
-  private async handleIssueViewConfigurationSavedConfigurationsChange(savedConfigurations: IConfiguration[]) {
-    this.roamingStorage.set('issues.configurations', savedConfigurations.map(configuration => configuration.toJSON()));
+  private async handleIssueViewSettingsSavedViewsChange(savedViews: IView[]) {
+    this.roamingStorage.set('issues.views', savedViews.map(view => view.toJSON()));
 
     this.setState({
-      savedConfigurations,
-    });
-  }
-
-  private async handleResetConfigurationCommandExecute() {
-    const items = await this.application.items.getAll(null, null);
-
-    this.setState({
-      items,
-      selectedItem: _.last(items.filter(isIssue)),
-      configuration: Configuration.create(),
+      savedViews,
     });
   }
 
@@ -149,7 +137,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
             <CommandButton commandId="refresh" type="secondary"><Icon name="refresh" /></CommandButton>
           </div>
           <div className="view-settings row">
-            <IssueViewConfiguration configuration={this.state.configuration} savedConfigurations={this.state.savedConfigurations} onChange={this.handleIssueViewConfigurationChange} onSavedConfigurationsChange={this.handleIssueViewConfigurationSavedConfigurationsChange} />
+            <IssueViewSettings view={this.state.view} savedViews={this.state.savedViews} onChange={this.handleIssueViewSettingsChange} onSavedViewsChange={this.handleIssueViewSettingsSavedViewsChange} />
           </div>
           <div className="items row">
             <div className="item-list">

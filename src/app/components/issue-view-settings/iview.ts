@@ -1,10 +1,10 @@
 import * as NQL from '../../nql';
 
-export interface IConfiguration {
+export interface IView {
   id: string;
   name: string;
   issueFilterQuery?: NQL.Expression;
   taskFilterQuery?: NQL.Expression;
-  isEmpty(): boolean;
+  isDefault(): boolean;
   toJSON(): Object;
 }

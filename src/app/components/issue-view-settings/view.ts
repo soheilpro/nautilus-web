@@ -1,14 +1,14 @@
 import * as uuid from 'uuid';
 import * as NQL from '../../nql';
-import { IConfiguration } from './iconfiguration';
+import { IView } from './iview';
 
-export class Configuration implements IConfiguration {
+export class View implements IView {
   id: string;
   name: string;
   issueFilterQuery: NQL.Expression;
   taskFilterQuery: NQL.Expression;
 
-  isEmpty() {
+  isDefault() {
     return !this.issueFilterQuery && !this.taskFilterQuery;
   }
 
@@ -26,22 +26,22 @@ export class Configuration implements IConfiguration {
   static fromJSON(json: any) {
     const expressionObjectConverter = new NQL.ExpressionJSONConverter();
 
-    const configuration = new Configuration();
-    configuration.id = json.id;
-    configuration.name = json.name;
-    configuration.issueFilterQuery = json.issueFilterQuery ? expressionObjectConverter.parse(json.issueFilterQuery) : undefined;
-    configuration.taskFilterQuery = json.taskFilterQuery ? expressionObjectConverter.parse(json.taskFilterQuery) : undefined;
+    const view = new View();
+    view.id = json.id;
+    view.name = json.name;
+    view.issueFilterQuery = json.issueFilterQuery ? expressionObjectConverter.parse(json.issueFilterQuery) : undefined;
+    view.taskFilterQuery = json.taskFilterQuery ? expressionObjectConverter.parse(json.taskFilterQuery) : undefined;
 
-    return configuration;
+    return view;
   }
 
   static create({ name, issueFilterQuery, taskFilterQuery }: { name?: string, issueFilterQuery?: NQL.Expression, taskFilterQuery?: NQL.Expression } = {}) {
-    const configuration = new Configuration();
-    configuration.id = uuid().replace(/-/g, '');
-    configuration.name = name;
-    configuration.issueFilterQuery = issueFilterQuery;
-    configuration.taskFilterQuery = taskFilterQuery;
+    const view = new View();
+    view.id = uuid().replace(/-/g, '');
+    view.name = name;
+    view.issueFilterQuery = issueFilterQuery;
+    view.taskFilterQuery = taskFilterQuery;
 
-    return configuration;
+    return view;
   }
 }

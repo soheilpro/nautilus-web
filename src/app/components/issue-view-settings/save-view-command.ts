@@ -1,18 +1,18 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
-import { IConfiguration } from './iconfiguration';
+import { IView } from './iview';
 
-export default class SaveConfigurationCommand extends BaseCommand {
-  constructor(private configuration: IConfiguration, private onExecute: () => void) {
+export default class SaveViewCommand extends BaseCommand {
+  constructor(private view: IView, private onExecute: () => void) {
     super();
   }
 
   get id() {
-    return 'save-configuration';
+    return 'save-view';
   }
 
   get name() {
-    return 'Configuration: Save';
+    return 'View: Save';
   }
 
   get shortcut() {
@@ -23,7 +23,7 @@ export default class SaveConfigurationCommand extends BaseCommand {
   }
 
   get enabled() {
-    return !this.configuration.isEmpty();
+    return !this.view.isDefault();
   }
 
   execute() {
