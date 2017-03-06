@@ -1,15 +1,20 @@
+import * as _ from 'underscore';
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
 import Window from '../window';
-import { ISearchResult } from './isearch-result';
-import SearchGuide from './search-guide';
-import SearchOptions from './search-options';
-import SearchResultList from './search-result-list';
+import Input from '../input';
 
 require('../../assets/stylesheets/base.less');
 require ('./index.less');
+
+export interface ISearchResult {
+  key: string;
+  type: string;
+  item: IIssue;
+}
 
 interface ISearchWindowProps {
   onIssueSelect(issue: IIssue): void;
@@ -18,6 +23,7 @@ interface ISearchWindowProps {
 interface ISearchWindowState {
   searchResults?: ISearchResult[];
   selectedSearchResultIndex?: number;
+  searchText?: string;
 }
 
 export default class SearchWindow extends React.Component<ISearchWindowProps, ISearchWindowState> {
@@ -28,10 +34,13 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     super();
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
-    this.handleOptionsQueryChange = this.handleOptionsQueryChange.bind(this);
-    this.handleSearchResultListSearchResultSelect = this.handleSearchResultListSearchResultSelect.bind(this);
+    this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    this.handleSearchResultMouseEnter = this.handleSearchResultMouseEnter.bind(this);
+    this.handleSearchResultClick = this.handleSearchResultClick.bind(this);
 
-    this.state = {};
+    this.state = {
+      selectedSearchResultIndex: 0,
+    };
   }
 
   private onSearchResultSelect(searchResult: ISearchResult) {
@@ -70,12 +79,16 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     }
   }
 
-  private async handleOptionsQueryChange(query: string) {
+  private async handleSearchInputChange(value: string) {
     this.counter++;
 
-    query = query.trim();
+    this.setState({
+      searchText: value,
+    });
 
-    if (!query) {
+    value = value.trim();
+
+    if (!value) {
       this.setState({
         searchResults: undefined,
       });
@@ -84,7 +97,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     }
 
     const counter = this.counter;
-    const searchResults = await this.search(query);
+    const searchResults = await this.search(value);
 
     // Display results only if no other search has been performed in the meantime
     if (counter !== this.counter)
@@ -94,6 +107,16 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
       searchResults,
       selectedSearchResultIndex: 0,
     });
+  }
+
+  private handleSearchResultMouseEnter(searchResult: ISearchResult) {
+    this.setState({
+      selectedSearchResultIndex: this.state.searchResults.indexOf(searchResult),
+    });
+  }
+
+  private handleSearchResultClick(searchResult: ISearchResult) {
+    this.onSearchResultSelect(searchResult);
   }
 
   private async search(query: string) {
@@ -108,22 +131,48 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     });
   }
 
-  private handleSearchResultListSearchResultSelect(searchResult: ISearchResult) {
-    this.onSearchResultSelect(searchResult);
+  private renderSearchResult(searchResult: ISearchResult) {
+    if (searchResult.type === 'Issue') {
+      const issue = searchResult.item as IIssue;
+
+      return (
+        <div className="issue">
+          <span className="sid">{issue.sid}</span>
+          <span className="title">{issue.title}</span>
+        </div>
+      );
+    }
+
+    return null;
   }
 
   render() {
     return (
       <Window className="search-window-component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
-          <div className="options">
-            <SearchOptions autoFocus={true} onQueryChange={this.handleOptionsQueryChange} />
-          </div>
-          {
-            this.state.searchResults ?
-              <SearchResultList searchResults={this.state.searchResults} selectedSearchResultIndex={this.state.selectedSearchResultIndex} onSearchResultSelect={this.handleSearchResultListSearchResultSelect} />
-              :
-              <SearchGuide />
+          <Input className="search-input" placeholder="Search issues, milestones, projects, users..." value={this.state.searchText} autoFocus={true} onChange={this.handleSearchInputChange} />
+            {
+              this.state.searchResults ?
+                this.state.searchResults.length > 0 ?
+                  <div className="search-result-list">
+                    {
+                      this.state.searchResults.map((searchResult, index) => {
+                        return (
+                          <a className={classNames('search-result', {'selected': index === this.state.selectedSearchResultIndex})} href="#" onClick={_.partial(this.handleSearchResultClick, searchResult)} onMouseEnter={_.partial(this.handleSearchResultMouseEnter, searchResult)} key={searchResult.key}>
+                            {this.renderSearchResult(searchResult)}
+                          </a>
+                        );
+                      })
+                    }
+                  </div>
+                  :
+                  <div className="no-search-results-found">
+                    No results found.
+                  </div>
+                :
+                <div className="search-help">
+                  Try searching for an issue's title or its id.
+                </div>
           }
         </div>
       </Window>
