@@ -14,7 +14,7 @@ export default class DeleteTaskCommand extends BaseCommand {
     return 'delete-task';
   }
 
-  get name() {
+  get title() {
     return 'Delete Task';
   }
 

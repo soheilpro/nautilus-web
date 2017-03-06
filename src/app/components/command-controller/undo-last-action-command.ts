@@ -9,7 +9,7 @@ export default class UndoLastActionCommand extends BaseCommand {
     return 'undo-last-action';
   }
 
-  get name() {
+  get title() {
     return 'Undo';
   }
 

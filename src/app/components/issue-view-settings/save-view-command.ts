@@ -11,7 +11,7 @@ export default class SaveViewCommand extends BaseCommand {
     return 'save-view';
   }
 
-  get name() {
+  get title() {
     return 'View: Save';
   }
 

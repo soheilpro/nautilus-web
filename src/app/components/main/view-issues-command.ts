@@ -7,7 +7,7 @@ export default class ViewIssuesCommand extends BaseCommand {
     return 'view-issues';
   }
 
-  get name() {
+  get title() {
     return 'View Issues';
   }
 

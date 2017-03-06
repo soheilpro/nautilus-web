@@ -14,7 +14,7 @@ export default class DeleteIssueCommand extends BaseCommand {
     return 'delete-issue';
   }
 
-  get name() {
+  get title() {
     return 'Delete Issue';
   }
 

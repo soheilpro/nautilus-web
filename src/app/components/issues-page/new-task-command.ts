@@ -14,7 +14,7 @@ export default class NewTaskCommand extends BaseCommand {
     return 'new-task';
   }
 
-  get name() {
+  get title() {
     return 'New Task';
   }
 

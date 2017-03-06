@@ -10,7 +10,7 @@ export default class FilterIssueByProjectCommand extends BaseCommand {
     return 'issue-project-filter';
   }
 
-  get name() {
+  get title() {
     return 'Filter: Issues Project';
   }
 

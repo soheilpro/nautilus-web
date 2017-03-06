@@ -40,7 +40,7 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
   }
 
   componentDidMount() {
-    this.commands = _.sortBy(this.commandManager.getCommands().filter(command => command.visible), command => command.name);
+    this.commands = _.sortBy(this.commandManager.getCommands().filter(command => command.visible), command => command.title);
 
     this.setState({
       commands: this.commands,
@@ -100,7 +100,7 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
 
     text = text.toLowerCase().trim();
 
-    return commands.filter(command => command.name.toLowerCase().indexOf(text) !== -1);
+    return commands.filter(command => command.title.toLowerCase().indexOf(text) !== -1);
   }
 
   render() {
@@ -116,7 +116,7 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
                       return (
                         <a className={classNames('command', {'disabled': !command.enabled, 'selected': index === this.state.selectedCommandIndex})} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
                           <span className="title">
-                            {command.name}
+                            {command.title}
                           </span>
                           <span className="shortcut">
                             <Shortcut shortcut={command.shortcut} />

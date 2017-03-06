@@ -14,7 +14,7 @@ export default class EditIssueCommand extends BaseCommand {
     return 'edit-issue';
   }
 
-  get name() {
+  get title() {
     return 'Edit Issue';
   }
 

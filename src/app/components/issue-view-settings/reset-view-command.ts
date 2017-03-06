@@ -11,7 +11,7 @@ export default class ResetViewCommand extends BaseCommand {
     return 'reset-view';
   }
 
-  get name() {
+  get title() {
     return 'View: Reset';
   }
 

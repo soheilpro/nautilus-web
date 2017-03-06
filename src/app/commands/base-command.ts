@@ -3,7 +3,7 @@ import { ICommand } from './icommand';
 
 export abstract class BaseCommand implements ICommand {
   abstract get id(): string;
-  abstract get name(): string;
+  abstract get title(): string;
 
   get shortcut(): IShortcut
   {

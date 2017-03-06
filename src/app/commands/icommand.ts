@@ -2,7 +2,7 @@ import { IShortcut } from '../keyboard';
 
 export interface ICommand {
   id: string;
-  name: string;
+  title: string;
   shortcut: IShortcut;
   visible: boolean;
   enabled: boolean;

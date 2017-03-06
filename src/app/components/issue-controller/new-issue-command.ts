@@ -9,7 +9,7 @@ export default class NewIssueCommand extends BaseCommand {
     return 'new-issue';
   }
 
-  get name() {
+  get title() {
     return 'New Issue';
   }
 

@@ -14,7 +14,7 @@ export default class EditTaskCommand extends BaseCommand {
     return 'edit-task';
   }
 
-  get name() {
+  get title() {
     return 'Edit Task';
   }
 

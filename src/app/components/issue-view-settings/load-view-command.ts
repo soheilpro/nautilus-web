@@ -10,7 +10,7 @@ export default class LoadViewCommand extends BaseCommand {
     return 'load-view';
   }
 
-  get name() {
+  get title() {
     return 'View: Load';
   }
 

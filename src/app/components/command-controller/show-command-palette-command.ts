@@ -9,7 +9,7 @@ export default class ShowCommandPaletteCommand extends BaseCommand {
     return 'show-command-palette';
   }
 
-  get name() {
+  get title() {
     return 'Show Command Palette';
   }
 

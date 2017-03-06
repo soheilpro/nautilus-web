@@ -10,7 +10,7 @@ export default class FilterIssueByTypeCommand extends BaseCommand {
     return 'issue-type-filter';
   }
 
-  get name() {
+  get title() {
     return 'Filter: Issues Type';
   }
 

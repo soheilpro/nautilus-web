@@ -10,7 +10,7 @@ export default class FilterTaskByTypeCommand extends BaseCommand {
     return 'task-type-filter';
   }
 
-  get name() {
+  get title() {
     return 'Filter: Tasks Type';
   }
 

@@ -9,7 +9,7 @@ export default class SearchCommand extends BaseCommand {
     return 'search';
   }
 
-  get name() {
+  get title() {
     return 'Search';
   }
 
