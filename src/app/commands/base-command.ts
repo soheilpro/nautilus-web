@@ -5,8 +5,7 @@ export abstract class BaseCommand implements ICommand {
   abstract get id(): string;
   abstract get title(): string;
 
-  get shortcut(): IShortcut
-  {
+  get shortcut(): IShortcut {
     return null;
   }
 
