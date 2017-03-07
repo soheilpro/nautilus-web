@@ -5,7 +5,6 @@ import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import CommandPaletteWindow from '../command-palette-window';
 import ShowCommandPaletteCommand from './show-command-palette-command';
-import UndoLastActionCommand from './undo-last-action-command';
 
 interface ICommandControllerProps {
 }
@@ -62,7 +61,6 @@ export default class CommandController extends React.Component<ICommandControlle
   getCommands() {
     return [
       new ShowCommandPaletteCommand(),
-      new UndoLastActionCommand(),
     ];
   }
 

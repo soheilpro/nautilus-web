@@ -1,5 +1,6 @@
 import { IActionManager } from '../actions';
 import { IApplication } from '../application';
+import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ISearchController } from '../search';
@@ -15,13 +16,14 @@ export class ServiceManager implements IServiceManager {
   private localStorage: IStorage;
   private roamingStorage: IStorage;
   private application: IApplication;
-  private actionManager: IActionManager;
   private commandManager: ICommandManager;
   private commandController: ICommandController;
+  private actionController: IActionController;
+  private actionManager: IActionManager;
+  private windowController: IWindowController;
   private searchController: ISearchController;
   private issueController: IIssueController;
   private taskController: ITaskController;
-  private windowController: IWindowController;
 
   setSessionStorage(storage: IStorage) {
     this.sessionStorage = storage;
@@ -55,12 +57,12 @@ export class ServiceManager implements IServiceManager {
     return this.application;
   }
 
-  setActionManager(actionManager: IActionManager) {
-    this.actionManager = actionManager;
+  setCommandController(commandController: ICommandController) {
+    this.commandController = commandController;
   }
 
-  getActionManager() {
-    return this.actionManager;
+  getCommandController() {
+    return this.commandController;
   }
 
   setCommandManager(commandManager: ICommandManager) {
@@ -71,12 +73,28 @@ export class ServiceManager implements IServiceManager {
     return this.commandManager;
   }
 
-  setCommandController(commandController: ICommandController) {
-    this.commandController = commandController;
+  setActionController(actionController: IActionController) {
+    this.actionController = actionController;
   }
 
-  getCommandController() {
-    return this.commandController;
+  getActionController() {
+    return this.actionController;
+  }
+
+  setActionManager(actionManager: IActionManager) {
+    this.actionManager = actionManager;
+  }
+
+  getActionManager() {
+    return this.actionManager;
+  }
+
+  setWindowController(windowController: IWindowController) {
+    this.windowController = windowController;
+  }
+
+  getWindowController() {
+    return this.windowController;
   }
 
   setSearchController(searchController: ISearchController) {
@@ -101,13 +119,5 @@ export class ServiceManager implements IServiceManager {
 
   getTaskController() {
     return this.taskController;
-  }
-
-  setWindowController(windowController: IWindowController) {
-    this.windowController = windowController;
-  }
-
-  getWindowController() {
-    return this.windowController;
   }
 }

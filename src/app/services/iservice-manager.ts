@@ -1,5 +1,6 @@
 import { IActionManager } from '../actions';
 import { IApplication } from '../application';
+import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ISearchController } from '../search';
@@ -20,17 +21,20 @@ export interface IServiceManager {
   setApplication(application: IApplication): void;
   getApplication(): IApplication;
 
-  setActionManager(actionManager: IActionManager): void;
-  getActionManager(): IActionManager;
+  setCommandController(commandController: ICommandController): void;
+  getCommandController(): ICommandController;
 
   setCommandManager(commandManager: ICommandManager): void;
   getCommandManager(): ICommandManager;
 
+  setActionController(actionController: IActionController): void;
+  getActionController(): IActionController;
+
+  setActionManager(actionManager: IActionManager): void;
+  getActionManager(): IActionManager;
+
   setWindowController(windowController: IWindowController): void;
   getWindowController(): IWindowController;
-
-  setCommandController(commandController: ICommandController): void;
-  getCommandController(): ICommandController;
 
   setSearchController(searchController: ISearchController): void;
   getSearchController(): ISearchController;

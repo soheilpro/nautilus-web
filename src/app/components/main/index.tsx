@@ -3,6 +3,7 @@ import { Router, Route, browserHistory } from 'react-router';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import CommandController from '../command-controller';
+import ActionController from '../action-controller';
 import IssueController from '../issue-controller';
 import SearchController from '../search-controller';
 import TaskController from '../task-controller';
@@ -40,6 +41,7 @@ export default class Main extends React.Component<IMainProps, IMainState> implem
       <div>
         <WindowController />
         <CommandController />
+        <ActionController />
         <SearchController />
         <IssueController />
         <TaskController />
