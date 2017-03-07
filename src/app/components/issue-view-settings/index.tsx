@@ -12,9 +12,9 @@ import TaskQueryBuilder from '../task-query-builder';
 import ViewList from './view-list';
 import { IView } from './iview';
 import { View } from './view';
-import IssueProjectFilterCommand from './issue-project-filter-command';
-import IssueTypeFilterCommand from './issue-type-filter-command';
-import TaskTypeFilterCommand from './task-type-filter-command';
+import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
+import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
+import FilterTasksByTypeCommand from './filter-tasks-by-type-command';
 import ResetViewCommand from './reset-view-command';
 import SaveViewCommand from './save-view-command';
 import LoadViewCommand from './load-view-command';
@@ -88,9 +88,9 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
     });
 
     return [
-      new IssueProjectFilterCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
-      new IssueTypeFilterCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
-      new TaskTypeFilterCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'type')),
+      new FilterIssuesByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
+      new FilterIssuesByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
+      new FilterTasksByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'type')),
       new ResetViewCommand(view, this.handleResetViewCommandExecute),
       new SaveViewCommand(view, this.handleSaveViewCommandExecute),
       new LoadViewCommand(this.handleLoadViewCommandExecute),
