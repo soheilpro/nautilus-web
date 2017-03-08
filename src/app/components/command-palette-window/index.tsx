@@ -110,28 +110,28 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
       <Window className="command-palette-window-component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <Input className="search-input" placeholder="Search commands" value={this.state.searchText} autoFocus={true} onChange={this.handleSearchInputChange} />
-            {
-              this.state.commands.length > 0 ?
-                <div className="command-list">
-                  {
-                    this.state.commands.map((command, index) => {
-                      return (
-                        <a className={classNames('command', {'disabled': !command.enabled, 'selected': index === this.state.selectedCommandIndex})} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
-                          <span className="title">
-                            {command.title}
-                          </span>
-                          <span className="shortcut">
-                            <Shortcut shortcut={command.shortcut} />
-                          </span>
-                        </a>
-                      );
-                    })
-                  }
-                </div>
-                :
-                <div className="no-commands-found">
-                  No commands found.
-                </div>
+          {
+            this.state.commands.length > 0 ?
+              <div className="command-list">
+                {
+                  this.state.commands.map((command, index) => {
+                    return (
+                      <a className={classNames('command', {'disabled': !command.enabled, 'selected': index === this.state.selectedCommandIndex})} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
+                        <span className="title">
+                          {command.title}
+                        </span>
+                        <span className="shortcut">
+                          <Shortcut shortcut={command.shortcut} />
+                        </span>
+                      </a>
+                    );
+                  })
+                }
+              </div>
+              :
+              <div className="no-commands-found">
+                No commands found.
+              </div>
           }
         </div>
       </Window>

@@ -157,28 +157,28 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
       <Window className="search-window-component">
         <div className="container" onKeyDown={this.handleContainerKeyDown}>
           <Input className="search-input" placeholder="Search issues, milestones, projects, users..." value={this.state.searchText} autoFocus={true} onChange={this.handleSearchInputChange} />
-            {
-              this.state.searchResults ?
-                this.state.searchResults.length > 0 ?
-                  <div className="search-result-list">
-                    {
-                      this.state.searchResults.map((searchResult, index) => {
-                        return (
-                          <a className={classNames('search-result', {'selected': index === this.state.selectedSearchResultIndex})} href="#" onClick={_.partial(this.handleSearchResultClick, searchResult)} onMouseEnter={_.partial(this.handleSearchResultMouseEnter, searchResult)} key={searchResult.key}>
-                            {this.renderSearchResult(searchResult)}
-                          </a>
-                        );
-                      })
-                    }
-                  </div>
-                  :
-                  <div className="no-search-results-found">
-                    No results found.
-                  </div>
-                :
-                <div className="search-help">
-                  Try searching for an issue's title or its id.
+          {
+            this.state.searchResults ?
+              this.state.searchResults.length > 0 ?
+                <div className="search-result-list">
+                  {
+                    this.state.searchResults.map((searchResult, index) => {
+                      return (
+                        <a className={classNames('search-result', {'selected': index === this.state.selectedSearchResultIndex})} href="#" onClick={_.partial(this.handleSearchResultClick, searchResult)} onMouseEnter={_.partial(this.handleSearchResultMouseEnter, searchResult)} key={searchResult.key}>
+                          {this.renderSearchResult(searchResult)}
+                        </a>
+                      );
+                    })
+                  }
                 </div>
+                :
+                <div className="no-search-results-found">
+                  No results found.
+                </div>
+              :
+              <div className="search-help">
+                Try searching for an issue's title or its id.
+              </div>
           }
         </div>
       </Window>

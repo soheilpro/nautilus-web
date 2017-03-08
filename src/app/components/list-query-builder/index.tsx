@@ -310,21 +310,26 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
         <div className="item-list">
           {
-            this.state.items.map((item, index) => {
-              return (
-                <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
-                  <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
-                    <Icon name="minus-square" />
-                  </a>
-                  <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
-                    <Icon name="plus-square" />
-                  </a>
-                  <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
-                    {item[this.props.displayProperty]}
-                  </a>
-                </div>
-              );
-            })
+            this.state.items.length > 0 ?
+              this.state.items.map((item, index) => {
+                return (
+                  <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
+                    <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
+                      <Icon name="minus-square" />
+                    </a>
+                    <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
+                      <Icon name="plus-square" />
+                    </a>
+                    <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
+                      {item[this.props.displayProperty]}
+                    </a>
+                  </div>
+                );
+              })
+              :
+              <div className="no-items-found">
+                  No items found.
+              </div>
           }
         </div>
       </div>

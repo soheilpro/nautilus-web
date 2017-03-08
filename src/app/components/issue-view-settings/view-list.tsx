@@ -108,18 +108,23 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
         <div className="view-list">
           {
-            this.state.views.map((view, index) => {
-              return (
-                <div className={classNames('view', 'row', {'selected': index === this.state.selectedViewIndex})} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
-                  <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleViewDeleteClick, view)}>
-                    <Icon name="remove" />
-                  </a>
-                  <a className="name" href="#" onClick={_.partial(this.handleViewTitleClick, view)}>
-                    {view.name}
-                  </a>
-                </div>
-              );
-            })
+            this.state.views.length > 0 ?
+              this.state.views.map((view, index) => {
+                return (
+                  <div className={classNames('view', 'row', {'selected': index === this.state.selectedViewIndex})} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
+                    <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleViewDeleteClick, view)}>
+                      <Icon name="remove" />
+                    </a>
+                    <a className="name" href="#" onClick={_.partial(this.handleViewTitleClick, view)}>
+                      {view.name}
+                    </a>
+                  </div>
+                );
+              })
+              :
+              <div className="no-views-found">
+                  No saved views found.
+              </div>
           }
         </div>
       </div>
