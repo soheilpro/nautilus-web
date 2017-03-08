@@ -58,21 +58,25 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedSearchResultIndex: this.state.selectedSearchResultIndex < this.state.searchResults.length - 1 ? this.state.selectedSearchResultIndex + 1 : 0,
-      });
+      if (this.state.searchResults) {
+        this.setState({
+          selectedSearchResultIndex: this.state.selectedSearchResultIndex < this.state.searchResults.length - 1 ? this.state.selectedSearchResultIndex + 1 : 0,
+        });
+      }
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedSearchResultIndex: this.state.selectedSearchResultIndex > 0 ? this.state.selectedSearchResultIndex - 1 : this.state.searchResults.length - 1,
-      });
+      if (this.state.searchResults) {
+        this.setState({
+          selectedSearchResultIndex: this.state.selectedSearchResultIndex > 0 ? this.state.selectedSearchResultIndex - 1 : this.state.searchResults.length - 1,
+        });
+      }
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      if (this.state.searchResults.length > 0) {
+      if (this.state.searchResults && this.state.searchResults.length > 0) {
         const searchResult = this.state.searchResults[this.state.selectedSearchResultIndex];
         this.onSearchResultSelect(searchResult);
       }
