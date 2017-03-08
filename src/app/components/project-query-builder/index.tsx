@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IProject, asEntity, entityComparer } from '../../application';
@@ -26,7 +27,7 @@ export default class ProjectQueryBuilder extends React.Component<IProjectQueryBu
 
   componentDidMount() {
     this.setState({
-      projects: this.application.projects.getAll(),
+      projects: _.sortBy(this.application.projects.getAll(), project => project.name),
     });
   }
 

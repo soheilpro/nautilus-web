@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { ItemKind, IItemType, asEntity, entityComparer } from '../../application';
@@ -27,7 +28,7 @@ export default class IssueTypeQueryBuilder extends React.Component<IIssueTypeQue
 
   componentDidMount() {
     this.setState({
-      itemTypes: this.application.itemTypes.getAll(this.props.itemKind),
+      itemTypes: _.sortBy(this.application.itemTypes.getAll(this.props.itemKind), itemType => itemType.order),
     });
   }
 

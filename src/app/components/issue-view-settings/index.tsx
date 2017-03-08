@@ -61,7 +61,7 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
     this.state = {
       issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
       taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
-      savedViews: props.savedViews,
+      savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     };
   }
 
@@ -73,7 +73,7 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
     this.state = {
       issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
       taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
-      savedViews: props.savedViews,
+      savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     };
   }
 
