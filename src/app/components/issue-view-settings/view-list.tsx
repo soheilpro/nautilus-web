@@ -81,11 +81,15 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
     });
   }
 
-  private handleViewDeleteClick(view: IView) {
+  private handleViewDeleteClick(view: IView, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     this.props.onDelete(view);
   }
 
-  private handleViewTitleClick(view: IView) {
+  private handleViewTitleClick(view: IView, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     this.props.onSelect(view);
   }
 

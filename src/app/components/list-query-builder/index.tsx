@@ -116,7 +116,9 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     });
   }
 
-  private handleItemExcludeClick(item: IItem) {
+  private handleItemExcludeClick(item: IItem, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     this.toggleItemExclude(item);
 
     this.setState({
@@ -124,7 +126,9 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     });
   }
 
-  private handleItemIncludeClick(item: IItem) {
+  private handleItemIncludeClick(item: IItem, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     this.toggleItemInclude(item);
 
     this.setState({
@@ -132,7 +136,9 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     });
   }
 
-  private handleItemTitleClick(item: IItem) {
+  private handleItemTitleClick(item: IItem, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     this.includeItem(item);
 
     this.setState({

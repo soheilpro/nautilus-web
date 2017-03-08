@@ -89,7 +89,9 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
     });
   }
 
-  private handleCommandClick(command: ICommand) {
+  private handleCommandClick(command: ICommand, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     if (command.enabled)
       this.props.onSelect(command);
   }

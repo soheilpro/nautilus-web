@@ -119,7 +119,9 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     });
   }
 
-  private handleSearchResultClick(searchResult: ISearchResult) {
+  private handleSearchResultClick(searchResult: ISearchResult, event: React.MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
+
     this.onSearchResultSelect(searchResult);
   }
 
