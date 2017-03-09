@@ -28,7 +28,7 @@ interface ISearchWindowState {
 
 export default class SearchWindow extends React.Component<ISearchWindowProps, ISearchWindowState> {
   private application = ServiceManager.Instance.getApplication();
-  private counter = 0;
+  private searchCounter = 0;
 
   constructor() {
     super();
@@ -84,7 +84,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
   }
 
   private async handleSearchInputChange(value: string) {
-    this.counter++;
+    this.searchCounter++;
 
     this.setState({
       searchText: value,
@@ -100,11 +100,11 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
       return;
     }
 
-    const counter = this.counter;
+    const searchCounter = this.searchCounter;
     const searchResults = await this.search(value);
 
     // Display results only if no other search has been performed in the meantime
-    if (counter !== this.counter)
+    if (searchCounter !== this.searchCounter)
       return;
 
     this.setState({
