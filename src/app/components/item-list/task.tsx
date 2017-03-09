@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ITask } from '../../application';
 import ItemSidField from '../item-sid-field';
+import ItemTitleField from '../item-title-field';
 import ItemTypeField from '../item-type-field';
 import ItemStateField from '../item-state-field';
 import UserField from '../user-field';
@@ -27,7 +28,10 @@ export default class Task extends React.Component<ITaskProps, ITaskState> {
           this.props.task.type &&
             <span className="type"><ItemTypeField itemType={this.props.task.type} /></span>
         }
-        <span className="title">{this.props.task.title}</span>
+        {
+          this.props.task.title &&
+            <span className="title"><ItemTitleField title={this.props.task.title} /></span>
+        }
         {
           this.props.task.state &&
             <span className="state"><ItemStateField itemState={this.props.task.state} /></span>
