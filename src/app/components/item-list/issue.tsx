@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
 import ProjectField from '../project-field';
+import ItemSidField from '../item-sid-field';
 import ItemTypeField from '../item-type-field';
 import ItemPriorityField from '../item-priority-field';
 import ItemStateField from '../item-state-field';
@@ -19,7 +20,9 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
   render() {
     return (
       <div className="issue-component">
-        <span className="sid">{this.props.issue.sid}</span>
+        <span className="sid">
+          <ItemSidField sid={this.props.issue.sid} />
+        </span>
         <span className="title">{this.props.issue.title}</span>
         {
           this.props.issue.project &&
