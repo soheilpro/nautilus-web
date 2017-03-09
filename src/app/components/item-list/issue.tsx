@@ -26,23 +26,33 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
         </span>
         {
           this.props.issue.title &&
-            <span className="title"><ItemTitleField title={this.props.issue.title} /></span>
+            <span className="title">
+              <ItemTitleField title={this.props.issue.title} />
+            </span>
         }
         {
           this.props.issue.project &&
-            <span className="project"><ProjectField project={this.props.issue.project} /></span>
+            <span className="project">
+              <ProjectField project={this.props.issue.project} />
+            </span>
         }
         {
           this.props.issue.type &&
-            <span className="type"><ItemTypeField itemType={this.props.issue.type} /></span>
+            <span className="type">
+              <ItemTypeField itemType={this.props.issue.type} />
+            </span>
         }
         {
           this.props.issue.priority &&
-            <span className="priority"><ItemPriorityField itemPriority={this.props.issue.priority} /></span>
+            <span className="priority">
+              <ItemPriorityField itemPriority={this.props.issue.priority} />
+            </span>
         }
         {
           this.props.issue.state &&
-            <span className="state"><ItemStateField itemState={this.props.issue.state} /></span>
+            <span className="state">
+              <ItemStateField itemState={this.props.issue.state} />
+            </span>
         }
       </div>
     );
