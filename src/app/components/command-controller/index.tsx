@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import { ICommandProvider, ICommand, ICommandController } from '../../commands';
 import { KeyCombination, isInputEvent } from '../../keyboard';
@@ -49,8 +50,10 @@ export default class CommandController extends React.Component<ICommandControlle
   }
 
   showCommandPaletteWindow() {
+    const commands = _.sortBy(this.commandManager.getCommands().filter(command => command.visible), command => command.title);
+
     this.commandPaletteWindow = {
-      content: <CommandPaletteWindow onSelect={this.handleCommandPaletteWindowSelect} />,
+      content: <CommandPaletteWindow commands={commands} onSelect={this.handleCommandPaletteWindowSelect} />,
       top: 20,
       width: 600,
     };

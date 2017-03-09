@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { ICommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
-import { ServiceManager } from '../../services';
 import Window from '../window';
 import Input from '../input';
 import Shortcut from '../shortcut';
@@ -12,6 +11,7 @@ require('../../assets/stylesheets/base.less');
 require ('./index.less');
 
 interface ICommandPaletteWindowProps {
+  commands: ICommand[];
   onSelect(command: ICommand): void;
 }
 
@@ -22,10 +22,8 @@ interface ICommandPaletteWindowState {
 }
 
 export default class CommandPaletteWindow extends React.Component<ICommandPaletteWindowProps, ICommandPaletteWindowState> {
-  private commandManager = ServiceManager.Instance.getCommandManager();
-  private commands: ICommand[];
 
-  constructor() {
+  constructor(props: ICommandPaletteWindowProps) {
     super();
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
@@ -34,18 +32,9 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
     this.handleCommandClick = this.handleCommandClick.bind(this);
 
     this.state = {
-      commands: [],
+      commands: props.commands,
       selectedCommandIndex: 0,
     };
-  }
-
-  componentDidMount() {
-    this.commands = _.sortBy(this.commandManager.getCommands().filter(command => command.visible), command => command.title);
-
-    this.setState({
-      commands: this.commands,
-      selectedCommandIndex: 0,
-    });
   }
 
   private handleContainerKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -78,7 +67,7 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
   private async handleSearchInputChange(value: string) {
     this.setState({
       searchText: value,
-      commands: this.filterCommands(this.commands, value),
+      commands: this.filterCommands(this.props.commands, value),
       selectedCommandIndex: 0,
     });
   }
