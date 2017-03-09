@@ -9,6 +9,7 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "blueimp-md5": "^2.6.0",
     "classnames": "^2.2.5",
     "font-awesome": "^4.7.0",
@@ -24,6 +25,7 @@
     "@types/blueimp-md5": "^1.1.30",
     "@types/classnames": "0.0.32",
     "@types/jquery": "^2.0.34",
+    "@types/node": "^7.0.7",
     "@types/react": "^0.14.55",
     "@types/react-dom": "^0.14.19",
     "@types/react-router": "^2.0.41",

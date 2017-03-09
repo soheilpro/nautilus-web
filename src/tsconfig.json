@@ -11,7 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "jsx": "react",
-    "lib": [ "es5", "es2015.promise", "dom" ]
+    "lib": [ "es5", "es2015.iterable", "es2015.promise", "dom" ]
   },
   "exclude": [
     "node_modules"
