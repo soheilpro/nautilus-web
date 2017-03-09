@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
 import ProjectField from '../project-field';
-import ItemSidField from '../item-sid-field';
-import ItemTitleField from '../item-title-field';
+import SidField from '../sid-field';
+import TextField from '../text-field';
 import ItemTypeField from '../item-type-field';
 import ItemPriorityField from '../item-priority-field';
 import ItemStateField from '../item-state-field';
@@ -22,12 +22,12 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
     return (
       <div className="issue-component">
         <span className="sid">
-          <ItemSidField sid={this.props.issue.sid} />
+          <SidField sid={this.props.issue.sid} />
         </span>
         {
           this.props.issue.title &&
             <span className="title">
-              <ItemTitleField title={this.props.issue.title} />
+              <TextField title={this.props.issue.title} />
             </span>
         }
         {
