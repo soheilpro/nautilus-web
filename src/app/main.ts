@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Application } from './application';
+import { ContextManager } from './context';
 import { ActionManager } from './actions';
 import { CommandManager } from './commands';
 import { ServiceManager } from './services';
@@ -22,6 +23,9 @@ async function main() {
   const application = new Application({ address: 'http://localhost:3000' });
   await application.initialize();
   ServiceManager.Instance.setApplication(application);
+
+  const contextManager = new ContextManager();
+  ServiceManager.Instance.setContextManager(contextManager);
 
   const actionManager = new ActionManager();
   ServiceManager.Instance.setActionManager(actionManager);

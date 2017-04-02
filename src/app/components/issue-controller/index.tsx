@@ -8,6 +8,8 @@ import { IWindow } from '../../windows';
 import AddEditIssueWindow from '../add-edit-issue-window';
 import DeleteIssueWindow from '../delete-issue-window';
 import NewIssueCommand from './new-issue-command';
+import EditIssueCommand from './edit-issue-command';
+import DeleteIssueCommand from './delete-issue-command';
 import AddIssueAction from './add-issue-action';
 import UpdateIssueAction from './update-issue-action';
 import DeleteIssueAction from './delete-issue-action';
@@ -20,6 +22,7 @@ interface IIssueControllerState {
 
 export default class IssueController extends React.Component<IIssueControllerProps, IIssueControllerState> implements IIssueController, ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
+  private contextManager = ServiceManager.Instance.getContextManager();
   private actionManager = ServiceManager.Instance.getActionManager();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
@@ -51,8 +54,13 @@ export default class IssueController extends React.Component<IIssueControllerPro
   }
 
   getCommands() {
+    const context = this.contextManager.getContext();
+    const activeIssue = context['activeIssue'];
+
     return [
       new NewIssueCommand(),
+      activeIssue ? new EditIssueCommand(activeIssue) : undefined,
+      activeIssue ? new DeleteIssueCommand(activeIssue) : undefined,
     ];
   }
 

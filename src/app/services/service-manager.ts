@@ -1,5 +1,6 @@
 import { IActionManager } from '../actions';
 import { IApplication } from '../application';
+import { IContextManager } from '../context';
 import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
@@ -16,6 +17,7 @@ export class ServiceManager implements IServiceManager {
   private localStorage: IStorage;
   private roamingStorage: IStorage;
   private application: IApplication;
+  private contextManager: IContextManager;
   private commandManager: ICommandManager;
   private commandController: ICommandController;
   private actionController: IActionController;
@@ -55,6 +57,14 @@ export class ServiceManager implements IServiceManager {
 
   getApplication() {
     return this.application;
+  }
+
+  setContextManager(contextManager: IContextManager) {
+    this.contextManager = contextManager;
+  }
+
+  getContextManager() {
+    return this.contextManager;
   }
 
   setCommandController(commandController: ICommandController) {

@@ -1,11 +1,15 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import { ITask, ITaskChange, IIssue } from '../../application';
+import { ICommandProvider } from '../../commands';
 import { ITaskController } from '../../tasks';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import AddEditTaskWindow from '../add-edit-task-window';
 import DeleteTaskWindow from '../delete-task-window';
+import NewTaskCommand from './new-task-command';
+import EditTaskCommand from './edit-task-command';
+import DeleteTaskCommand from './delete-task-command';
 import AddTaskAction from './add-task-action';
 import UpdateTaskAction from './update-task-action';
 import DeleteTaskAction from './delete-task-action';
@@ -16,9 +20,11 @@ interface ITaskControllerProps {
 interface ITaskControllerState {
 }
 
-export default class TaskController extends React.Component<ITaskControllerProps, ITaskControllerState> implements ITaskController {
+export default class TaskController extends React.Component<ITaskControllerProps, ITaskControllerState> implements ITaskController, ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
+  private contextManager = ServiceManager.Instance.getContextManager();
   private actionManager = ServiceManager.Instance.getActionManager();
+  private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private addTaskWindow: IWindow;
   private editTaskWindow: IWindow;
@@ -39,10 +45,23 @@ export default class TaskController extends React.Component<ITaskControllerProps
 
   componentWillMount() {
     ServiceManager.Instance.setTaskController(this);
+    this.commandManager.registerCommandProvider(this);
   }
 
   componentWillUnmount() {
+    this.commandManager.unregisterCommandProvider(this);
     ServiceManager.Instance.setTaskController(undefined);
+  }
+
+  getCommands() {
+    const context = this.contextManager.getContext();
+    const activeTask = context['activeTask'];
+
+    return [
+      activeTask ? new NewTaskCommand(activeTask) : undefined,
+      activeTask ? new EditTaskCommand(activeTask) : undefined,
+      activeTask ? new DeleteTaskCommand(activeTask) : undefined,
+    ];
   }
 
   addTask(issue: IIssue) {

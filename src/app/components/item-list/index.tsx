@@ -1,15 +1,10 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import { IItem, isIssue, isTask } from '../../application';
-import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import List from '../list';
 import Issue from './issue';
 import Task from './task';
-import EditIssueCommand from './edit-issue-command';
-import DeleteIssueCommand from './delete-issue-command';
-import EditTaskCommand from './edit-task-command';
-import DeleteTaskCommand from './delete-task-command';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -26,8 +21,7 @@ interface IItemListState {
   selectedItem?: IItem;
 }
 
-export default class ItemList extends React.Component<IItemListProps, IItemListState> implements ICommandProvider {
-  private commandManager = ServiceManager.Instance.getCommandManager();
+export default class ItemList extends React.Component<IItemListProps, IItemListState> {
   private issueController = ServiceManager.Instance.getIssueController();
   private taskController = ServiceManager.Instance.getTaskController();
 
@@ -44,30 +38,11 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
     };
   }
 
-  componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
-  }
-
   componentWillReceiveProps(props: IItemListProps) {
     this.setState({
       items: this.sortItems(props.items),
       selectedItem: props.selectedItem,
     });
-  }
-
-  componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
-  }
-
-  getCommands() {
-    const selectedItem = this.state.selectedItem;
-
-    return [
-      isIssue(selectedItem) ? new EditIssueCommand(selectedItem) : undefined,
-      isIssue(selectedItem) ? new DeleteIssueCommand(selectedItem) : undefined,
-      isTask(selectedItem) ? new EditTaskCommand(selectedItem) : undefined,
-      isTask(selectedItem) ? new DeleteTaskCommand(selectedItem) : undefined,
-    ];
   }
 
   private handleItemSelect(item: IItem) {

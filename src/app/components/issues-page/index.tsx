@@ -1,7 +1,7 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { ICommandProvider } from '../../commands';
-import { IItem, isIssue, isTask, asIssue } from '../../application';
+import { IItem, isIssue, isTask } from '../../application';
+import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
@@ -10,7 +10,6 @@ import ItemList from '../item-list';
 import MasterPage from '../master-page';
 import CommandButton from '../command-button';
 import Icon from '../icon';
-import NewTaskCommand from './new-task-command';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -25,10 +24,10 @@ interface IIssuesPageState {
   savedViews?: IView[];
 }
 
-export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
+export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
-  private commandManager = ServiceManager.Instance.getCommandManager();
+  private contextManager = ServiceManager.Instance.getContextManager();
 
   constructor() {
     super();
@@ -48,7 +47,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   componentWillMount() {
-    this.commandManager.registerCommandProvider(this);
+    this.contextManager.registerContextItemProvider(this);
     this.application.items.on('add', this.handleApplicationItemsAdd);
     this.application.items.on('update', this.handleApplicationItemsUpdate);
     this.application.items.on('delete', this.handleApplicationItemsDelete);
@@ -73,13 +72,14 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.application.items.off('delete', this.handleApplicationItemsDelete);
     this.application.items.off('update', this.handleApplicationItemsUpdate);
     this.application.items.off('add', this.handleApplicationItemsAdd);
-    this.commandManager.unregisterCommandProvider(this);
+    this.contextManager.unregisterContextItemProvider(this);
   }
 
-  getCommands() {
-    return [
-      new NewTaskCommand(asIssue(this.state.selectedItem)),
-    ];
+  getContext() {
+    return {
+      'activeIssue': isIssue(this.state.selectedItem) ? this.state.selectedItem : undefined,
+      'activeTask': isTask(this.state.selectedItem) ? this.state.selectedItem : undefined,
+    };
   }
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {

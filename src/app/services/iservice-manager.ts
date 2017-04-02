@@ -1,5 +1,6 @@
 import { IActionManager } from '../actions';
 import { IApplication } from '../application';
+import { IContextManager } from '../context';
 import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
@@ -20,6 +21,9 @@ export interface IServiceManager {
 
   setApplication(application: IApplication): void;
   getApplication(): IApplication;
+
+  setContextManager(contextManager: IContextManager): void;
+  getContextManager(): IContextManager;
 
   setCommandController(commandController: ICommandController): void;
   getCommandController(): ICommandController;
