@@ -19,7 +19,7 @@ export default class DeleteTaskCommand extends BaseCommand {
   }
 
   get shortcut() {
-    return [{ keyCode: KeyCode.Delete }];
+    return [{ keyCode: KeyCode.D }];
   }
 
   get enabled() {

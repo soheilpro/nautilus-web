@@ -5,17 +5,18 @@ import { ItemKind, IItemType, asEntity, entityComparer } from '../../application
 import { ServiceManager } from '../../services';
 import ListQueryBuilder from '../list-query-builder';
 
-interface IIssueTypeQueryBuilderProps {
+interface IItemTypeQueryBuilderProps {
+  queryItem: string;
   itemKind: ItemKind;
   query?: NQL.Expression;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
-interface IIssueTypeQueryBuilderState {
+interface IItemTypeQueryBuilderState {
   itemTypes?: IItemType[];
 }
 
-export default class IssueTypeQueryBuilder extends React.Component<IIssueTypeQueryBuilderProps, IIssueTypeQueryBuilderState> {
+export default class ItemTypeQueryBuilder extends React.Component<IItemTypeQueryBuilderProps, IItemTypeQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {
@@ -32,13 +33,13 @@ export default class IssueTypeQueryBuilder extends React.Component<IIssueTypeQue
     });
   }
 
-  static canParseQuery(query: NQL.Expression) {
-    return ListQueryBuilder.canParseQuery(query, 'type', 'ItemType');
+  static canParseQuery(query: NQL.Expression, queryItem: string) {
+    return ListQueryBuilder.canParseQuery(query, queryItem, 'ItemType');
   }
 
   render() {
     return (
-      <ListQueryBuilder items={this.state.itemTypes} displayProperty="title" query={this.props.query} queryItem="type" queryItemType="ItemType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
+      <ListQueryBuilder items={this.state.itemTypes} displayProperty="title" query={this.props.query} queryItem={this.props.queryItem} queryItemType="ItemType" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
     );
   }
 };

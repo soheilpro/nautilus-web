@@ -14,7 +14,13 @@ import { IView } from './iview';
 import { View } from './view';
 import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
+import FilterIssuesByPriorityCommand from './filter-issues-by-priority-command';
+import FilterIssuesByStateCommand from './filter-issues-by-state-command';
+import FilterIssuesByCreayedByCommand from './filter-issues-by-created-by-command';
 import FilterTasksByTypeCommand from './filter-tasks-by-type-command';
+import FilterTasksByStateCommand from './filter-tasks-by-state-command';
+import FilterTasksByAssignedToCommand from './filter-tasks-by-assigned-to-command';
+import FilterTasksByCreatedByCommand from './filter-tasks-by-created-by-command';
 import ResetViewCommand from './reset-view-command';
 import SaveViewCommand from './save-view-command';
 import LoadViewCommand from './load-view-command';
@@ -90,7 +96,13 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
     return [
       new FilterIssuesByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
       new FilterIssuesByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
+      new FilterIssuesByPriorityCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'priority')),
+      new FilterIssuesByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'state')),
+      new FilterIssuesByCreayedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'createdBy')),
       new FilterTasksByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'type')),
+      new FilterTasksByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'state')),
+      new FilterTasksByAssignedToCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'assignedTo')),
+      new FilterTasksByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'createdBy')),
       new ResetViewCommand(view, this.handleResetViewCommandExecute),
       new SaveViewCommand(view, this.handleSaveViewCommandExecute),
       new LoadViewCommand(this.handleLoadViewCommandExecute),

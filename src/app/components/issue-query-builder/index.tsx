@@ -4,6 +4,9 @@ import { ItemKind } from '../../application';
 import AndQueryBuilder, { IQueryBuilder } from '../and-query-builder';
 import ProjectQueryBuilder from '../project-query-builder';
 import ItemTypeQueryBuilder from '../item-type-query-builder';
+import ItemPriorityQueryBuilder from '../item-priority-query-builder';
+import ItemStateQueryBuilder from '../item-state-query-builder';
+import UserQueryBuilder from '../user-query-builder';
 
 interface IIssueQueryBuilderProps {
   query: NQL.Expression;
@@ -17,8 +20,11 @@ export default class IssueQueryBuilder extends React.Component<IIssueQueryBuilde
   private andQueryBuilderComponent: AndQueryBuilder;
 
   private queryBuilders: IQueryBuilder[] = [
-    { key: 'project', title: 'Project', Component: ProjectQueryBuilder},
-    { key: 'type',    title: 'Type',    Component: ItemTypeQueryBuilder, props: { itemKind: 'issue' as ItemKind } },
+    { key: 'project',   title: 'Project',    queryItem: 'project',   Component: ProjectQueryBuilder},
+    { key: 'type',      title: 'Type',       queryItem: 'type',      Component: ItemTypeQueryBuilder,     props: { itemKind: 'issue' as ItemKind } },
+    { key: 'priority',  title: 'Priority',   queryItem: 'priority',  Component: ItemPriorityQueryBuilder, props: { itemKind: 'issue' as ItemKind } },
+    { key: 'state',     title: 'State',      queryItem: 'state',     Component: ItemStateQueryBuilder,    props: { itemKind: 'issue' as ItemKind } },
+    { key: 'createdBy', title: 'Created By', queryItem: 'createdBy', Component: UserQueryBuilder },
   ];
 
   open(key: string) {

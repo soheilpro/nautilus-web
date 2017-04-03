@@ -6,6 +6,7 @@ import { ServiceManager } from '../../services';
 import ListQueryBuilder from '../list-query-builder';
 
 interface IProjectQueryBuilderProps {
+  queryItem: string;
   query?: NQL.Expression;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
@@ -31,13 +32,13 @@ export default class ProjectQueryBuilder extends React.Component<IProjectQueryBu
     });
   }
 
-  static canParseQuery(query: NQL.Expression) {
-    return ListQueryBuilder.canParseQuery(query, 'project', 'Project');
+  static canParseQuery(query: NQL.Expression, queryItem: string) {
+    return ListQueryBuilder.canParseQuery(query, queryItem, 'Project');
   }
 
   render() {
     return (
-      <ListQueryBuilder items={this.state.projects} displayProperty="name" query={this.props.query} queryItem="project" queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
+      <ListQueryBuilder items={this.state.projects} displayProperty="name" query={this.props.query} queryItem={this.props.queryItem} queryItemType="Project" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
     );
   }
 };

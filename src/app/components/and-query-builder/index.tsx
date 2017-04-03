@@ -9,16 +9,18 @@ require('./index.less');
 
 interface IQueryBuilderProps {
   query?: NQL.Expression;
+  queryItem: string;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
 declare class QueryBuilder extends React.Component<IQueryBuilderProps, {}> {
-  static canParseQuery(query: NQL.Expression): void;
+  static canParseQuery(query: NQL.Expression, queryItem: string): void;
 }
 
 export interface IQueryBuilder {
   key: string;
   title: string;
+  queryItem: string;
   Component: typeof QueryBuilder;
   props?: Object;
 }
@@ -69,7 +71,7 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
 
     for (const child of children) {
       for (const queryBuilder of this.props.queryBuilders) {
-        if (queryBuilder.Component.canParseQuery(child)) {
+        if (queryBuilder.Component.canParseQuery(child, queryBuilder.queryItem)) {
           queries[queryBuilder.key] = child;
           break;
         }
@@ -115,7 +117,7 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
               return (
                 <Dropdown className={classNames('query-builder', { 'active': !!this.state.queries[queryBuilder.key] })} title={queryBuilder.title} ref={e => this.dropdownComponents[queryBuilder.key] = e} key={queryBuilder.key}>
                   <div className="container">
-                    <queryBuilder.Component query={this.state.queries[queryBuilder.key]} onChange={_.partial(this.handleFilterChange, queryBuilder.key)} {...queryBuilder.props} />
+                    <queryBuilder.Component query={this.state.queries[queryBuilder.key]} queryItem={queryBuilder.queryItem} onChange={_.partial(this.handleFilterChange, queryBuilder.key)} {...queryBuilder.props} />
                   </div>
                 </Dropdown>
               );

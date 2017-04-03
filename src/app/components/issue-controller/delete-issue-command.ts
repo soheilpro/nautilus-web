@@ -19,7 +19,7 @@ export default class DeleteIssueCommand extends BaseCommand {
   }
 
   get shortcut() {
-    return [{ keyCode: KeyCode.Delete }];
+    return [{ keyCode: KeyCode.D }];
   }
 
   get enabled() {

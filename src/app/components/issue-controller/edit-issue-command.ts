@@ -19,7 +19,7 @@ export default class EditIssueCommand extends BaseCommand {
   }
 
   get shortcut() {
-    return [{ keyCode: KeyCode.Enter }];
+    return [{ keyCode: KeyCode.E }];
   }
 
   get enabled() {

@@ -11,7 +11,7 @@ export default class FilterTaskByTypeCommand extends BaseCommand {
   }
 
   get title() {
-    return 'Filter: Tasks Type';
+    return 'Filter Tasks by Type';
   }
 
   get shortcut() {

@@ -29,16 +29,17 @@ export class ItemModule extends BaseModule implements IItemModule {
     let issues = this.items.filter(isIssue);
 
     if (issueQuery) {
-      const itemFilter = new IssueFilter();
-      const predicate = itemFilter.getPredicate(issueQuery);
+      const issueFilter = new IssueFilter();
+      const predicate = issueFilter.getPredicate(issueQuery);
+
       issues = issues.filter(predicate);
     }
 
     let tasks = this.items.filter(item => isTask(item) && issues.some(issue => entityComparer(item.parent, issue)));
 
     if (taskQuery) {
-      const itemFilter = new TaskFilter();
-      const predicate = itemFilter.getPredicate(taskQuery);
+      const taskFilter = new TaskFilter();
+      const predicate = taskFilter.getPredicate(taskQuery);
       tasks = tasks.filter(predicate);
 
       // Remove issues that are not parent of any tasks
