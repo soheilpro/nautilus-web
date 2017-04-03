@@ -11,7 +11,7 @@ export default class FilterTaskByStateCommand extends BaseCommand {
   }
 
   get title() {
-    return 'Filter Tasks by State';
+    return 'View: Filter Tasks by State';
   }
 
   get shortcut() {

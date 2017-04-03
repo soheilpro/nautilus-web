@@ -11,7 +11,7 @@ export default class FilterTaskByTypeCommand extends BaseCommand {
   }
 
   get title() {
-    return 'Filter Tasks by Created By';
+    return 'View: Filter Tasks by Created By';
   }
 
   get shortcut() {
