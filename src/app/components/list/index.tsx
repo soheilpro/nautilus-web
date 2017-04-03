@@ -17,6 +17,7 @@ interface IListProps {
   renderItem(item: IListItem, index: number): JSX.Element;
   onItemSelect?(item: IListItem): void;
   onItemAction?(item: IListItem): void;
+  onItemDelete?(item: IListItem): void;
 }
 
 interface IListState {
@@ -103,6 +104,18 @@ export default class List extends React.Component<IListProps, IListState> {
 
         this.props.onItemSelect(selectedItem);
       }
+    }
+    else if (event.which === KeyCode.Enter) {
+      event.preventDefault();
+
+      if (this.props.onItemAction)
+        this.props.onItemAction(this.state.selectedItem);
+    }
+    else if (event.which === KeyCode.Delete) {
+      event.preventDefault();
+
+      if (this.props.onItemDelete)
+        this.props.onItemDelete(this.state.selectedItem);
     }
   }
 

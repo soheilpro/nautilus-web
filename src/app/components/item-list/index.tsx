@@ -30,6 +30,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
     this.handleItemSelect = this.handleItemSelect.bind(this);
     this.handleItemAction = this.handleItemAction.bind(this);
+    this.handleItemDelete = this.handleItemDelete.bind(this);
     this.renderItem = this.renderItem.bind(this);
 
     this.state = {
@@ -60,6 +61,16 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
     if (isTask(item))
       return this.taskController.editTask(item);
+
+    throw new Error('Not supported.');
+  }
+
+  private handleItemDelete(item: IItem) {
+    if (isIssue(item))
+      return this.issueController.deleteIssue(item);
+
+    if (isTask(item))
+      return this.taskController.deleteTask(item);
 
     throw new Error('Not supported.');
   }
@@ -122,7 +133,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   render() {
     return (
       <div className="item-list-component">
-        <List items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={this.props.autoFocus} renderItem={this.renderItem} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} />
+        <List items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={this.props.autoFocus} renderItem={this.renderItem} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} onItemDelete={this.handleItemDelete} />
       </div>
     );
   }
