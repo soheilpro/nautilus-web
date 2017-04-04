@@ -25,10 +25,9 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
           <SidField sid={this.props.issue.sid} />
         </span>
         {
-          this.props.issue.title &&
-            <span className="title">
-              <TextField title={this.props.issue.title} />
-            </span>
+          <span className="title">
+            <TextField title={this.props.issue.title} />
+          </span>
         }
         {
           this.props.issue.project &&

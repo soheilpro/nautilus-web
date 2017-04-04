@@ -72,8 +72,8 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
       case 'edit':
         const issueChange: IIssueChange = {
           type: this.state.type || null,
-          title: this.state.title || null,
-          description: this.state.description || null,
+          title: this.state.title,
+          description: this.state.description,
           state: this.state.state || null,
           priority: this.state.priority || null,
           project: this.state.project || null,

@@ -31,10 +31,9 @@ export default class Task extends React.Component<ITaskProps, ITaskState> {
             </span>
         }
         {
-          this.props.task.title &&
-            <span className="title">
-              <TextField title={this.props.task.title} />
-            </span>
+          <span className="title">
+            <TextField title={this.props.task.title} />
+          </span>
         }
         {
           this.props.task.state &&

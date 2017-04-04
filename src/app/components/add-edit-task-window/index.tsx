@@ -67,8 +67,8 @@ export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindo
       case 'edit':
         const taskChange: ITaskChange = {
           type: this.state.type || null,
-          title: this.state.title || null,
-          description: this.state.description || null,
+          title: this.state.title,
+          description: this.state.description,
           state: this.state.state || null,
           assignedTo: this.state.assignedTo || null,
         };
