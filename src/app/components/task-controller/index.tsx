@@ -55,12 +55,13 @@ export default class TaskController extends React.Component<ITaskControllerProps
 
   getCommands() {
     const context = this.contextManager.getContext();
+    const activeIssue = context['activeIssue'];
     const activeTask = context['activeTask'];
 
     return [
-      activeTask ? new NewTaskCommand(activeTask) : undefined,
-      activeTask ? new EditTaskCommand(activeTask) : undefined,
-      activeTask ? new DeleteTaskCommand(activeTask) : undefined,
+      new NewTaskCommand(activeIssue),
+      new EditTaskCommand(activeTask),
+      new DeleteTaskCommand(activeTask),
     ];
   }
 

@@ -59,8 +59,8 @@ export default class IssueController extends React.Component<IIssueControllerPro
 
     return [
       new NewIssueCommand(),
-      activeIssue ? new EditIssueCommand(activeIssue) : undefined,
-      activeIssue ? new DeleteIssueCommand(activeIssue) : undefined,
+      new EditIssueCommand(activeIssue),
+      new DeleteIssueCommand(activeIssue),
     ];
   }
 
