@@ -35,11 +35,12 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
     this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    this.handleSearchResultListMouseLeave = this.handleSearchResultListMouseLeave.bind(this);
     this.handleSearchResultMouseEnter = this.handleSearchResultMouseEnter.bind(this);
     this.handleSearchResultClick = this.handleSearchResultClick.bind(this);
 
     this.state = {
-      selectedSearchResultIndex: 0,
+      selectedSearchResultIndex: -1,
     };
   }
 
@@ -77,8 +78,10 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
       event.preventDefault();
 
       if (this.state.searchResults && this.state.searchResults.length > 0) {
-        const searchResult = this.state.searchResults[this.state.selectedSearchResultIndex];
-        this.onSearchResultSelect(searchResult);
+        if (this.state.selectedSearchResultIndex !== -1) {
+          const searchResult = this.state.searchResults[this.state.selectedSearchResultIndex];
+          this.onSearchResultSelect(searchResult);
+        }
       }
     }
   }
@@ -110,6 +113,12 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
     this.setState({
       searchResults,
       selectedSearchResultIndex: 0,
+    });
+  }
+
+  private handleSearchResultListMouseLeave() {
+    this.setState({
+      selectedSearchResultIndex: -1,
     });
   }
 
@@ -160,7 +169,7 @@ export default class SearchWindow extends React.Component<ISearchWindowProps, IS
           {
             this.state.searchResults ?
               this.state.searchResults.length > 0 ?
-                <div className="search-result-list">
+                <div className="search-result-list" onMouseLeave={this.handleSearchResultListMouseLeave}>
                   {
                     this.state.searchResults.map((searchResult, index) => {
                       return (

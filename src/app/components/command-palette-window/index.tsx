@@ -27,12 +27,13 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
     this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    this.handleCommandListMouseLeave = this.handleCommandListMouseLeave.bind(this);
     this.handleCommandMouseEnter = this.handleCommandMouseEnter.bind(this);
     this.handleCommandClick = this.handleCommandClick.bind(this);
 
     this.state = {
       commands: props.commands,
-      selectedCommandIndex: 0,
+      selectedCommandIndex: -1,
     };
   }
 
@@ -55,10 +56,12 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
       event.preventDefault();
 
       if (this.state.commands.length > 0) {
-        const command = this.state.commands[this.state.selectedCommandIndex];
+        if (this.state.selectedCommandIndex !== -1) {
+          const command = this.state.commands[this.state.selectedCommandIndex];
 
-        if (command.enabled)
-          this.props.onSelect(command);
+          if (command.enabled)
+            this.props.onSelect(command);
+        }
       }
     }
   }
@@ -68,6 +71,12 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
       searchText: value,
       commands: this.filterCommands(this.props.commands, value),
       selectedCommandIndex: 0,
+    });
+  }
+
+  private handleCommandListMouseLeave() {
+    this.setState({
+      selectedCommandIndex: -1,
     });
   }
 
@@ -100,7 +109,7 @@ export default class CommandPaletteWindow extends React.Component<ICommandPalett
           <Input className="search-input" placeholder="Search commands" value={this.state.searchText} autoFocus={true} onChange={this.handleSearchInputChange} />
           {
             this.state.commands.length > 0 ?
-              <div className="command-list">
+              <div className="command-list" onMouseLeave={this.handleCommandListMouseLeave}>
                 {
                   this.state.commands.map((command, index) => {
                     return (

@@ -27,13 +27,14 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+    this.handleViewListMouseLeave = this.handleViewListMouseLeave.bind(this);
     this.handleViewMouseEnter = this.handleViewMouseEnter.bind(this);
     this.handleViewDeleteClick = this.handleViewDeleteClick.bind(this);
     this.handleViewTitleClick = this.handleViewTitleClick.bind(this);
 
     this.state = {
       views: props.views,
-      selectedViewIndex: 0,
+      selectedViewIndex: -1,
     };
   }
 
@@ -61,9 +62,10 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      const selectedView = this.state.views[this.state.selectedViewIndex];
-
-      this.props.onSelect(selectedView);
+      if (this.state.selectedViewIndex !== -1) {
+        const selectedView = this.state.views[this.state.selectedViewIndex];
+        this.props.onSelect(selectedView);
+      }
     }
   }
 
@@ -72,6 +74,12 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
       searchText: value,
       views: this.filterItems(this.props.views, value),
       selectedViewIndex: 0,
+    });
+  }
+
+  private handleViewListMouseLeave() {
+    this.setState({
+      selectedViewIndex: -1,
     });
   }
 
@@ -106,7 +114,7 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
     return (
       <div className="view-list-component" onKeyDown={this.handleKeyDown}>
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
-        <div className="view-list">
+        <div className="view-list" onMouseLeave={this.handleViewListMouseLeave}>
           {
             this.state.views.length > 0 ?
               this.state.views.map((view, index) => {

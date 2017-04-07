@@ -39,6 +39,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+    this.handleItemListMouseLeave = this.handleItemListMouseLeave.bind(this);
     this.handleItemMouseEnter = this.handleItemMouseEnter.bind(this);
     this.handleItemExcludeClick = this.handleItemExcludeClick.bind(this);
     this.handleItemIncludeClick = this.handleItemIncludeClick.bind(this);
@@ -48,7 +49,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
 
     this.state = {
       items: props.items,
-      selectedItemIndex: 0,
+      selectedItemIndex: -1,
       includedItems,
       excludedItems,
     };
@@ -96,9 +97,10 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      const selectedItem = this.state.items[this.state.selectedItemIndex];
-
-      this.includeItem(selectedItem);
+      if (this.state.selectedItemIndex !== -1) {
+        const selectedItem = this.state.items[this.state.selectedItemIndex];
+        this.includeItem(selectedItem);
+      }
     }
   }
 
@@ -107,6 +109,12 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
       searchText: value,
       items: this.filterItems(this.props.items, value),
       selectedItemIndex: 0,
+    });
+  }
+
+  private handleItemListMouseLeave() {
+    this.setState({
+      selectedItemIndex: -1,
     });
   }
 
@@ -308,7 +316,7 @@ export default class ListQueryBuilder extends React.Component<IListQueryBuilderP
     return (
       <div className="list-query-builder-component" onKeyDown={this.handleKeyDown}>
         <Input className="search-input" value={this.state.searchText} autoFocus={true} selectOnFocus={true} style="simple" onChange={this.handleSearchTextChange} />
-        <div className="item-list">
+        <div className="item-list" onMouseLeave={this.handleItemListMouseLeave}>
           {
             this.state.items.length > 0 ?
               this.state.items.map((item, index) => {
