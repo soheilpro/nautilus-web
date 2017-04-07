@@ -10,6 +10,7 @@ export default class IssueFilter {
       { name: 'ItemState', base: 'Entity' },
       { name: 'Project',   base: 'Entity' },
       { name: 'User',      base: 'Entity' },
+      { name: 'Item',      base: 'Entity' },
     ];
 
     const compiler = new NQL.ExpressionCompiler(types);
@@ -34,6 +35,9 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
 
     if (['createdBy'].some(name => name === expression.name))
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'User');
+
+    if (['milestone'].some(name => name === expression.name))
+      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), 'parent'), 'Item');
 
     throw new Error('Not supported.');
   }

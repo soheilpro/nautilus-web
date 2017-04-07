@@ -194,7 +194,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
                 Milestone:
               </div>
               <div className="value">
-                <ItemSelect className="state" item={this.state.milestone} kind="milestone" onChange={this.handleMilestoneInputChange} />
+                <ItemSelect className="state" item={this.state.milestone} itemKind="milestone" onChange={this.handleMilestoneInputChange} />
               </div>
             </div>
           </form>

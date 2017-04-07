@@ -12,6 +12,7 @@ import TaskQueryBuilder from '../task-query-builder';
 import ViewList from './view-list';
 import { IView } from './iview';
 import { View } from './view';
+import FilterIssuesByMilestoneCommand from './filter-issues-by-milestone-command';
 import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
 import FilterIssuesByPriorityCommand from './filter-issues-by-priority-command';
@@ -94,6 +95,7 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
     });
 
     return [
+      new FilterIssuesByMilestoneCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'milestone')),
       new FilterIssuesByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
       new FilterIssuesByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
       new FilterIssuesByPriorityCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'priority')),

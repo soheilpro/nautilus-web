@@ -5,7 +5,7 @@ import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IItemSelectProps {
-  kind: ItemKind;
+  itemKind: ItemKind;
   item: IItem;
   className?: string;
   onChange(item: IItem): void;
@@ -30,7 +30,7 @@ export default class ItemSelect extends React.Component<IItemSelectProps, IItemS
 
   async componentDidMount() {
     this.setState({
-      items: await this.application.items.getAllByKind(this.props.kind),
+      items: await this.application.items.getAllByKind(this.props.itemKind),
     });
   }
 
