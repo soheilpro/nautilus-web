@@ -76,11 +76,11 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
   }
 
   componentWillReceiveProps(props: IIssueViewViewProps) {
-    this.state = {
+    this.setState({
       issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
       taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
-    };
+    });
   }
 
   componentWillUnmount() {

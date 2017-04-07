@@ -38,9 +38,9 @@ export default class ViewList extends React.Component<IViewListProps, IViewListS
   }
 
   componentWillReceiveProps(props: IViewListProps) {
-    this.state = {
+    this.setState({
       views: props.views,
-    };
+    });
   }
 
   private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {

@@ -53,9 +53,9 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
   }
 
   componentWillReceiveProps(props: IAndQueryBuilderProps) {
-    this.state = {
+    this.setState({
       queries: this.getQueryObject(props.query) || {},
-    };
+    });
   }
 
   open(key: string) {
