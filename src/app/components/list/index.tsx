@@ -29,7 +29,7 @@ export default class List extends React.Component<IListProps, IListState> {
   private componentElement: HTMLElement;
 
   constructor(props: IListProps) {
-    super();
+    super(props);
 
     this.handleListKeyDown = this.handleListKeyDown.bind(this);
     this.handleListFocus = this.handleListFocus.bind(this);

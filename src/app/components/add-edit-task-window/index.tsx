@@ -28,7 +28,7 @@ interface IAddEditTaskWindowState {
 
 export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindowProps, IAddEditTaskWindowState> {
   constructor(props: IAddEditTaskWindowProps) {
-    super();
+    super(props);
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleTitleInputChange = this.handleTitleInputChange.bind(this);

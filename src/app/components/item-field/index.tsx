@@ -17,7 +17,7 @@ export default class ItemField extends React.Component<IItemFieldProps, IItemFie
   private application = ServiceManager.Instance.getApplication();
 
   constructor(props: IItemFieldProps) {
-    super();
+    super(props);
 
     this.state = {};
 

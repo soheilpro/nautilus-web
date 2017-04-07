@@ -23,7 +23,7 @@ interface IViewListState {
 
 export default class ViewList extends React.Component<IViewListProps, IViewListState> {
   constructor(props: IViewListProps) {
-    super();
+    super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);

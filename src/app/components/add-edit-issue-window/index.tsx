@@ -32,7 +32,7 @@ interface IAddEditIssueWindowState {
 
 export default class AddEditIssueWindow extends React.Component<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
   constructor(props: IAddEditIssueWindowProps) {
-    super();
+    super(props);
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleTitleInputChange = this.handleTitleInputChange.bind(this);

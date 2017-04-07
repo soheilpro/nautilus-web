@@ -35,7 +35,7 @@ interface IListQueryBuilderState {
 
 export default class ListQueryBuilder extends React.Component<IListQueryBuilderProps, IListQueryBuilderState> {
   constructor(props: IListQueryBuilderProps) {
-    super();
+    super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleSearchTextChange = this.handleSearchTextChange.bind(this);

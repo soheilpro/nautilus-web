@@ -49,7 +49,7 @@ export default class IssueViewView extends React.Component<IIssueViewViewProps, 
   private promptWindow: IWindow;
 
   constructor(props: IIssueViewViewProps) {
-    super();
+    super(props);
 
     this.handleIssueQueryBuilderChange = this.handleIssueQueryBuilderChange.bind(this);
     this.handleTaskQueryBuilderChange = this.handleTaskQueryBuilderChange.bind(this);

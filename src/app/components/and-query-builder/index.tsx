@@ -43,7 +43,7 @@ export default class AndQueryBuilder extends React.Component<IAndQueryBuilderPro
   private dropdownComponents: { [key: string]: Dropdown } = {};
 
   constructor(props: IAndQueryBuilderProps) {
-    super();
+    super(props);
 
     this.handleFilterChange = this.handleFilterChange.bind(this);
 

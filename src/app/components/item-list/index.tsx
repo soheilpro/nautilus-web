@@ -26,7 +26,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   private taskController = ServiceManager.Instance.getTaskController();
 
   constructor(props: IItemListProps) {
-    super();
+    super(props);
 
     this.handleItemSelect = this.handleItemSelect.bind(this);
     this.handleItemAction = this.handleItemAction.bind(this);

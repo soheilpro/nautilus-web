@@ -22,9 +22,8 @@ interface ICommandPaletteWindowState {
 }
 
 export default class CommandPaletteWindow extends React.Component<ICommandPaletteWindowProps, ICommandPaletteWindowState> {
-
   constructor(props: ICommandPaletteWindowProps) {
-    super();
+    super(props);
 
     this.handleContainerKeyDown = this.handleContainerKeyDown.bind(this);
     this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
