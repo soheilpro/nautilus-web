@@ -9,4 +9,3 @@ export * from './item-type';
 export * from './item';
 export * from './project';
 export * from './user';
-export * from './item-kind';

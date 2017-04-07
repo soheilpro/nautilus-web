@@ -11,6 +11,7 @@ import { ITaskChange } from './itask-change';
 import { isIssue } from './is-issue';
 import { isTask } from './is-task';
 import { entityComparer } from '../entity-comparer';
+import { ItemKind } from './item-kind';
 import IssueFilter from './issue-filter';
 import TaskFilter from './task-filter';
 
@@ -23,6 +24,12 @@ export class ItemModule extends BaseModule implements IItemModule {
 
   async load() {
     this.items = await this.client.items.getAll({});
+  }
+
+  getAllByKind(kind: ItemKind) {
+    const items = this.items.filter(item => item.kind === kind);
+
+    return Promise.resolve(items);
   }
 
   getAll(issueQuery: NQL.Expression, taskQuery: NQL.Expression) {
@@ -49,6 +56,10 @@ export class ItemModule extends BaseModule implements IItemModule {
     const items = issues.concat(tasks);
 
     return Promise.resolve(items);
+  }
+
+  get(item: IItem) {
+    return Promise.resolve(_.find(this.items, _.partial(entityComparer, item)));
   }
 
   searchIssues(query: string) {

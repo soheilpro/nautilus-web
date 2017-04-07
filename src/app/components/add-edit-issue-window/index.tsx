@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange } from '../../application';
+import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IItem } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
 import ItemPrioritySelect from '../item-priority-select';
 import ItemTypeSelect from '../item-type-select';
 import ItemStateSelect from '../item-state-select';
+import ItemSelect from '../item-select';
 import Button from '../button';
 
 require('../../assets/stylesheets/base.less');
@@ -26,6 +27,7 @@ interface IAddEditIssueWindowState {
   priority?: IItemPriority;
   state?: IItemState;
   description?: string;
+  milestone?: IItem;
 }
 
 export default class AddEditIssueWindow extends React.Component<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
@@ -39,6 +41,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
     this.handlePriorityInputChange = this.handlePriorityInputChange.bind(this);
     this.handleStateInputChange = this.handleStateInputChange.bind(this);
     this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
+    this.handleMilestoneInputChange = this.handleMilestoneInputChange.bind(this);
 
     this.state = {};
 
@@ -49,6 +52,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
       this.state.priority = props.issue.priority;
       this.state.state = props.issue.state;
       this.state.description = props.issue.description;
+      this.state.milestone = props.issue.parent;
     }
   }
 
@@ -64,6 +68,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
           state: this.state.state,
           priority: this.state.priority,
           project: this.state.project,
+          parent: this.state.milestone,
         };
 
         this.props.onAdd(issue);
@@ -77,6 +82,7 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
           state: this.state.state || null,
           priority: this.state.priority || null,
           project: this.state.project || null,
+          parent: this.state.milestone || null,
         };
 
         this.props.onUpdate(issueChange);
@@ -117,6 +123,12 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
   private handleDescriptionInputChange(value: string) {
     this.setState({
       description: value,
+    });
+  }
+
+  private handleMilestoneInputChange(value: IItem) {
+    this.setState({
+      milestone: value,
     });
   }
 
@@ -175,6 +187,14 @@ export default class AddEditIssueWindow extends React.Component<IAddEditIssueWin
               </div>
               <div className="value">
                 <Input className="description" value={this.state.description} multiline={true} selectOnFocus={true} onChange={this.handleDescriptionInputChange} />
+              </div>
+            </div>
+            <div className="field">
+              <div className="label">
+                Milestone:
+              </div>
+              <div className="value">
+                <ItemSelect className="state" item={this.state.milestone} kind="milestone" onChange={this.handleMilestoneInputChange} />
               </div>
             </div>
           </form>

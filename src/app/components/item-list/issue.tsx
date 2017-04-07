@@ -6,6 +6,7 @@ import TextField from '../text-field';
 import ItemTypeField from '../item-type-field';
 import ItemPriorityField from '../item-priority-field';
 import ItemStateField from '../item-state-field';
+import ItemField from '../item-field';
 
 require('../../assets/stylesheets/base.less');
 require('./issue.less');
@@ -51,6 +52,12 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
           this.props.issue.state &&
             <span className="state">
               <ItemStateField itemState={this.props.issue.state} />
+            </span>
+        }
+        {
+          this.props.issue.parent &&
+            <span className="milestone">
+              <ItemField item={this.props.issue.parent} />
             </span>
         }
       </div>

@@ -5,6 +5,7 @@ import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';
 import { IItemType } from '../../sdk';
 import { IItemTypeModule } from './iitem-type-module';
+import { ItemKind } from '../item';
 
 export class ItemTypeModule extends BaseModule implements IItemTypeModule {
   private itemTypes: IItemType[];
@@ -17,7 +18,7 @@ export class ItemTypeModule extends BaseModule implements IItemTypeModule {
     this.itemTypes = await this.client.itemTypes.getAll({});
   }
 
-  getAll(itemKind: string) {
+  getAll(itemKind: ItemKind) {
     return this.itemTypes.filter(itemType => itemType.itemKind === itemKind);
   }
 

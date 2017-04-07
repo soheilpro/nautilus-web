@@ -5,6 +5,7 @@ import { BaseModule } from '../base-module';
 import { entityComparer } from '../entity-comparer';
 import { IItemPriority } from '../../sdk';
 import { IItemPriorityModule } from './iitem-priority-module';
+import { ItemKind } from '../item';
 
 export class ItemPriorityModule extends BaseModule implements IItemPriorityModule {
   private itemPriorities: IItemPriority[];
@@ -17,7 +18,7 @@ export class ItemPriorityModule extends BaseModule implements IItemPriorityModul
     this.itemPriorities = await this.client.itemPriorities.getAll({});
   }
 
-  getAll(itemKind: string) {
+  getAll(itemKind: ItemKind) {
     return this.itemPriorities.filter(itemPriority => itemPriority.itemKind === itemKind);
   }
 

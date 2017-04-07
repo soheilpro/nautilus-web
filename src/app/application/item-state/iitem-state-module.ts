@@ -1,6 +1,6 @@
 import { IModule } from '../imodule';
 import { IItemState } from '../../sdk';
-import { ItemKind } from '../item-kind';
+import { ItemKind } from '../item';
 
 export interface IItemStateModule extends IModule {
   getAll(itemKind: ItemKind): IItemState[];

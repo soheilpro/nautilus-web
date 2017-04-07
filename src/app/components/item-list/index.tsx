@@ -86,6 +86,9 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
 
       const parent = findItemById(item.parent.id);
 
+      if (!parent)
+        return [];
+
       return getParents(parent).concat(parent);
     };
 
