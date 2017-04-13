@@ -141,7 +141,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           </div>
           <div className="items row">
             <div className="item-list">
-              <ItemList items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={true} onItemSelect={this.handleItemListItemSelect} />
+              <ItemList items={this.state.items} selectedItem={this.state.selectedItem} onItemSelect={this.handleItemListItemSelect} />
             </div>
             <div className="item-detail">
               {

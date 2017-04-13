@@ -13,7 +13,6 @@ interface IListItem {
 interface IListProps {
   items: IListItem[];
   selectedItem?: IListItem;
-  autoFocus?: boolean;
   renderItem(item: IListItem, index: number): JSX.Element;
   onItemSelect?(item: IListItem): void;
   onItemAction?(item: IListItem): void;
@@ -27,6 +26,7 @@ interface IListState {
 
 export default class List extends React.Component<IListProps, IListState> {
   private componentElement: HTMLElement;
+  private selectedItemElement: HTMLElement;
 
   constructor(props: IListProps) {
     super(props);
@@ -42,16 +42,15 @@ export default class List extends React.Component<IListProps, IListState> {
     };
   }
 
-  componentDidMount() {
-    if (this.props.autoFocus)
-      this.componentElement.focus();
+  componentDidUpdate() {
+    if (this.state.isFocused && this.selectedItemElement)
+      this.selectedItemElement.focus();
   }
 
   componentWillReceiveProps(props: IListProps) {
     let selectedItem = props.selectedItem;
 
     if (!selectedItem) {
-
       // Handle deleted item
       if (props.items.indexOf(this.state.selectedItem) === -1) {
         let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
@@ -147,11 +146,11 @@ export default class List extends React.Component<IListProps, IListState> {
 
   render() {
     return (
-      <div className={classNames('list-component', { focused: this.state.isFocused })} tabIndex={0} onKeyDown={this.handleListKeyDown} onFocus={this.handleListFocus} onBlur={this.handleListBlur} ref={e => this.componentElement = e}>
+      <div className={classNames('list-component', { focused: this.state.isFocused })} onKeyDown={this.handleListKeyDown} onFocus={this.handleListFocus} onBlur={this.handleListBlur} ref={e => this.componentElement = e}>
         {
           this.props.items.map((item, index) => {
             return (
-              <div className={classNames('item', { selected: this.state.selectedItem === item })} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id}>
+              <div className={classNames('item', { selected: this.state.selectedItem === item })} tabIndex={0} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id} ref={e => { if (this.state.selectedItem === item) this.selectedItemElement = e; }}>
                 {this.props.renderItem(item, index)}
               </div>
             );

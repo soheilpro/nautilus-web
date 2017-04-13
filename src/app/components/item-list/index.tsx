@@ -12,7 +12,6 @@ require('./index.less');
 interface IItemListProps {
   items?: IItem[];
   selectedItem?: IItem;
-  autoFocus?: boolean;
   onItemSelect?(item: IItem): void;
 }
 
@@ -136,7 +135,7 @@ export default class ItemList extends React.Component<IItemListProps, IItemListS
   render() {
     return (
       <div className="item-list-component">
-        <List items={this.state.items} selectedItem={this.state.selectedItem} autoFocus={this.props.autoFocus} renderItem={this.renderItem} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} onItemDelete={this.handleItemDelete} />
+        <List items={this.state.items} selectedItem={this.state.selectedItem} renderItem={this.renderItem} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} onItemDelete={this.handleItemDelete} />
       </div>
     );
   }
