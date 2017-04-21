@@ -21,10 +21,10 @@ export default class IssueQueryBuilder extends React.Component<IIssueQueryBuilde
   private andQueryBuilderComponent: AndQueryBuilder;
 
   private queryBuilders: IQueryBuilder[] = [
-    { key: 'milestone', title: 'Milestone',  queryItem: 'milestone', Component: ItemQueryBuilder,         props: { itemKind: 'milestone' as ItemKind } },
-    { key: 'project',   title: 'Project',    queryItem: 'project',   Component: ProjectQueryBuilder},
     { key: 'type',      title: 'Type',       queryItem: 'type',      Component: ItemTypeQueryBuilder,     props: { itemKind: 'issue' as ItemKind } },
     { key: 'priority',  title: 'Priority',   queryItem: 'priority',  Component: ItemPriorityQueryBuilder, props: { itemKind: 'issue' as ItemKind } },
+    { key: 'project',   title: 'Project',    queryItem: 'project',   Component: ProjectQueryBuilder},
+    { key: 'milestone', title: 'Milestone',  queryItem: 'milestone', Component: ItemQueryBuilder,         props: { itemKind: 'milestone' as ItemKind } },
     { key: 'state',     title: 'State',      queryItem: 'state',     Component: ItemStateQueryBuilder,    props: { itemKind: 'issue' as ItemKind } },
     { key: 'createdBy', title: 'Created By', queryItem: 'createdBy', Component: UserQueryBuilder },
   ];

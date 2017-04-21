@@ -31,12 +31,6 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
           </span>
         }
         {
-          this.props.issue.project &&
-            <span className="project">
-              <ProjectField project={this.props.issue.project} />
-            </span>
-        }
-        {
           this.props.issue.type &&
             <span className="type">
               <ItemTypeField itemType={this.props.issue.type} />
@@ -49,15 +43,21 @@ export default class Issue extends React.Component<IIssueProps, IIssueState> {
             </span>
         }
         {
-          this.props.issue.state &&
-            <span className="state">
-              <ItemStateField itemState={this.props.issue.state} />
+          this.props.issue.project &&
+            <span className="project">
+              <ProjectField project={this.props.issue.project} />
             </span>
         }
         {
           this.props.issue.parent &&
             <span className="milestone">
               <ItemField item={this.props.issue.parent} />
+            </span>
+        }
+        {
+          this.props.issue.state &&
+            <span className="state">
+              <ItemStateField itemState={this.props.issue.state} />
             </span>
         }
       </div>

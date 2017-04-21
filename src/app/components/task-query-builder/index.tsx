@@ -18,9 +18,9 @@ export default class TaskQueryBuilder extends React.Component<ITaskQueryBuilderP
   private andQueryBuilderComponent: AndQueryBuilder;
 
   private queryBuilders: IQueryBuilder[] = [
+    { key: 'assignedTo', title: 'Assigned To', queryItem: 'assignedTo', Component: UserQueryBuilder },
     { key: 'type',       title: 'Type',        queryItem: 'type',       Component: ItemTypeQueryBuilder,  props: { itemKind: 'task' as ItemKind } },
     { key: 'state',      title: 'State',       queryItem: 'state',      Component: ItemStateQueryBuilder, props: { itemKind: 'task' as ItemKind } },
-    { key: 'assignedTo', title: 'Assigned To', queryItem: 'assignedTo', Component: UserQueryBuilder },
     { key: 'createdBy',  title: 'Created By',  queryItem: 'createdBy',  Component: UserQueryBuilder },
   ];
 

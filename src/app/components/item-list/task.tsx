@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ITask } from '../../application';
-import SidField from '../sid-field';
 import TextField from '../text-field';
 import ItemTypeField from '../item-type-field';
 import ItemStateField from '../item-state-field';
@@ -20,20 +19,18 @@ export default class Task extends React.Component<ITaskProps, ITaskState> {
   render() {
     return (
       <div className="task-component">
-        <span className="sid">
-          <SidField sid={this.props.task.sid} />
-        </span>
         <span className="arrow"></span>
+        {
+          this.props.task.assignedTo &&
+            <span className="assigned-to">
+              <UserField user={this.props.task.assignedTo} />
+            </span>
+        }
         {
           this.props.task.type &&
             <span className="type">
               <ItemTypeField itemType={this.props.task.type} />
             </span>
-        }
-        {
-          <span className="title">
-            <TextField title={this.props.task.title} />
-          </span>
         }
         {
           this.props.task.state &&
@@ -42,10 +39,9 @@ export default class Task extends React.Component<ITaskProps, ITaskState> {
             </span>
         }
         {
-          this.props.task.assignedTo &&
-            <span className="assigned-to">
-              <UserField user={this.props.task.assignedTo} />
-            </span>
+          <span className="title">
+            <TextField title={this.props.task.title} />
+          </span>
         }
       </div>
     );
