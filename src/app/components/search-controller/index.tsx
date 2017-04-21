@@ -13,7 +13,7 @@ interface ISearchControllerProps {
 interface ISearchControllerState {
 }
 
-export default class SearchController extends React.Component<ISearchControllerProps, ISearchControllerState> implements ISearchController, ICommandProvider {
+export default class SearchController extends React.PureComponent<ISearchControllerProps, ISearchControllerState> implements ISearchController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private searchWindow: IWindow;

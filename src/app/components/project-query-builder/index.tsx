@@ -15,7 +15,7 @@ interface IProjectQueryBuilderState {
   projects?: IProject[];
 }
 
-export default class ProjectQueryBuilder extends React.Component<IProjectQueryBuilderProps, IProjectQueryBuilderState> {
+export default class ProjectQueryBuilder extends React.PureComponent<IProjectQueryBuilderProps, IProjectQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

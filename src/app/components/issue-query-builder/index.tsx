@@ -17,7 +17,7 @@ interface IIssueQueryBuilderProps {
 interface IIssueQueryBuilderState {
 }
 
-export default class IssueQueryBuilder extends React.Component<IIssueQueryBuilderProps, IIssueQueryBuilderState> {
+export default class IssueQueryBuilder extends React.PureComponent<IIssueQueryBuilderProps, IIssueQueryBuilderState> {
   private andQueryBuilderComponent: AndQueryBuilder;
 
   private queryBuilders: IQueryBuilder[] = [

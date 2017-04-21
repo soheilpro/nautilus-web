@@ -16,7 +16,7 @@ interface IItemStateQueryBuilderState {
   itemStates?: IItemState[];
 }
 
-export default class ItemStateQueryBuilder extends React.Component<IItemStateQueryBuilderProps, IItemStateQueryBuilderState> {
+export default class ItemStateQueryBuilder extends React.PureComponent<IItemStateQueryBuilderProps, IItemStateQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

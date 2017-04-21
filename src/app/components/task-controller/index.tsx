@@ -20,7 +20,7 @@ interface ITaskControllerProps {
 interface ITaskControllerState {
 }
 
-export default class TaskController extends React.Component<ITaskControllerProps, ITaskControllerState> implements ITaskController, ICommandProvider {
+export default class TaskController extends React.PureComponent<ITaskControllerProps, ITaskControllerState> implements ITaskController, ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private contextManager = ServiceManager.Instance.getContextManager();
   private actionManager = ServiceManager.Instance.getActionManager();

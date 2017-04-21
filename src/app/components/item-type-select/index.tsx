@@ -15,7 +15,7 @@ interface IItemTypeSelectState {
   itemTypes?: IItemType[];
 }
 
-export default class ItemTypeSelect extends React.Component<IItemTypeSelectProps, IItemTypeSelectState> {
+export default class ItemTypeSelect extends React.PureComponent<IItemTypeSelectProps, IItemTypeSelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

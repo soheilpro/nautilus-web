@@ -33,7 +33,7 @@ interface IListQueryBuilderState {
   excludedItems?: IItem[];
 }
 
-export default class ListQueryBuilder extends React.Component<IListQueryBuilderProps, IListQueryBuilderState> {
+export default class ListQueryBuilder extends React.PureComponent<IListQueryBuilderProps, IListQueryBuilderState> {
   constructor(props: IListQueryBuilderProps) {
     super(props);
 

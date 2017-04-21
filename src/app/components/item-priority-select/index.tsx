@@ -15,7 +15,7 @@ interface IItemPrioritySelectState {
   itemPriorities?: IItemPriority[];
 }
 
-export default class ItemPrioritySelect extends React.Component<IItemPrioritySelectProps, IItemPrioritySelectState> {
+export default class ItemPrioritySelect extends React.PureComponent<IItemPrioritySelectProps, IItemPrioritySelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

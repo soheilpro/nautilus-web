@@ -13,7 +13,7 @@ interface ICommandControllerProps {
 interface ICommandControllerState {
 }
 
-export default class CommandController extends React.Component<ICommandControllerProps, ICommandControllerState> implements ICommandController, ICommandProvider {
+export default class CommandController extends React.PureComponent<ICommandControllerProps, ICommandControllerState> implements ICommandController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private commandShortcutsDisabledCounter: number = 0;

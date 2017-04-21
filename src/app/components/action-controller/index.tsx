@@ -10,7 +10,7 @@ interface IActionControllerProps {
 interface IActionControllerState {
 }
 
-export default class ActionController extends React.Component<IActionControllerProps, IActionControllerState> implements IActionController, ICommandProvider {
+export default class ActionController extends React.PureComponent<IActionControllerProps, IActionControllerState> implements IActionController, ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   componentWillMount() {
@@ -28,7 +28,6 @@ export default class ActionController extends React.Component<IActionControllerP
       new UndoLastActionCommand(),
     ];
   }
-
 
   render() {
     return (

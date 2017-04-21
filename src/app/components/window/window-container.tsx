@@ -15,7 +15,7 @@ interface IWindowContainerState {
   zIndex?: number;
 }
 
-export class WindowContainer extends React.Component<IWindowContainerProps, IWindowContainerState> {
+export class WindowContainer extends React.PureComponent<IWindowContainerProps, IWindowContainerState> {
   static defaultProps = {
     position: 'fixed',
     closeOnBlur: true,

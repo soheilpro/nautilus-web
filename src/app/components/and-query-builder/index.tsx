@@ -13,7 +13,7 @@ interface IQueryBuilderProps {
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
-declare class QueryBuilder extends React.Component<IQueryBuilderProps, {}> {
+declare class QueryBuilder extends React.PureComponent<IQueryBuilderProps, {}> {
   static canParseQuery(query: NQL.Expression, queryItem: string): void;
 }
 
@@ -39,7 +39,7 @@ interface IAndQueryBuilderState {
   queries?: IQueryObject;
 }
 
-export default class AndQueryBuilder extends React.Component<IAndQueryBuilderProps, IAndQueryBuilderState> {
+export default class AndQueryBuilder extends React.PureComponent<IAndQueryBuilderProps, IAndQueryBuilderState> {
   private dropdownComponents: { [key: string]: Dropdown } = {};
 
   constructor(props: IAndQueryBuilderProps) {

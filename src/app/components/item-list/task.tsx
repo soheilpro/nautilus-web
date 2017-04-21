@@ -15,7 +15,7 @@ interface ITaskProps {
 interface ITaskState {
 }
 
-export default class Task extends React.Component<ITaskProps, ITaskState> {
+export default class Task extends React.PureComponent<ITaskProps, ITaskState> {
   render() {
     return (
       <div className="task-component">

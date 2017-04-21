@@ -20,7 +20,7 @@ interface IIssueControllerProps {
 interface IIssueControllerState {
 }
 
-export default class IssueController extends React.Component<IIssueControllerProps, IIssueControllerState> implements IIssueController, ICommandProvider {
+export default class IssueController extends React.PureComponent<IIssueControllerProps, IIssueControllerState> implements IIssueController, ICommandProvider {
   private application = ServiceManager.Instance.getApplication();
   private contextManager = ServiceManager.Instance.getContextManager();
   private actionManager = ServiceManager.Instance.getActionManager();

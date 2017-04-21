@@ -10,7 +10,7 @@ interface INavigationProps {
 interface INavigationState {
 }
 
-export default class Navigation extends React.Component<INavigationProps, INavigationState> {
+export default class Navigation extends React.PureComponent<INavigationProps, INavigationState> {
   render() {
     return (
       <div className="navigation-component">

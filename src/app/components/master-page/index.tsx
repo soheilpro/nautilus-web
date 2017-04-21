@@ -11,7 +11,7 @@ interface IMasterPageProps {
 interface IMasterPageState {
 }
 
-export default class MasterPage extends React.Component<IMasterPageProps, IMasterPageState> {
+export default class MasterPage extends React.PureComponent<IMasterPageProps, IMasterPageState> {
   render() {
     return (
       <div className="master-page-component">

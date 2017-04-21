@@ -13,7 +13,7 @@ interface IExpressionProps {
 interface IExpressionState {
 }
 
-export default class Expression extends React.Component<IExpressionProps, IExpressionState> {
+export default class Expression extends React.PureComponent<IExpressionProps, IExpressionState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

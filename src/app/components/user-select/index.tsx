@@ -14,7 +14,7 @@ interface IUserSelectState {
   users?: IUser[];
 }
 
-export default class UserSelect extends React.Component<IUserSelectProps, IUserSelectState> {
+export default class UserSelect extends React.PureComponent<IUserSelectProps, IUserSelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

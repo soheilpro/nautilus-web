@@ -18,7 +18,7 @@ interface IIssueProps {
 interface IIssueState {
 }
 
-export default class Issue extends React.Component<IIssueProps, IIssueState> {
+export default class Issue extends React.PureComponent<IIssueProps, IIssueState> {
   render() {
     return (
       <div className="issue-component">

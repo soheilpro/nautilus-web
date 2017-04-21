@@ -12,7 +12,7 @@ interface IHeaderProps {
 interface IHeaderState {
 }
 
-export default class Header extends React.Component<IHeaderProps, IHeaderState> {
+export default class Header extends React.PureComponent<IHeaderProps, IHeaderState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

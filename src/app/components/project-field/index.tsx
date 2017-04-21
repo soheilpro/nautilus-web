@@ -12,7 +12,7 @@ interface IProjectFieldProps {
 interface IProjectFieldState {
 }
 
-export default class ProjectField extends React.Component<IProjectFieldProps, IProjectFieldState> {
+export default class ProjectField extends React.PureComponent<IProjectFieldProps, IProjectFieldState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

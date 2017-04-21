@@ -18,7 +18,7 @@ interface IDropdownState {
   isOpen?: boolean;
 }
 
-export default class Dropdown extends React.Component<IDropdownProps, IDropdownState> {
+export default class Dropdown extends React.PureComponent<IDropdownProps, IDropdownState> {
   private rootElement: HTMLElement;
   private buttonElement: HTMLElement;
   private windowContainerComponent: WindowContainer;

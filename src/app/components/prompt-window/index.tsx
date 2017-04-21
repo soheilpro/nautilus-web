@@ -19,7 +19,7 @@ interface IPromptWindowState {
   inputText?: string;
 }
 
-export default class PromptWindow extends React.Component<IPromptWindowProps, IPromptWindowState> {
+export default class PromptWindow extends React.PureComponent<IPromptWindowProps, IPromptWindowState> {
   constructor() {
     super();
 

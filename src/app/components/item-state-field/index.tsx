@@ -12,7 +12,7 @@ interface IItemStateFieldProps {
 interface IItemStateFieldState {
 }
 
-export default class ItemStateField extends React.Component<IItemStateFieldProps, IItemStateFieldState> {
+export default class ItemStateField extends React.PureComponent<IItemStateFieldProps, IItemStateFieldState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

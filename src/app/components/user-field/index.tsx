@@ -12,7 +12,7 @@ interface IUserFieldProps {
 interface IUserFieldState {
 }
 
-export default class UserField extends React.Component<IUserFieldProps, IUserFieldState> {
+export default class UserField extends React.PureComponent<IUserFieldProps, IUserFieldState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

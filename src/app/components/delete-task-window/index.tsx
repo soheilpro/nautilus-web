@@ -12,7 +12,7 @@ interface IDeleteTaskWindowProps {
 interface IDeleteTaskWindowState {
 }
 
-export default class DeleteTaskWindow extends React.Component<IDeleteTaskWindowProps, IDeleteTaskWindowState> {
+export default class DeleteTaskWindow extends React.PureComponent<IDeleteTaskWindowProps, IDeleteTaskWindowState> {
   render() {
     return (
       <Window className="delete-task-window-component">

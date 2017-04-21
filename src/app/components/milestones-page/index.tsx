@@ -7,7 +7,7 @@ interface IMilestonesPageProps {
 interface IMilestonesPageState {
 }
 
-export default class MilestonesPage extends React.Component<IMilestonesPageProps, IMilestonesPageState> {
+export default class MilestonesPage extends React.PureComponent<IMilestonesPageProps, IMilestonesPageState> {
   render() {
     return (
       <MasterPage>

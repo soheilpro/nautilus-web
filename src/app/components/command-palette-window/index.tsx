@@ -21,7 +21,7 @@ interface ICommandPaletteWindowState {
   searchText?: string;
 }
 
-export default class CommandPaletteWindow extends React.Component<ICommandPaletteWindowProps, ICommandPaletteWindowState> {
+export default class CommandPaletteWindow extends React.PureComponent<ICommandPaletteWindowProps, ICommandPaletteWindowState> {
   constructor(props: ICommandPaletteWindowProps) {
     super(props);
 

@@ -12,7 +12,7 @@ interface IDeleteIssueWindowProps {
 interface IDeleteIssueWindowState {
 }
 
-export default class DeleteIssueWindow extends React.Component<IDeleteIssueWindowProps, IDeleteIssueWindowState> {
+export default class DeleteIssueWindow extends React.PureComponent<IDeleteIssueWindowProps, IDeleteIssueWindowState> {
   render() {
     return (
       <Window className="delete-issue-window-component">

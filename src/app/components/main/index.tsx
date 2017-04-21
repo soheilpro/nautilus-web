@@ -19,7 +19,7 @@ interface IMainProps {
 interface IMainState {
 }
 
-export default class Main extends React.Component<IMainProps, IMainState> implements ICommandProvider {
+export default class Main extends React.PureComponent<IMainProps, IMainState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   componentWillMount() {

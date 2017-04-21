@@ -30,7 +30,7 @@ interface IAddEditIssueWindowState {
   milestone?: IItem;
 }
 
-export default class AddEditIssueWindow extends React.Component<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
+export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
   constructor(props: IAddEditIssueWindowProps) {
     super(props);
 

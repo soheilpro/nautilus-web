@@ -9,7 +9,7 @@ interface IWindowContentProps {
 interface IWindowContentState {
 }
 
-export class WindowContent extends React.Component<IWindowContentProps, IWindowContentState> {
+export class WindowContent extends React.PureComponent<IWindowContentProps, IWindowContentState> {
   render() {
     return (
       <div className="window-content-component">

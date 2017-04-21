@@ -21,7 +21,7 @@ interface ISelectProps {
 interface ISelectState {
 }
 
-export default class Select extends React.Component<ISelectProps, ISelectState> {
+export default class Select extends React.PureComponent<ISelectProps, ISelectState> {
   constructor() {
     super();
 

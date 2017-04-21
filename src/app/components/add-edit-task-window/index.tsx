@@ -26,7 +26,7 @@ interface IAddEditTaskWindowState {
   description?: string;
 }
 
-export default class AddEditTaskWindow extends React.Component<IAddEditTaskWindowProps, IAddEditTaskWindowState> {
+export default class AddEditTaskWindow extends React.PureComponent<IAddEditTaskWindowProps, IAddEditTaskWindowState> {
   constructor(props: IAddEditTaskWindowProps) {
     super(props);
 

@@ -21,7 +21,7 @@ interface IViewListState {
   searchText?: string;
 }
 
-export default class ViewList extends React.Component<IViewListProps, IViewListState> {
+export default class ViewList extends React.PureComponent<IViewListProps, IViewListState> {
   constructor(props: IViewListProps) {
     super(props);
 

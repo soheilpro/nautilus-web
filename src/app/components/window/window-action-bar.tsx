@@ -9,7 +9,7 @@ interface IWindowActionBarProps {
 interface IWindowActionBarState {
 }
 
-export class WindowActionBar extends React.Component<IWindowActionBarProps, IWindowActionBarState> {
+export class WindowActionBar extends React.PureComponent<IWindowActionBarProps, IWindowActionBarState> {
   render() {
     return (
       <div className="window-action-bar-component">

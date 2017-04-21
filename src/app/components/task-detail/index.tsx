@@ -11,7 +11,7 @@ interface ITaskDetailProps {
 interface ITaskDetailState {
 }
 
-export default class TaskDetail extends React.Component<ITaskDetailProps, ITaskDetailState> {
+export default class TaskDetail extends React.PureComponent<ITaskDetailProps, ITaskDetailState> {
   render() {
     return (
       <div className="task-detail-component">

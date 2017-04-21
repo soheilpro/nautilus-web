@@ -24,7 +24,7 @@ interface IListState {
   selectedItem?: IListItem;
 }
 
-export default class List extends React.Component<IListProps, IListState> {
+export default class List extends React.PureComponent<IListProps, IListState> {
   private componentElement: HTMLElement;
   private selectedItemElement: HTMLElement;
 

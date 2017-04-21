@@ -9,7 +9,7 @@ interface IWindowHeaderProps {
 interface IWindowHeaderState {
 }
 
-export class WindowHeader extends React.Component<IWindowHeaderProps, IWindowHeaderState> {
+export class WindowHeader extends React.PureComponent<IWindowHeaderProps, IWindowHeaderState> {
   render() {
     return (
       <div className="window-header-component">

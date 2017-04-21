@@ -15,7 +15,7 @@ interface ILoginState {
   error?: string;
 }
 
-export default class Login extends React.Component<ILoginProps, ILoginState> {
+export default class Login extends React.PureComponent<ILoginProps, ILoginState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

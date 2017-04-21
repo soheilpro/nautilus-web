@@ -10,7 +10,7 @@ interface IAppProps {
 interface IAppState {
 }
 
-export default class App extends React.Component<IAppProps, IAppState> {
+export default class App extends React.PureComponent<IAppProps, IAppState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

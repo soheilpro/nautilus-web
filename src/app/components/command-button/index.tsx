@@ -14,7 +14,7 @@ interface ICommandButtonProps {
 interface ICommandButtonState {
 }
 
-export default class CommandButton extends React.Component<ICommandButtonProps, ICommandButtonState> {
+export default class CommandButton extends React.PureComponent<ICommandButtonProps, ICommandButtonState> {
   private commandManager = ServiceManager.Instance.getCommandManager();
 
   constructor() {

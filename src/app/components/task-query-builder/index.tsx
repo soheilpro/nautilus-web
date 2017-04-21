@@ -14,7 +14,7 @@ interface ITaskQueryBuilderProps {
 interface ITaskQueryBuilderState {
 }
 
-export default class TaskQueryBuilder extends React.Component<ITaskQueryBuilderProps, ITaskQueryBuilderState> {
+export default class TaskQueryBuilder extends React.PureComponent<ITaskQueryBuilderProps, ITaskQueryBuilderState> {
   private andQueryBuilderComponent: AndQueryBuilder;
 
   private queryBuilders: IQueryBuilder[] = [

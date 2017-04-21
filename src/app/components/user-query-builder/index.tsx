@@ -15,7 +15,7 @@ interface IUserQueryBuilderState {
   users?: IUser[];
 }
 
-export default class UserQueryBuilder extends React.Component<IUserQueryBuilderProps, IUserQueryBuilderState> {
+export default class UserQueryBuilder extends React.PureComponent<IUserQueryBuilderProps, IUserQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

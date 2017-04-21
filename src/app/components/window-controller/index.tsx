@@ -19,7 +19,7 @@ interface IWindowControllerState {
   windows?: IExtendedWindow[];
 }
 
-export default class WindowController extends React.Component<IWindowControllerProps, IWindowControllerState> implements IWindowController {
+export default class WindowController extends React.PureComponent<IWindowControllerProps, IWindowControllerState> implements IWindowController {
   private windowKeyCounter = 0;
   private elementToFocus?: HTMLElement;
 

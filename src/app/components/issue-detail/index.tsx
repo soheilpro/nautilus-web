@@ -11,7 +11,7 @@ interface IIssueDetailProps {
 interface IIssueDetailState {
 }
 
-export default class IssueDetail extends React.Component<IIssueDetailProps, IIssueDetailState> {
+export default class IssueDetail extends React.PureComponent<IIssueDetailProps, IIssueDetailState> {
   render() {
     return (
       <div className="issue-detail-component">

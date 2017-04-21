@@ -10,7 +10,7 @@ interface ISidFieldProps {
 interface ISidFieldState {
 }
 
-export default class SidField extends React.Component<ISidFieldProps, ISidFieldState> {
+export default class SidField extends React.PureComponent<ISidFieldProps, ISidFieldState> {
   render() {
     return (
       <div className="sid-field-component">

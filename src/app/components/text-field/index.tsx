@@ -10,7 +10,7 @@ interface ITextFieldProps {
 interface ITextFieldState {
 }
 
-export default class TextField extends React.Component<ITextFieldProps, ITextFieldState> {
+export default class TextField extends React.PureComponent<ITextFieldProps, ITextFieldState> {
   render() {
     return (
       <div className="text-field-component">

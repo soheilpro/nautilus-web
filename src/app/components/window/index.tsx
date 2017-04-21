@@ -11,7 +11,7 @@ interface IWindowProps {
 interface IWindowState {
 }
 
-export default class Window extends React.Component<IWindowProps, IWindowState> {
+export default class Window extends React.PureComponent<IWindowProps, IWindowState> {
   render() {
     return (
       <div className={classNames('window-component', this.props.className)}>

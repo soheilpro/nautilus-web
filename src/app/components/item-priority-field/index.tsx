@@ -12,7 +12,7 @@ interface IItemPriorityFieldProps {
 interface IItemPriorityFieldState {
 }
 
-export default class ItemPriorityField extends React.Component<IItemPriorityFieldProps, IItemPriorityFieldState> {
+export default class ItemPriorityField extends React.PureComponent<IItemPriorityFieldProps, IItemPriorityFieldState> {
   private application = ServiceManager.Instance.getApplication();
 
   render() {

@@ -24,7 +24,7 @@ interface IIssuesPageState {
   savedViews?: IView[];
 }
 
-export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
+export default class IssuesPage extends React.PureComponent<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private contextManager = ServiceManager.Instance.getContextManager();

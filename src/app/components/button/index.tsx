@@ -16,7 +16,7 @@ interface IButtonProps {
 interface IButtonState {
 }
 
-export default class Button extends React.Component<IButtonProps, IButtonState> {
+export default class Button extends React.PureComponent<IButtonProps, IButtonState> {
   static defaultProps = {
     type: 'primary',
     enabled: true,

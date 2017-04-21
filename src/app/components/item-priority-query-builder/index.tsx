@@ -16,7 +16,7 @@ interface IIssuePriorityQueryBuilderState {
   itemPriorities?: IItemPriority[];
 }
 
-export default class IssuePriorityQueryBuilder extends React.Component<IIssuePriorityQueryBuilderProps, IIssuePriorityQueryBuilderState> {
+export default class IssuePriorityQueryBuilder extends React.PureComponent<IIssuePriorityQueryBuilderProps, IIssuePriorityQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

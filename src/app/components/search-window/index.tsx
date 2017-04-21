@@ -26,7 +26,7 @@ interface ISearchWindowState {
   searchText?: string;
 }
 
-export default class SearchWindow extends React.Component<ISearchWindowProps, ISearchWindowState> {
+export default class SearchWindow extends React.PureComponent<ISearchWindowProps, ISearchWindowState> {
   private application = ServiceManager.Instance.getApplication();
   private searchCounter = 0;
 

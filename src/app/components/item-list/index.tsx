@@ -20,7 +20,7 @@ interface IItemListState {
   selectedItem?: IItem;
 }
 
-export default class ItemList extends React.Component<IItemListProps, IItemListState> {
+export default class ItemList extends React.PureComponent<IItemListProps, IItemListState> {
   private issueController = ServiceManager.Instance.getIssueController();
   private taskController = ServiceManager.Instance.getTaskController();
 

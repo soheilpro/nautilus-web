@@ -14,7 +14,7 @@ interface IProjectSelectState {
   projects?: IProject[];
 }
 
-export default class ProjectSelect extends React.Component<IProjectSelectProps, IProjectSelectState> {
+export default class ProjectSelect extends React.PureComponent<IProjectSelectProps, IProjectSelectState> {
   private application = ServiceManager.Instance.getApplication();
 
   constructor() {

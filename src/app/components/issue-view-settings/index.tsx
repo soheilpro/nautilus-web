@@ -42,7 +42,7 @@ interface IIssueViewViewState {
   savedViews?: IView[];
 }
 
-export default class IssueViewView extends React.Component<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
+export default class IssueViewView extends React.PureComponent<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private queryBuilderComponents: { [itemKind: string]: (IssueQueryBuilder | TaskQueryBuilder) } = {};
