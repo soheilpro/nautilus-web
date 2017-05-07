@@ -8,7 +8,6 @@ import Button from '../button';
 import Dropdown from '../dropdown';
 import PromptWindow from '../prompt-window';
 import IssueQueryBuilder from '../issue-query-builder';
-import TaskQueryBuilder from '../task-query-builder';
 import ViewList from './view-list';
 import { IView } from './iview';
 import { View } from './view';
@@ -17,11 +16,8 @@ import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
 import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
 import FilterIssuesByPriorityCommand from './filter-issues-by-priority-command';
 import FilterIssuesByStateCommand from './filter-issues-by-state-command';
-import FilterIssuesByCreayedByCommand from './filter-issues-by-created-by-command';
-import FilterTasksByTypeCommand from './filter-tasks-by-type-command';
-import FilterTasksByStateCommand from './filter-tasks-by-state-command';
-import FilterTasksByAssignedToCommand from './filter-tasks-by-assigned-to-command';
-import FilterTasksByCreatedByCommand from './filter-tasks-by-created-by-command';
+import FilterIssuesByAssignedToCommand from './filter-issues-by-assigned-to-command';
+import FilterIssuesByCreatedByCommand from './filter-issues-by-created-by-command';
 import ResetViewCommand from './reset-view-command';
 import SaveViewCommand from './save-view-command';
 import LoadViewCommand from './load-view-command';
@@ -38,14 +34,13 @@ interface IIssueViewViewProps {
 
 interface IIssueViewViewState {
   issueFilterQuery?: NQL.Expression;
-  taskFilterQuery?: NQL.Expression;
   savedViews?: IView[];
 }
 
 export default class IssueViewView extends React.PureComponent<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
-  private queryBuilderComponents: { [itemKind: string]: (IssueQueryBuilder | TaskQueryBuilder) } = {};
+  private queryBuilderComponents: { [itemKind: string]: (IssueQueryBuilder) } = {};
   private savedViewListDropdownComponent: Dropdown;
   private promptWindow: IWindow;
 
@@ -53,7 +48,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     super(props);
 
     this.handleIssueQueryBuilderChange = this.handleIssueQueryBuilderChange.bind(this);
-    this.handleTaskQueryBuilderChange = this.handleTaskQueryBuilderChange.bind(this);
     this.handleResetButtonClick = this.handleResetButtonClick.bind(this);
     this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
     this.handleSavePromptWindowConfirm = this.handleSavePromptWindowConfirm.bind(this);
@@ -67,7 +61,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
     this.state = {
       issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
-      taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     };
   }
@@ -79,7 +72,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
   componentWillReceiveProps(props: IIssueViewViewProps) {
     this.setState({
       issueFilterQuery: props.view ? props.view.issueFilterQuery : undefined,
-      taskFilterQuery: props.view ? props.view.taskFilterQuery : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     });
   }
@@ -91,7 +83,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
   getCommands() {
     const view = View.create({
       issueFilterQuery: this.state.issueFilterQuery,
-      taskFilterQuery: this.state.taskFilterQuery
     });
 
     return [
@@ -100,11 +91,8 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
       new FilterIssuesByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
       new FilterIssuesByPriorityCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'priority')),
       new FilterIssuesByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'state')),
-      new FilterIssuesByCreayedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'createdBy')),
-      new FilterTasksByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'type')),
-      new FilterTasksByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'state')),
-      new FilterTasksByAssignedToCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'assignedTo')),
-      new FilterTasksByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'task', 'createdBy')),
+      new FilterIssuesByAssignedToCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'assignedTo')),
+      new FilterIssuesByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'createdBy')),
       new ResetViewCommand(view, this.handleResetViewCommandExecute),
       new SaveViewCommand(view, this.handleSaveViewCommandExecute),
       new LoadViewCommand(this.handleLoadViewCommandExecute),
@@ -120,7 +108,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
     this.setState({
       issueFilterQuery: null,
-      taskFilterQuery: null,
     });
   }
 
@@ -142,20 +129,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
   private async handleIssueQueryBuilderChange(query: NQL.Expression) {
     const view = View.create({
       issueFilterQuery: query,
-      taskFilterQuery: this.state.taskFilterQuery
-    });
-
-    this.props.onChange(view);
-
-    this.setState({
-      issueFilterQuery: query,
-    });
-  }
-
-  private async handleTaskQueryBuilderChange(query: NQL.Expression) {
-    const view = View.create({
-      issueFilterQuery: this.state.issueFilterQuery,
-      taskFilterQuery: query
     });
 
     this.props.onChange(view);
@@ -170,7 +143,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
     this.setState({
       issueFilterQuery: null,
-      taskFilterQuery: null,
     });
   }
 
@@ -191,7 +163,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     const view = View.create({
       name,
       issueFilterQuery: this.state.issueFilterQuery,
-      taskFilterQuery: this.state.taskFilterQuery
     });
 
     const savedViews = this.state.savedViews.concat(view);
@@ -232,15 +203,6 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
             </div>
             <div className="table-cell">
               <IssueQueryBuilder query={this.state.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
-            </div>
-          </div>
-          <div className="separator"></div>
-          <div className="query-builder table-row">
-            <div className="title table-cell">
-              Filter Tasks:
-            </div>
-            <div className="table-cell">
-              <TaskQueryBuilder query={this.state.taskFilterQuery} onChange={this.handleTaskQueryBuilderChange} ref={e => this.queryBuilderComponents['task'] = e} />
             </div>
           </div>
         </div>

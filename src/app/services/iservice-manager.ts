@@ -6,7 +6,6 @@ import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
 import { ISearchController } from '../search';
 import { IStorage } from '../storage';
-import { ITaskController } from '../tasks';
 import { IWindowController } from '../windows';
 
 export interface IServiceManager {
@@ -45,7 +44,4 @@ export interface IServiceManager {
 
   setIssueController(issueController: IIssueController): void;
   getIssueController(): IIssueController;
-
-  setTaskController(taskController: ITaskController): void;
-  getTaskController(): ITaskController;
 }

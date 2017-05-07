@@ -8,6 +8,7 @@ export default class IssueFilter {
     const types =  [
       { name: 'ItemType',  base: 'Entity' },
       { name: 'ItemState', base: 'Entity' },
+      { name: 'ItemPriority', base: 'Entity' },
       { name: 'Project',   base: 'Entity' },
       { name: 'User',      base: 'Entity' },
       { name: 'Item',      base: 'Entity' },
@@ -33,7 +34,7 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
     if (['state'].some(name => name === expression.name))
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'ItemState');
 
-    if (['createdBy'].some(name => name === expression.name))
+    if (['assignedTo', 'createdBy'].some(name => name === expression.name))
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'User');
 
     if (['milestone'].some(name => name === expression.name))

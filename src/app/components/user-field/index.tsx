@@ -22,7 +22,7 @@ export default class UserField extends React.PureComponent<IUserFieldProps, IUse
     const user = this.application.users.get(this.props.user);
 
     return (
-      <div className="task-assigned-to-field-component">
+      <div className="user-field-component">
         {user.name}
       </div>
     );

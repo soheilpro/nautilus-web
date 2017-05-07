@@ -7,7 +7,6 @@ import { IIssueController } from '../issues';
 import { ISearchController } from '../search';
 import { IServiceManager } from './iservice-manager';
 import { IStorage } from '../storage';
-import { ITaskController } from '../tasks';
 import { IWindowController } from '../windows';
 
 export class ServiceManager implements IServiceManager {
@@ -25,7 +24,6 @@ export class ServiceManager implements IServiceManager {
   private windowController: IWindowController;
   private searchController: ISearchController;
   private issueController: IIssueController;
-  private taskController: ITaskController;
 
   setSessionStorage(storage: IStorage) {
     this.sessionStorage = storage;
@@ -121,13 +119,5 @@ export class ServiceManager implements IServiceManager {
 
   getIssueController() {
     return this.issueController;
-  }
-
-  setTaskController(taskController: ITaskController) {
-    this.taskController = taskController;
-  }
-
-  getTaskController() {
-    return this.taskController;
   }
 }

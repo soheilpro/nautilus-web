@@ -1,10 +1,9 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, isIssue, isTask } from '../../application';
+import { IItem, isIssue } from '../../application';
 import { ServiceManager } from '../../services';
 import List from '../list';
 import Issue from './issue';
-import Task from './task';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -22,7 +21,6 @@ interface IItemListState {
 
 export default class ItemList extends React.PureComponent<IItemListProps, IItemListState> {
   private issueController = ServiceManager.Instance.getIssueController();
-  private taskController = ServiceManager.Instance.getTaskController();
 
   constructor(props: IItemListProps) {
     super(props);
@@ -58,18 +56,12 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
     if (isIssue(item))
       return this.issueController.editIssue(item);
 
-    if (isTask(item))
-      return this.taskController.editTask(item);
-
     throw new Error('Not supported.');
   }
 
   private handleItemDelete(item: IItem) {
     if (isIssue(item))
       return this.issueController.deleteIssue(item);
-
-    if (isTask(item))
-      return this.taskController.deleteTask(item);
 
     throw new Error('Not supported.');
   }
@@ -125,9 +117,6 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
   renderItem(item: IItem) {
     if (isIssue(item))
       return <Issue issue={item} />;
-
-    if (isTask(item))
-      return <Task task={item} />;
 
     throw new Error('Not supported.');
   }

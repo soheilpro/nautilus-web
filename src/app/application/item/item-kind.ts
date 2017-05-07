@@ -1,1 +1,1 @@
-export type ItemKind = 'milestone' | 'issue' | 'task';
+export type ItemKind = 'milestone' | 'issue';

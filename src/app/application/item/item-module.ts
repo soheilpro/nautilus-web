@@ -6,14 +6,10 @@ import { BaseModule } from '../base-module';
 import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
-import { ITask } from './itask';
-import { ITaskChange } from './itask-change';
 import { isIssue } from './is-issue';
-import { isTask } from './is-task';
 import { entityComparer } from '../entity-comparer';
 import { ItemKind } from './item-kind';
 import IssueFilter from './issue-filter';
-import TaskFilter from './task-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
   private items: IItem[];
@@ -32,7 +28,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(items);
   }
 
-  getAll(issueQuery: NQL.Expression, taskQuery: NQL.Expression) {
+  getAll(issueQuery: NQL.Expression) {
     let issues = this.items.filter(isIssue);
 
     if (issueQuery) {
@@ -42,20 +38,7 @@ export class ItemModule extends BaseModule implements IItemModule {
       issues = issues.filter(predicate);
     }
 
-    let tasks = this.items.filter(item => isTask(item) && issues.some(issue => entityComparer(item.parent, issue)));
-
-    if (taskQuery) {
-      const taskFilter = new TaskFilter();
-      const predicate = taskFilter.getPredicate(taskQuery);
-      tasks = tasks.filter(predicate);
-
-      // Remove issues that are not parent of any tasks
-      issues = issues.filter(issue => tasks.some(task => entityComparer(task.parent, issue)));
-    }
-
-    const items = issues.concat(tasks);
-
-    return Promise.resolve(items);
+    return Promise.resolve(issues);
   }
 
   get(item: IItem) {
@@ -83,13 +66,6 @@ export class ItemModule extends BaseModule implements IItemModule {
     return this.add(issue);
   }
 
-  async addTask(task: ITask, issue: IIssue) {
-    task.kind = 'task';
-    task.parent = issue;
-
-    return this.add(task);
-  }
-
   private async update(itemId: string, itemChange: IItemChange) {
     const item = await this.client.items.update(itemId, itemChange);
 
@@ -104,10 +80,6 @@ export class ItemModule extends BaseModule implements IItemModule {
     return this.update(issueId, issueChange);
   }
 
-  async updateTask(taskId: string, taskChange: ITaskChange) {
-    return this.update(taskId, taskChange);
-  }
-
   private async delete(item: IItem) {
     await this.client.items.delete(item.id);
 
@@ -118,9 +90,5 @@ export class ItemModule extends BaseModule implements IItemModule {
 
   async deleteIssue(issue: IIssue)  {
     return this.delete(issue);
-  }
-
-  async deleteTask(task: ITask)  {
-    return this.delete(task);
   }
 }

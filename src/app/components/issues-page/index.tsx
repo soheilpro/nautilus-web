@@ -1,11 +1,10 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, isIssue, isTask } from '../../application';
+import { IItem, isIssue } from '../../application';
 import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
-import TaskDetail from '../task-detail';
 import ItemList from '../item-list';
 import MasterPage from '../master-page';
 import CommandButton from '../command-button';
@@ -54,7 +53,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   }
 
   async componentDidMount() {
-    const items = await this.application.items.getAll(null, null);
+    const items = await this.application.items.getAll(null);
 
     this.setState({
       items,
@@ -78,27 +77,26 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   getContext() {
     return {
       'activeIssue': isIssue(this.state.selectedItem) ? this.state.selectedItem : undefined,
-      'activeTask': isTask(this.state.selectedItem) ? this.state.selectedItem : undefined,
     };
   }
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null, null),
+      items: await this.application.items.getAll(null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsUpdate({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null, null),
+      items: await this.application.items.getAll(null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsDelete({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null, null),
+      items: await this.application.items.getAll(null),
       selectedItem: undefined,
     });
   }
@@ -110,7 +108,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   }
 
   private async handleIssueViewSettingsChange(view: IView) {
-    const items = await this.application.items.getAll(view.issueFilterQuery, view.taskFilterQuery);
+    const items = await this.application.items.getAll(view.issueFilterQuery);
 
     this.setState({
       items,
@@ -133,7 +131,6 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
         <div className="issues-page-component">
           <div className="action-bar">
             <CommandButton commandId="new-issue"><Icon name="plus" position="before" /> New Issue</CommandButton>
-            <CommandButton commandId="new-task" enabled={isIssue(this.state.selectedItem)}><Icon name="plus" position="before" /> New Task</CommandButton>
             <CommandButton commandId="refresh" type="secondary"><Icon name="refresh" /></CommandButton>
           </div>
           <div className="view-settings row">
@@ -145,12 +142,8 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
             </div>
             <div className="item-detail">
               {
-                isIssue(this.state.selectedItem) &&
+                this.state.selectedItem &&
                   <IssueDetail issue={this.state.selectedItem} />
-              }
-              {
-                isTask(this.state.selectedItem) &&
-                  <TaskDetail task={this.state.selectedItem} />
               }
             </div>
           </div>

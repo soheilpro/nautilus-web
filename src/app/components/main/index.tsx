@@ -6,7 +6,6 @@ import CommandController from '../command-controller';
 import ActionController from '../action-controller';
 import IssueController from '../issue-controller';
 import SearchController from '../search-controller';
-import TaskController from '../task-controller';
 import WindowController from '../window-controller';
 import IssuesPage from '../issues-page';
 import MilestonesPage from '../milestones-page';
@@ -44,7 +43,6 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
         <ActionController />
         <SearchController />
         <IssueController />
-        <TaskController />
         <Router history={browserHistory}>
           <Route path="/" component={IssuesPage}/>
           <Route path="/milestones" component={MilestonesPage}/>
