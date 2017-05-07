@@ -5,6 +5,7 @@ require('./index.less');
 
 interface ITextFieldProps {
   title: string;
+  style?: object;
 }
 
 interface ITextFieldState {
@@ -13,7 +14,7 @@ interface ITextFieldState {
 export default class TextField extends React.PureComponent<ITextFieldProps, ITextFieldState> {
   render() {
     return (
-      <div className="text-field-component">
+      <div className="text-field-component" style={this.props.style}>
         {this.props.title}
       </div>
     );
