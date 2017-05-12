@@ -24,12 +24,12 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
   private application = ServiceManager.Instance.getApplication();
 
   private styleForState(state: IItemState) {
-    if (!state)
-      return null;
-
     let style = {
       'padding': '1px 5px',
     };
+
+    if (!state)
+      return style;
 
     switch (state.key) {
       case 'todo':
@@ -69,6 +69,7 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
         <span className="sid">
           <SidField sid={this.props.issue.sid} />
         </span>
+        <span className="divider1"></span>
         {
           <span className="title">
             <TextField title={this.props.issue.title} style={this.styleForState(state)} />
@@ -78,30 +79,35 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
         {
           this.props.issue.project &&
             <span className="project">
+              <span className="divider2"></span>
               <ProjectField project={this.props.issue.project} />
             </span>
         }
         {
           this.props.issue.type &&
             <span className="type">
+              <span className="divider2"></span>
               <ItemTypeField itemType={this.props.issue.type} />
             </span>
         }
         {
           this.props.issue.priority &&
             <span className="priority">
+              <span className="divider2"></span>
               <ItemPriorityField itemPriority={this.props.issue.priority} />
             </span>
         }
         {
           this.props.issue.state &&
             <span className="state">
+              <span className="divider2"></span>
               <ItemStateField itemState={this.props.issue.state} />
             </span>
         }
         {
           this.props.issue.parent &&
             <span className="milestone">
+              <span className="divider2"></span>
               <ItemField item={this.props.issue.parent} />
             </span>
         }

@@ -13,9 +13,9 @@ interface ISidFieldState {
 export default class SidField extends React.PureComponent<ISidFieldProps, ISidFieldState> {
   render() {
     return (
-      <div className="sid-field-component">
+      <span className="sid-field-component">
         {this.props.sid}
-      </div>
+      </span>
     );
   }
 };

@@ -22,9 +22,9 @@ export default class ProjectField extends React.PureComponent<IProjectFieldProps
     const project = this.application.projects.get(this.props.project);
 
     return (
-      <div className="project-field-component">
+      <span className="project-field-component">
         {project.name}
-      </div>
+      </span>
     );
   }
 };

@@ -37,7 +37,7 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
 
   render() {
     return (
-      <div>
+      <div className="main-component rtl">
         <WindowController />
         <CommandController />
         <ActionController />

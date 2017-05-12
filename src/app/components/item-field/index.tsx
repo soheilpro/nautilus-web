@@ -39,9 +39,9 @@ export default class ItemField extends React.PureComponent<IItemFieldProps, IIte
       return null;
 
     return (
-      <div className="item-field-component">
+      <span className="item-field-component">
         {this.state.item.title}
-      </div>
+      </span>
     );
   }
 };

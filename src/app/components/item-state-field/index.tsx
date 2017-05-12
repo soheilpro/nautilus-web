@@ -22,9 +22,9 @@ export default class ItemStateField extends React.PureComponent<IItemStateFieldP
     const itemState = this.application.itemStates.get(this.props.itemState);
 
     return (
-      <div className="item-state-field-component">
+      <span className="item-state-field-component">
         {itemState.title}
-      </div>
+      </span>
     );
   }
 };

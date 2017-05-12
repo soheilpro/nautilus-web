@@ -14,9 +14,9 @@ interface ITextFieldState {
 export default class TextField extends React.PureComponent<ITextFieldProps, ITextFieldState> {
   render() {
     return (
-      <div className="text-field-component" style={this.props.style}>
+      <span className="text-field-component" style={this.props.style}>
         {this.props.title}
-      </div>
+      </span>
     );
   }
 };

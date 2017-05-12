@@ -140,6 +140,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
             <div className="item-list">
               <ItemList items={this.state.items} selectedItem={this.state.selectedItem} onItemSelect={this.handleItemListItemSelect} />
             </div>
+            <div className="divider"></div>
             <div className="item-detail">
               {
                 this.state.selectedItem &&

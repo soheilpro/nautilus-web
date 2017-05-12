@@ -22,9 +22,9 @@ export default class ItemTypeField extends React.PureComponent<IItemTypeFieldPro
     const itemType = this.application.itemTypes.get(this.props.itemType);
 
     return (
-      <div className="item-type-field-component">
+      <span className="item-type-field-component">
         {itemType.title}
-      </div>
+      </span>
     );
   }
 };

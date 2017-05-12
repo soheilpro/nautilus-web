@@ -22,9 +22,9 @@ export default class ItemPriorityField extends React.PureComponent<IItemPriority
     const itemPriority = this.application.itemPriorities.get(this.props.itemPriority);
 
     return (
-      <div className="item-priority-field-component">
+      <span className="item-priority-field-component">
         {itemPriority.title}
-      </div>
+      </span>
     );
   }
 };

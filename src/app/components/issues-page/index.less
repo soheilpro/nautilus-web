@@ -14,15 +14,27 @@
   }
 
   .items {
+    display: flex;
+
     .item-list {
-      float: left;
+      flex: 1;
       width: ~"calc(100% - 300px - 10px)";
     }
 
+    .divider {
+      width: 10px;
+    }
+
     .item-detail {
-      float: right;
       width: 300px;
-      margin-left: 10px;
+    }
+  }
+}
+
+.rtl {
+  .issues-page-component {
+    .items {
+      direction: rtl;
     }
   }
 }
