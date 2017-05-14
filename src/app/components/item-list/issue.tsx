@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IIssue, IItemState } from '../../application';
+import { IIssue, IItemState, IItemPriority } from '../../application';
 import { ServiceManager } from '../../services';
 import ProjectField from '../project-field';
 import SidField from '../sid-field';
@@ -23,9 +23,9 @@ interface IIssueState {
 export default class Issue extends React.PureComponent<IIssueProps, IIssueState> {
   private application = ServiceManager.Instance.getApplication();
 
-  private styleForState(state: IItemState) {
+  private getStyleForTitle(state: IItemState) {
     let style = {
-      'padding': '1px 5px',
+      padding: '1px 5px',
     };
 
     if (!state)
@@ -61,8 +61,38 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
     return null;
   }
 
+  private getStyleForPriority(priority: IItemPriority) {
+    let style = {
+      padding: '2px 4px',
+      borderRadius: '2px',
+      color: '#fff',
+      textTransform: 'lowercase',
+      fontSize: '.8em',
+    };
+
+    if (!priority)
+      return style;
+
+    switch (priority.key) {
+      case 'high':
+        return {
+          ...style,
+          backgroundColor: '#ff9800',
+        };
+
+      case 'critical':
+        return {
+          ...style,
+          backgroundColor: '#f44336',
+        };
+    }
+
+    return null;
+  }
+
   render() {
     const state = this.application.itemStates.get(this.props.issue.state);
+    const priority = this.application.itemPriorities.get(this.props.issue.priority);
 
     return (
       <div className="issue-component">
@@ -72,8 +102,15 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
         <span className="divider1"></span>
         {
           <span className="title">
-            <TextField title={this.props.issue.title} style={this.styleForState(state)} />
+            <TextField title={this.props.issue.title} style={this.getStyleForTitle(state)} />
           </span>
+        }
+        {
+          this.props.issue.priority &&
+            <span className="priority">
+              <span className="divider2"></span>
+              <ItemPriorityField itemPriority={this.props.issue.priority} style={this.getStyleForPriority(priority)} />
+            </span>
         }
         <span className="spacer"></span>
         {
@@ -88,13 +125,6 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
             <span className="type">
               <span className="divider2"></span>
               <ItemTypeField itemType={this.props.issue.type} />
-            </span>
-        }
-        {
-          this.props.issue.priority &&
-            <span className="priority">
-              <span className="divider2"></span>
-              <ItemPriorityField itemPriority={this.props.issue.priority} />
             </span>
         }
         {

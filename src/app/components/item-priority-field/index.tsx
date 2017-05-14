@@ -7,6 +7,7 @@ require('./index.less');
 
 interface IItemPriorityFieldProps {
   itemPriority: IItemPriority;
+  style?: object;
 }
 
 interface IItemPriorityFieldState {
@@ -22,7 +23,7 @@ export default class ItemPriorityField extends React.PureComponent<IItemPriority
     const itemPriority = this.application.itemPriorities.get(this.props.itemPriority);
 
     return (
-      <span className="item-priority-field-component">
+      <span className="item-priority-field-component" style={this.props.style}>
         {itemPriority.title}
       </span>
     );
