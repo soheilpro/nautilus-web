@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IItem } from '../../application';
+import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IItem, IUser } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
@@ -7,6 +7,7 @@ import ItemPrioritySelect from '../item-priority-select';
 import ItemTypeSelect from '../item-type-select';
 import ItemStateSelect from '../item-state-select';
 import ItemSelect from '../item-select';
+import UserSelect from '../user-select';
 import Button from '../button';
 
 require('../../assets/stylesheets/base.less');
@@ -22,11 +23,12 @@ interface IAddEditIssueWindowProps {
 
 interface IAddEditIssueWindowState {
   title?: string;
+  description?: string;
   project?: IProject;
   type?: IItemType;
   priority?: IItemPriority;
   state?: IItemState;
-  description?: string;
+  assignedTo?: IUser;
   milestone?: IItem;
 }
 
@@ -36,22 +38,24 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleTitleInputChange = this.handleTitleInputChange.bind(this);
+    this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
     this.handleProjectSelectChange = this.handleProjectSelectChange.bind(this);
     this.handleTypeInputChange = this.handleTypeInputChange.bind(this);
     this.handlePriorityInputChange = this.handlePriorityInputChange.bind(this);
     this.handleStateInputChange = this.handleStateInputChange.bind(this);
-    this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
+    this.handleAssignedToInputChange = this.handleAssignedToInputChange.bind(this);
     this.handleMilestoneInputChange = this.handleMilestoneInputChange.bind(this);
 
     this.state = {};
 
     if (props.issue) {
       this.state.title = props.issue.title;
+      this.state.description = props.issue.description;
       this.state.project = props.issue.project;
       this.state.type = props.issue.type;
       this.state.priority = props.issue.priority;
       this.state.state = props.issue.state;
-      this.state.description = props.issue.description;
+      this.state.assignedTo = props.issue.assignedTo;
       this.state.milestone = props.issue.parent;
     }
   }
@@ -62,12 +66,13 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     switch (this.props.mode) {
       case 'add':
         const issue: IIssue = {
-          type: this.state.type,
           title: this.state.title,
           description: this.state.description,
-          state: this.state.state,
-          priority: this.state.priority,
           project: this.state.project,
+          type: this.state.type,
+          priority: this.state.priority,
+          state: this.state.state,
+          assignedTo: this.state.assignedTo,
           parent: this.state.milestone,
         };
 
@@ -76,12 +81,13 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
 
       case 'edit':
         const issueChange: IIssueChange = {
-          type: this.state.type || null,
           title: this.state.title,
           description: this.state.description,
-          state: this.state.state || null,
-          priority: this.state.priority || null,
           project: this.state.project || null,
+          type: this.state.type || null,
+          priority: this.state.priority || null,
+          state: this.state.state || null,
+          assignedTo: this.state.assignedTo || null,
           parent: this.state.milestone || null,
         };
 
@@ -93,6 +99,12 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
   private handleTitleInputChange(value: string) {
     this.setState({
       title: value,
+    });
+  }
+
+  private handleDescriptionInputChange(value: string) {
+    this.setState({
+      description: value,
     });
   }
 
@@ -120,9 +132,9 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     });
   }
 
-  private handleDescriptionInputChange(value: string) {
+  private handleAssignedToInputChange(value: IItemState) {
     this.setState({
-      description: value,
+      assignedTo: value,
     });
   }
 
@@ -147,6 +159,14 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
               </div>
               <div className="value">
                 <Input className="title" value={this.state.title} autoFocus={true} selectOnFocus={true} onChange={this.handleTitleInputChange} />
+              </div>
+            </div>
+            <div className="field">
+              <div className="label">
+                Description:
+              </div>
+              <div className="value">
+                <Input className="description" value={this.state.description} multiline={true} selectOnFocus={true} onChange={this.handleDescriptionInputChange} />
               </div>
             </div>
             <div className="field">
@@ -183,10 +203,10 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
             </div>
             <div className="field">
               <div className="label">
-                Description:
+                Assigned To:
               </div>
               <div className="value">
-                <Input className="description" value={this.state.description} multiline={true} selectOnFocus={true} onChange={this.handleDescriptionInputChange} />
+                <UserSelect className="assigned-to-state" user={this.state.assignedTo} onChange={this.handleAssignedToInputChange} />
               </div>
             </div>
             <div className="field">

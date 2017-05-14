@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as classNames from 'classnames';
 import { IIssue, IItemState } from '../../application';
 import { ServiceManager } from '../../services';
 import ProjectField from '../project-field';
@@ -9,6 +8,7 @@ import ItemTypeField from '../item-type-field';
 import ItemPriorityField from '../item-priority-field';
 import ItemStateField from '../item-state-field';
 import ItemField from '../item-field';
+import UserField from '../user-field';
 
 require('../../assets/stylesheets/base.less');
 require('./issue.less');
@@ -65,7 +65,7 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
     const state = this.application.itemStates.get(this.props.issue.state);
 
     return (
-      <div className={classNames('issue-component', state ? `state-${state.key}` : null)}>
+      <div className="issue-component">
         <span className="sid">
           <SidField sid={this.props.issue.sid} />
         </span>
@@ -102,6 +102,13 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
             <span className="state">
               <span className="divider2"></span>
               <ItemStateField itemState={this.props.issue.state} />
+            </span>
+        }
+        {
+          this.props.issue.assignedTo &&
+            <span className="assigned-to">
+              <span className="divider2"></span>
+              <UserField user={this.props.issue.assignedTo} />
             </span>
         }
         {
