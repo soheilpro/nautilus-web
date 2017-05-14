@@ -16,6 +16,9 @@ export default class IssueDetail extends React.PureComponent<IIssueDetailProps, 
     return (
       <div className="issue-detail-component">
         <div className="header">Issue #{this.props.issue.sid}</div>
+        <div className="description">
+          {this.props.issue.description}
+        </div>
       </div>
     );
   }
