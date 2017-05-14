@@ -16,7 +16,6 @@ export default class Navigation extends React.PureComponent<INavigationProps, IN
       <div className="navigation-component">
         <IndexLink to="/" activeClassName="active">Issues</IndexLink>
         <Link to="/milestones" activeClassName="active">Milestones</Link>
-        <Link to="/projects" activeClassName="active">Projects</Link>
       </div>
     );
   }

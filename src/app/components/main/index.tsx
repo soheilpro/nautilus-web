@@ -9,7 +9,6 @@ import SearchController from '../search-controller';
 import WindowController from '../window-controller';
 import IssuesPage from '../issues-page';
 import MilestonesPage from '../milestones-page';
-import ProjectsPage from '../projects-page';
 import ViewIssuesCommand from './view-issues-command';
 
 interface IMainProps {
@@ -46,7 +45,6 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
         <Router history={browserHistory}>
           <Route path="/" component={IssuesPage}/>
           <Route path="/milestones" component={MilestonesPage}/>
-          <Route path="/projects" component={ProjectsPage}/>
         </Router>
       </div>
     );
