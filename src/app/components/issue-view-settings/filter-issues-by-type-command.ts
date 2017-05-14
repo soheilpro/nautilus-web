@@ -11,7 +11,7 @@ export default class FilterIssueByTypeCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by Type';
+    return 'Filter Issues by Type';
   }
 
   get shortcut() {

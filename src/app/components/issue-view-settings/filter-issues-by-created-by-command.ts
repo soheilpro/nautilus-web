@@ -11,7 +11,7 @@ export default class FilterIssueByCreatedByCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by Created By';
+    return 'Filter Issues by Created By';
   }
 
   get shortcut() {

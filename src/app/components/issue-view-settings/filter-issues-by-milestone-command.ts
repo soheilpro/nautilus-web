@@ -11,7 +11,7 @@ export default class FilterIssueByMilestoneCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by Milestone';
+    return 'Filter Issues by Milestone';
   }
 
   get shortcut() {

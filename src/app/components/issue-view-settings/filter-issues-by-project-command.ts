@@ -11,7 +11,7 @@ export default class FilterIssueByProjectCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by Project';
+    return 'Filter Issues by Project';
   }
 
   get shortcut() {

@@ -11,7 +11,7 @@ export default class FilterIssuesByAssignedToCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by Assigned To';
+    return 'Filter Issues by Assigned To';
   }
 
   get shortcut() {

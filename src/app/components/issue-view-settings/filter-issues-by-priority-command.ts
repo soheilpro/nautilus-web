@@ -11,7 +11,7 @@ export default class FilterIssueByPriorityCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by Priority';
+    return 'Filter Issues by Priority';
   }
 
   get shortcut() {

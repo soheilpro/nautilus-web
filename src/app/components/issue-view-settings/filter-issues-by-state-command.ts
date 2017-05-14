@@ -11,7 +11,7 @@ export default class FilterIssueByStateCommand extends BaseCommand {
   }
 
   get title() {
-    return 'View: Filter Issues by State';
+    return 'Filter Issues by State';
   }
 
   get shortcut() {
