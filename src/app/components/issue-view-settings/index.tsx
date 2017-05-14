@@ -219,7 +219,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
           {
             this.state.issueFilterQuery ?
               <Expression expression={this.state.issueFilterQuery} /> :
-              <span className="all">Show all issues</span>
+              <span className="no-filter">No filters selected.</span>
           }
         </div>
       </div>
