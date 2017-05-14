@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import { ICommandProvider } from '../../commands';
+import { ICommandProvider, ICommand } from '../../commands';
 import { ISearchController } from '../../search';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import SearchWindow from '../search-window';
-import SearchCommand from './search-command';
 
 interface ISearchControllerProps {
 }
@@ -48,13 +47,12 @@ export default class SearchController extends React.PureComponent<ISearchControl
 
   getCommands() {
     return [
-      new SearchCommand(),
-    ];
+      // new SearchCommand(),
+    ] as ICommand[];
   }
 
   private handleSearchWindowIssueSelect(issue: IIssue) {
     this.windowController.closeWindow(this.searchWindow);
-    // TODO
   }
 
   render() {
