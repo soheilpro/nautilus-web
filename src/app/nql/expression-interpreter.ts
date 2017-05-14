@@ -95,7 +95,7 @@ export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpretatio
     };
 
     switch (expression.operator) {
-      case '==':
+      case '=':
         return areEqual(expression.left, expression.right);
 
       case '!=':

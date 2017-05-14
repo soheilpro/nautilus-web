@@ -40,7 +40,7 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
 
   visitComparison(expression: ComparisonExpression, context: IContext): string {
     switch (expression.operator) {
-      case '==':
+      case '=':
       case '!=':
         return this.visitComparisonEquality(expression.left, expression.right, expression.operator, context);
 
@@ -79,7 +79,7 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   private javaScriptOperatorFromComparisonOperator(operator: string) {
-      if (operator === '==')
+      if (operator === '=')
         return '===';
 
       if (operator === '!=')
@@ -99,7 +99,7 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
 
     switch (operator) {
       case 'IN':
-        return right.children.map(child => this.visitComparisonEquality(left, child, '==', context)).join(' || ');
+        return right.children.map(child => this.visitComparisonEquality(left, child, '=', context)).join(' || ');
 
       case 'NOT IN':
         return right.children.map(child => this.visitComparisonEquality(left, child, '!=', context)).join(' && ');

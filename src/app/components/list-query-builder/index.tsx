@@ -204,7 +204,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
         new NQL.ConstantExpression(props.itemToQueryItem(includedItems[0]), props.queryItemType),
-        '==');
+        '=');
     }
 
     if (includedItems.length > 1) {
@@ -240,7 +240,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     const comparisonQuery = query as NQL.ComparisonExpression;
 
-    if (comparisonQuery.operator === '==') {
+    if (comparisonQuery.operator === '=') {
       const item = (comparisonQuery.right as NQL.ConstantExpression).value;
 
       return {
@@ -289,7 +289,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     if (query.left.name !== queryItem)
       return false;
 
-    if (query.operator === '==' || query.operator === '!=') {
+    if (query.operator === '=' || query.operator === '!=') {
       if (!(query.right instanceof NQL.ConstantExpression))
         return false;
 
