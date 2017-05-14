@@ -28,12 +28,12 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(items);
   }
 
-  getAll(issueQuery: NQL.Expression) {
+  getAllIssues(query: NQL.Expression) {
     let issues = this.items.filter(isIssue);
 
-    if (issueQuery) {
+    if (query) {
       const issueFilter = new IssueFilter();
-      const predicate = issueFilter.getPredicate(issueQuery);
+      const predicate = issueFilter.getPredicate(query);
 
       issues = issues.filter(predicate);
     }
@@ -41,18 +41,12 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(issues);
   }
 
-  get(item: IItem) {
+  getIssue(item: IItem) {
     return Promise.resolve(_.find(this.items, _.partial(entityComparer, item)));
   }
 
   getMilestone(item: IItem) {
     return _.find(this.items, _.partial(entityComparer, item));
-  }
-
-  searchIssues(query: string) {
-    const items = this.items.filter(item => isIssue(item) && item.title && item.title.indexOf(query) !== -1);
-
-    return Promise.resolve(items);
   }
 
   private async add(item: IItem) {

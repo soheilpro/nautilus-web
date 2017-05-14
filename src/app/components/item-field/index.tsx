@@ -21,7 +21,7 @@ export default class ItemField extends React.PureComponent<IItemFieldProps, IIte
 
     this.state = {};
 
-    this.application.items.get(props.item).then(item => {
+    this.application.items.getIssue(props.item).then(item => {
       this.setState({
         item,
       });
@@ -30,7 +30,7 @@ export default class ItemField extends React.PureComponent<IItemFieldProps, IIte
 
   async componentWillReceiveProps(props: IItemFieldProps) {
     this.setState({
-      item: await this.application.items.get(props.item),
+      item: await this.application.items.getIssue(props.item),
     });
   }
 

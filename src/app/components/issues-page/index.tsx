@@ -53,7 +53,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   }
 
   async componentDidMount() {
-    const items = await this.application.items.getAll(null);
+    const items = await this.application.items.getAllIssues(null);
 
     this.setState({
       items,
@@ -82,21 +82,21 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null),
+      items: await this.application.items.getAllIssues(null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsUpdate({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null),
+      items: await this.application.items.getAllIssues(null),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsDelete({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAll(null),
+      items: await this.application.items.getAllIssues(null),
       selectedItem: undefined,
     });
   }
@@ -108,7 +108,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   }
 
   private async handleIssueViewSettingsChange(view: IView) {
-    const items = await this.application.items.getAll(view.issueFilterQuery);
+    const items = await this.application.items.getAllIssues(view.issueFilterQuery);
 
     this.setState({
       items,
