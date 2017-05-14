@@ -8,6 +8,7 @@ import Button from '../button';
 import Dropdown from '../dropdown';
 import PromptWindow from '../prompt-window';
 import IssueQueryBuilder from '../issue-query-builder';
+import Expression from '../expression';
 import ViewList from './view-list';
 import { IView } from './iview';
 import { View } from './view';
@@ -203,6 +204,13 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
             </div>
             <div className="table-cell">
               <IssueQueryBuilder query={this.state.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
+            </div>
+          </div>
+          <div className="query-text table-row">
+            <div className="title table-cell">
+            </div>
+            <div className="text table-cell">
+              <Expression expression={this.state.issueFilterQuery} />
             </div>
           </div>
         </div>
