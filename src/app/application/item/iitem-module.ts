@@ -9,6 +9,7 @@ export interface IItemModule extends IModule {
   getAllByKind(kind: ItemKind): Promise<IItem[]>;
   getAll(issueQuery: NQL.Expression): Promise<IItem[]>;
   get(item: IItem): Promise<IItem>;
+  getMilestone(item: IItem): IItem;
   searchIssues(query: string): Promise<IIssue[]>;
   addIssue(issue: IIssue): Promise<IIssue>;
   updateIssue(issueId: string, issueChange: IIssueChange): Promise<IIssue>;

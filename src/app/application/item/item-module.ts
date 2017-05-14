@@ -45,6 +45,10 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(_.find(this.items, _.partial(entityComparer, item)));
   }
 
+  getMilestone(item: IItem) {
+    return _.find(this.items, _.partial(entityComparer, item));
+  }
+
   searchIssues(query: string) {
     const items = this.items.filter(item => isIssue(item) && item.title && item.title.indexOf(query) !== -1);
 
