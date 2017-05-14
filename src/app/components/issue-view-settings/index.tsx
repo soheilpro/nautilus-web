@@ -197,35 +197,30 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
   render() {
     return (
       <div className="issue-view-settings-component">
-        <div className="query-builders table">
-          <div className="query-builder table-row">
-            <div className="title table-cell">
-              Filter Issues:
-            </div>
-            <div className="table-cell">
-              <IssueQueryBuilder query={this.state.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
-            </div>
+        <div className="query">
+          <div className="query-builder">
+            <IssueQueryBuilder query={this.state.issueFilterQuery} onChange={this.handleIssueQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
           </div>
-          <div className="query-text table-row">
-            <div className="title table-cell">
-            </div>
-            <div className="text table-cell">
-              <Expression expression={this.state.issueFilterQuery} />
-            </div>
+          <div className="buttons">
+            {
+              !this.props.view.isDefault() &&
+                <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
+            }
+            {
+              !this.props.view.isDefault() &&
+                <Button className="save" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
+            }
+            <Dropdown className="load" title="Load" ref={e => this.savedViewListDropdownComponent = e}>
+              <ViewList views={this.state.savedViews} onDelete={this.handleViewListDelete} onSelect={this.handleViewListSelect} />
+            </Dropdown>
           </div>
         </div>
-        <div className="buttons">
+        <div className="query-text">
           {
-            !this.props.view.isDefault() &&
-              <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
+            this.state.issueFilterQuery ?
+              <Expression expression={this.state.issueFilterQuery} /> :
+              <span className="all">Showing all issues</span>
           }
-          {
-            !this.props.view.isDefault() &&
-              <Button className="save" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
-          }
-          <Dropdown className="load" title="Load" ref={e => this.savedViewListDropdownComponent = e}>
-            <ViewList views={this.state.savedViews} onDelete={this.handleViewListDelete} onSelect={this.handleViewListSelect} />
-          </Dropdown>
         </div>
       </div>
     );

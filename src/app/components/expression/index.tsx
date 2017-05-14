@@ -20,9 +20,8 @@ export default class Expression extends React.PureComponent<IExpressionProps, IE
     return (
       <div className="expression-component">
         {
-          this.props.expression ?
-            <span dangerouslySetInnerHTML={{ __html: new HTMLExpressionFormatter(this.application).format(this.props.expression, null) }} /> :
-            <span>All</span>
+          this.props.expression &&
+            <span dangerouslySetInnerHTML={{ __html: new HTMLExpressionFormatter(this.application).format(this.props.expression, null) }} />
         }
       </div>
     );
