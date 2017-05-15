@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { IIssue, IItemState, IItemPriority } from '../../application';
-import { ServiceManager } from '../../services';
-import ProjectField from '../project-field';
+import { IIssue } from '../../application';
 import SidField from '../sid-field';
-import TextField from '../text-field';
-import ItemTypeField from '../item-type-field';
-import ItemPriorityField from '../item-priority-field';
-import ItemStateField from '../item-state-field';
-import ItemField from '../item-field';
-import UserField from '../user-field';
+import IssueTitleField from '../issue-title-field';
+import IssuePriorityField from '../issue-priority-field';
+import IssueProjectField from '../issue-project-field';
+import IssueTypeField from '../issue-type-field';
+import IssueStateField from '../issue-state-field';
+import IssueAssignedTo from '../issue-assigned-to-field';
+import IssueMilestoneField from '../issue-milestone-field';
 
 require('../../assets/stylesheets/base.less');
 require('./issue.less');
@@ -21,79 +20,7 @@ interface IIssueState {
 }
 
 export default class Issue extends React.PureComponent<IIssueProps, IIssueState> {
-  private application = ServiceManager.Instance.getApplication();
-
-  private getStyleForTitle(state: IItemState) {
-    let style = {
-      padding: '1px 5px',
-    };
-
-    if (!state)
-      return style;
-
-    switch (state.key) {
-      case 'todo':
-        return {
-          ...style,
-          backgroundColor: '#ffe0b2',
-        };
-
-      case 'doing':
-        return {
-          ...style,
-          backgroundColor: '#b3e5fc',
-        };
-
-      case 'done':
-        return {
-          ...style,
-          backgroundColor: '#c5e1a5',
-        };
-
-      case 'closed':
-        return {
-          ...style,
-          color: '#aaa',
-          textDecoration: 'line-through',
-        };
-    }
-
-    return null;
-  }
-
-  private getStyleForPriority(priority: IItemPriority) {
-    let style = {
-      padding: '2px 4px',
-      borderRadius: '2px',
-      color: '#fff',
-      textTransform: 'lowercase',
-      fontSize: '.8em',
-    };
-
-    if (!priority)
-      return style;
-
-    switch (priority.key) {
-      case 'high':
-        return {
-          ...style,
-          backgroundColor: '#ff9800',
-        };
-
-      case 'critical':
-        return {
-          ...style,
-          backgroundColor: '#f44336',
-        };
-    }
-
-    return null;
-  }
-
   render() {
-    const state = this.application.itemStates.get(this.props.issue.state);
-    const priority = this.application.itemPriorities.get(this.props.issue.priority);
-
     return (
       <div className="issue-component">
         <span className="sid">
@@ -102,14 +29,14 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
         <span className="divider1"></span>
         {
           <span className="title">
-            <TextField title={this.props.issue.title} style={this.getStyleForTitle(state)} />
+            <IssueTitleField issue={this.props.issue} />
           </span>
         }
         {
           this.props.issue.priority &&
             <span className="priority">
               <span className="divider2"></span>
-              <ItemPriorityField itemPriority={this.props.issue.priority} style={this.getStyleForPriority(priority)} />
+              <IssuePriorityField issue={this.props.issue} />
             </span>
         }
         <span className="spacer"></span>
@@ -117,35 +44,35 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
           this.props.issue.project &&
             <span className="project">
               <span className="divider2"></span>
-              <ProjectField project={this.props.issue.project} />
+              <IssueProjectField issue={this.props.issue} />
             </span>
         }
         {
           this.props.issue.type &&
             <span className="type">
               <span className="divider2"></span>
-              <ItemTypeField itemType={this.props.issue.type} />
+              <IssueTypeField issue={this.props.issue} />
             </span>
         }
         {
           this.props.issue.state &&
             <span className="state">
               <span className="divider2"></span>
-              <ItemStateField itemState={this.props.issue.state} />
+              <IssueStateField issue={this.props.issue} />
             </span>
         }
         {
           this.props.issue.assignedTo &&
             <span className="assigned-to">
               <span className="divider2"></span>
-              <UserField user={this.props.issue.assignedTo} />
+              <IssueAssignedTo issue={this.props.issue} />
             </span>
         }
         {
           this.props.issue.parent &&
             <span className="milestone">
               <span className="divider2"></span>
-              <ItemField item={this.props.issue.parent} />
+              <IssueMilestoneField issue={this.props.issue} />
             </span>
         }
       </div>

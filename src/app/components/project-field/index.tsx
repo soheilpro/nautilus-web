@@ -1,29 +1,26 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IProject } from '../../application';
-import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IProjectFieldProps {
   project: IProject;
+  className?: string;
 }
 
 interface IProjectFieldState {
 }
 
 export default class ProjectField extends React.PureComponent<IProjectFieldProps, IProjectFieldState> {
-  private application = ServiceManager.Instance.getApplication();
-
   render() {
     if (!this.props.project)
       return null;
 
-    const project = this.application.projects.get(this.props.project);
-
     return (
-      <span className="project-field-component">
-        {project.name}
+      <span className={classNames('project-field-component', this.props.className)}>
+        {this.props.project.name}
       </span>
     );
   }

@@ -1,29 +1,26 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IUser } from '../../application';
-import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IUserFieldProps {
   user: IUser;
+  className?: string;
 }
 
 interface IUserFieldState {
 }
 
 export default class UserField extends React.PureComponent<IUserFieldProps, IUserFieldState> {
-  private application = ServiceManager.Instance.getApplication();
-
   render() {
     if (!this.props.user)
       return null;
 
-    const user = this.application.users.get(this.props.user);
-
     return (
-      <span className="user-field-component">
-        {user.name}
+      <span className={classNames('user-field-component', this.props.className)}>
+        {this.props.user.name}
       </span>
     );
   }

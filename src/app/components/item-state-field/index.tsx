@@ -1,29 +1,26 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IItemState } from '../../application';
-import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IItemStateFieldProps {
   itemState: IItemState;
+  className?: string;
 }
 
 interface IItemStateFieldState {
 }
 
 export default class ItemStateField extends React.PureComponent<IItemStateFieldProps, IItemStateFieldState> {
-  private application = ServiceManager.Instance.getApplication();
-
   render() {
     if (!this.props.itemState)
       return null;
 
-    const itemState = this.application.itemStates.get(this.props.itemState);
-
     return (
-      <span className="item-state-field-component">
-        {itemState.title}
+      <span className={classNames('item-state-field-component', this.props.className)}>
+        {this.props.itemState.title}
       </span>
     );
   }

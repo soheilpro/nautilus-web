@@ -1,30 +1,26 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IItemPriority } from '../../application';
-import { ServiceManager } from '../../services';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IItemPriorityFieldProps {
   itemPriority: IItemPriority;
-  style?: object;
+  className?: string;
 }
 
 interface IItemPriorityFieldState {
 }
 
 export default class ItemPriorityField extends React.PureComponent<IItemPriorityFieldProps, IItemPriorityFieldState> {
-  private application = ServiceManager.Instance.getApplication();
-
   render() {
     if (!this.props.itemPriority)
       return null;
 
-    const itemPriority = this.application.itemPriorities.get(this.props.itemPriority);
-
     return (
-      <span className="item-priority-field-component" style={this.props.style}>
-        {itemPriority.title}
+      <span className={classNames('item-priority-field-component', `priority-${this.props.itemPriority.key}`, this.props.className)}>
+        {this.props.itemPriority.title}
       </span>
     );
   }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import UserField from '../user-field';
+import IssueDescriptionField from '../issue-description-field';
+import IssueCreatedByField from '../issue-created-by-field';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -18,12 +19,12 @@ export default class IssueDetail extends React.PureComponent<IIssueDetailProps, 
       <div className="issue-detail-component">
         <div className="header">Issue #{this.props.issue.sid}</div>
         <div className="description">
-          {this.props.issue.description}
+          <IssueDescriptionField issue={this.props.issue} />
         </div>
         <div className="created">
           <div className="label">Created by:</div>
           <div className="user">
-            <UserField user={this.props.issue.createdBy} />
+            <IssueCreatedByField issue={this.props.issue} />
           </div>
         </div>
       </div>
