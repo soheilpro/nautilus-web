@@ -20,7 +20,6 @@ interface IListProps {
 }
 
 interface IListState {
-  isFocused?: boolean;
   selectedItem?: IListItem;
 }
 
@@ -32,8 +31,6 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     super(props);
 
     this.handleListKeyDown = this.handleListKeyDown.bind(this);
-    this.handleListFocus = this.handleListFocus.bind(this);
-    this.handleListBlur = this.handleListBlur.bind(this);
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleItemDoubleClick = this.handleItemDoubleClick.bind(this);
 
@@ -42,8 +39,18 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     };
   }
 
+  componentDidMount() {
+    $(this.componentElement).on('focusin', (e) => {
+      $(this.componentElement).addClass('focused');
+    });
+
+    $(this.componentElement).on('focusout', (e) => {
+      $(this.componentElement).removeClass('focused');
+    });
+  }
+
   componentDidUpdate() {
-    if (this.state.isFocused && this.selectedItemElement)
+    if (this.selectedItemElement)
       this.selectedItemElement.focus();
   }
 
@@ -118,18 +125,6 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     }
   }
 
-  private handleListFocus() {
-    this.setState({
-      isFocused: true,
-    });
-  }
-
-  private handleListBlur() {
-    this.setState({
-      isFocused: false,
-    });
-  }
-
   private handleItemClick(item: IListItem, index: number) {
     if (this.props.onItemSelect)
       this.props.onItemSelect(item);
@@ -146,7 +141,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
 
   render() {
     return (
-      <div className={classNames('list-component', { focused: this.state.isFocused })} onKeyDown={this.handleListKeyDown} onFocus={this.handleListFocus} onBlur={this.handleListBlur} ref={e => this.componentElement = e}>
+      <div className="list-component" onKeyDown={this.handleListKeyDown} ref={e => this.componentElement = e}>
         {
           this.props.items.map((item, index) => {
             return (
