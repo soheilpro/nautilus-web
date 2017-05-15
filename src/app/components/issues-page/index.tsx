@@ -27,6 +27,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private contextManager = ServiceManager.Instance.getContextManager();
+  private itemDetailContainerElement: HTMLElement;
 
   constructor() {
     super();
@@ -53,6 +54,10 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   }
 
   async componentDidMount() {
+    $(this.itemDetailContainerElement).sticky({
+      topSpacing: 10,
+    });
+
     const items = await this.application.items.getAllIssues(null);
 
     this.setState({
@@ -142,10 +147,12 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
             </div>
             <div className="divider"></div>
             <div className="item-detail">
+              <div ref={e => this.itemDetailContainerElement = e}>
               {
                 this.state.selectedItem &&
                   <IssueDetail issue={this.state.selectedItem} />
               }
+              </div>
             </div>
           </div>
         </div>

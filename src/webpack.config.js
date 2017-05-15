@@ -6,7 +6,7 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     app: './app/main.ts',
-    vendor: ['react', 'react-dom', 'react-router', 'axios', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5', 'classnames', 'uuid']
+    vendor: ['react', 'react-dom', 'react-router', 'axios', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5', 'classnames', 'uuid', 'jquery', 'jquery-sticky']
   },
   output: {
     path: './out',
@@ -30,6 +30,9 @@ module.exports = {
   },
   plugins: [
     failPlugin,
+    new webpack.ProvidePlugin({
+      $: "jquery",
+    }),
     new ExtractTextPlugin('[name].css'),
     new webpack.optimize.CommonsChunkPlugin('vendor', '[name].js'),
     new HtmlWebpackPlugin({
