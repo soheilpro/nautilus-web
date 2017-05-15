@@ -1,6 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, isIssue } from '../../application';
+import { IItem } from '../../application';
 import { ServiceManager } from '../../services';
 import List from '../list';
 import Issue from './issue';
@@ -53,17 +53,11 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
   }
 
   private handleItemAction(item: IItem) {
-    if (isIssue(item))
-      return this.issueController.editIssue(item);
-
-    throw new Error('Not supported.');
+    return this.issueController.editIssue(item);
   }
 
   private handleItemDelete(item: IItem) {
-    if (isIssue(item))
-      return this.issueController.deleteIssue(item);
-
-    throw new Error('Not supported.');
+    return this.issueController.deleteIssue(item);
   }
 
   private sortItems(items: IItem[]) {
@@ -115,10 +109,7 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
   }
 
   renderItem(item: IItem) {
-    if (isIssue(item))
-      return <Issue issue={item} />;
-
-    throw new Error('Not supported.');
+    return <Issue issue={item} />;
   }
 
   render() {
