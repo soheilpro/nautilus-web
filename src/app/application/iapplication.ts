@@ -14,6 +14,7 @@ export interface IApplication extends EventEmitter {
   logIn(username: string, password: string): Promise<ISession>;
 
   isLoaded(): boolean;
+  load(): void;
 
   getSession(): ISession;
 

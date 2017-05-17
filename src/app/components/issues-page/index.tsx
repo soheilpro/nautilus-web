@@ -1,6 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, isIssue, entityComparer } from '../../application';
+import { IItem, entityComparer } from '../../application';
 import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
@@ -24,7 +24,7 @@ interface IIssuesPageState {
   savedViews?: IView[];
 }
 
-export default class IssuesPage extends React.PureComponent<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
+export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
   private localStorage = ServiceManager.Instance.getLocalStorage();
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
@@ -34,6 +34,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   constructor() {
     super();
 
+    this.handleApplicationLoad = this.handleApplicationLoad.bind(this);
     this.handleApplicationItemsAdd = this.handleApplicationItemsAdd.bind(this);
     this.handleApplicationItemsUpdate = this.handleApplicationItemsUpdate.bind(this);
     this.handleApplicationItemsDelete = this.handleApplicationItemsDelete.bind(this);
@@ -50,6 +51,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
 
   componentWillMount() {
     this.contextManager.registerContextItemProvider(this);
+    this.application.on('load', this.handleApplicationLoad);
     this.application.items.on('add', this.handleApplicationItemsAdd);
     this.application.items.on('update', this.handleApplicationItemsUpdate);
     this.application.items.on('delete', this.handleApplicationItemsDelete);
@@ -65,7 +67,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
 
     this.setState({
       items,
-      selectedItem: _.last(items.filter(isIssue)),
+      selectedItem: _.last(items),
       view,
     });
 
@@ -80,13 +82,25 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
     this.application.items.off('delete', this.handleApplicationItemsDelete);
     this.application.items.off('update', this.handleApplicationItemsUpdate);
     this.application.items.off('add', this.handleApplicationItemsAdd);
+    this.application.off('load', this.handleApplicationLoad);
     this.contextManager.unregisterContextItemProvider(this);
   }
 
   getContext() {
     return {
-      'activeIssue': isIssue(this.state.selectedItem) ? this.state.selectedItem : undefined,
+      'activeIssue': this.state.selectedItem,
     };
+  }
+
+  private async handleApplicationLoad() {
+    this.setState(async state => {
+      const items = await this.application.items.getAllIssues(state.view.filterQuery);
+
+      this.setState({
+        items,
+        selectedItem: _.last(items),
+      });
+    });
   }
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {
@@ -114,12 +128,6 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
     });
   }
 
-  private handleItemListItemSelect(item: IItem) {
-    this.setState({
-      selectedItem: item,
-    });
-  }
-
   private async handleIssueViewSettingsChange(view: IView) {
     this.localStorage.set('issues.view', view.toJSON());
 
@@ -127,7 +135,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
 
     this.setState({
       items,
-      selectedItem: _.last(items.filter(isIssue)),
+      selectedItem: _.last(items),
       view,
     });
   }
@@ -137,6 +145,12 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
 
     this.setState({
       savedViews,
+    });
+  }
+
+  private handleItemListItemSelect(item: IItem) {
+    this.setState({
+      selectedItem: item,
     });
   }
 

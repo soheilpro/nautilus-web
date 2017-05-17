@@ -9,6 +9,7 @@ import SearchController from '../search-controller';
 import WindowController from '../window-controller';
 import IssuesPage from '../issues-page';
 import MilestonesPage from '../milestones-page';
+import RefreshCommand from './refresh-command';
 import ViewIssuesCommand from './view-issues-command';
 
 interface IMainProps {
@@ -30,6 +31,7 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
 
   getCommands() {
     return [
+      new RefreshCommand(),
       new ViewIssuesCommand(),
     ];
   }
