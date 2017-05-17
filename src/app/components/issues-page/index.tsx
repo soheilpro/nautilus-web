@@ -1,8 +1,9 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, isIssue } from '../../application';
+import { IItem, isIssue, entityComparer } from '../../application';
 import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
+import ArrayHelper from '../../utilities/array-helper';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
 import ItemList from '../item-list';
@@ -58,7 +59,7 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
       topSpacing: 10,
     });
 
-    const items = await this.application.items.getAllIssues(null);
+    const items = await this.application.items.getAllIssues(this.state.view.issueFilterQuery);
 
     this.setState({
       items,
@@ -87,22 +88,26 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
 
   private async handleApplicationItemsAdd({ item }: { item: IItem }) {
     this.setState({
-      items: await this.application.items.getAllIssues(null),
+      items: this.state.items.concat(item),
       selectedItem: item,
     });
   }
 
   private async handleApplicationItemsUpdate({ item }: { item: IItem }) {
-    this.setState({
-      items: await this.application.items.getAllIssues(null),
-      selectedItem: item,
+    this.setState(state => {
+      return {
+        items: ArrayHelper.replaceElement(state.items, item, item, entityComparer),
+        selectedItem: item,
+      };
     });
   }
 
   private async handleApplicationItemsDelete({ item }: { item: IItem }) {
-    this.setState({
-      items: await this.application.items.getAllIssues(null),
-      selectedItem: undefined,
+    this.setState(state => {
+      return {
+        items: ArrayHelper.removeElement(state.items, item, entityComparer),
+        selectedItem: undefined,
+      };
     });
   }
 
