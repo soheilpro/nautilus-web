@@ -25,6 +25,7 @@ interface IIssuesPageState {
 }
 
 export default class IssuesPage extends React.PureComponent<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
+  private localStorage = ServiceManager.Instance.getLocalStorage();
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private contextManager = ServiceManager.Instance.getContextManager();
@@ -59,11 +60,13 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
       topSpacing: 10,
     });
 
-    const items = await this.application.items.getAllIssues(this.state.view.issueFilterQuery);
+    const view = View.fromJSON(await this.localStorage.get('issues.view', View.create().toJSON()));
+    const items = await this.application.items.getAllIssues(view.filterQuery);
 
     this.setState({
       items,
       selectedItem: _.last(items.filter(isIssue)),
+      view,
     });
 
     const savedViews = (await this.roamingStorage.get('issues.views', [])).map(x => View.fromJSON(x));
@@ -118,7 +121,9 @@ export default class IssuesPage extends React.PureComponent<IIssuesPageProps, II
   }
 
   private async handleIssueViewSettingsChange(view: IView) {
-    const items = await this.application.items.getAllIssues(view.issueFilterQuery);
+    this.localStorage.set('issues.view', view.toJSON());
+
+    const items = await this.application.items.getAllIssues(view.filterQuery);
 
     this.setState({
       items,
