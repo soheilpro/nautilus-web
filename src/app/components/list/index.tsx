@@ -13,7 +13,7 @@ interface IListItem {
 interface IListProps {
   items: IListItem[];
   selectedItem?: IListItem;
-  renderItem(item: IListItem, index: number): JSX.Element;
+  renderItem(item: IListItem, index: number, isSelected: boolean): JSX.Element;
   onItemSelect?(item: IListItem): void;
   onItemAction?(item: IListItem): void;
   onItemDelete?(item: IListItem): void;
@@ -146,7 +146,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
           this.props.items.map((item, index) => {
             return (
               <div className={classNames('item', { selected: this.state.selectedItem === item })} tabIndex={0} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id} ref={e => { if (this.state.selectedItem === item) this.selectedItemElement = e; }}>
-                {this.props.renderItem(item, index)}
+                {this.props.renderItem(item, index, this.state.selectedItem === item)}
               </div>
             );
           })

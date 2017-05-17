@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IIssue } from '../../application';
-import SidField from '../sid-field';
+import IssueSidField from '../issue-sid-field';
 import IssueTitleField from '../issue-title-field';
 import IssuePriorityField from '../issue-priority-field';
 import IssueProjectField from '../issue-project-field';
@@ -14,6 +14,7 @@ require('./issue.less');
 
 interface IIssueProps {
   issue: IIssue;
+  isSelected: boolean;
 }
 
 interface IIssueState {
@@ -24,7 +25,7 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
     return (
       <div className="issue-component">
         <span className="sid">
-          <SidField sid={this.props.issue.sid} />
+          <IssueSidField issue={this.props.issue} bold={this.props.isSelected} />
         </span>
         <span className="divider1"></span>
         {

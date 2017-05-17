@@ -108,8 +108,8 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
     return itemsWithPath.map(itemWithPath => itemWithPath.item);
   }
 
-  renderItem(item: IItem) {
-    return <Issue issue={item} />;
+  renderItem(item: IItem, index: number, isSelected: boolean) {
+    return <Issue issue={item} isSelected={isSelected} />;
   }
 
   render() {
