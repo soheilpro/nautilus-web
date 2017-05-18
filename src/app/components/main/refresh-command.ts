@@ -4,6 +4,7 @@ import { ServiceManager } from '../../services';
 
 export default class RefreshCommand extends BaseCommand {
   private application = ServiceManager.Instance.getApplication();
+  private notificationController = ServiceManager.Instance.getNotificationController();
 
   get id() {
     return 'refresh';
@@ -17,7 +18,15 @@ export default class RefreshCommand extends BaseCommand {
     return [{ keyCode: KeyCode.R }];
   }
 
-  execute() {
-    this.application.load();
+  async execute() {
+    const notification = {
+      title: 'Refreshing...',
+    };
+
+    this.notificationController.showNotification(notification);
+
+    await this.application.load();
+
+    this.notificationController.hideNotification(notification);
   }
 }

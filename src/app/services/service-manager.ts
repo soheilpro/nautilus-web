@@ -4,6 +4,7 @@ import { IContextManager } from '../context';
 import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
+import { INotificationController } from '../notifications';
 import { ISearchController } from '../search';
 import { IServiceManager } from './iservice-manager';
 import { IStorage } from '../storage';
@@ -22,6 +23,7 @@ export class ServiceManager implements IServiceManager {
   private actionController: IActionController;
   private actionManager: IActionManager;
   private windowController: IWindowController;
+  private notificationController: INotificationController;
   private searchController: ISearchController;
   private issueController: IIssueController;
 
@@ -103,6 +105,14 @@ export class ServiceManager implements IServiceManager {
 
   getWindowController() {
     return this.windowController;
+  }
+
+  setNotificationController(notificationController: INotificationController) {
+    this.notificationController = notificationController;
+  }
+
+  getNotificationController() {
+    return this.notificationController;
   }
 
   setSearchController(searchController: ISearchController) {

@@ -5,6 +5,7 @@ import { ServiceManager } from '../../services';
 import CommandController from '../command-controller';
 import ActionController from '../action-controller';
 import IssueController from '../issue-controller';
+import NotificationController from '../notification-controller';
 import SearchController from '../search-controller';
 import WindowController from '../window-controller';
 import IssuesPage from '../issues-page';
@@ -40,6 +41,7 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
     return (
       <div className="main-component rtl">
         <WindowController />
+        <NotificationController />
         <CommandController />
         <ActionController />
         <SearchController />

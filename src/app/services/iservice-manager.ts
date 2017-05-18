@@ -4,6 +4,7 @@ import { IContextManager } from '../context';
 import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
+import { INotificationController } from '../notifications';
 import { ISearchController } from '../search';
 import { IStorage } from '../storage';
 import { IWindowController } from '../windows';
@@ -38,6 +39,9 @@ export interface IServiceManager {
 
   setWindowController(windowController: IWindowController): void;
   getWindowController(): IWindowController;
+
+  setNotificationController(notificationController: INotificationController): void;
+  getNotificationController(): INotificationController;
 
   setSearchController(searchController: ISearchController): void;
   getSearchController(): ISearchController;
