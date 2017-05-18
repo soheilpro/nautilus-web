@@ -6,7 +6,7 @@ import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
-import ItemList from '../item-list';
+import IssueList from '../issue-list';
 import MasterPage from '../master-page';
 import CommandButton from '../command-button';
 import Icon from '../icon';
@@ -40,7 +40,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleApplicationIssueDelete = this.handleApplicationIssueDelete.bind(this);
     this.handleIssueViewSettingsChange = this.handleIssueViewSettingsChange.bind(this);
     this.handleIssueViewSettingsSavedViewsChange = this.handleIssueViewSettingsSavedViewsChange.bind(this);
-    this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
+    this.handleIssueListIssueSelect = this.handleIssueListIssueSelect.bind(this);
 
     this.state = {
       issues: [],
@@ -148,7 +148,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private handleItemListItemSelect(issue: IIssue) {
+  private handleIssueListIssueSelect(issue: IIssue) {
     this.setState({
       selectedIssue: issue,
     });
@@ -167,11 +167,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           </div>
           <div className="issues row">
             <div className="issue-list">
-              <ItemList items={this.state.issues} selectedItem={this.state.selectedIssue} onItemSelect={this.handleItemListItemSelect} />
+              <IssueList issues={this.state.issues} selectedIssue={this.state.selectedIssue} onIssueSelect={this.handleIssueListIssueSelect} />
             </div>
             <div className="divider"></div>
             <div className="issue-detail">
-              <div ref={e => this.issueDetailContainerElement = e}>
+              <div className="issue-detail-container" ref={e => this.issueDetailContainerElement = e}>
               {
                 this.state.selectedIssue &&
                   <IssueDetail issue={this.state.selectedIssue} />
