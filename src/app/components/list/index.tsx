@@ -145,7 +145,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
         {
           this.props.items.map((item, index) => {
             return (
-              <div className={classNames('item', { selected: this.state.selectedItem === item })} tabIndex={0} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id} ref={e => { if (this.state.selectedItem === item) this.selectedItemElement = e; }}>
+              <div className={classNames('item', { 'selected': this.state.selectedItem === item })} tabIndex={0} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id} ref={e => { if (this.state.selectedItem === item) this.selectedItemElement = e; }}>
                 {this.props.renderItem(item, index, this.state.selectedItem === item)}
               </div>
             );
