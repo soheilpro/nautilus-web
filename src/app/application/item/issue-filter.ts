@@ -6,12 +6,12 @@ export default class IssueFilter {
     const normalizedQuery = new QueryNormalizer().tranform(query, null);
 
     const types =  [
-      { name: 'ItemType',  base: 'Entity' },
-      { name: 'ItemState', base: 'Entity' },
       { name: 'ItemPriority', base: 'Entity' },
-      { name: 'Project',   base: 'Entity' },
-      { name: 'User',      base: 'Entity' },
-      { name: 'Item',      base: 'Entity' },
+      { name: 'ItemState',    base: 'Entity' },
+      { name: 'ItemType',     base: 'Entity' },
+      { name: 'Milestone',    base: 'Entity' },
+      { name: 'Project',      base: 'Entity' },
+      { name: 'User',         base: 'Entity' },
     ];
 
     const compiler = new NQL.ExpressionCompiler(types);
@@ -38,7 +38,7 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'User');
 
     if (['milestone'].some(name => name === expression.name))
-      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), 'parent'), 'Item');
+      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), 'parent'), 'Milestone');
 
     throw new Error('Not supported.');
   }

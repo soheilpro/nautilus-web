@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as NQL from '../../nql';
 import { ItemKind } from '../../application';
 import AndQueryBuilder, { IQueryBuilder } from '../and-query-builder';
-import ItemQueryBuilder from '../item-query-builder';
+import MilestoneQueryBuilder from '../milestone-query-builder';
 import ProjectQueryBuilder from '../project-query-builder';
 import ItemTypeQueryBuilder from '../item-type-query-builder';
 import ItemPriorityQueryBuilder from '../item-priority-query-builder';
@@ -21,8 +21,8 @@ export default class IssueQueryBuilder extends React.PureComponent<IIssueQueryBu
   private andQueryBuilderComponent: AndQueryBuilder;
 
   private queryBuilders: IQueryBuilder[] = [
-    { key: 'milestone',  title: 'Milestone',   queryItem: 'milestone',  Component: ItemQueryBuilder,         props: { itemKind: 'milestone' as ItemKind } },
-    { key: 'project',    title: 'Project',     queryItem: 'project',    Component: ProjectQueryBuilder},
+    { key: 'milestone',  title: 'Milestone',   queryItem: 'milestone',  Component: MilestoneQueryBuilder },
+    { key: 'project',    title: 'Project',     queryItem: 'project',    Component: ProjectQueryBuilder },
     { key: 'type',       title: 'Type',        queryItem: 'type',       Component: ItemTypeQueryBuilder,     props: { itemKind: 'issue' as ItemKind } },
     { key: 'priority',   title: 'Priority',    queryItem: 'priority',   Component: ItemPriorityQueryBuilder, props: { itemKind: 'issue' as ItemKind } },
     { key: 'state',      title: 'State',       queryItem: 'state',      Component: ItemStateQueryBuilder,    props: { itemKind: 'issue' as ItemKind } },

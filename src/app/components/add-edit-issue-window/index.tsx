@@ -6,7 +6,7 @@ import ProjectSelect from '../project-select';
 import ItemPrioritySelect from '../item-priority-select';
 import ItemTypeSelect from '../item-type-select';
 import ItemStateSelect from '../item-state-select';
-import ItemSelect from '../item-select';
+import MilestoneSelect from '../milestone-select';
 import UserSelect from '../user-select';
 import Button from '../button';
 
@@ -214,7 +214,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 Milestone:
               </div>
               <div className="value">
-                <ItemSelect className="state" item={this.state.milestone} itemKind="milestone" onChange={this.handleMilestoneInputChange} />
+                <MilestoneSelect className="state" milestone={this.state.milestone} onChange={this.handleMilestoneInputChange} />
               </div>
             </div>
           </form>

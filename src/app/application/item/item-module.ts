@@ -8,7 +8,6 @@ import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
 import { IMilestone } from './imilestone';
 import { entityComparer } from '../entity-comparer';
-import { ItemKind } from './item-kind';
 import IssueFilter from './issue-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
@@ -36,12 +35,6 @@ export class ItemModule extends BaseModule implements IItemModule {
           break;
       }
     }
-  }
-
-  getAllByKind(kind: ItemKind) {
-    const items = this.issues.filter(item => item.kind === kind);
-
-    return Promise.resolve(items);
   }
 
   getAllMilestones(query: NQL.Expression) {
