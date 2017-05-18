@@ -17,7 +17,7 @@ export default class IssueMilestoneField extends React.PureComponent<IIssueMiles
   private application = ServiceManager.Instance.getApplication();
 
   render() {
-    const milestone = this.application.items.getMilestone(this.props.issue.parent);
+    const milestone = this.application.items.getMilestone(this.props.issue.milestone);
 
     if (!milestone)
       return null;

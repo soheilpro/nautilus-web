@@ -9,6 +9,7 @@ import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
 import { IMilestone } from './imilestone';
 import Milestone from './milestone';
+import Issue from './issue';
 import IssueFilter from './issue-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
@@ -32,7 +33,7 @@ export class ItemModule extends BaseModule implements IItemModule {
           break;
 
         case 'issue':
-          this.issues.push(item);
+          this.issues.push(new Issue(item, this.application));
           break;
       }
     }
@@ -42,28 +43,14 @@ export class ItemModule extends BaseModule implements IItemModule {
     let milestones = [...this.milestones];
 
     if (query) {
-      const milestoneFilter = new IssueFilter();
-      const predicate = milestoneFilter.getPredicate(query);
-
-      milestones = milestones.filter(predicate);
+      throw new Error('Not implemented.');
     }
 
-    return Promise.resolve(milestones);
+    return milestones;
   }
 
   getMilestone(item: IItem) {
     return _.find(this.milestones, _.partial(entityComparer, item));
-  }
-
-  async addIssue(issue: IIssue) {
-    issue.kind = 'issue';
-
-    issue = await this.client.items.insert(issue);
-    this.issues.push(issue);
-
-    this.emit('issue.add', { issue });
-
-    return issue;
   }
 
   getAllIssues(query: NQL.Expression) {
@@ -83,8 +70,22 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(_.find(this.issues, _.partial(entityComparer, item)));
   }
 
+  async addIssue(issue: IIssue) {
+    const item = {
+      ...issue,
+      kind: 'issue',
+    };
+
+    issue = new Issue(await this.client.items.insert(item), this.application);
+    this.issues.push(issue);
+
+    this.emit('issue.add', { issue });
+
+    return issue;
+  }
+
   async updateIssue(issueId: string, issueChange: IIssueChange) {
-    const issue = await this.client.items.update(issueId, issueChange);
+    const issue = new Issue(await this.client.items.update(issueId, issueChange), this.application);
 
     this.issues[_.findIndex(this.issues, issue => issue.id === issueId)] = issue;
 
@@ -96,7 +97,7 @@ export class ItemModule extends BaseModule implements IItemModule {
   async deleteIssue(issue: IIssue)  {
     await this.client.items.delete(issue.id);
 
-    this.issues.splice(this.issues.indexOf(issue) , 1);
+    this.issues.splice(this.issues.indexOf(issue), 1);
 
     this.emit('issue.delete', { issue });
   }

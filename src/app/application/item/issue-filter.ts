@@ -38,7 +38,7 @@ class QueryNormalizer extends NQL.ExpressionTransformer<{}> {
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), expression.name), 'User');
 
     if (['milestone'].some(name => name === expression.name))
-      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), 'parent'), 'Milestone');
+      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('issue'), 'milestone'), 'Milestone');
 
     throw new Error('Not supported.');
   }

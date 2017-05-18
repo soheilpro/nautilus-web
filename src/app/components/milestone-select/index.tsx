@@ -27,9 +27,9 @@ export default class MilestoneSelect extends React.PureComponent<IMilestoneSelec
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.setState({
-      milestones: await this.application.items.getAllMilestones(null),
+      milestones: this.application.items.getAllMilestones(null),
     });
   }
 

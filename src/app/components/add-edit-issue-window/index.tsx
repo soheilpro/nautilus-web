@@ -56,7 +56,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
       this.state.priority = props.issue.priority;
       this.state.state = props.issue.state;
       this.state.assignedTo = props.issue.assignedTo;
-      this.state.milestone = props.issue.parent;
+      this.state.milestone = props.issue.milestone;
     }
   }
 
@@ -73,7 +73,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
           priority: this.state.priority,
           state: this.state.state,
           assignedTo: this.state.assignedTo,
-          parent: this.state.milestone,
+          milestone: this.state.milestone,
         };
 
         this.props.onAdd(issue);
@@ -88,7 +88,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
           priority: this.state.priority || null,
           state: this.state.state || null,
           assignedTo: this.state.assignedTo || null,
-          parent: this.state.milestone || null,
+          milestone: this.state.milestone || null,
         };
 
         this.props.onUpdate(issueChange);

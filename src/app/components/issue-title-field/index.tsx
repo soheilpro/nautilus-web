@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { ServiceManager } from '../../services';
 import { IIssue } from '../../application';
 
 require('../../assets/stylesheets/base.less');
@@ -14,13 +13,9 @@ interface IIssueTitleFieldState {
 }
 
 export default class IssueTitleField extends React.PureComponent<IIssueTitleFieldProps, IIssueTitleFieldState> {
-  private application = ServiceManager.Instance.getApplication();
-
   render() {
-    const state = this.application.itemStates.get(this.props.issue.state);
-
     return (
-      <span className={classNames('issue-title-field-component', state ? `state-${state.key}` : null)}>
+      <span className={classNames('issue-title-field-component', this.props.issue.state ? `state-${this.props.issue.state.key}` : null)}>
         {this.props.issue.title}
       </span>
     );

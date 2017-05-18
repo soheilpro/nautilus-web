@@ -70,7 +70,7 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
             </span>
         }
         {
-          this.props.issue.parent &&
+          this.props.issue.milestone &&
             <span className="milestone">
               <span className="divider2"></span>
               <IssueMilestoneField issue={this.props.issue} />
