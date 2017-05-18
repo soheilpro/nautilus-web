@@ -1,6 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
-import { IItem, entityComparer } from '../../application';
+import { IIssue, entityComparer } from '../../application';
 import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
@@ -18,8 +18,8 @@ interface IIssuesPageProps {
 }
 
 interface IIssuesPageState {
-  items?: IItem[];
-  selectedItem?: IItem;
+  issues?: IIssue[];
+  selectedIssue?: IIssue;
   view?: IView;
   savedViews?: IView[];
 }
@@ -29,21 +29,21 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private contextManager = ServiceManager.Instance.getContextManager();
-  private itemDetailContainerElement: HTMLElement;
+  private issueDetailContainerElement: HTMLElement;
 
   constructor() {
     super();
 
     this.handleApplicationLoad = this.handleApplicationLoad.bind(this);
-    this.handleApplicationItemsAdd = this.handleApplicationItemsAdd.bind(this);
-    this.handleApplicationItemsUpdate = this.handleApplicationItemsUpdate.bind(this);
-    this.handleApplicationItemsDelete = this.handleApplicationItemsDelete.bind(this);
+    this.handleApplicationIssueAdd = this.handleApplicationIssueAdd.bind(this);
+    this.handleApplicationIssueUpdate = this.handleApplicationIssueUpdate.bind(this);
+    this.handleApplicationIssueDelete = this.handleApplicationIssueDelete.bind(this);
     this.handleIssueViewSettingsChange = this.handleIssueViewSettingsChange.bind(this);
     this.handleIssueViewSettingsSavedViewsChange = this.handleIssueViewSettingsSavedViewsChange.bind(this);
     this.handleItemListItemSelect = this.handleItemListItemSelect.bind(this);
 
     this.state = {
-      items: [],
+      issues: [],
       view: View.create(),
       savedViews: [],
     };
@@ -52,22 +52,22 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   componentWillMount() {
     this.contextManager.registerContextItemProvider(this);
     this.application.on('load', this.handleApplicationLoad);
-    this.application.items.on('add', this.handleApplicationItemsAdd);
-    this.application.items.on('update', this.handleApplicationItemsUpdate);
-    this.application.items.on('delete', this.handleApplicationItemsDelete);
+    this.application.items.on('issue.add', this.handleApplicationIssueAdd);
+    this.application.items.on('issue.update', this.handleApplicationIssueUpdate);
+    this.application.items.on('issue.delete', this.handleApplicationIssueDelete);
   }
 
   async componentDidMount() {
-    $(this.itemDetailContainerElement).sticky({
+    $(this.issueDetailContainerElement).sticky({
       topSpacing: 10,
     });
 
     const view = View.fromJSON(await this.localStorage.get('issues.view', View.create().toJSON()));
-    const items = await this.application.items.getAllIssues(view.filterQuery);
+    const issues = await this.application.items.getAllIssues(view.filterQuery);
 
     this.setState({
-      items,
-      selectedItem: _.last(items),
+      issues,
+      selectedIssue: _.last(issues),
       view,
     });
 
@@ -79,51 +79,51 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   componentWillUnmount() {
-    this.application.items.off('delete', this.handleApplicationItemsDelete);
-    this.application.items.off('update', this.handleApplicationItemsUpdate);
-    this.application.items.off('add', this.handleApplicationItemsAdd);
+    this.application.items.off('issue.delete', this.handleApplicationIssueDelete);
+    this.application.items.off('issue.update', this.handleApplicationIssueUpdate);
+    this.application.items.off('issue.add', this.handleApplicationIssueAdd);
     this.application.off('load', this.handleApplicationLoad);
     this.contextManager.unregisterContextItemProvider(this);
   }
 
   getContext() {
     return {
-      'activeIssue': this.state.selectedItem,
+      'activeIssue': this.state.selectedIssue,
     };
   }
 
   private async handleApplicationLoad() {
     this.setState(async state => {
-      const items = await this.application.items.getAllIssues(state.view.filterQuery);
+      const issues = await this.application.items.getAllIssues(state.view.filterQuery);
 
       this.setState({
-        items,
-        selectedItem: _.last(items),
+        issues,
+        selectedIssue: _.last(issues),
       });
     });
   }
 
-  private async handleApplicationItemsAdd({ item }: { item: IItem }) {
+  private async handleApplicationIssueAdd({ issue }: { issue: IIssue }) {
     this.setState({
-      items: this.state.items.concat(item),
-      selectedItem: item,
+      issues: this.state.issues.concat(issue),
+      selectedIssue: issue,
     });
   }
 
-  private async handleApplicationItemsUpdate({ item }: { item: IItem }) {
+  private async handleApplicationIssueUpdate({ issue }: { issue: IIssue }) {
     this.setState(state => {
       return {
-        items: ArrayHelper.replaceElement(state.items, item, item, entityComparer),
-        selectedItem: item,
+        issues: ArrayHelper.replaceElement(state.issues, issue, issue, entityComparer),
+        selectedIssue: issue,
       };
     });
   }
 
-  private async handleApplicationItemsDelete({ item }: { item: IItem }) {
+  private async handleApplicationIssueDelete({ issue }: { issue: IIssue }) {
     this.setState(state => {
       return {
-        items: ArrayHelper.removeElement(state.items, item, entityComparer),
-        selectedItem: undefined,
+        issues: ArrayHelper.removeElement(state.issues, issue, entityComparer),
+        selectedIssue: undefined,
       };
     });
   }
@@ -131,11 +131,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private async handleIssueViewSettingsChange(view: IView) {
     this.localStorage.set('issues.view', view.toJSON());
 
-    const items = await this.application.items.getAllIssues(view.filterQuery);
+    const issues = await this.application.items.getAllIssues(view.filterQuery);
 
     this.setState({
-      items,
-      selectedItem: _.last(items),
+      issues,
+      selectedIssue: _.last(issues),
       view,
     });
   }
@@ -148,9 +148,9 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private handleItemListItemSelect(item: IItem) {
+  private handleItemListItemSelect(issue: IIssue) {
     this.setState({
-      selectedItem: item,
+      selectedIssue: issue,
     });
   }
 
@@ -165,16 +165,16 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           <div className="view-settings row">
             <IssueViewSettings view={this.state.view} savedViews={this.state.savedViews} onChange={this.handleIssueViewSettingsChange} onSavedViewsChange={this.handleIssueViewSettingsSavedViewsChange} />
           </div>
-          <div className="items row">
-            <div className="item-list">
-              <ItemList items={this.state.items} selectedItem={this.state.selectedItem} onItemSelect={this.handleItemListItemSelect} />
+          <div className="issues row">
+            <div className="issue-list">
+              <ItemList items={this.state.issues} selectedItem={this.state.selectedIssue} onItemSelect={this.handleItemListItemSelect} />
             </div>
             <div className="divider"></div>
-            <div className="item-detail">
-              <div ref={e => this.itemDetailContainerElement = e}>
+            <div className="issue-detail">
+              <div ref={e => this.issueDetailContainerElement = e}>
               {
-                this.state.selectedItem &&
-                  <IssueDetail issue={this.state.selectedItem} />
+                this.state.selectedIssue &&
+                  <IssueDetail issue={this.state.selectedIssue} />
               }
               </div>
             </div>
