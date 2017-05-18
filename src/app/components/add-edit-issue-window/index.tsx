@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IItem, IUser } from '../../application';
+import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser } from '../../application';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
@@ -29,7 +29,7 @@ interface IAddEditIssueWindowState {
   priority?: IItemPriority;
   state?: IItemState;
   assignedTo?: IUser;
-  milestone?: IItem;
+  milestone?: IMilestone;
 }
 
 export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
@@ -138,7 +138,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     });
   }
 
-  private handleMilestoneInputChange(value: IItem) {
+  private handleMilestoneInputChange(value: IMilestone) {
     this.setState({
       milestone: value,
     });

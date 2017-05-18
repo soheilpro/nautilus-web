@@ -38,7 +38,7 @@ export default class MilestoneQueryBuilder extends React.PureComponent<IMileston
 
   render() {
     return (
-      <ListQueryBuilder items={this.state.milestones} displayProperty="title" query={this.props.query} queryItem={this.props.queryItem} queryItemType="Milestone" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
+      <ListQueryBuilder items={this.state.milestones} displayProperty="fullTitle" query={this.props.query} queryItem={this.props.queryItem} queryItemType="Milestone" itemToQueryItem={asEntity} itemComparer={entityComparer} onChange={this.props.onChange} />
     );
   }
 };

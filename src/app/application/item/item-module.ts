@@ -3,18 +3,19 @@ import * as NQL from '../../nql';
 import { IClient, IItem } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
+import { entityComparer } from '../entity-comparer';
 import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
 import { IMilestone } from './imilestone';
-import { entityComparer } from '../entity-comparer';
+import Milestone from './milestone';
 import IssueFilter from './issue-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
   private milestones: IMilestone[];
   private issues: IIssue[];
 
-  constructor(application: IApplication, private client: IClient) {
+  constructor(private application: IApplication, private client: IClient) {
     super();
   }
 
@@ -27,7 +28,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     for (const item of items) {
       switch (item.kind) {
         case 'milestone':
-          this.milestones.push(item);
+          this.milestones.push(new Milestone(item, this.application));
           break;
 
         case 'issue':

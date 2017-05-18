@@ -39,7 +39,7 @@ export default class MilestoneSelect extends React.PureComponent<IMilestoneSelec
 
   render() {
     return (
-      <Select className={classNames('milestone-select-component', this.props.className)} selectedItem={this.props.milestone} items={this.state.milestones} displayProperty="title" onChange={this.handleSelectChange} />
+      <Select className={classNames('milestone-select-component', this.props.className)} selectedItem={this.props.milestone} items={this.state.milestones} displayProperty="fullTitle" onChange={this.handleSelectChange} />
     );
   }
 };

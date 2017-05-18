@@ -48,7 +48,7 @@ export default class HTMLExpressionFormatter extends NQL.ExpressionVisitor<strin
       return this.application.itemStates.get(expression.value).title;
 
     if (expression.type === 'Milestone')
-      return this.application.items.getMilestone(expression.value).title;
+      return this.application.items.getMilestone(expression.value).fullTitle;
 
     throw new Error('Not supported.');
   }
