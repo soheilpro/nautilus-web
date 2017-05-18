@@ -17,7 +17,7 @@ export class UserModule extends BaseModule implements IUserModule {
   }
 
   getAll() {
-    return this.users.slice();
+    return [...this.users];
   }
 
   get(user: IUser) {

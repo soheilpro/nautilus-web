@@ -66,7 +66,7 @@ export default class AndQueryBuilder extends React.PureComponent<IAndQueryBuilde
     if (!query)
       return null;
 
-    const children = (query as NQL.AndExpression).children.slice();
+    const children = [...(query as NQL.AndExpression).children];
     const queries: IQueryObject = {};
 
     for (const child of children) {
