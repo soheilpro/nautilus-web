@@ -28,7 +28,7 @@ export default class MilestoneQueryBuilder extends React.PureComponent<IMileston
 
   componentDidMount() {
     this.setState({
-      milestones: _.sortBy(this.application.items.getAllMilestones(null), milestone => milestone.title),
+      milestones: _.sortBy(this.application.items.getAllMilestones(null), milestone => milestone.fullTitle),
     });
   }
 
