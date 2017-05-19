@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IUser } from '../../application';
@@ -29,7 +30,7 @@ export default class UserSelect extends React.PureComponent<IUserSelectProps, IU
 
   componentDidMount() {
     this.setState({
-      users: this.application.users.getAll(),
+      users: _.sortBy(this.application.users.getAll(), user => user.name),
     });
   }
 

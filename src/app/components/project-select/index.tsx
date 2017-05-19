@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IProject } from '../../application';
@@ -29,7 +30,7 @@ export default class ProjectSelect extends React.PureComponent<IProjectSelectPro
 
   componentDidMount() {
     this.setState({
-      projects: this.application.projects.getAll(),
+      projects: _.sortBy(this.application.projects.getAll(), project => project.name),
     });
   }
 

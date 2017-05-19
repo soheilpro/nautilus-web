@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IMilestone } from '../../application';
@@ -29,7 +30,7 @@ export default class MilestoneSelect extends React.PureComponent<IMilestoneSelec
 
   componentDidMount() {
     this.setState({
-      milestones: this.application.items.getAllMilestones(null),
+      milestones: _.sortBy(this.application.items.getAllMilestones(null), milestone => milestone.fullTitle),
     });
   }
 

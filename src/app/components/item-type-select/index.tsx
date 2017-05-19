@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { ItemKind, IItemType } from '../../application';
@@ -30,7 +31,7 @@ export default class ItemTypeSelect extends React.PureComponent<IItemTypeSelectP
 
   componentDidMount() {
     this.setState({
-      itemTypes: this.application.itemTypes.getAll(this.props.itemKind),
+      itemTypes: _.sortBy(this.application.itemTypes.getAll(this.props.itemKind), itemType => itemType.order),
     });
   }
 

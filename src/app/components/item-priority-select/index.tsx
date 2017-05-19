@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { ItemKind, IItemPriority } from '../../application';
@@ -30,7 +31,7 @@ export default class ItemPrioritySelect extends React.PureComponent<IItemPriorit
 
   componentDidMount() {
     this.setState({
-      itemPriorities: this.application.itemPriorities.getAll(this.props.itemKind),
+      itemPriorities: _.sortBy(this.application.itemPriorities.getAll(this.props.itemKind), itemPriority => itemPriority.order),
     });
   }
 
