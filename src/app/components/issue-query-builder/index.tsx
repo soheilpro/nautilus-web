@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { ItemKind } from '../../application';
+import { IProject, IItemType, IItemPriority, IItemState, IUser, IMilestone } from '../../application';
+import { ServiceManager } from '../../services';
 import AndQueryBuilder, { IQueryBuilder } from '../and-query-builder';
 import MilestoneQueryBuilder from '../milestone-query-builder';
 import ProjectQueryBuilder from '../project-query-builder';
@@ -15,28 +16,59 @@ interface IIssueQueryBuilderProps {
 }
 
 interface IIssueQueryBuilderState {
+  projects?: IProject[];
+  itemTypes?: IItemType[];
+  itemPriorities?: IItemPriority[];
+  itemStates?: IItemState[];
+  users?: IUser[];
+  milestones?: IMilestone[];
 }
 
 export default class IssueQueryBuilder extends React.PureComponent<IIssueQueryBuilderProps, IIssueQueryBuilderState> {
+  private application = ServiceManager.Instance.getApplication();
   private andQueryBuilderComponent: AndQueryBuilder;
 
-  private queryBuilders: IQueryBuilder[] = [
-    { key: 'milestone',  title: 'Milestone',   queryItem: 'milestone',  Component: MilestoneQueryBuilder },
-    { key: 'project',    title: 'Project',     queryItem: 'project',    Component: ProjectQueryBuilder },
-    { key: 'type',       title: 'Type',        queryItem: 'type',       Component: ItemTypeQueryBuilder,     props: { itemKind: 'issue' as ItemKind } },
-    { key: 'priority',   title: 'Priority',    queryItem: 'priority',   Component: ItemPriorityQueryBuilder, props: { itemKind: 'issue' as ItemKind } },
-    { key: 'state',      title: 'State',       queryItem: 'state',      Component: ItemStateQueryBuilder,    props: { itemKind: 'issue' as ItemKind } },
-    { key: 'assignedTo', title: 'Assigned To', queryItem: 'assignedTo', Component: UserQueryBuilder },
-    { key: 'createdBy',  title: 'Created By',  queryItem: 'createdBy',  Component: UserQueryBuilder },
-  ];
+  constructor() {
+    super();
+
+    this.state = {
+      projects: [],
+      itemTypes: [],
+      itemPriorities: [],
+      itemStates: [],
+      users: [],
+      milestones: [],
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      projects: this.application.projects.getAll(),
+      itemTypes: this.application.itemTypes.getAll('issue'),
+      itemPriorities: this.application.itemPriorities.getAll('issue'),
+      itemStates: this.application.itemStates.getAll('issue'),
+      users: this.application.users.getAll(),
+      milestones: this.application.items.getAllMilestones(null),
+    });
+  }
 
   open(key: string) {
     this.andQueryBuilderComponent.open(key);
   }
 
   render() {
+    const queryBuilders: IQueryBuilder[] = [
+      { key: 'milestone',  title: 'Milestone',   queryItem: 'milestone',  Component: MilestoneQueryBuilder,    props: { milestones: this.state.milestones } },
+      { key: 'project',    title: 'Project',     queryItem: 'project',    Component: ProjectQueryBuilder,      props: { projects: this.state.projects } },
+      { key: 'type',       title: 'Type',        queryItem: 'type',       Component: ItemTypeQueryBuilder,     props: { itemTypes: this.state.itemTypes } },
+      { key: 'priority',   title: 'Priority',    queryItem: 'priority',   Component: ItemPriorityQueryBuilder, props: { itemPriorities: this.state.itemPriorities } },
+      { key: 'state',      title: 'State',       queryItem: 'state',      Component: ItemStateQueryBuilder,    props: { itemStates: this.state.itemStates } },
+      { key: 'assignedTo', title: 'Assigned To', queryItem: 'assignedTo', Component: UserQueryBuilder,         props: { users: this.state.users } },
+      { key: 'createdBy',  title: 'Created By',  queryItem: 'createdBy',  Component: UserQueryBuilder,         props: { users: this.state.users } },
+    ];
+
     return (
-      <AndQueryBuilder queryBuilders={this.queryBuilders} query={this.props.query} onChange={this.props.onChange} ref={e => this.andQueryBuilderComponent = e} />
+      <AndQueryBuilder queryBuilders={queryBuilders} query={this.props.query} onChange={this.props.onChange} ref={e => this.andQueryBuilderComponent = e} />
     );
   }
 };
