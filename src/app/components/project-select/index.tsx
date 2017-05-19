@@ -1,37 +1,23 @@
-import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IProject } from '../../application';
-import { ServiceManager } from '../../services';
 import Select from '../select';
 
 interface IProjectSelectProps {
+  projects: IProject[];
   project: IProject;
   className?: string;
   onChange(project: IProject): void;
 }
 
 interface IProjectSelectState {
-  projects?: IProject[];
 }
 
 export default class ProjectSelect extends React.PureComponent<IProjectSelectProps, IProjectSelectState> {
-  private application = ServiceManager.Instance.getApplication();
-
   constructor() {
     super();
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
-
-    this.state = {
-      projects: [],
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      projects: _.sortBy(this.application.projects.getAll(), project => project.name),
-    });
   }
 
   private handleSelectChange(project: IProject) {
@@ -40,7 +26,7 @@ export default class ProjectSelect extends React.PureComponent<IProjectSelectPro
 
   render() {
     return (
-      <Select className={classNames('project-select-component', this.props.className)} selectedItem={this.props.project} items={this.state.projects} displayProperty="name" onChange={this.handleSelectChange} />
+      <Select className={classNames('project-select-component', this.props.className)} selectedItem={this.props.project} items={this.props.projects} displayProperty="name" onChange={this.handleSelectChange} />
     );
   }
 };

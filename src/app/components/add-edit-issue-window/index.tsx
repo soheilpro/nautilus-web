@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser } from '../../application';
+import { ServiceManager } from '../../services';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
@@ -22,6 +23,12 @@ interface IAddEditIssueWindowProps {
 }
 
 interface IAddEditIssueWindowState {
+  projects?: IProject[];
+  itemTypes?: IItemType[];
+  itemPriorities?: IItemPriority[];
+  itemStates?: IItemState[];
+  users?: IUser[];
+  milestones?: IMilestone[];
   title?: string;
   description?: string;
   project?: IProject;
@@ -33,6 +40,8 @@ interface IAddEditIssueWindowState {
 }
 
 export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssueWindowProps, IAddEditIssueWindowState> {
+  private application = ServiceManager.Instance.getApplication();
+
   constructor(props: IAddEditIssueWindowProps) {
     super(props);
 
@@ -46,7 +55,14 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     this.handleAssignedToInputChange = this.handleAssignedToInputChange.bind(this);
     this.handleMilestoneInputChange = this.handleMilestoneInputChange.bind(this);
 
-    this.state = {};
+    this.state = {
+      projects: [],
+      itemTypes: [],
+      itemPriorities: [],
+      itemStates: [],
+      users: [],
+      milestones: [],
+    };
 
     if (props.issue) {
       this.state.title = props.issue.title;
@@ -58,6 +74,17 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
       this.state.assignedTo = props.issue.assignedTo;
       this.state.milestone = props.issue.milestone;
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      projects: this.application.projects.getAll(),
+      itemTypes: this.application.itemTypes.getAll('issue'),
+      itemPriorities: this.application.itemPriorities.getAll('issue'),
+      itemStates: this.application.itemStates.getAll('issue'),
+      users: this.application.users.getAll(),
+      milestones: this.application.items.getAllMilestones(null),
+    });
   }
 
   private handleFormSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -174,7 +201,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 Project:
               </div>
               <div className="value">
-                <ProjectSelect className="project" project={this.state.project} onChange={this.handleProjectSelectChange} />
+                <ProjectSelect className="project" projects={this.state.projects} project={this.state.project} onChange={this.handleProjectSelectChange} />
               </div>
             </div>
             <div className="field">
@@ -182,7 +209,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 Type:
               </div>
               <div className="value">
-                <ItemTypeSelect className="type" itemKind="issue" itemType={this.state.type} onChange={this.handleTypeInputChange} />
+                <ItemTypeSelect className="type" itemTypes={this.state.itemTypes} itemType={this.state.type} onChange={this.handleTypeInputChange} />
               </div>
             </div>
             <div className="field">
@@ -190,7 +217,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 Priority:
               </div>
               <div className="value">
-                <ItemPrioritySelect className="priority" itemKind="issue" itemPriority={this.state.priority} onChange={this.handlePriorityInputChange} />
+                <ItemPrioritySelect className="priority" itemPriorities={this.state.itemPriorities} itemPriority={this.state.priority} onChange={this.handlePriorityInputChange} />
               </div>
             </div>
             <div className="field">
@@ -198,7 +225,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 State:
               </div>
               <div className="value">
-                <ItemStateSelect className="state" itemKind="issue" itemState={this.state.state} onChange={this.handleStateInputChange} />
+                <ItemStateSelect className="state" itemStates={this.state.itemStates} itemState={this.state.state} onChange={this.handleStateInputChange} />
               </div>
             </div>
             <div className="field">
@@ -206,7 +233,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 Assigned To:
               </div>
               <div className="value">
-                <UserSelect className="assigned-to-state" user={this.state.assignedTo} onChange={this.handleAssignedToInputChange} />
+                <UserSelect className="assigned-to-state" users={this.state.users} user={this.state.assignedTo} onChange={this.handleAssignedToInputChange} />
               </div>
             </div>
             <div className="field">
@@ -214,7 +241,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
                 Milestone:
               </div>
               <div className="value">
-                <MilestoneSelect className="state" milestone={this.state.milestone} onChange={this.handleMilestoneInputChange} />
+                <MilestoneSelect className="state" milestones={this.state.milestones} milestone={this.state.milestone} onChange={this.handleMilestoneInputChange} />
               </div>
             </div>
           </form>

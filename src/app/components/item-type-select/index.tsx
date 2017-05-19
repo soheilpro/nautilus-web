@@ -1,38 +1,23 @@
-import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { ItemKind, IItemType } from '../../application';
-import { ServiceManager } from '../../services';
+import { IItemType } from '../../application';
 import Select from '../select';
 
 interface IItemTypeSelectProps {
-  itemKind: ItemKind;
+  itemTypes?: IItemType[];
   itemType: IItemType;
   className?: string;
   onChange(itemType: IItemType): void;
 }
 
 interface IItemTypeSelectState {
-  itemTypes?: IItemType[];
 }
 
 export default class ItemTypeSelect extends React.PureComponent<IItemTypeSelectProps, IItemTypeSelectState> {
-  private application = ServiceManager.Instance.getApplication();
-
   constructor() {
     super();
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
-
-    this.state = {
-      itemTypes: [],
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      itemTypes: _.sortBy(this.application.itemTypes.getAll(this.props.itemKind), itemType => itemType.order),
-    });
   }
 
   private handleSelectChange(itemType: IItemType) {
@@ -41,7 +26,7 @@ export default class ItemTypeSelect extends React.PureComponent<IItemTypeSelectP
 
   render() {
     return (
-      <Select className={classNames('item-type-select-component', this.props.className)} selectedItem={this.props.itemType} items={this.state.itemTypes} displayProperty="title" onChange={this.handleSelectChange} />
+      <Select className={classNames('item-type-select-component', this.props.className)} selectedItem={this.props.itemType} items={this.props.itemTypes} displayProperty="title" onChange={this.handleSelectChange} />
     );
   }
 };

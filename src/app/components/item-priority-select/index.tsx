@@ -1,38 +1,23 @@
-import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { ItemKind, IItemPriority } from '../../application';
-import { ServiceManager } from '../../services';
+import { IItemPriority } from '../../application';
 import Select from '../select';
 
 interface IItemPrioritySelectProps {
-  itemKind: ItemKind;
+  itemPriorities?: IItemPriority[];
   itemPriority: IItemPriority;
   className?: string;
   onChange(itemPriority: IItemPriority): void;
 }
 
 interface IItemPrioritySelectState {
-  itemPriorities?: IItemPriority[];
 }
 
 export default class ItemPrioritySelect extends React.PureComponent<IItemPrioritySelectProps, IItemPrioritySelectState> {
-  private application = ServiceManager.Instance.getApplication();
-
   constructor() {
     super();
 
     this.handleSelectChange = this.handleSelectChange.bind(this);
-
-    this.state = {
-      itemPriorities: [],
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      itemPriorities: _.sortBy(this.application.itemPriorities.getAll(this.props.itemKind), itemPriority => itemPriority.order),
-    });
   }
 
   private handleSelectChange(itemPriority: IItemPriority) {
@@ -41,7 +26,7 @@ export default class ItemPrioritySelect extends React.PureComponent<IItemPriorit
 
   render() {
     return (
-      <Select className={classNames('item-priority-select-component', this.props.className)} selectedItem={this.props.itemPriority} items={this.state.itemPriorities} displayProperty="title" onChange={this.handleSelectChange} />
+      <Select className={classNames('item-priority-select-component', this.props.className)} selectedItem={this.props.itemPriority} items={this.props.itemPriorities} displayProperty="title" onChange={this.handleSelectChange} />
     );
   }
 };
