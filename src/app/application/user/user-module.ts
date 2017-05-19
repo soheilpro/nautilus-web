@@ -13,7 +13,7 @@ export class UserModule extends BaseModule implements IUserModule {
   }
 
   async load() {
-    this.users = (await this.client.users.getAll({}));
+    this.users = _.sortBy(await this.client.users.getAll({}), user => user.name);
   }
 
   getAll() {

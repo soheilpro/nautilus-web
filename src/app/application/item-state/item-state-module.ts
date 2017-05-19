@@ -15,7 +15,7 @@ export class ItemStateModule extends BaseModule implements IItemStateModule {
   }
 
   async load() {
-    this.itemStates = await this.client.itemStates.getAll({});
+    this.itemStates = _.sortBy(await this.client.itemStates.getAll({}), itemState => itemState.order);
   }
 
   getAll(itemKind: ItemKind) {

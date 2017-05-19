@@ -15,7 +15,7 @@ export class ItemPriorityModule extends BaseModule implements IItemPriorityModul
   }
 
   async load() {
-    this.itemPriorities = await this.client.itemPriorities.getAll({});
+    this.itemPriorities = _.sortBy(await this.client.itemPriorities.getAll({}), itemPriority => itemPriority.order);
   }
 
   getAll(itemKind: ItemKind) {

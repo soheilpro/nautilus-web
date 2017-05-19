@@ -15,7 +15,7 @@ export class ItemTypeModule extends BaseModule implements IItemTypeModule {
   }
 
   async load() {
-    this.itemTypes = await this.client.itemTypes.getAll({});
+    this.itemTypes = _.sortBy(await this.client.itemTypes.getAll({}), itemType => itemType.order);
   }
 
   getAll(itemKind: ItemKind) {

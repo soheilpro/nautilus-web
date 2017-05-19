@@ -13,7 +13,7 @@ export class ProjectModule extends BaseModule implements IProjectModule {
   }
 
   async load() {
-    this.projects = await this.client.projects.getAll({});
+    this.projects = _.sortBy(await this.client.projects.getAll({}), project => project.name);
   }
 
   getAll() {
