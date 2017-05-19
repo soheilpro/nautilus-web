@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser } from '../../application';
+import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser, entityComparer } from '../../application';
 import { ServiceManager } from '../../services';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
@@ -77,13 +77,15 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
   }
 
   componentDidMount() {
-    this.setState({
-      projects: this.application.projects.getAll(),
-      itemTypes: this.application.itemTypes.getAll('issue'),
-      itemPriorities: this.application.itemPriorities.getAll('issue'),
-      itemStates: this.application.itemStates.getAll('issue'),
-      users: this.application.users.getAll(),
-      milestones: this.application.items.getAllMilestones(null),
+    this.setState(state => {
+      return {
+        projects: this.application.projects.getAll(),
+        itemTypes: this.application.itemTypes.getAll('issue'),
+        itemPriorities: this.application.itemPriorities.getAll('issue'),
+        itemStates: this.application.itemStates.getAll('issue'),
+        users: this.application.users.getAll(),
+        milestones: this.getMilestones(state.project),
+      };
     });
   }
 
@@ -138,6 +140,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
   private handleProjectSelectChange(value: IProject) {
     this.setState({
       project: value,
+      milestones: this.getMilestones(value),
     });
   }
 
@@ -169,6 +172,15 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     this.setState({
       milestone: value,
     });
+  }
+
+  private getMilestones(project: IProject) {
+    const milestones = this.application.items.getAllMilestones(null);
+
+    if (!project)
+      return milestones;
+
+    return milestones.filter(milestone => !milestone.project || entityComparer(milestone.project, project));
   }
 
   render() {
