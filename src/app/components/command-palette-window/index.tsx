@@ -41,15 +41,19 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedCommandIndex: this.state.selectedCommandIndex < this.state.commands.length - 1 ? this.state.selectedCommandIndex + 1 : 0,
+      this.setState(state => {
+        return {
+          selectedCommandIndex: state.selectedCommandIndex < state.commands.length - 1 ? state.selectedCommandIndex + 1 : 0,
+        };
       });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedCommandIndex: this.state.selectedCommandIndex > 0 ? this.state.selectedCommandIndex - 1 : this.state.commands.length - 1,
+      this.setState(state => {
+        return {
+          selectedCommandIndex: state.selectedCommandIndex > 0 ? state.selectedCommandIndex - 1 : state.commands.length - 1,
+        };
       });
     }
     else if (event.which === KeyCode.Enter) {
@@ -81,8 +85,10 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
   }
 
   private handleCommandMouseEnter(command: ICommand) {
-    this.setState({
-      selectedCommandIndex: this.state.commands.indexOf(command),
+    this.setState(state => {
+      return {
+        selectedCommandIndex: state.commands.indexOf(command),
+      };
     });
   }
 

@@ -58,10 +58,12 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   componentWillReceiveProps(props: IListQueryBuilderProps) {
     const { includedItems, excludedItems } = this.parseQuery(props.query, props);
 
-    this.setState({
-      items: this.filterItems(props.items, this.state.searchText),
-      includedItems,
-      excludedItems,
+    this.setState(state => {
+      return {
+        items: this.filterItems(props.items, state.searchText),
+        includedItems,
+        excludedItems,
+      };
     });
   }
 
@@ -69,15 +71,19 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedItemIndex: this.state.selectedItemIndex < this.state.items.length - 1 ? this.state.selectedItemIndex + 1 : 0,
+      this.setState(state => {
+        return {
+          selectedItemIndex: state.selectedItemIndex < state.items.length - 1 ? state.selectedItemIndex + 1 : 0,
+        };
       });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedItemIndex: this.state.selectedItemIndex > 0 ? this.state.selectedItemIndex - 1 : this.state.items.length - 1,
+      this.setState(state => {
+        return {
+          selectedItemIndex: state.selectedItemIndex > 0 ? state.selectedItemIndex - 1 : state.items.length - 1,
+        };
       });
     }
     else if (event.which === KeyCode.Dash) {
@@ -119,8 +125,10 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   }
 
   private handleItemMouseEnter(item: IItem) {
-    this.setState({
-      selectedItemIndex: this.state.items.indexOf(item),
+    this.setState(state => {
+      return {
+        selectedItemIndex: state.items.indexOf(item),
+      };
     });
   }
 
@@ -129,8 +137,10 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.toggleItemExclude(item);
 
-    this.setState({
-      selectedItemIndex: this.state.items.indexOf(item),
+    this.setState(state => {
+      return {
+        selectedItemIndex: state.items.indexOf(item),
+      };
     });
   }
 
@@ -139,8 +149,10 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.toggleItemInclude(item);
 
-    this.setState({
-      selectedItemIndex: this.state.items.indexOf(item),
+    this.setState(state => {
+      return {
+        selectedItemIndex: state.items.indexOf(item),
+      };
     });
   }
 
@@ -149,8 +161,10 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.includeItem(item);
 
-    this.setState({
-      selectedItemIndex: this.state.items.indexOf(item),
+    this.setState(state => {
+      return {
+        selectedItemIndex: state.items.indexOf(item),
+      };
     });
   }
 

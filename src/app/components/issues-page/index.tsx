@@ -104,9 +104,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private async handleApplicationIssueAdd({ issue }: { issue: IIssue }) {
-    this.setState({
-      issues: this.state.issues.concat(issue),
-      selectedIssue: issue,
+    this.setState(state => {
+      return {
+        issues: state.issues.concat(issue),
+        selectedIssue: issue,
+      };
     });
   }
 

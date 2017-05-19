@@ -48,15 +48,19 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
     if (event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedViewIndex: this.state.selectedViewIndex < this.state.views.length - 1 ? this.state.selectedViewIndex + 1 : 0,
+      this.setState(state => {
+        return {
+          selectedViewIndex: state.selectedViewIndex < state.views.length - 1 ? state.selectedViewIndex + 1 : 0,
+        };
       });
     }
     else if (event.which === KeyCode.UpArrow) {
       event.preventDefault();
 
-      this.setState({
-        selectedViewIndex: this.state.selectedViewIndex > 0 ? this.state.selectedViewIndex - 1 : this.state.views.length - 1,
+      this.setState(state => {
+        return {
+          selectedViewIndex: state.selectedViewIndex > 0 ? state.selectedViewIndex - 1 : state.views.length - 1,
+        };
       });
     }
     else if (event.which === KeyCode.Enter) {
@@ -84,8 +88,10 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
   }
 
   private handleViewMouseEnter(view: IView) {
-    this.setState({
-      selectedViewIndex: this.state.views.indexOf(view),
+    this.setState(state => {
+      return {
+        selectedViewIndex: state.views.indexOf(view),
+      };
     });
   }
 

@@ -61,8 +61,10 @@ export default class SearchWindow extends React.PureComponent<ISearchWindowProps
       event.preventDefault();
 
       if (this.state.searchResults) {
-        this.setState({
-          selectedSearchResultIndex: this.state.selectedSearchResultIndex < this.state.searchResults.length - 1 ? this.state.selectedSearchResultIndex + 1 : 0,
+        this.setState(state => {
+          return {
+            selectedSearchResultIndex: state.selectedSearchResultIndex < state.searchResults.length - 1 ? state.selectedSearchResultIndex + 1 : 0,
+          };
         });
       }
     }
@@ -70,8 +72,10 @@ export default class SearchWindow extends React.PureComponent<ISearchWindowProps
       event.preventDefault();
 
       if (this.state.searchResults) {
-        this.setState({
-          selectedSearchResultIndex: this.state.selectedSearchResultIndex > 0 ? this.state.selectedSearchResultIndex - 1 : this.state.searchResults.length - 1,
+        this.setState(state => {
+          return {
+            selectedSearchResultIndex: state.selectedSearchResultIndex > 0 ? state.selectedSearchResultIndex - 1 : state.searchResults.length - 1,
+          };
         });
       }
     }
