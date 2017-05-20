@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as classNames from 'classnames';
+import { KeyCode } from '../../keyboard';
 import Icon from '../icon';
 import Window, { WindowContainer } from '../window';
 
@@ -19,14 +20,16 @@ interface IDropdownState {
 }
 
 export default class Dropdown extends React.PureComponent<IDropdownProps, IDropdownState> {
-  private rootElement: HTMLElement;
+  private componentElement: HTMLElement;
   private buttonElement: HTMLElement;
   private windowContainerComponent: WindowContainer;
 
   constructor() {
     super();
 
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.handleButtonKeyDown = this.handleButtonKeyDown.bind(this);
     this.handleWindowContainerCloseRequest = this.handleWindowContainerCloseRequest.bind(this);
 
     this.state = {};
@@ -64,11 +67,38 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
       this.props.onClose();
   }
 
+  focus() {
+    this.buttonElement.focus();
+  }
+
+  private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.which === KeyCode.Escape) {
+      if (this.state.isOpen) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.close();
+        this.focus();
+      }
+    }
+  }
+
   private handleButtonClick() {
     if (!this.state.isOpen)
       this.open();
     else
       this.close();
+  }
+
+  private handleButtonKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.which === KeyCode.Enter) {
+      event.preventDefault();
+
+      if (!this.state.isOpen)
+        this.open();
+      else
+        this.close();
+    }
   }
 
   private handleWindowContainerCloseRequest() {
@@ -77,14 +107,14 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
 
   render() {
     return (
-      <div className={classNames('dropdown-component', this.props.className, {'open': this.state.isOpen})} tabIndex={0} ref={e => this.rootElement = e}>
-        <div className="button" onClick={this.handleButtonClick} ref={e => this.buttonElement = e}>
+      <div className={classNames('dropdown-component', this.props.className, {'open': this.state.isOpen})} onKeyDown={this.handleKeyDown} ref={e => this.componentElement = e}>
+        <div className="button" tabIndex={0} onClick={this.handleButtonClick} onKeyDown={this.handleButtonKeyDown} ref={e => this.buttonElement = e}>
           {this.props.title}
           <Icon className="caret" name={this.state.isOpen ? 'caret-up' : 'caret-down'} />
         </div>
         {
           this.state.isOpen &&
-            <WindowContainer position="absolute" blurCheckElement={this.rootElement} onCloseRequest={this.handleWindowContainerCloseRequest} ref={e => this.windowContainerComponent = e}>
+            <WindowContainer position="absolute" blurCheckElement={this.componentElement} onCloseRequest={this.handleWindowContainerCloseRequest} ref={e => this.windowContainerComponent = e}>
               <Window className="window">
                 {this.props.children}
               </Window>
