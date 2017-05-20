@@ -73,8 +73,13 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
   private async handleSearchInputChange(value: string) {
     this.setState({
       searchText: value,
+    });
+
+    value = value.trim();
+
+    this.setState({
       commands: this.filterCommands(this.props.commands, value),
-      selectedCommandIndex: 0,
+      selectedCommandIndex: value ? 0 : -1,
     });
   }
 
@@ -103,7 +108,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
     if (!text)
       return commands;
 
-    text = text.toLowerCase().trim();
+    text = text.toLowerCase();
 
     return commands.filter(command => command.title.toLowerCase().indexOf(text) !== -1);
   }

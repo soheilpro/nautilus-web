@@ -117,7 +117,7 @@ export default class SearchWindow extends React.PureComponent<ISearchWindowProps
 
     this.setState({
       searchResults,
-      selectedSearchResultIndex: 0,
+      selectedSearchResultIndex: value ? 0 : -1,
     });
   }
 
