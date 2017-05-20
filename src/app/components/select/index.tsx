@@ -45,7 +45,7 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
     return (
       <div className={classNames('select-component', this.props.className)}>
         <Dropdown title={this.props.selectedItem && this.props.selectedItem[this.props.displayProperty]} ref={e => this.dropdownComponent = e}>
-          <ItemList items={this.props.items} displayProperty={this.props.displayProperty} onSelect={this.handleItemListSelect} />
+          <ItemList items={this.props.items} selectedItem={this.props.selectedItem} displayProperty={this.props.displayProperty} onSelect={this.handleItemListSelect} />
         </Dropdown>
         {
           this.props.selectedItem &&

@@ -10,6 +10,7 @@ require('./item-list.less');
 
 interface IItemListProps {
   items: IItem[];
+  selectedItem: IItem;
   displayProperty: string;
   onSelect(item: IItem): void;
 }
@@ -32,7 +33,7 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
 
     this.state = {
       items: props.items,
-      selectedItemIndex: -1,
+      selectedItemIndex: props.items.indexOf(props.selectedItem),
     };
   }
 
