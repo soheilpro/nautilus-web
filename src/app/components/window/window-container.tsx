@@ -24,7 +24,7 @@ export class WindowContainer extends React.PureComponent<IWindowContainerProps, 
 
   private static zIndexCounter = 1000;
 
-  private rootElement?: HTMLElement;
+  private componentElement?: HTMLElement;
 
   constructor() {
     super();
@@ -55,7 +55,7 @@ export class WindowContainer extends React.PureComponent<IWindowContainerProps, 
       return;
 
     setTimeout(() => {
-      if ((this.props.blurCheckElement || this.rootElement).contains(document.activeElement))
+      if ((this.props.blurCheckElement || this.componentElement).contains(document.activeElement))
         return;
 
       if (this.props.closeOnEsc)
@@ -65,7 +65,7 @@ export class WindowContainer extends React.PureComponent<IWindowContainerProps, 
 
   render() {
     return (
-      <div className="window-container-component" style={{ position: this.props.position, top: this.props.top, left: `calc(100% / 2 - ${this.props.width}px / 2)`, width: this.props.width, zIndex: this.state.zIndex }} tabIndex={0} onKeyDown={this.handleKeyDown} onBlur={this.handleBlur} ref={e => this.rootElement = e}>
+      <div className="window-container-component" style={{ position: this.props.position, top: this.props.top, left: `calc(100% / 2 - ${this.props.width}px / 2)`, width: this.props.width, zIndex: this.state.zIndex }} tabIndex={0} onKeyDown={this.handleKeyDown} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
         {this.props.children}
       </div>
     );
