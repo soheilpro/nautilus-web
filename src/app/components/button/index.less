@@ -23,6 +23,10 @@
     cursor: default;
   }
 
+  &:focus {
+    box-shadow: 0 0 10px lighten(@primary, 20%);
+  }
+
   &.secondary {
     border-color: @darkgray;
     background-color: @white;
@@ -36,6 +40,11 @@
       color: lighten(desaturate(@text, 100%), 30%);
       cursor: default;
     }
+
+    &:focus {
+      border-color: @primary;
+      box-shadow: 0 0 10px lighten(@primary, 40%);
+    }
   }
 
   &.destructive {
@@ -45,6 +54,10 @@
 
     &:hover {
       background-color: lighten(@danger, 5%);
+    }
+
+    &:focus {
+      box-shadow: 0 0 10px lighten(@danger, 40%);
     }
 
     &:disabled {
