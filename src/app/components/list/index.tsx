@@ -41,11 +41,11 @@ export default class List extends React.PureComponent<IListProps, IListState> {
 
   componentDidMount() {
     $(this.componentElement).on('focusin', (e) => {
-      $(this.componentElement).addClass('focused');
+      $(this.componentElement).addClass('focus');
     });
 
     $(this.componentElement).on('focusout', (e) => {
-      $(this.componentElement).removeClass('focused');
+      $(this.componentElement).removeClass('focus');
     });
   }
 
