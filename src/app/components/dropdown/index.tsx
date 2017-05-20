@@ -99,6 +99,12 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
       else
         this.close();
     }
+    else if (event.which === KeyCode.DownArrow) {
+      event.preventDefault();
+
+      if (!this.state.isOpen)
+        this.open();
+    }
   }
 
   private handleWindowContainerCloseRequest() {
