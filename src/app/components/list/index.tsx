@@ -30,7 +30,9 @@ export default class List extends React.PureComponent<IListProps, IListState> {
   constructor(props: IListProps) {
     super(props);
 
-    this.handleListKeyDown = this.handleListKeyDown.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleItemDoubleClick = this.handleItemDoubleClick.bind(this);
 
@@ -39,18 +41,8 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     };
   }
 
-  componentDidMount() {
-    $(this.componentElement).on('focusin', (e) => {
-      $(this.componentElement).addClass('focus');
-    });
-
-    $(this.componentElement).on('focusout', (e) => {
-      $(this.componentElement).removeClass('focus');
-    });
-  }
-
   componentDidUpdate() {
-    if (this.selectedItemElement)
+    if ($(this.componentElement).hasClass('focus') && this.selectedItemElement)
       this.selectedItemElement.focus();
   }
 
@@ -80,13 +72,13 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     });
   }
 
-  private handleListKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.which === KeyCode.DownArrow) {
-      event.preventDefault();
-
       const selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
 
       if (selectedItemIndex < this.props.items.length - 1) {
+        event.preventDefault();
+
         const selectedItem = this.props.items[selectedItemIndex + 1];
 
         this.setState({
@@ -97,11 +89,11 @@ export default class List extends React.PureComponent<IListProps, IListState> {
       }
     }
     else if (event.which === KeyCode.UpArrow) {
-      event.preventDefault();
-
       const selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
 
       if (selectedItemIndex > 0) {
+        event.preventDefault();
+
         const selectedItem = this.props.items[selectedItemIndex - 1];
 
         this.setState({
@@ -125,6 +117,14 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     }
   }
 
+  private handleFocus() {
+    $(this.componentElement).addClass('focus');
+  }
+
+  private handleBlur() {
+    $(this.componentElement).removeClass('focus');
+  }
+
   private handleItemClick(item: IListItem, index: number) {
     if (this.props.onItemSelect)
       this.props.onItemSelect(item);
@@ -141,7 +141,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
 
   render() {
     return (
-      <div className="list-component" onKeyDown={this.handleListKeyDown} ref={e => this.componentElement = e}>
+      <div className="list-component" onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
         {
           this.props.items.map((item, index) => {
             return (
