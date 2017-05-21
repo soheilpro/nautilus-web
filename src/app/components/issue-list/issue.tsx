@@ -9,6 +9,7 @@ import IssueTypeField from '../issue-type-field';
 import IssueStateField from '../issue-state-field';
 import IssueAssignedTo from '../issue-assigned-to-field';
 import IssueMilestoneField from '../issue-milestone-field';
+import ItemPriorityIndicator from '../item-priority-indicator';
 
 require('../../assets/stylesheets/base.less');
 require('./issue.less');
@@ -50,6 +51,7 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
         </div>
         <div className="list-field title">
           <IssueTitleField issue={this.props.item} />
+          <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
         </div>
         <div className="list-field project">
           <IssueProjectField issue={this.props.item} />
