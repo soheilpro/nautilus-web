@@ -103,7 +103,7 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
         form.removeChild(button);
       }
     }
-    else if (event.which === KeyCode.DownArrow) {
+    else if (event.which === KeyCode.UpArrow || event.which === KeyCode.DownArrow) {
       event.preventDefault();
 
       if (!this.state.isOpen)
