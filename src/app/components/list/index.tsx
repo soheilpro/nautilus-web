@@ -10,10 +10,25 @@ interface IListItem {
   id?: string;
 };
 
+interface IListItemProps {
+  item: IListItem;
+  index: number;
+  isSelected: boolean;
+  onSelect?(): void;
+  onAction?(): void;
+}
+
+interface IListItemState {
+}
+
+export class ListItem extends React.Component<IListItemProps, IListItemState> {
+}
+
 interface IListProps {
   items: IListItem[];
   selectedItem?: IListItem;
-  renderItem(item: IListItem, index: number, isSelected: boolean): JSX.Element;
+  Item?: typeof ListItem;
+  className?: string;
   onItemSelect?(item: IListItem): void;
   onItemAction?(item: IListItem): void;
   onItemDelete?(item: IListItem): void;
@@ -33,8 +48,8 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
-    this.handleItemClick = this.handleItemClick.bind(this);
-    this.handleItemDoubleClick = this.handleItemDoubleClick.bind(this);
+    this.handleItemSelect = this.handleItemSelect.bind(this);
+    this.handleItemAction = this.handleItemAction.bind(this);
 
     this.state = {
       selectedItem: props.selectedItem,
@@ -125,7 +140,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     $(this.componentElement).removeClass('focus');
   }
 
-  private handleItemClick(item: IListItem, index: number) {
+  private handleItemSelect(item: IListItem) {
     if (this.props.onItemSelect)
       this.props.onItemSelect(item);
 
@@ -134,20 +149,18 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     });
   }
 
-  private handleItemDoubleClick(item: IListItem, index: number) {
+  private handleItemAction(item: IListItem) {
     if (this.props.onItemAction)
       this.props.onItemAction(item);
   }
 
   render() {
     return (
-      <div className="list-component" onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+      <div className={classNames('list-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
         {
           this.props.items.map((item, index) => {
             return (
-              <div className={classNames('item', { 'selected': this.state.selectedItem === item })} tabIndex={0} onClick={_.partial(this.handleItemClick, item, index)} onDoubleClick={_.partial(this.handleItemDoubleClick, item, index)} key={item.id} ref={e => { if (this.state.selectedItem === item) this.selectedItemElement = e; }}>
-                {this.props.renderItem(item, index, this.state.selectedItem === item)}
-              </div>
+              <this.props.Item item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={_.partial(this.handleItemSelect, item)} onAction={_.partial(this.handleItemAction, item)} key={item.id} />
             );
           })
         }

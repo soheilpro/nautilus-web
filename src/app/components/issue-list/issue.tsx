@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IIssue } from '../../application';
 import IssueSidField from '../issue-sid-field';
 import IssueTitleField from '../issue-title-field';
@@ -13,69 +14,61 @@ require('../../assets/stylesheets/base.less');
 require('./issue.less');
 
 interface IIssueProps {
-  issue: IIssue;
+  item: IIssue;
+  index: number;
   isSelected: boolean;
+  onSelect?(): void;
+  onAction?(): void;
 }
 
 interface IIssueState {
 }
 
 export default class Issue extends React.PureComponent<IIssueProps, IIssueState> {
+  constructor() {
+    super();
+
+    this.handleClick = this.handleClick.bind(this);
+    this.handleDoubleClick = this.handleDoubleClick.bind(this);
+  }
+
+  private handleClick() {
+    if (this.props.onSelect)
+      this.props.onSelect();
+  }
+
+  private handleDoubleClick() {
+    if (this.props.onAction)
+      this.props.onAction();
+  }
+
   render() {
     return (
-      <div className="issue-component">
-        <span className="sid">
-          <IssueSidField issue={this.props.issue} bold={this.props.isSelected} />
-        </span>
-        <span className="divider1"></span>
-        {
-          <span className="title">
-            <IssueTitleField issue={this.props.issue} />
-          </span>
-        }
-        {
-          this.props.issue.priority &&
-            <span className="priority">
-              <span className="divider2"></span>
-              <IssuePriorityField issue={this.props.issue} />
-            </span>
-        }
-        <span className="spacer"></span>
-        {
-          this.props.issue.project &&
-            <span className="project">
-              <span className="divider2"></span>
-              <IssueProjectField issue={this.props.issue} />
-            </span>
-        }
-        {
-          this.props.issue.type &&
-            <span className="type">
-              <span className="divider2"></span>
-              <IssueTypeField issue={this.props.issue} />
-            </span>
-        }
-        {
-          this.props.issue.state &&
-            <span className="state">
-              <span className="divider2"></span>
-              <IssueStateField issue={this.props.issue} />
-            </span>
-        }
-        {
-          this.props.issue.assignedTo &&
-            <span className="assigned-to">
-              <span className="divider2"></span>
-              <IssueAssignedTo issue={this.props.issue} />
-            </span>
-        }
-        {
-          this.props.issue.milestone &&
-            <span className="milestone">
-              <span className="divider2"></span>
-              <IssueMilestoneField issue={this.props.issue} />
-            </span>
-        }
+      <div className={classNames('issue-component', 'list-item', {'selected': this.props.isSelected})} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+        <div className="list-field sid">
+          <IssueSidField issue={this.props.item} bold={this.props.isSelected} />
+        </div>
+        <div className="list-field title">
+          <IssueTitleField issue={this.props.item} />
+        </div>
+        <div className="list-field project">
+          <IssueProjectField issue={this.props.item} />
+        </div>
+        <div className="list-field type">
+          <IssueTypeField issue={this.props.item} />
+        </div>
+        <div className="list-field priority">
+          <IssuePriorityField issue={this.props.item} />
+        </div>
+        <div className="list-field state">
+          <IssueStateField issue={this.props.item} />
+        </div>
+        <div className="list-field assigned-to">
+          <IssueAssignedTo issue={this.props.item} />
+        </div>
+        <div className="list-field milestone">
+          <IssueMilestoneField issue={this.props.item} />
+        </div>
       </div>
     );
   }

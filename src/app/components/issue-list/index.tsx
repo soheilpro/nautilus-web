@@ -107,15 +107,9 @@ export default class IssueList extends React.PureComponent<IIssueListProps, IIss
     return issuesWithPath.map(issueWithPath => issueWithPath.issue);
   }
 
-  renderIssue(issue: IIssue, index: number, isSelected: boolean) {
-    return <Issue issue={issue} isSelected={isSelected} />;
-  }
-
   render() {
     return (
-      <div className="issue-list-component">
-        <List items={this.state.issues} selectedItem={this.state.selectedIssue} renderItem={this.renderIssue} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
-      </div>
+      <List className="issue-list-component" items={this.state.issues} selectedItem={this.state.selectedIssue} Item={Issue} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
     );
   }
 };
