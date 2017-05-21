@@ -11,6 +11,7 @@ interface ISelectProps {
   items: ISelectItem[];
   selectedItem: ISelectItem;
   displayProperty: string;
+  placeholder?: string;
   className?: string;
   onChange(item: ISelectItem): void;
 }
@@ -33,10 +34,22 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
     this.props.onChange(item);
   }
 
+  private getDropdownTitle() {
+    return (
+      <span className={classNames('title', {'placeholder': !this.props.selectedItem})}>
+        {
+          this.props.selectedItem ?
+            this.props.selectedItem[this.props.displayProperty] :
+            this.props.placeholder
+        }
+      </span>
+    );
+  }
+
   render() {
     return (
       <div className={classNames('select-component', this.props.className)}>
-        <Dropdown title={this.props.selectedItem && this.props.selectedItem[this.props.displayProperty]} ref={e => this.dropdownComponent = e}>
+        <Dropdown className="dropdown" title={this.getDropdownTitle()} ref={e => this.dropdownComponent = e}>
           <ItemList items={this.props.items} selectedItem={this.props.selectedItem} displayProperty={this.props.displayProperty} onSelect={this.handleItemListSelect} />
         </Dropdown>
       </div>

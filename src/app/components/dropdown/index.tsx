@@ -9,7 +9,7 @@ require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IDropdownProps {
-  title: string;
+  title: string | JSX.Element;
   className?: string;
   onOpen?(): void;
   onClose?(): void;
