@@ -92,12 +92,16 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
 
   private handleButtonKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.which === KeyCode.Enter) {
-      event.preventDefault();
+      const form = $(this.componentElement).closest('form')[0];
 
-      if (!this.state.isOpen)
-        this.open();
-      else
-        this.close();
+      if (form) {
+        // Because calling form.submit() will not trigger events
+        let button = form.ownerDocument.createElement('input');
+        button.style.display = 'none';
+        button.type = 'submit';
+        form.appendChild(button).click();
+        form.removeChild(button);
+      }
     }
     else if (event.which === KeyCode.DownArrow) {
       event.preventDefault();

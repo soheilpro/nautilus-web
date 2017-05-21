@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import Dropdown from '../dropdown';
-import Icon from '../icon';
 import ItemList from './item-list';
 import { IItem } from './iitem';
 
@@ -26,7 +25,6 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
     super();
 
     this.handleItemListSelect = this.handleItemListSelect.bind(this);
-    this.handleClearClick = this.handleClearClick.bind(this);
   }
 
   private handleItemListSelect(item: IItem) {
@@ -35,24 +33,12 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
     this.props.onChange(item);
   }
 
-  private handleClearClick(event: React.MouseEvent<HTMLAnchorElement>) {
-    event.preventDefault();
-
-    this.handleItemListSelect(null);
-  }
-
   render() {
     return (
       <div className={classNames('select-component', this.props.className)}>
         <Dropdown title={this.props.selectedItem && this.props.selectedItem[this.props.displayProperty]} ref={e => this.dropdownComponent = e}>
           <ItemList items={this.props.items} selectedItem={this.props.selectedItem} displayProperty={this.props.displayProperty} onSelect={this.handleItemListSelect} />
         </Dropdown>
-        {
-          this.props.selectedItem &&
-            <a className="clear" href="#" onClick={this.handleClearClick}>
-              <Icon name="remove" />
-            </a>
-        }
       </div>
     );
   }
