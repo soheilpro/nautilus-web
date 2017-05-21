@@ -3,26 +3,26 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
 import Input from '../input';
-import { IItem } from './iitem';
+import { ISelectItem } from './iselect-item';
 
 require('../../assets/stylesheets/base.less');
 require('./item-list.less');
 
-interface IItemListProps {
-  items: IItem[];
-  selectedItem: IItem;
+interface ISelectItemListProps {
+  items: ISelectItem[];
+  selectedItem: ISelectItem;
   displayProperty: string;
-  onSelect(item: IItem): void;
+  onSelect(item: ISelectItem): void;
 }
 
-interface IItemListState {
-  items?: IItem[];
+interface ISelectItemListState {
+  items?: ISelectItem[];
   selectedItemIndex?: number;
   searchText?: string;
 }
 
-export default class ItemList extends React.PureComponent<IItemListProps, IItemListState> {
-  constructor(props: IItemListProps) {
+export default class ItemList extends React.PureComponent<ISelectItemListProps, ISelectItemListState> {
+  constructor(props: ISelectItemListProps) {
     super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -37,7 +37,7 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
     };
   }
 
-  componentWillReceiveProps(props: IItemListProps) {
+  componentWillReceiveProps(props: ISelectItemListProps) {
     this.setState({
       items: props.items,
     });
@@ -89,7 +89,7 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
     });
   }
 
-  private handleItemMouseEnter(item: IItem) {
+  private handleItemMouseEnter(item: ISelectItem) {
     this.setState(state => {
       return {
         selectedItemIndex: state.items.indexOf(item),
@@ -97,13 +97,13 @@ export default class ItemList extends React.PureComponent<IItemListProps, IItemL
     });
   }
 
-  private handleItemTitleClick(item: IItem, event: React.MouseEvent<HTMLAnchorElement>) {
+  private handleItemTitleClick(item: ISelectItem, event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
     this.props.onSelect(item);
   }
 
-  private filterItems(items: IItem[], text: string) {
+  private filterItems(items: ISelectItem[], text: string) {
     if (!text)
       return items;
 

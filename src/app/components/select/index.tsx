@@ -2,17 +2,17 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import Dropdown from '../dropdown';
 import ItemList from './item-list';
-import { IItem } from './iitem';
+import { ISelectItem } from './iselect-item';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface ISelectProps {
-  items: IItem[];
-  selectedItem: IItem;
+  items: ISelectItem[];
+  selectedItem: ISelectItem;
   displayProperty: string;
   className?: string;
-  onChange(item: IItem): void;
+  onChange(item: ISelectItem): void;
 }
 
 interface ISelectState {
@@ -27,7 +27,7 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
     this.handleItemListSelect = this.handleItemListSelect.bind(this);
   }
 
-  private handleItemListSelect(item: IItem) {
+  private handleItemListSelect(item: ISelectItem) {
     this.dropdownComponent.close();
     this.dropdownComponent.focus();
     this.props.onChange(item);

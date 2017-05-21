@@ -1,4 +1,4 @@
-export interface IItem {
+export interface ISelectItem {
   id?: string;
   [key: string]: any;
 }
