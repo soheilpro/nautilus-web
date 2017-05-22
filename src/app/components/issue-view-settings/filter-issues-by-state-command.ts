@@ -1,7 +1,7 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
-export default class FilterIssueByStateCommand extends BaseCommand {
+export default class FilterIssuesByStateCommand extends BaseCommand {
   constructor(private onExecute: () => void) {
     super();
   }
