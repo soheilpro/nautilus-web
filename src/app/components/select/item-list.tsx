@@ -2,6 +2,7 @@ import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
+import Icon from '../icon';
 import Input from '../input';
 import { ISelectItem } from './iselect-item';
 
@@ -17,7 +18,7 @@ interface ISelectItemListProps {
 
 interface ISelectItemListState {
   items?: ISelectItem[];
-  selectedItemIndex?: number;
+  activeItemIndex?: number;
   searchText?: string;
 }
 
@@ -33,7 +34,6 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
 
     this.state = {
       items: props.items,
-      selectedItemIndex: props.items.indexOf(props.selectedItem),
     };
   }
 
@@ -49,7 +49,7 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
 
       this.setState(state => {
         return {
-          selectedItemIndex: state.selectedItemIndex < state.items.length - 1 ? state.selectedItemIndex + 1 : 0,
+          activeItemIndex: state.activeItemIndex < state.items.length - 1 ? state.activeItemIndex + 1 : 0,
         };
       });
     }
@@ -58,15 +58,15 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
 
       this.setState(state => {
         return {
-          selectedItemIndex: state.selectedItemIndex > 0 ? state.selectedItemIndex - 1 : state.items.length - 1,
+          activeItemIndex: state.activeItemIndex > 0 ? state.activeItemIndex - 1 : state.items.length - 1,
         };
       });
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      if (this.state.selectedItemIndex !== -1) {
-        const selectedItem = this.state.items[this.state.selectedItemIndex];
+      if (this.state.activeItemIndex !== -1) {
+        const selectedItem = this.state.items[this.state.activeItemIndex];
         this.props.onSelect(selectedItem);
       }
     }
@@ -79,20 +79,20 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
     this.setState({
       searchText: value,
       items: this.filterItems(this.props.items, value),
-      selectedItemIndex: 0,
+      activeItemIndex: 0,
     });
   }
 
   private handleItemListMouseLeave() {
     this.setState({
-      selectedItemIndex: -1,
+      activeItemIndex: -1,
     });
   }
 
   private handleItemMouseEnter(item: ISelectItem) {
     this.setState(state => {
       return {
-        selectedItemIndex: state.items.indexOf(item),
+        activeItemIndex: state.items.indexOf(item),
       };
     });
   }
@@ -120,8 +120,9 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
           {
             this.state.items.map((item, index) => {
               return (
-                <div className={classNames('item', 'row', {'selected': index === this.state.selectedItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
+                <div className={classNames('item', 'row', {'active': index === this.state.activeItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
                   <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
+                    <Icon className={classNames('icon', {'selected': item === this.props.selectedItem})} name="check" />
                     {item[this.props.displayProperty]}
                   </a>
                 </div>

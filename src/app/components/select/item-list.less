@@ -17,9 +17,18 @@
         padding: 2px 6px;
         text-decoration: none;
         color: @text;
+
+          .icon {
+            margin-right: 8px;
+            visibility: hidden;
+
+            &.selected {
+              visibility: visible;
+            }
+          }
       }
 
-      &.selected {
+      &.active {
         .title {
           background-color: @primary;
           color: @white;
