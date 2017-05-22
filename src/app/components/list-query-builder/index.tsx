@@ -27,7 +27,7 @@ interface IListQueryBuilderProps {
 
 interface IListQueryBuilderState {
   items?: IItem[];
-  selectedItemIndex?: number;
+  activeItemIndex?: number;
   searchText?: string;
   includedItems?: IItem[];
   excludedItems?: IItem[];
@@ -49,7 +49,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.state = {
       items: props.items,
-      selectedItemIndex: -1,
+      activeItemIndex: -1,
       includedItems,
       excludedItems,
     };
@@ -73,7 +73,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
       this.setState(state => {
         return {
-          selectedItemIndex: state.selectedItemIndex < state.items.length - 1 ? state.selectedItemIndex + 1 : 0,
+          activeItemIndex: state.activeItemIndex < state.items.length - 1 ? state.activeItemIndex + 1 : 0,
         };
       });
     }
@@ -82,30 +82,30 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
       this.setState(state => {
         return {
-          selectedItemIndex: state.selectedItemIndex > 0 ? state.selectedItemIndex - 1 : state.items.length - 1,
+          activeItemIndex: state.activeItemIndex > 0 ? state.activeItemIndex - 1 : state.items.length - 1,
         };
       });
     }
     else if (event.which === KeyCode.Dash) {
       event.preventDefault();
 
-      const selectedItem = this.state.items[this.state.selectedItemIndex];
+      const activeItem = this.state.items[this.state.activeItemIndex];
 
-      this.toggleItemExclude(selectedItem);
+      this.toggleItemExclude(activeItem);
     }
     else if (event.which === KeyCode.Equals) {
       event.preventDefault();
 
-      const selectedItem = this.state.items[this.state.selectedItemIndex];
+      const activeItem = this.state.items[this.state.activeItemIndex];
 
-      this.toggleItemInclude(selectedItem);
+      this.toggleItemInclude(activeItem);
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      if (this.state.selectedItemIndex !== -1) {
-        const selectedItem = this.state.items[this.state.selectedItemIndex];
-        this.includeItem(selectedItem);
+      if (this.state.activeItemIndex !== -1) {
+        const activeItem = this.state.items[this.state.activeItemIndex];
+        this.includeItem(activeItem);
       }
     }
   }
@@ -114,20 +114,20 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     this.setState({
       searchText: value,
       items: this.filterItems(this.props.items, value),
-      selectedItemIndex: -1,
+      activeItemIndex: -1,
     });
   }
 
   private handleItemListMouseLeave() {
     this.setState({
-      selectedItemIndex: -1,
+      activeItemIndex: -1,
     });
   }
 
   private handleItemMouseEnter(item: IItem) {
     this.setState(state => {
       return {
-        selectedItemIndex: state.items.indexOf(item),
+        activeItemIndex: state.items.indexOf(item),
       };
     });
   }
@@ -139,7 +139,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.setState(state => {
       return {
-        selectedItemIndex: state.items.indexOf(item),
+        activeItemIndex: state.items.indexOf(item),
       };
     });
   }
@@ -151,7 +151,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.setState(state => {
       return {
-        selectedItemIndex: state.items.indexOf(item),
+        activeItemIndex: state.items.indexOf(item),
       };
     });
   }
@@ -163,7 +163,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     this.setState(state => {
       return {
-        selectedItemIndex: state.items.indexOf(item),
+        activeItemIndex: state.items.indexOf(item),
       };
     });
   }
@@ -335,11 +335,11 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
             this.state.items.length > 0 ?
               this.state.items.map((item, index) => {
                 return (
-                  <div className={classNames('item', {'selected': index === this.state.selectedItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
-                    <a className={classNames('exclude', {'selected': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
+                  <div className={classNames('item', {'active': index === this.state.activeItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
+                    <a className={classNames('exclude', {'active': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
                       <Icon name="minus-square" />
                     </a>
-                    <a className={classNames('include', {'selected': this.state.includedItems.indexOf(item) !== -1})} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
+                    <a className={classNames('include', {'active': this.state.includedItems.indexOf(item) !== -1})} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
                       <Icon name="plus-square" />
                     </a>
                     <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>

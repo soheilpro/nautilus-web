@@ -17,7 +17,7 @@ interface ICommandPaletteWindowProps {
 
 interface ICommandPaletteWindowState {
   commands?: ICommand[];
-  selectedCommandIndex?: number;
+  activeCommandIndex?: number;
   searchText?: string;
 }
 
@@ -33,7 +33,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
 
     this.state = {
       commands: props.commands,
-      selectedCommandIndex: -1,
+      activeCommandIndex: -1,
     };
   }
 
@@ -43,7 +43,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
 
       this.setState(state => {
         return {
-          selectedCommandIndex: state.selectedCommandIndex < state.commands.length - 1 ? state.selectedCommandIndex + 1 : 0,
+          activeCommandIndex: state.activeCommandIndex < state.commands.length - 1 ? state.activeCommandIndex + 1 : 0,
         };
       });
     }
@@ -52,7 +52,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
 
       this.setState(state => {
         return {
-          selectedCommandIndex: state.selectedCommandIndex > 0 ? state.selectedCommandIndex - 1 : state.commands.length - 1,
+          activeCommandIndex: state.activeCommandIndex > 0 ? state.activeCommandIndex - 1 : state.commands.length - 1,
         };
       });
     }
@@ -60,8 +60,8 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
       event.preventDefault();
 
       if (this.state.commands.length > 0) {
-        if (this.state.selectedCommandIndex !== -1) {
-          const command = this.state.commands[this.state.selectedCommandIndex];
+        if (this.state.activeCommandIndex !== -1) {
+          const command = this.state.commands[this.state.activeCommandIndex];
 
           if (command.enabled)
             this.props.onSelect(command);
@@ -79,20 +79,20 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
 
     this.setState({
       commands: this.filterCommands(this.props.commands, value),
-      selectedCommandIndex: value ? 0 : -1,
+      activeCommandIndex: value ? 0 : -1,
     });
   }
 
   private handleCommandListMouseLeave() {
     this.setState({
-      selectedCommandIndex: -1,
+      activeCommandIndex: -1,
     });
   }
 
   private handleCommandMouseEnter(command: ICommand) {
     this.setState(state => {
       return {
-        selectedCommandIndex: state.commands.indexOf(command),
+        activeCommandIndex: state.commands.indexOf(command),
       };
     });
   }
@@ -124,7 +124,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
                 {
                   this.state.commands.map((command, index) => {
                     return (
-                      <a className={classNames('command', {'disabled': !command.enabled, 'selected': index === this.state.selectedCommandIndex})} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
+                      <a className={classNames('command', {'disabled': !command.enabled, 'active': index === this.state.activeCommandIndex})} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
                         <span className="title">
                           {command.title}
                         </span>

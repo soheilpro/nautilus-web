@@ -17,7 +17,7 @@ interface IViewListProps {
 
 interface IViewListState {
   views?: IView[];
-  selectedViewIndex?: number;
+  activeViewIndex?: number;
   searchText?: string;
 }
 
@@ -34,7 +34,7 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
 
     this.state = {
       views: props.views,
-      selectedViewIndex: -1,
+      activeViewIndex: -1,
     };
   }
 
@@ -50,7 +50,7 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
 
       this.setState(state => {
         return {
-          selectedViewIndex: state.selectedViewIndex < state.views.length - 1 ? state.selectedViewIndex + 1 : 0,
+          activeViewIndex: state.activeViewIndex < state.views.length - 1 ? state.activeViewIndex + 1 : 0,
         };
       });
     }
@@ -59,16 +59,16 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
 
       this.setState(state => {
         return {
-          selectedViewIndex: state.selectedViewIndex > 0 ? state.selectedViewIndex - 1 : state.views.length - 1,
+          activeViewIndex: state.activeViewIndex > 0 ? state.activeViewIndex - 1 : state.views.length - 1,
         };
       });
     }
     else if (event.which === KeyCode.Enter) {
       event.preventDefault();
 
-      if (this.state.selectedViewIndex !== -1) {
-        const selectedView = this.state.views[this.state.selectedViewIndex];
-        this.props.onSelect(selectedView);
+      if (this.state.activeViewIndex !== -1) {
+        const activeView = this.state.views[this.state.activeViewIndex];
+        this.props.onSelect(activeView);
       }
     }
   }
@@ -77,20 +77,20 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
     this.setState({
       searchText: value,
       views: this.filterItems(this.props.views, value),
-      selectedViewIndex: 0,
+      activeViewIndex: 0,
     });
   }
 
   private handleViewListMouseLeave() {
     this.setState({
-      selectedViewIndex: -1,
+      activeViewIndex: -1,
     });
   }
 
   private handleViewMouseEnter(view: IView) {
     this.setState(state => {
       return {
-        selectedViewIndex: state.views.indexOf(view),
+        activeViewIndex: state.views.indexOf(view),
       };
     });
   }
@@ -125,7 +125,7 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
             this.state.views.length > 0 ?
               this.state.views.map((view, index) => {
                 return (
-                  <div className={classNames('view', 'row', {'selected': index === this.state.selectedViewIndex})} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
+                  <div className={classNames('view', 'row', {'active': index === this.state.activeViewIndex})} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
                     <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleViewDeleteClick, view)}>
                       <Icon name="remove" />
                     </a>
