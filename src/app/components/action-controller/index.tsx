@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { IActionController } from '../../actions';
-import { ICommandProvider } from '../../commands';
+import { ICommandProvider, ICommand } from '../../commands';
 import { ServiceManager } from '../../services';
-import UndoLastActionCommand from './undo-last-action-command';
 
 interface IActionControllerProps {
 }
@@ -25,8 +24,8 @@ export default class ActionController extends React.PureComponent<IActionControl
 
   getCommands() {
     return [
-      new UndoLastActionCommand(),
-    ];
+      // new UndoLastActionCommand(),
+    ] as ICommand[];
   }
 
   render() {
