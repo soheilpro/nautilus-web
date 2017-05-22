@@ -1,3 +1,13 @@
 .issue-list-component {
   width: 100%;
 }
+
+.rtl {
+  .issue-list-component {
+    direction: rtl;
+
+    > * {
+      direction: initial;
+    }
+  }
+}
