@@ -10,12 +10,12 @@ import ItemPriorityQueryBuilder from '../item-priority-query-builder';
 import ItemStateQueryBuilder from '../item-state-query-builder';
 import UserQueryBuilder from '../user-query-builder';
 
-interface IIssueQueryBuilderProps {
+interface IIssueFilterQueryBuilderProps {
   query: NQL.Expression;
   onChange(query: NQL.Expression): void;
 }
 
-interface IIssueQueryBuilderState {
+interface IIssueFilterQueryBuilderState {
   projects?: IProject[];
   itemTypes?: IItemType[];
   itemPriorities?: IItemPriority[];
@@ -24,7 +24,7 @@ interface IIssueQueryBuilderState {
   milestones?: IMilestone[];
 }
 
-export default class IssueQueryBuilder extends React.PureComponent<IIssueQueryBuilderProps, IIssueQueryBuilderState> {
+export default class IssueFilterQueryBuilder extends React.PureComponent<IIssueFilterQueryBuilderProps, IIssueFilterQueryBuilderState> {
   private application = ServiceManager.Instance.getApplication();
   private andQueryBuilderComponent: AndQueryBuilder;
 

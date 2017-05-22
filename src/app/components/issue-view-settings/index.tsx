@@ -7,7 +7,7 @@ import { IWindow } from '../../windows';
 import Button from '../button';
 import Dropdown from '../dropdown';
 import PromptWindow from '../prompt-window';
-import IssueQueryBuilder from '../issue-query-builder';
+import IssueFilterQueryBuilder from '../issue-filter-query-builder';
 import Expression from '../expression';
 import ViewList from './view-list';
 import { IView } from './iview';
@@ -41,14 +41,14 @@ interface IIssueViewViewState {
 export default class IssueViewView extends React.PureComponent<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
-  private queryBuilderComponents: { [itemKind: string]: (IssueQueryBuilder) } = {};
+  private queryBuilderComponents: { [itemKind: string]: (IssueFilterQueryBuilder) } = {};
   private savedViewListDropdownComponent: Dropdown;
   private promptWindow: IWindow;
 
   constructor(props: IIssueViewViewProps) {
     super(props);
 
-    this.handleIssueQueryBuilderChange = this.handleIssueQueryBuilderChange.bind(this);
+    this.handleIssueFilterQueryBuilderChange = this.handleIssueFilterQueryBuilderChange.bind(this);
     this.handleResetButtonClick = this.handleResetButtonClick.bind(this);
     this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
     this.handleSavePromptWindowConfirm = this.handleSavePromptWindowConfirm.bind(this);
@@ -127,7 +127,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.savedViewListDropdownComponent.open();
   }
 
-  private async handleIssueQueryBuilderChange(query: NQL.Expression) {
+  private async handleIssueFilterQueryBuilderChange(query: NQL.Expression) {
     const view = View.create({
       filterQuery: query,
     });
@@ -199,7 +199,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
       <div className="issue-view-settings-component">
         <div className="query">
           <div className="query-builder">
-            <IssueQueryBuilder query={this.state.filterQuery} onChange={this.handleIssueQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
+            <IssueFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleIssueFilterQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
           </div>
           <div className="buttons">
             {
