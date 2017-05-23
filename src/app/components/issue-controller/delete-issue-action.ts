@@ -1,7 +1,7 @@
 import { BaseAction } from '../../actions';
 import { IApplication, IIssue } from '../../application';
 
-export default class AddIssueAction extends BaseAction {
+export default class DeleteIssueAction extends BaseAction {
   constructor(private issue: IIssue, private application: IApplication) {
     super();
   }

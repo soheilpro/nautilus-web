@@ -1,7 +1,7 @@
 import { BaseAction } from '../../actions';
 import { IApplication, IMilestone } from '../../application';
 
-export default class AddMilestoneAction extends BaseAction {
+export default class DeleteMilestoneAction extends BaseAction {
   constructor(private milestone: IMilestone, private application: IApplication) {
     super();
   }
