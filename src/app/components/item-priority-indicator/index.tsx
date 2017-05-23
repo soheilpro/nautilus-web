@@ -20,7 +20,7 @@ export default class ItemPriorityIndicator extends React.PureComponent<IItemPrio
       return null;
 
     const icons: {[key: string]: string} = {
-      'high': 'exclamation',
+      'important': 'exclamation',
       'critical': 'bolt',
     };
 
