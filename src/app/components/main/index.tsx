@@ -12,8 +12,8 @@ import WindowController from '../window-controller';
 import IssuesPage from '../issues-page';
 import MilestonesPage from '../milestones-page';
 import RefreshCommand from './refresh-command';
-import ViewIssuesCommand from './view-issues-command';
-import ViewMilestonesCommand from './view-milestones-command';
+import GoToIssuesCommand from './go-to-issues-command';
+import GoToMilestonesCommand from './go-to-milestones-command';
 
 interface IMainProps {
 }
@@ -35,8 +35,8 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
   getCommands() {
     return [
       new RefreshCommand(),
-      new ViewIssuesCommand(),
-      new ViewMilestonesCommand(),
+      new GoToIssuesCommand(),
+      new GoToMilestonesCommand(),
     ];
   }
 

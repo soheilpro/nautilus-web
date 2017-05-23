@@ -2,23 +2,23 @@ import { browserHistory } from 'react-router';
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
-export default class ViewIssuesCommand extends BaseCommand {
+export default class GoToMilestonesCommand extends BaseCommand {
   get id() {
-    return 'view-issues';
+    return 'go-to-milestones';
   }
 
   get title() {
-    return 'View Issues';
+    return 'Go to Milestones';
   }
 
   get shortcut() {
     return [
       { keyCode: KeyCode.G },
-      { keyCode: KeyCode.I }
+      { keyCode: KeyCode.M }
     ];
   }
 
   execute() {
-    browserHistory.push('/');
+    browserHistory.push('/milestones');
   }
 }
