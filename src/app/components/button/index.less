@@ -66,4 +66,25 @@
       cursor: default;
     }
   }
+
+  &.link {
+    border: none;
+    padding: 6px 10px;
+    background-color: initial;
+    color: @primary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus {
+      text-decoration: underline;
+      box-shadow: initial;
+    }
+
+    &:disabled {
+      color: lighten(desaturate(@text, 100%), 30%);
+      cursor: default;
+    }
+  }
 }

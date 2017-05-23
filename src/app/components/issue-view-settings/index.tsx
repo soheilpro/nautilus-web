@@ -201,16 +201,18 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
           <div className="query-builder">
             <IssueFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleIssueFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
           </div>
-          <div className="buttons">
+          <div className="reset">
             {
               !this.props.view.isDefault() &&
-                <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
+                <Button className="reset-button" type="link" onClick={this.handleResetButtonClick}>Reset</Button>
             }
+          </div>
+          <div className="load-save">
             {
               !this.props.view.isDefault() &&
-                <Button className="save" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
+                <Button className="save-button" type="secondary" onClick={this.handleSaveButtonClick}>Save</Button>
             }
-            <Dropdown className="load" title="Load" ref={e => this.savedViewListDropdownComponent = e}>
+            <Dropdown className="load-button" title="Load" ref={e => this.savedViewListDropdownComponent = e}>
               <ViewList views={this.state.savedViews} onDelete={this.handleViewListDelete} onSelect={this.handleViewListSelect} />
             </Dropdown>
           </div>

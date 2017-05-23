@@ -5,7 +5,7 @@ require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IButtonProps {
-  type?: 'primary' | 'secondary' | 'submit' | 'destructive';
+  type?: 'primary' | 'secondary' | 'submit' | 'destructive' | 'link';
   enabled?: boolean;
   autoFocus?: boolean;
   form?: string;

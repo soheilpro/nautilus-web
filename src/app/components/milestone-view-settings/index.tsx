@@ -171,10 +171,10 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
           <div className="query-builder">
             <MilestoneFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleMilestoneFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
           </div>
-          <div className="buttons">
+          <div className="reset">
             {
               !this.props.view.isDefault() &&
-                <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
+                <Button className="reset-button" type="link" onClick={this.handleResetButtonClick}>Reset</Button>
             }
           </div>
         </div>
