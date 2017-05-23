@@ -125,7 +125,7 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
             this.state.views.length > 0 ?
               this.state.views.map((view, index) => {
                 return (
-                  <div className={classNames('view', 'row', {'active': index === this.state.activeViewIndex})} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
+                  <div className={classNames('view', 'row', { 'active': index === this.state.activeViewIndex })} onMouseEnter={_.partial(this.handleViewMouseEnter, view)} key={view.id}>
                     <a className="remove" href="#" title="Remove" onClick={_.partial(this.handleViewDeleteClick, view)}>
                       <Icon name="remove" />
                     </a>

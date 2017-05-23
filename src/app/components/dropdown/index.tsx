@@ -117,7 +117,7 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
 
   render() {
     return (
-      <div className={classNames('dropdown-component', this.props.className, {'open': this.state.isOpen})} onKeyDown={this.handleKeyDown} ref={e => this.componentElement = e}>
+      <div className={classNames('dropdown-component', this.props.className, { 'open': this.state.isOpen })} onKeyDown={this.handleKeyDown} ref={e => this.componentElement = e}>
         <div className="button" tabIndex={0} onClick={this.handleButtonClick} onKeyDown={this.handleButtonKeyDown} ref={e => this.buttonElement = e}>
           {this.props.title}
           <Icon className="caret" name={this.state.isOpen ? 'caret-up' : 'caret-down'} />

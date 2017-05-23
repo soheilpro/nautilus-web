@@ -335,11 +335,11 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
             this.state.items.length > 0 ?
               this.state.items.map((item, index) => {
                 return (
-                  <div className={classNames('item', {'active': index === this.state.activeItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
-                    <a className={classNames('exclude', {'active': this.state.excludedItems.indexOf(item) !== -1})} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
+                  <div className={classNames('item', { 'active': index === this.state.activeItemIndex })} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
+                    <a className={classNames('exclude', { 'active': this.state.excludedItems.indexOf(item) !== -1 })} href="#" title="Exclude" onClick={_.partial(this.handleItemExcludeClick, item)}>
                       <Icon name="minus-square" />
                     </a>
-                    <a className={classNames('include', {'active': this.state.includedItems.indexOf(item) !== -1})} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
+                    <a className={classNames('include', { 'active': this.state.includedItems.indexOf(item) !== -1 })} href="#" title="Include" onClick={_.partial(this.handleItemIncludeClick, item)}>
                       <Icon name="plus-square" />
                     </a>
                     <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>

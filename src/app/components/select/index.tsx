@@ -36,7 +36,7 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
 
   private getDropdownTitle() {
     return (
-      <span className={classNames('title', {'placeholder': !this.props.selectedItem})}>
+      <span className={classNames('title', { 'placeholder': !this.props.selectedItem })}>
         {
           this.props.selectedItem ?
             this.props.selectedItem[this.props.displayProperty] :

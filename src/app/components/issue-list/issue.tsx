@@ -45,7 +45,7 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
 
   render() {
     return (
-      <div className={classNames('issue-component', 'list-item', {'selected': this.props.isSelected})} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+      <div className={classNames('issue-component', 'list-item', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
         <div className="list-field sid">
           <IssueSidField issue={this.props.item} bold={this.props.isSelected} />
         </div>

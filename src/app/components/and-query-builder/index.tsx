@@ -115,7 +115,7 @@ export default class AndQueryBuilder extends React.PureComponent<IAndQueryBuilde
           {
             this.props.queryBuilders.map(queryBuilder => {
               return (
-                <Dropdown className={classNames('query-builder', {'active': !!this.state.queries[queryBuilder.key]})} title={queryBuilder.title} ref={e => this.dropdownComponents[queryBuilder.key] = e} key={queryBuilder.key}>
+                <Dropdown className={classNames('query-builder', { 'active': !!this.state.queries[queryBuilder.key] })} title={queryBuilder.title} ref={e => this.dropdownComponents[queryBuilder.key] = e} key={queryBuilder.key}>
                   <div className="container">
                     <queryBuilder.Component query={this.state.queries[queryBuilder.key]} queryItem={queryBuilder.queryItem} onChange={_.partial(this.handleFilterChange, queryBuilder.key)} {...queryBuilder.props} />
                   </div>

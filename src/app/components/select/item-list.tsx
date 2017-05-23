@@ -120,9 +120,9 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
           {
             this.state.items.map((item, index) => {
               return (
-                <div className={classNames('item', 'row', {'active': index === this.state.activeItemIndex})} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
+                <div className={classNames('item', 'row', { 'active': index === this.state.activeItemIndex })} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
                   <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
-                    <Icon className={classNames('icon', {'selected': item === this.props.selectedItem})} name="check" />
+                    <Icon className={classNames('icon', { 'selected': item === this.props.selectedItem })} name="check" />
                     {item[this.props.displayProperty]}
                   </a>
                 </div>

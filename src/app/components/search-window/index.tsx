@@ -178,7 +178,7 @@ export default class SearchWindow extends React.PureComponent<ISearchWindowProps
                   {
                     this.state.searchResults.map((searchResult, index) => {
                       return (
-                        <a className={classNames('search-result', {'selected': index === this.state.selectedSearchResultIndex})} href="#" onClick={_.partial(this.handleSearchResultClick, searchResult)} onMouseEnter={_.partial(this.handleSearchResultMouseEnter, searchResult)} key={searchResult.key}>
+                        <a className={classNames('search-result', { 'selected': index === this.state.selectedSearchResultIndex })} href="#" onClick={_.partial(this.handleSearchResultClick, searchResult)} onMouseEnter={_.partial(this.handleSearchResultMouseEnter, searchResult)} key={searchResult.key}>
                           {this.renderSearchResult(searchResult)}
                         </a>
                       );

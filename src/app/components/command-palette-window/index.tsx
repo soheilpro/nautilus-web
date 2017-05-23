@@ -124,7 +124,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
                 {
                   this.state.commands.map((command, index) => {
                     return (
-                      <a className={classNames('command', {'disabled': !command.enabled, 'active': index === this.state.activeCommandIndex})} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
+                      <a className={classNames('command', { 'disabled': !command.enabled, 'active': index === this.state.activeCommandIndex })} href="#" onClick={_.partial(this.handleCommandClick, command)} onMouseEnter={_.partial(this.handleCommandMouseEnter, command)} key={command.id}>
                         <span className="title">
                           {command.title}
                         </span>
