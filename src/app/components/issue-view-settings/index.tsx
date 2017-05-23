@@ -12,13 +12,13 @@ import Expression from '../expression';
 import ViewList from './view-list';
 import { IView } from './iview';
 import { View } from './view';
-import FilterIssuesByMilestoneCommand from './filter-issues-by-milestone-command';
-import FilterIssuesByProjectCommand from './filter-issues-by-project-command';
-import FilterIssuesByTypeCommand from './filter-issues-by-type-command';
-import FilterIssuesByPriorityCommand from './filter-issues-by-priority-command';
-import FilterIssuesByStateCommand from './filter-issues-by-state-command';
-import FilterIssuesByAssignedToCommand from './filter-issues-by-assigned-to-command';
-import FilterIssuesByCreatedByCommand from './filter-issues-by-created-by-command';
+import FilterByMilestoneCommand from './filter-by-milestone-command';
+import FilterByProjectCommand from './filter-by-project-command';
+import FilterByTypeCommand from './filter-by-type-command';
+import FilterByPriorityCommand from './filter-by-priority-command';
+import FilterByStateCommand from './filter-by-state-command';
+import FilterByAssignedToCommand from './filter-by-assigned-to-command';
+import FilterByCreatedByCommand from './filter-by-created-by-command';
 import ResetViewCommand from './reset-view-command';
 import SaveViewCommand from './save-view-command';
 import LoadViewCommand from './load-view-command';
@@ -87,13 +87,13 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     });
 
     return [
-      new FilterIssuesByMilestoneCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'milestone')),
-      new FilterIssuesByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
-      new FilterIssuesByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
-      new FilterIssuesByPriorityCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'priority')),
-      new FilterIssuesByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'state')),
-      new FilterIssuesByAssignedToCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'assignedTo')),
-      new FilterIssuesByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'createdBy')),
+      new FilterByMilestoneCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'milestone')),
+      new FilterByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
+      new FilterByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
+      new FilterByPriorityCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'priority')),
+      new FilterByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'state')),
+      new FilterByAssignedToCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'assignedTo')),
+      new FilterByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'createdBy')),
       new ResetViewCommand(view, this.handleResetViewCommandExecute),
       new SaveViewCommand(view, this.handleSaveViewCommandExecute),
       new LoadViewCommand(this.handleLoadViewCommandExecute),

@@ -11,9 +11,9 @@ import MilestoneFilterQueryBuilder from '../milestone-filter-query-builder';
 import Expression from '../expression';
 import { IView } from './iview';
 import { View } from './view';
-import FilterMilestonesByProjectCommand from './filter-milestones-by-project-command';
-import FilterMilestonesByStateCommand from './filter-milestones-by-state-command';
-import FilterMilestonesByCreatedByCommand from './filter-milestones-by-created-by-command';
+import FilterByProjectCommand from './filter-by-project-command';
+import FilterByStateCommand from './filter-by-state-command';
+import FilterByCreatedByCommand from './filter-by-created-by-command';
 import ResetViewCommand from './reset-view-command';
 
 require('../../assets/stylesheets/base.less');
@@ -78,9 +78,9 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     });
 
     return [
-      new FilterMilestonesByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'project')),
-      new FilterMilestonesByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'state')),
-      new FilterMilestonesByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'createdBy')),
+      new FilterByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'project')),
+      new FilterByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'state')),
+      new FilterByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'createdBy')),
       new ResetViewCommand(view, this.handleResetViewCommandExecute),
     ];
   }

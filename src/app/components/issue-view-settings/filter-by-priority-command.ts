@@ -11,13 +11,13 @@ export default class FilterIssuesByPriorityCommand extends BaseCommand {
   }
 
   get title() {
-    return 'Filter Issues by Priority';
+    return 'Filter by Priority';
   }
 
   get shortcut() {
     return [
       { keyCode: KeyCode.F },
-      { keyCode: KeyCode.I },
+      { keyCode: KeyCode.B },
       { keyCode: KeyCode.R },
     ];
   }

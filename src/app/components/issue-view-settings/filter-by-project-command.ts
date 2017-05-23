@@ -1,23 +1,23 @@
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
-export default class FiltersMilestoneByProjectCommand extends BaseCommand {
+export default class FilterIssuesByProjectCommand extends BaseCommand {
   constructor(private onExecute: () => void) {
     super();
   }
 
   get id() {
-    return 'milestone-project-filter';
+    return 'issue-project-filter';
   }
 
   get title() {
-    return 'Filter Milestones by Project';
+    return 'Filter by Project';
   }
 
   get shortcut() {
     return [
       { keyCode: KeyCode.F },
-      { keyCode: KeyCode.M },
+      { keyCode: KeyCode.B },
       { keyCode: KeyCode.P },
     ];
   }
