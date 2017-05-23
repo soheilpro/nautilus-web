@@ -25,7 +25,10 @@ export default class Login extends React.PureComponent<ILoginProps, ILoginState>
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
 
-    this.state = {};
+    this.state = {
+      username: '',
+      password: '',
+    };
   }
 
   private handleUsernameChange(value: string) {
