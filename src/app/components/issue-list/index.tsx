@@ -3,6 +3,7 @@ import * as React from 'react';
 import { IIssue } from '../../application';
 import { ServiceManager } from '../../services';
 import List from '../list';
+import Header from './header';
 import Issue from './issue';
 
 require('../../assets/stylesheets/base.less');
@@ -109,7 +110,7 @@ export default class IssueList extends React.PureComponent<IIssueListProps, IIss
 
   render() {
     return (
-      <List className="issue-list-component" items={this.state.issues} selectedItem={this.state.selectedIssue} Item={Issue} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
+      <List className="issue-list-component" items={this.state.issues} selectedItem={this.state.selectedIssue} Header={Header} Item={Issue} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
     );
   }
 };

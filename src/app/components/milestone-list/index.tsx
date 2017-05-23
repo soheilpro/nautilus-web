@@ -3,6 +3,7 @@ import * as React from 'react';
 import { IMilestone } from '../../application';
 import { ServiceManager } from '../../services';
 import List from '../list';
+import Header from './header';
 import Milestone from './milestone';
 
 require('../../assets/stylesheets/base.less');
@@ -109,7 +110,7 @@ export default class MilestoneList extends React.PureComponent<IMilestoneListPro
 
   render() {
     return (
-      <List className="milestone-list-component" items={this.state.milestones} selectedItem={this.state.selectedMilestone} Item={Milestone} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
+      <List className="milestone-list-component" items={this.state.milestones} selectedItem={this.state.selectedMilestone} Header={Header} Item={Milestone} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
     );
   }
 };

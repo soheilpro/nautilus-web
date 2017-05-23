@@ -46,29 +46,29 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
   render() {
     return (
       <div className={classNames('issue-component', 'list-item', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
-        <div className="list-field sid">
+        <div className="list-item-field sid">
           <IssueSidField issue={this.props.item} bold={this.props.isSelected} />
         </div>
-        <div className="list-field title">
+        <div className="list-item-field title">
           <IssueTitleField issue={this.props.item} />
           <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
         </div>
-        <div className="list-field project">
+        <div className="list-item-field project">
           <IssueProjectField issue={this.props.item} />
         </div>
-        <div className="list-field type">
+        <div className="list-item-field type">
           <IssueTypeField issue={this.props.item} />
         </div>
-        <div className="list-field priority">
+        <div className="list-item-field priority">
           <IssuePriorityField issue={this.props.item} />
         </div>
-        <div className="list-field state">
+        <div className="list-item-field state">
           <IssueStateField issue={this.props.item} />
         </div>
-        <div className="list-field assigned-to">
+        <div className="list-item-field assigned-to">
           <IssueAssignedTo issue={this.props.item} />
         </div>
-        <div className="list-field milestone">
+        <div className="list-item-field milestone">
           <IssueMilestoneField issue={this.props.item} />
         </div>
       </div>

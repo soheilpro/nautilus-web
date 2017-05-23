@@ -2,18 +2,26 @@
 
 .list-component {
   display: table;
-  border-top: 1px solid @gray;
+
+  .list-header {
+    display: table-row;
+
+    .list-header-field {
+      display: table-cell;
+      border-bottom: 1px solid @darkgray;
+    }
+  }
 
   .list-item {
     display: table-row;
 
-    .list-field {
+    .list-item-field {
       display: table-cell;
       border-bottom: 1px solid @gray;
     }
 
     &.selected {
-      .list-field {
+      .list-item-field {
         background-color: #f6f6f6;
       }
     }
@@ -22,7 +30,7 @@
   &.focus {
     .list-item {
       &.selected {
-        .list-field {
+        .list-item-field {
           background-color: #e9e9e9;
         }
       }

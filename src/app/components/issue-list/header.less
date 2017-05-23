@@ -1,10 +1,12 @@
 @import '../../assets/stylesheets/common';
 
-.issue-component {
+.header-component {
   cursor: default;
 
-  .list-item-field {
+  .list-header-field {
     padding: 5px 10px;
+    font-weight: bold;
+    white-space: nowrap;
 
     &.sid {
       text-align: center;
@@ -14,23 +16,15 @@
       width: 100%;
       padding-left: 0;
       padding-right: 0;
-
-      .priority-indicator {
-        margin-left: 10px;
-      }
     }
   }
 }
 
 .rtl {
-  .issue-component {
-    .list-item-field {
+  .header-component {
+    .list-header-field {
       &.title {
         direction: rtl;
-
-        .priority-indicator {
-          margin-right: 10px;
-        }
       }
     }
   }

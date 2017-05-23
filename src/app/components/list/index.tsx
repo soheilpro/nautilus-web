@@ -24,9 +24,13 @@ interface IListItemState {
 export class ListItem extends React.Component<IListItemProps, IListItemState> {
 }
 
+export class ListHeader extends React.Component<{}, {}> {
+}
+
 interface IListProps {
   items: IListItem[];
   selectedItem?: IListItem;
+  Header?: typeof ListHeader;
   Item?: typeof ListItem;
   className?: string;
   onItemSelect?(item: IListItem): void;
@@ -157,6 +161,10 @@ export default class List extends React.PureComponent<IListProps, IListState> {
   render() {
     return (
       <div className={classNames('list-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+        {
+          this.props.Header &&
+            <this.props.Header />
+        }
         {
           this.props.items.map((item, index) => {
             return (
