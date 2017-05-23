@@ -65,10 +65,10 @@ export default class IssueList extends React.PureComponent<IIssueListProps, IIss
     });
 
     const getParents = (issue: IIssue): IIssue[] => {
-      if (!issue.parentIssue)
+      if (!issue.parent)
         return [];
 
-      const parent = findIssueById(issue.parentIssue.id);
+      const parent = findIssueById(issue.parent.id);
 
       if (!parent)
         return [];

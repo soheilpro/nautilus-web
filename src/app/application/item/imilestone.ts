@@ -7,7 +7,7 @@ export interface IMilestone extends IEntity {
   description?: string;
   state?: IItemState;
   project?: IProject;
-  parentMilestone?: IMilestone;
+  parent?: IMilestone;
   createdBy?: IUser;
   modifiedBy?: IUser;
 }

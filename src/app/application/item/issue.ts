@@ -54,7 +54,7 @@ export default class Issue implements IIssue {
     return this.application.projects.get(this.item.project);
   }
 
-  get parentIssue() {
+  get parent() {
     return null as IIssue;
   }
 

@@ -65,10 +65,10 @@ export default class MilestoneList extends React.PureComponent<IMilestoneListPro
     });
 
     const getParents = (milestone: IMilestone): IMilestone[] => {
-      if (!milestone.parentMilestone)
+      if (!milestone.parent)
         return [];
 
-      const parent = findMilestoneById(milestone.parentMilestone.id);
+      const parent = findMilestoneById(milestone.parent.id);
 
       if (!parent)
         return [];

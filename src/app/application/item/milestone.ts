@@ -45,7 +45,7 @@ export default class Milestone implements IMilestone {
     return this.application.projects.get(this.item.project);
   }
 
-  get parentMilestone() {
+  get parent() {
     return null as IMilestone;
   }
 

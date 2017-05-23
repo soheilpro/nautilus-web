@@ -11,7 +11,7 @@ export interface IIssue extends IEntity {
   priority?: IItemPriority;
   tags?: string[];
   project?: IProject;
-  parentIssue?: IIssue;
+  parent?: IIssue;
   milestone?: IMilestone;
   assignedTo?: IUser;
   createdBy?: IUser;
