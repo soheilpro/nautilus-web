@@ -34,7 +34,7 @@ interface IMilestoneViewViewState {
 export default class MilestoneViewView extends React.PureComponent<IMilestoneViewViewProps, IMilestoneViewViewState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
-  private queryBuilderComponents: { [itemKind: string]: (MilestoneFilterQueryBuilder) } = {};
+  private queryBuilderComponent: MilestoneFilterQueryBuilder;
   private savedViewListDropdownComponent: Dropdown;
   private promptWindow: IWindow;
 
@@ -86,7 +86,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
   }
 
   private handleOpenFilterCommandExecute(itemKind: string, key: string) {
-    this.queryBuilderComponents[itemKind].open(key);
+    this.queryBuilderComponent.open(key);
   }
 
   private handleResetViewCommandExecute() {
@@ -169,7 +169,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
       <div className="milestone-view-settings-component">
         <div className="query">
           <div className="query-builder">
-            <MilestoneFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleMilestoneFilterQueryBuilderChange} ref={e => this.queryBuilderComponents['milestone'] = e} />
+            <MilestoneFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleMilestoneFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
           </div>
           <div className="buttons">
             {

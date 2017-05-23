@@ -41,7 +41,7 @@ interface IIssueViewViewState {
 export default class IssueViewView extends React.PureComponent<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
-  private queryBuilderComponents: { [itemKind: string]: (IssueFilterQueryBuilder) } = {};
+  private queryBuilderComponent: IssueFilterQueryBuilder;
   private savedViewListDropdownComponent: Dropdown;
   private promptWindow: IWindow;
 
@@ -101,7 +101,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
   }
 
   private handleOpenFilterCommandExecute(itemKind: string, key: string) {
-    this.queryBuilderComponents[itemKind].open(key);
+    this.queryBuilderComponent.open(key);
   }
 
   private handleResetViewCommandExecute() {
@@ -199,7 +199,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
       <div className="issue-view-settings-component">
         <div className="query">
           <div className="query-builder">
-            <IssueFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleIssueFilterQueryBuilderChange} ref={e => this.queryBuilderComponents['issue'] = e} />
+            <IssueFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleIssueFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
           </div>
           <div className="buttons">
             {
