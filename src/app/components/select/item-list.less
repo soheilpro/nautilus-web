@@ -1,37 +1,39 @@
 @import '../../assets/stylesheets/common';
 
-.item-list-component {
-  padding: 10px;
+.select-component {
+  .item-list-component {
+    padding: 10px;
 
-  .search-input {
-    min-width: 100%;
-    margin-bottom: 10px;
-  }
+    .search-input {
+      min-width: 100%;
+      margin-bottom: 10px;
+    }
 
-  .item-list {
-    .item {
-      display: flex;
+    .item-list {
+      .item {
+        display: flex;
 
-      .title {
-        flex: 1;
-        padding: 2px 6px;
-        text-decoration: none;
-        color: @text;
-
-          .icon {
-            margin-right: 8px;
-            visibility: hidden;
-
-            &.selected {
-              visibility: visible;
-            }
-          }
-      }
-
-      &.active {
         .title {
-          background-color: @primary;
-          color: @white;
+          flex: 1;
+          padding: 2px 6px;
+          text-decoration: none;
+          color: @text;
+
+            .icon {
+              margin-right: 8px;
+              visibility: hidden;
+
+              &.selected {
+                visibility: visible;
+              }
+            }
+        }
+
+        &.active {
+          .title {
+            background-color: @primary;
+            color: @white;
+          }
         }
       }
     }

@@ -1,35 +1,39 @@
 @import '../../assets/stylesheets/common';
 
-.issue-component {
-  cursor: default;
+.issue-list-component {
+  .issue-component {
+    cursor: default;
 
-  .list-item-field {
-    padding: 5px 10px;
+    .list-item-field {
+      padding: 5px 10px;
 
-    &.sid {
-      text-align: center;
-    }
+      &.sid {
+        text-align: center;
+      }
 
-    &.title {
-      width: 100%;
-      padding-left: 0;
-      padding-right: 0;
+      &.title {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
 
-      .priority-indicator {
-        margin-left: 10px;
+        .priority-indicator {
+          margin-left: 10px;
+        }
       }
     }
   }
 }
 
 .rtl {
-  .issue-component {
-    .list-item-field {
-      &.title {
-        direction: rtl;
+  .issue-list-component {
+    .issue-component {
+      .list-item-field {
+        &.title {
+          direction: rtl;
 
-        .priority-indicator {
-          margin-right: 10px;
+          .priority-indicator {
+            margin-right: 10px;
+          }
         }
       }
     }
