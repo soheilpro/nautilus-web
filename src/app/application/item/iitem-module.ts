@@ -4,13 +4,17 @@ import { IModule } from '../imodule';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
 import { IMilestone } from './imilestone';
+import { IMilestoneChange } from './imilestone-change';
 
 export interface IItemModule extends IModule {
-  getAllMilestones(query: NQL.Expression): IMilestone[];
-  getMilestone(item: IItem): IMilestone;
   getAllIssues(query: NQL.Expression): Promise<IItem[]>;
   getIssue(item: IItem): Promise<IItem>;
   addIssue(issue: IIssue): Promise<IIssue>;
   updateIssue(issueId: string, issueChange: IIssueChange): Promise<IIssue>;
   deleteIssue(issue: IIssue): Promise<void>;
+  getAllMilestones(query: NQL.Expression): IMilestone[];
+  getMilestone(item: IItem): IMilestone;
+  addMilestone(milestone: IMilestone): Promise<IMilestone>;
+  updateMilestone(milestoneId: string, milestoneChange: IMilestoneChange): Promise<IMilestone>;
+  deleteMilestone(milestone: IMilestone): Promise<void>;
 }

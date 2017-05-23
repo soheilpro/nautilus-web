@@ -4,6 +4,7 @@ import { IContextManager } from '../context';
 import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
+import { IMilestoneController } from '../milestones';
 import { INotificationController } from '../notifications';
 import { ISearchController } from '../search';
 import { IStorage } from '../storage';
@@ -48,4 +49,7 @@ export interface IServiceManager {
 
   setIssueController(issueController: IIssueController): void;
   getIssueController(): IIssueController;
+
+  setMilestoneController(milestoneController: IMilestoneController): void;
+  getMilestoneController(): IMilestoneController;
 }

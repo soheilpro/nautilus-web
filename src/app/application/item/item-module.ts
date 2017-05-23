@@ -8,9 +8,11 @@ import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
 import { IMilestone } from './imilestone';
+import { IMilestoneChange } from './imilestone-change';
 import Milestone from './milestone';
 import Issue from './issue';
 import IssueFilter from './issue-filter';
+import MilestoneFilter from './milestone-filter';
 
 export class ItemModule extends BaseModule implements IItemModule {
   private milestones: IMilestone[];
@@ -39,20 +41,6 @@ export class ItemModule extends BaseModule implements IItemModule {
     }
 
     this.milestones = _.sortBy(this.milestones, milestone => milestone.fullTitle);
-  }
-
-  getAllMilestones(query: NQL.Expression) {
-    let milestones = [...this.milestones];
-
-    if (query) {
-      throw new Error('Not implemented.');
-    }
-
-    return milestones;
-  }
-
-  getMilestone(item: IItem) {
-    return _.find(this.milestones, _.partial(entityComparer, item));
   }
 
   getAllIssues(query: NQL.Expression) {
@@ -102,5 +90,54 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.issues.splice(this.issues.indexOf(issue), 1);
 
     this.emit('issue.delete', { issue });
+  }
+
+  getAllMilestones(query: NQL.Expression) {
+    let milestones = [...this.milestones];
+
+    if (query) {
+      const issueFilter = new MilestoneFilter();
+      const predicate = issueFilter.getPredicate(query);
+
+      milestones = milestones.filter(predicate);
+    }
+
+    return milestones;
+  }
+
+  getMilestone(item: IItem) {
+    return _.find(this.milestones, _.partial(entityComparer, item));
+  }
+
+  async addMilestone(milestone: IMilestone) {
+    const item = {
+      ...milestone,
+      kind: 'milestone',
+    };
+
+    milestone = new Milestone(await this.client.items.insert(item), this.application);
+    this.milestones.push(milestone);
+
+    this.emit('milestone.add', { milestone });
+
+    return milestone;
+  }
+
+  async updateMilestone(milestoneId: string, milestoneChange: IMilestoneChange) {
+    const milestone = new Milestone(await this.client.items.update(milestoneId, milestoneChange), this.application);
+
+    this.milestones[_.findIndex(this.milestones, milestone => milestone.id === milestoneId)] = milestone;
+
+    this.emit('milestone.update', { milestone });
+
+    return milestone;
+  }
+
+  async deleteMilestone(milestone: IMilestone)  {
+    await this.client.items.delete(milestone.id);
+
+    this.milestones.splice(this.milestones.indexOf(milestone), 1);
+
+    this.emit('milestone.delete', { milestone });
   }
 }

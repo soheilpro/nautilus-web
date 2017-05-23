@@ -4,6 +4,7 @@ import { IContextManager } from '../context';
 import { IActionController } from '../actions';
 import { ICommandController, ICommandManager } from '../commands';
 import { IIssueController } from '../issues';
+import { IMilestoneController } from '../milestones';
 import { INotificationController } from '../notifications';
 import { ISearchController } from '../search';
 import { IServiceManager } from './iservice-manager';
@@ -26,6 +27,7 @@ export class ServiceManager implements IServiceManager {
   private notificationController: INotificationController;
   private searchController: ISearchController;
   private issueController: IIssueController;
+  private milestoneController: IMilestoneController;
 
   setSessionStorage(storage: IStorage) {
     this.sessionStorage = storage;
@@ -129,5 +131,13 @@ export class ServiceManager implements IServiceManager {
 
   getIssueController() {
     return this.issueController;
+  }
+
+  setMilestoneController(milestoneController: IMilestoneController) {
+    this.milestoneController = milestoneController;
+  }
+
+  getMilestoneController() {
+    return this.milestoneController;
   }
 }

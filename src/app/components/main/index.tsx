@@ -5,6 +5,7 @@ import { ServiceManager } from '../../services';
 import CommandController from '../command-controller';
 import ActionController from '../action-controller';
 import IssueController from '../issue-controller';
+import MilestoneController from '../milestone-controller';
 import NotificationController from '../notification-controller';
 import SearchController from '../search-controller';
 import WindowController from '../window-controller';
@@ -12,6 +13,7 @@ import IssuesPage from '../issues-page';
 import MilestonesPage from '../milestones-page';
 import RefreshCommand from './refresh-command';
 import ViewIssuesCommand from './view-issues-command';
+import ViewMilestonesCommand from './view-milestones-command';
 
 interface IMainProps {
 }
@@ -34,6 +36,7 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
     return [
       new RefreshCommand(),
       new ViewIssuesCommand(),
+      new ViewMilestonesCommand(),
     ];
   }
 
@@ -46,6 +49,7 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
         <ActionController />
         <SearchController />
         <IssueController />
+        <MilestoneController />
         <Router history={browserHistory}>
           <Route path="/" component={IssuesPage}/>
           <Route path="/milestones" component={MilestonesPage}/>

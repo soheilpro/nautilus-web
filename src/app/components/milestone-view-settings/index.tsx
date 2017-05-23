@@ -1,0 +1,194 @@
+import * as _ from 'underscore';
+import * as React from 'react';
+import * as NQL from '../../nql';
+import { ICommandProvider } from '../../commands';
+import { ServiceManager } from '../../services';
+import { IWindow } from '../../windows';
+import Button from '../button';
+import Dropdown from '../dropdown';
+import PromptWindow from '../prompt-window';
+import MilestoneFilterQueryBuilder from '../milestone-filter-query-builder';
+import Expression from '../expression';
+import { IView } from './iview';
+import { View } from './view';
+import FilterMilestonesByProjectCommand from './filter-milestones-by-project-command';
+import FilterMilestonesByStateCommand from './filter-milestones-by-state-command';
+import FilterMilestonesByCreatedByCommand from './filter-milestones-by-created-by-command';
+import ResetViewCommand from './reset-view-command';
+
+require('../../assets/stylesheets/base.less');
+require('./index.less');
+
+interface IMilestoneViewViewProps {
+  view?: IView;
+  savedViews?: IView[];
+  onChange(view: IView): void;
+  onSavedViewsChange(savedViews: IView[]): void;
+}
+
+interface IMilestoneViewViewState {
+  filterQuery?: NQL.Expression;
+  savedViews?: IView[];
+}
+
+export default class MilestoneViewView extends React.PureComponent<IMilestoneViewViewProps, IMilestoneViewViewState> implements ICommandProvider {
+  private commandManager = ServiceManager.Instance.getCommandManager();
+  private windowController = ServiceManager.Instance.getWindowController();
+  private queryBuilderComponents: { [itemKind: string]: (MilestoneFilterQueryBuilder) } = {};
+  private savedViewListDropdownComponent: Dropdown;
+  private promptWindow: IWindow;
+
+  constructor(props: IMilestoneViewViewProps) {
+    super(props);
+
+    this.handleMilestoneFilterQueryBuilderChange = this.handleMilestoneFilterQueryBuilderChange.bind(this);
+    this.handleResetButtonClick = this.handleResetButtonClick.bind(this);
+    this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
+    this.handleSavePromptWindowConfirm = this.handleSavePromptWindowConfirm.bind(this);
+    this.handleSavePromptWindowCloseRequest = this.handleSavePromptWindowCloseRequest.bind(this);
+    this.handleViewListDelete = this.handleViewListDelete.bind(this);
+    this.handleViewListSelect = this.handleViewListSelect.bind(this);
+    this.handleOpenFilterCommandExecute = this.handleOpenFilterCommandExecute.bind(this);
+    this.handleResetViewCommandExecute = this.handleResetViewCommandExecute.bind(this);
+
+    this.state = {
+      filterQuery: props.view ? props.view.filterQuery : undefined,
+      savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
+    };
+  }
+
+  componentWillMount() {
+    this.commandManager.registerCommandProvider(this);
+  }
+
+  componentWillReceiveProps(props: IMilestoneViewViewProps) {
+    this.setState({
+      filterQuery: props.view ? props.view.filterQuery : undefined,
+      savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
+    });
+  }
+
+  componentWillUnmount() {
+    this.commandManager.unregisterCommandProvider(this);
+  }
+
+  getCommands() {
+    const view = View.create({
+      filterQuery: this.state.filterQuery,
+    });
+
+    return [
+      new FilterMilestonesByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'project')),
+      new FilterMilestonesByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'state')),
+      new FilterMilestonesByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'milestone', 'createdBy')),
+      new ResetViewCommand(view, this.handleResetViewCommandExecute),
+    ];
+  }
+
+  private handleOpenFilterCommandExecute(itemKind: string, key: string) {
+    this.queryBuilderComponents[itemKind].open(key);
+  }
+
+  private handleResetViewCommandExecute() {
+    this.props.onChange(View.create());
+
+    this.setState({
+      filterQuery: null,
+    });
+  }
+
+  private async handleMilestoneFilterQueryBuilderChange(query: NQL.Expression) {
+    const view = View.create({
+      filterQuery: query,
+    });
+
+    this.props.onChange(view);
+
+    this.setState({
+      filterQuery: query,
+    });
+  }
+
+  private handleResetButtonClick() {
+    this.props.onChange(View.create());
+
+    this.setState({
+      filterQuery: null,
+    });
+  }
+
+  private handleSaveButtonClick() {
+    this.promptWindow = {
+      content: <PromptWindow title="Save" placeholder="Name" confirmButtonText="Save" onConfirm={this.handleSavePromptWindowConfirm} onCloseRequest={this.handleSavePromptWindowCloseRequest} />,
+      top: 120,
+      width: 500,
+      modal: true,
+    };
+
+    this.windowController.showWindow(this.promptWindow);
+  }
+
+  private handleSavePromptWindowConfirm(name: string) {
+    this.windowController.closeWindow(this.promptWindow);
+
+    const view = View.create({
+      name,
+      filterQuery: this.state.filterQuery,
+    });
+
+    const savedViews = this.state.savedViews.concat(view);
+
+    this.props.onSavedViewsChange(savedViews);
+
+    this.setState({
+      savedViews,
+    });
+  }
+
+  private handleSavePromptWindowCloseRequest() {
+    this.windowController.closeWindow(this.promptWindow);
+  }
+
+  private handleViewListDelete(view: IView) {
+    const savedViews = this.state.savedViews.filter(x => x !== view);
+
+    this.props.onSavedViewsChange(savedViews);
+
+    this.setState({
+      savedViews,
+    });
+  }
+
+  private handleViewListSelect(view: IView) {
+    this.savedViewListDropdownComponent.close();
+    this.props.onChange(view);
+  }
+
+  render() {
+    return (
+      <div className="milestone-view-settings-component">
+        <div className="query">
+          <div className="query-builder">
+            <MilestoneFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleMilestoneFilterQueryBuilderChange} ref={e => this.queryBuilderComponents['milestone'] = e} />
+          </div>
+          <div className="buttons">
+            {
+              !this.props.view.isDefault() &&
+                <Button className="reset" type="secondary" onClick={this.handleResetButtonClick}>Reset</Button>
+            }
+          </div>
+        </div>
+        <div className="query-text">
+          {
+            this.state.filterQuery ?
+              <Expression expression={this.state.filterQuery} /> :
+              <span className="no-filter">No filters selected.</span>
+          }
+        </div>
+      </div>
+    );
+  }
+};
+
+export * from './iview';
+export * from './view';
