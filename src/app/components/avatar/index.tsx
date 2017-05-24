@@ -20,10 +20,12 @@ export default class Avatar extends React.PureComponent<IAvatarProps, IAvatarSta
 
   render() {
     const md5: any = blueimpmd5;
+    const emailHash = md5(this.props.user.email);
+    const size = this.props.size * 2;
 
     return (
       <div className="avatar-component">
-        <img className="image" src={`http://www.gravatar.com/avatar/${md5(this.props.user.email)}?s=${this.props.size * 2}&d=identicon`} width={this.props.size} height={this.props.size} />
+        <img className="image" src={`http://www.gravatar.com/avatar/${emailHash}?s=${size}&d=identicon`} width={this.props.size} height={this.props.size} />
       </div>
     );
   }
