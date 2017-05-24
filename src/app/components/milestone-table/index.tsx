@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IMilestone } from '../../application';
 import { ServiceManager } from '../../services';
 import Table from '../table';
@@ -12,6 +13,7 @@ require('./index.less');
 interface IMilestoneTableProps {
   milestones?: IMilestone[];
   selectedMilestone?: IMilestone;
+  className?: string;
   onMilestoneSelect?(milestone: IMilestone): void;
 }
 
@@ -110,7 +112,7 @@ export default class MilestoneTable extends React.PureComponent<IMilestoneTableP
 
   render() {
     return (
-      <Table className="milestone-table-component" items={this.state.milestones} selectedItem={this.state.selectedMilestone} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
+      <Table className={classNames('milestone-table-component', this.props.className)} items={this.state.milestones} selectedItem={this.state.selectedMilestone} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };

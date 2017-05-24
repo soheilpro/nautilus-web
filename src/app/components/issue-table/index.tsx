@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as classNames from 'classnames';
 import { IIssue } from '../../application';
 import { ServiceManager } from '../../services';
 import Table from '../table';
@@ -12,6 +13,7 @@ require('./index.less');
 interface IIssueTableProps {
   issues?: IIssue[];
   selectedIssue?: IIssue;
+  className?: string;
   onIssueSelect?(issue: IIssue): void;
 }
 
@@ -110,7 +112,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
 
   render() {
     return (
-      <Table className="issue-table-component" items={this.state.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
+      <Table className={classNames('issue-table-component', this.props.className)} items={this.state.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };
