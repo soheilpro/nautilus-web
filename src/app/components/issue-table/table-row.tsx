@@ -10,6 +10,7 @@ import IssueStateField from '../issue-state-field';
 import IssueAssignedTo from '../issue-assigned-to-field';
 import IssueMilestoneField from '../issue-milestone-field';
 import ItemPriorityIndicator from '../item-priority-indicator';
+import { ITableRow } from '../table';
 
 require('../../assets/stylesheets/base.less');
 require('./table-row.less');
@@ -25,12 +26,18 @@ interface ITableRowProps {
 interface ITableRowState {
 }
 
-export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> {
+export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> implements ITableRow {
+  private componentElement: HTMLElement;
+
   constructor() {
     super();
 
     this.handleClick = this.handleClick.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
+  }
+
+  focus() {
+    this.componentElement.focus();
   }
 
   private handleClick() {
@@ -45,7 +52,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
 
   render() {
     return (
-      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
         <div className="table-cell sid">
           <IssueSidField issue={this.props.item} bold={this.props.isSelected} />
         </div>

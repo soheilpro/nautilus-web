@@ -26,7 +26,7 @@ interface ITableState {
 
 export default class Table extends React.PureComponent<ITableProps, ITableState> {
   private componentElement: HTMLElement;
-  private selectedItemElement: HTMLElement;
+  private selectedRow: TableRow;
 
   constructor(props: ITableProps) {
     super(props);
@@ -43,8 +43,8 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
   }
 
   componentDidUpdate() {
-    if ($(this.componentElement).hasClass('focus') && this.selectedItemElement)
-      this.selectedItemElement.focus();
+    if ($(this.componentElement).hasClass('focus') && this.selectedRow)
+      this.selectedRow.focus();
   }
 
   componentWillReceiveProps(props: ITableProps) {
@@ -150,7 +150,7 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
         {
           this.props.items.map((item, index) => {
             return (
-              <this.props.Row item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={_.partial(this.handleItemSelect, item)} onAction={_.partial(this.handleItemAction, item)} key={item.id} />
+              <this.props.Row item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={_.partial(this.handleItemSelect, item)} onAction={_.partial(this.handleItemAction, item)} ref={e => this.selectedRow = this.state.selectedItem === item ? e : this.selectedRow} key={item.id} />
             );
           })
         }
@@ -158,3 +158,5 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
     );
   }
 };
+
+export { ITableRow } from './table-row';

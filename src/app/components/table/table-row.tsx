@@ -12,5 +12,11 @@ interface ITableRowProps {
 interface ITableRowState {
 }
 
+export interface ITableRow {
+  focus(): void;
+}
+
 export default class TableRow extends React.Component<ITableRowProps, ITableRowState> {
+  focus() {
+  }
 }

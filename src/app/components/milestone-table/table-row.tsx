@@ -5,6 +5,7 @@ import MilestoneSidField from '../milestone-sid-field';
 import MilestoneTitleField from '../milestone-title-field';
 import MilestoneProjectField from '../milestone-project-field';
 import MilestoneStateField from '../milestone-state-field';
+import { ITableRow } from '../table';
 
 require('../../assets/stylesheets/base.less');
 require('./table-row.less');
@@ -20,12 +21,18 @@ interface ITableRowProps {
 interface ITableRowState {
 }
 
-export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> {
+export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> implements ITableRow {
+  private componentElement: HTMLElement;
+
   constructor() {
     super();
 
     this.handleClick = this.handleClick.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
+  }
+
+  focus() {
+    this.componentElement.focus();
   }
 
   private handleClick() {
@@ -40,7 +47,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
 
   render() {
     return (
-      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
         <div className="table-cell sid">
           <MilestoneSidField milestone={this.props.item} bold={this.props.isSelected} />
         </div>
