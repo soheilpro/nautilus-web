@@ -14,8 +14,8 @@ export default class Header extends React.PureComponent<IHeaderProps, IHeaderSta
     return (
       <div className="header-component list-header">
         <div className="list-header-field sid">#</div>
-        <div className="list-header-field title">Title</div>
         <div className="list-header-field project">Project</div>
+        <div className="list-header-field title">Title</div>
         <div className="list-header-field state">State</div>
       </div>
     );

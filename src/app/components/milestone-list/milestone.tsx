@@ -44,11 +44,11 @@ export default class Milestone extends React.PureComponent<IMilestoneProps, IMil
         <div className="list-item-field sid">
           <MilestoneSidField milestone={this.props.item} bold={this.props.isSelected} />
         </div>
-        <div className="list-item-field title">
-          <MilestoneTitleField milestone={this.props.item} />
-        </div>
         <div className="list-item-field project">
           <MilestoneProjectField milestone={this.props.item} />
+        </div>
+        <div className="list-item-field title">
+          <MilestoneTitleField milestone={this.props.item} />
         </div>
         <div className="list-item-field state">
           <MilestoneStateField milestone={this.props.item} />
