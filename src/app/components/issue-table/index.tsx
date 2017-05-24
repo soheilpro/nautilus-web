@@ -2,33 +2,33 @@ import * as _ from 'underscore';
 import * as React from 'react';
 import { IIssue } from '../../application';
 import { ServiceManager } from '../../services';
-import List from '../list';
-import Header from './header';
-import Issue from './issue';
+import Table from '../table';
+import TableHeader from './table-header';
+import TableRow from './table-row';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IIssueListProps {
+interface IIssueTableProps {
   issues?: IIssue[];
   selectedIssue?: IIssue;
   onIssueSelect?(issue: IIssue): void;
 }
 
-interface IIssueListState {
+interface IIssueTableState {
   issues?: IIssue[];
   selectedIssue?: IIssue;
 }
 
-export default class IssueList extends React.PureComponent<IIssueListProps, IIssueListState> {
+export default class IssueTable extends React.PureComponent<IIssueTableProps, IIssueTableState> {
   private issueController = ServiceManager.Instance.getIssueController();
 
-  constructor(props: IIssueListProps) {
+  constructor(props: IIssueTableProps) {
     super(props);
 
-    this.handleListItemSelect = this.handleListItemSelect.bind(this);
-    this.handleListItemAction = this.handleListItemAction.bind(this);
-    this.handleListItemDelete = this.handleListItemDelete.bind(this);
+    this.handleTableItemSelect = this.handleTableItemSelect.bind(this);
+    this.handleTableItemAction = this.handleTableItemAction.bind(this);
+    this.handleTableItemDelete = this.handleTableItemDelete.bind(this);
 
     this.state = {
       issues: this.sortIssues(props.issues),
@@ -36,14 +36,14 @@ export default class IssueList extends React.PureComponent<IIssueListProps, IIss
     };
   }
 
-  componentWillReceiveProps(props: IIssueListProps) {
+  componentWillReceiveProps(props: IIssueTableProps) {
     this.setState({
       issues: this.sortIssues(props.issues),
       selectedIssue: props.selectedIssue,
     });
   }
 
-  private handleListItemSelect(issue: IIssue) {
+  private handleTableItemSelect(issue: IIssue) {
     if (this.props.onIssueSelect)
       this.props.onIssueSelect(issue);
 
@@ -52,11 +52,11 @@ export default class IssueList extends React.PureComponent<IIssueListProps, IIss
     });
   }
 
-  private handleListItemAction(issue: IIssue) {
+  private handleTableItemAction(issue: IIssue) {
     return this.issueController.editIssue(issue);
   }
 
-  private handleListItemDelete(issue: IIssue) {
+  private handleTableItemDelete(issue: IIssue) {
     return this.issueController.deleteIssue(issue);
   }
 
@@ -110,7 +110,7 @@ export default class IssueList extends React.PureComponent<IIssueListProps, IIss
 
   render() {
     return (
-      <List className="issue-list-component" items={this.state.issues} selectedItem={this.state.selectedIssue} Header={Header} Item={Issue} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
+      <Table className="issue-table-component" items={this.state.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };

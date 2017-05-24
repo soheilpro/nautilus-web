@@ -7,9 +7,9 @@ import MilestoneProjectField from '../milestone-project-field';
 import MilestoneStateField from '../milestone-state-field';
 
 require('../../assets/stylesheets/base.less');
-require('./milestone.less');
+require('./table-row.less');
 
-interface IMilestoneProps {
+interface ITableRowProps {
   item: IMilestone;
   index: number;
   isSelected: boolean;
@@ -17,10 +17,10 @@ interface IMilestoneProps {
   onAction?(): void;
 }
 
-interface IMilestoneState {
+interface ITableRowState {
 }
 
-export default class Milestone extends React.PureComponent<IMilestoneProps, IMilestoneState> {
+export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> {
   constructor() {
     super();
 
@@ -40,17 +40,17 @@ export default class Milestone extends React.PureComponent<IMilestoneProps, IMil
 
   render() {
     return (
-      <div className={classNames('milestone-component', 'list-item', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
-        <div className="list-item-field sid">
+      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+        <div className="table-cell sid">
           <MilestoneSidField milestone={this.props.item} bold={this.props.isSelected} />
         </div>
-        <div className="list-item-field project">
+        <div className="table-cell project">
           <MilestoneProjectField milestone={this.props.item} />
         </div>
-        <div className="list-item-field title">
+        <div className="table-cell title">
           <MilestoneTitleField milestone={this.props.item} />
         </div>
-        <div className="list-item-field state">
+        <div className="table-cell state">
           <MilestoneStateField milestone={this.props.item} />
         </div>
       </div>

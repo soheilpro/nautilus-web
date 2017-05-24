@@ -2,51 +2,33 @@ import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
+import { IItem } from './iitem';
+import TableHeader from './table-header';
+import TableRow from './table-row';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IListItem {
-  id?: string;
-};
-
-interface IListItemProps {
-  item: IListItem;
-  index: number;
-  isSelected: boolean;
-  onSelect?(): void;
-  onAction?(): void;
-}
-
-interface IListItemState {
-}
-
-export class ListItem extends React.Component<IListItemProps, IListItemState> {
-}
-
-export class ListHeader extends React.Component<{}, {}> {
-}
-
-interface IListProps {
-  items: IListItem[];
-  selectedItem?: IListItem;
-  Header?: typeof ListHeader;
-  Item?: typeof ListItem;
+interface ITableProps {
+  items: IItem[];
+  selectedItem?: IItem;
+  Header?: typeof TableHeader;
+  Row?: typeof TableRow;
   className?: string;
-  onItemSelect?(item: IListItem): void;
-  onItemAction?(item: IListItem): void;
-  onItemDelete?(item: IListItem): void;
+  onItemSelect?(item: IItem): void;
+  onItemAction?(item: IItem): void;
+  onItemDelete?(item: IItem): void;
 }
 
-interface IListState {
-  selectedItem?: IListItem;
+interface ITableState {
+  selectedItem?: IItem;
 }
 
-export default class List extends React.PureComponent<IListProps, IListState> {
+export default class Table extends React.PureComponent<ITableProps, ITableState> {
   private componentElement: HTMLElement;
   private selectedItemElement: HTMLElement;
 
-  constructor(props: IListProps) {
+  constructor(props: ITableProps) {
     super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -65,7 +47,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
       this.selectedItemElement.focus();
   }
 
-  componentWillReceiveProps(props: IListProps) {
+  componentWillReceiveProps(props: ITableProps) {
     let selectedItem = props.selectedItem;
 
     if (!selectedItem) {
@@ -144,7 +126,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     $(this.componentElement).removeClass('focus');
   }
 
-  private handleItemSelect(item: IListItem) {
+  private handleItemSelect(item: IItem) {
     if (this.props.onItemSelect)
       this.props.onItemSelect(item);
 
@@ -153,14 +135,14 @@ export default class List extends React.PureComponent<IListProps, IListState> {
     });
   }
 
-  private handleItemAction(item: IListItem) {
+  private handleItemAction(item: IItem) {
     if (this.props.onItemAction)
       this.props.onItemAction(item);
   }
 
   render() {
     return (
-      <div className={classNames('list-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+      <div className={classNames('table-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
         {
           this.props.Header &&
             <this.props.Header />
@@ -168,7 +150,7 @@ export default class List extends React.PureComponent<IListProps, IListState> {
         {
           this.props.items.map((item, index) => {
             return (
-              <this.props.Item item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={_.partial(this.handleItemSelect, item)} onAction={_.partial(this.handleItemAction, item)} key={item.id} />
+              <this.props.Row item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={_.partial(this.handleItemSelect, item)} onAction={_.partial(this.handleItemAction, item)} key={item.id} />
             );
           })
         }

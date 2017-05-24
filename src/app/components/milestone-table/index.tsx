@@ -2,33 +2,33 @@ import * as _ from 'underscore';
 import * as React from 'react';
 import { IMilestone } from '../../application';
 import { ServiceManager } from '../../services';
-import List from '../list';
-import Header from './header';
-import Milestone from './milestone';
+import Table from '../table';
+import TableHeader from './table-header';
+import TableRow from './table-row';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IMilestoneListProps {
+interface IMilestoneTableProps {
   milestones?: IMilestone[];
   selectedMilestone?: IMilestone;
   onMilestoneSelect?(milestone: IMilestone): void;
 }
 
-interface IMilestoneListState {
+interface IMilestoneTableState {
   milestones?: IMilestone[];
   selectedMilestone?: IMilestone;
 }
 
-export default class MilestoneList extends React.PureComponent<IMilestoneListProps, IMilestoneListState> {
+export default class MilestoneTable extends React.PureComponent<IMilestoneTableProps, IMilestoneTableState> {
   private milestoneController = ServiceManager.Instance.getMilestoneController();
 
-  constructor(props: IMilestoneListProps) {
+  constructor(props: IMilestoneTableProps) {
     super(props);
 
-    this.handleListItemSelect = this.handleListItemSelect.bind(this);
-    this.handleListItemAction = this.handleListItemAction.bind(this);
-    this.handleListItemDelete = this.handleListItemDelete.bind(this);
+    this.handleTableItemSelect = this.handleTableItemSelect.bind(this);
+    this.handleTableItemAction = this.handleTableItemAction.bind(this);
+    this.handleTableItemDelete = this.handleTableItemDelete.bind(this);
 
     this.state = {
       milestones: this.sortMilestones(props.milestones),
@@ -36,14 +36,14 @@ export default class MilestoneList extends React.PureComponent<IMilestoneListPro
     };
   }
 
-  componentWillReceiveProps(props: IMilestoneListProps) {
+  componentWillReceiveProps(props: IMilestoneTableProps) {
     this.setState({
       milestones: this.sortMilestones(props.milestones),
       selectedMilestone: props.selectedMilestone,
     });
   }
 
-  private handleListItemSelect(milestone: IMilestone) {
+  private handleTableItemSelect(milestone: IMilestone) {
     if (this.props.onMilestoneSelect)
       this.props.onMilestoneSelect(milestone);
 
@@ -52,11 +52,11 @@ export default class MilestoneList extends React.PureComponent<IMilestoneListPro
     });
   }
 
-  private handleListItemAction(milestone: IMilestone) {
+  private handleTableItemAction(milestone: IMilestone) {
     return this.milestoneController.editMilestone(milestone);
   }
 
-  private handleListItemDelete(milestone: IMilestone) {
+  private handleTableItemDelete(milestone: IMilestone) {
     return this.milestoneController.deleteMilestone(milestone);
   }
 
@@ -110,7 +110,7 @@ export default class MilestoneList extends React.PureComponent<IMilestoneListPro
 
   render() {
     return (
-      <List className="milestone-list-component" items={this.state.milestones} selectedItem={this.state.selectedMilestone} Header={Header} Item={Milestone} onItemSelect={this.handleListItemSelect} onItemAction={this.handleListItemAction} onItemDelete={this.handleListItemDelete} />
+      <Table className="milestone-table-component" items={this.state.milestones} selectedItem={this.state.selectedMilestone} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };

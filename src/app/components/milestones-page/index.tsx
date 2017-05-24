@@ -6,7 +6,7 @@ import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
 import MilestoneViewSettings, { IView, View } from '../milestone-view-settings';
 import MilestoneDetail from '../milestone-detail';
-import MilestoneList from '../milestone-list';
+import MilestoneTable from '../milestone-table';
 import MasterPage from '../master-page';
 import CommandButton from '../command-button';
 import Icon from '../icon';
@@ -40,7 +40,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     this.handleApplicationMilestoneDelete = this.handleApplicationMilestoneDelete.bind(this);
     this.handleMilestoneViewSettingsChange = this.handleMilestoneViewSettingsChange.bind(this);
     this.handleMilestoneViewSettingsSavedViewsChange = this.handleMilestoneViewSettingsSavedViewsChange.bind(this);
-    this.handleMilestoneListMilestoneSelect = this.handleMilestoneListMilestoneSelect.bind(this);
+    this.handleMilestoneTableMilestoneSelect = this.handleMilestoneTableMilestoneSelect.bind(this);
 
     this.state = {
       milestones: [],
@@ -150,7 +150,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
   }
 
-  private handleMilestoneListMilestoneSelect(milestone: IMilestone) {
+  private handleMilestoneTableMilestoneSelect(milestone: IMilestone) {
     this.setState({
       selectedMilestone: milestone,
     });
@@ -169,7 +169,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
           </div>
           <div className="milestones row">
             <div className="milestone-list">
-              <MilestoneList milestones={this.state.milestones} selectedMilestone={this.state.selectedMilestone} onMilestoneSelect={this.handleMilestoneListMilestoneSelect} />
+              <MilestoneTable milestones={this.state.milestones} selectedMilestone={this.state.selectedMilestone} onMilestoneSelect={this.handleMilestoneTableMilestoneSelect} />
             </div>
             <div className="divider"></div>
             <div className="milestone-detail">

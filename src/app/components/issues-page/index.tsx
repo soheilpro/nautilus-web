@@ -6,7 +6,7 @@ import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
-import IssueList from '../issue-list';
+import IssueTable from '../issue-table';
 import MasterPage from '../master-page';
 import CommandButton from '../command-button';
 import Icon from '../icon';
@@ -40,7 +40,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.handleApplicationIssueDelete = this.handleApplicationIssueDelete.bind(this);
     this.handleIssueViewSettingsChange = this.handleIssueViewSettingsChange.bind(this);
     this.handleIssueViewSettingsSavedViewsChange = this.handleIssueViewSettingsSavedViewsChange.bind(this);
-    this.handleIssueListIssueSelect = this.handleIssueListIssueSelect.bind(this);
+    this.handleIssueTableIssueSelect = this.handleIssueTableIssueSelect.bind(this);
 
     this.state = {
       issues: [],
@@ -150,7 +150,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private handleIssueListIssueSelect(issue: IIssue) {
+  private handleIssueTableIssueSelect(issue: IIssue) {
     this.setState({
       selectedIssue: issue,
     });
@@ -169,7 +169,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
           </div>
           <div className="issues row">
             <div className="issue-list">
-              <IssueList issues={this.state.issues} selectedIssue={this.state.selectedIssue} onIssueSelect={this.handleIssueListIssueSelect} />
+              <IssueTable issues={this.state.issues} selectedIssue={this.state.selectedIssue} onIssueSelect={this.handleIssueTableIssueSelect} />
             </div>
             <div className="divider"></div>
             <div className="issue-detail">

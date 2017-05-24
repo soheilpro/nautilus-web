@@ -12,9 +12,9 @@ import IssueMilestoneField from '../issue-milestone-field';
 import ItemPriorityIndicator from '../item-priority-indicator';
 
 require('../../assets/stylesheets/base.less');
-require('./issue.less');
+require('./table-row.less');
 
-interface IIssueProps {
+interface ITableRowProps {
   item: IIssue;
   index: number;
   isSelected: boolean;
@@ -22,10 +22,10 @@ interface IIssueProps {
   onAction?(): void;
 }
 
-interface IIssueState {
+interface ITableRowState {
 }
 
-export default class Issue extends React.PureComponent<IIssueProps, IIssueState> {
+export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> {
   constructor() {
     super();
 
@@ -45,30 +45,30 @@ export default class Issue extends React.PureComponent<IIssueProps, IIssueState>
 
   render() {
     return (
-      <div className={classNames('issue-component', 'list-item', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
-        <div className="list-item-field sid">
+      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick}>
+        <div className="table-cell sid">
           <IssueSidField issue={this.props.item} bold={this.props.isSelected} />
         </div>
-        <div className="list-item-field title">
+        <div className="table-cell title">
           <IssueTitleField issue={this.props.item} />
           <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
         </div>
-        <div className="list-item-field project">
+        <div className="table-cell project">
           <IssueProjectField issue={this.props.item} />
         </div>
-        <div className="list-item-field type">
+        <div className="table-cell type">
           <IssueTypeField issue={this.props.item} />
         </div>
-        <div className="list-item-field priority">
+        <div className="table-cell priority">
           <IssuePriorityField issue={this.props.item} />
         </div>
-        <div className="list-item-field state">
+        <div className="table-cell state">
           <IssueStateField issue={this.props.item} />
         </div>
-        <div className="list-item-field assigned-to">
+        <div className="table-cell assigned-to">
           <IssueAssignedTo issue={this.props.item} />
         </div>
-        <div className="list-item-field milestone">
+        <div className="table-cell milestone">
           <IssueMilestoneField issue={this.props.item} />
         </div>
       </div>
