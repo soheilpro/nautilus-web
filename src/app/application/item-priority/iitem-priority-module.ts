@@ -4,5 +4,5 @@ import { ItemKind } from '../item';
 
 export interface IItemPriorityModule extends IModule {
   getAll(itemKind: ItemKind): IItemPriority[];
-  get(ItemPriority: IItemPriority): IItemPriority;
+  get(itemPriority: IItemPriority): IItemPriority;
 }

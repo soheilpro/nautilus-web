@@ -1,14 +1,15 @@
 import * as _ from 'underscore';
 import { IClient } from '../../sdk';
 import { IApplication } from '../iapplication';
+import ArrayHelper from '../../utilities/array-helper';
 import { BaseModule } from '../base-module';
-import { entityComparer } from '../entity-comparer';
 import { IItemPriority } from '../../sdk';
 import { IItemPriorityModule } from './iitem-priority-module';
 import { ItemKind } from '../item';
 
 export class ItemPriorityModule extends BaseModule implements IItemPriorityModule {
   private itemPriorities: IItemPriority[];
+  private itemPrioritiesMap: { [id: string]: IItemPriority };
 
   constructor(application: IApplication, private client: IClient) {
     super();
@@ -16,13 +17,14 @@ export class ItemPriorityModule extends BaseModule implements IItemPriorityModul
 
   async load() {
     this.itemPriorities = _.sortBy(await this.client.itemPriorities.getAll({}), itemPriority => itemPriority.order);
+    this.itemPrioritiesMap = ArrayHelper.toMap(this.itemPriorities, itemPriority => itemPriority.id);
   }
 
   getAll(itemKind: ItemKind) {
     return this.itemPriorities.filter(itemPriority => itemPriority.itemKind === itemKind);
   }
 
-  get(ItemPriority: IItemPriority) {
-    return _.find(this.itemPriorities, _.partial(entityComparer, ItemPriority));
+  get(itemPriority: IItemPriority) {
+    return this.itemPrioritiesMap[itemPriority.id];
   }
 }

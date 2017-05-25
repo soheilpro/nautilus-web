@@ -1,12 +1,13 @@
 import * as _ from 'underscore';
 import { IClient, IUser } from '../../sdk';
 import { IApplication } from '../iapplication';
+import ArrayHelper from '../../utilities/array-helper';
 import { BaseModule } from '../base-module';
-import { entityComparer } from '../entity-comparer';
 import { IUserModule } from './iuser-module';
 
 export class UserModule extends BaseModule implements IUserModule {
   private users: IUser[];
+  private usersMap: { [id: string]: IUser };
 
   constructor(application: IApplication, private client: IClient) {
     super();
@@ -14,6 +15,7 @@ export class UserModule extends BaseModule implements IUserModule {
 
   async load() {
     this.users = _.sortBy(await this.client.users.getAll({}), user => user.name);
+    this.usersMap = ArrayHelper.toMap(this.users, user => user.id);
   }
 
   getAll() {
@@ -21,6 +23,6 @@ export class UserModule extends BaseModule implements IUserModule {
   }
 
   get(user: IUser) {
-    return _.find(this.users, _.partial(entityComparer, user));
+    return this.usersMap[user.id];
   }
 }

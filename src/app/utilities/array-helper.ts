@@ -1,17 +1,26 @@
 import * as _ from 'underscore';
 
 export default class ArrayHelper {
-  static replaceElement<T>(array: T[], oldItem: T, newItem: T, comparer: (item1: T, item2: T) => boolean) {
-    array = [...array];
-    array.splice(_.findIndex(array, _.partial(comparer, oldItem)), 1, newItem);
+  static replaceElement<T>(items: T[], oldItem: T, newItem: T, comparer: (item1: T, item2: T) => boolean) {
+    items = [...items];
+    items.splice(_.findIndex(items, _.partial(comparer, oldItem)), 1, newItem);
 
-    return array;
+    return items;
   };
 
-  static removeElement<T>(array: T[], item: T, comparer: (item1: T, item2: T) => boolean) {
-    array = [...array];
-    array.splice(_.findIndex(array, _.partial(comparer, item)), 1);
+  static removeElement<T>(items: T[], item: T, comparer: (item1: T, item2: T) => boolean) {
+    items = [...items];
+    items.splice(_.findIndex(items, _.partial(comparer, item)), 1);
 
-    return array;
+    return items;
   };
+
+  static toMap<T>(items: T[], keyFor: (item: T) => string) {
+    const map: { [id: string]: T } = {};
+
+    for (const item of items)
+      map[keyFor(item)] = item;
+
+      return map;
+  }
 }

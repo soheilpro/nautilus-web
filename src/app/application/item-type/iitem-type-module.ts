@@ -4,5 +4,5 @@ import { ItemKind } from '../item';
 
 export interface IItemTypeModule extends IModule {
   getAll(itemKind: ItemKind): IItemType[];
-  get(ItemType: IItemType): IItemType;
+  get(itemType: IItemType): IItemType;
 }

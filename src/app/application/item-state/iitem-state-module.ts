@@ -4,5 +4,5 @@ import { ItemKind } from '../item';
 
 export interface IItemStateModule extends IModule {
   getAll(itemKind: ItemKind): IItemState[];
-  get(ItemState: IItemState): IItemState;
+  get(itemState: IItemState): IItemState;
 }
