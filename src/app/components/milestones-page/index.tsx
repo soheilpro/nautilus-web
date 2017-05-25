@@ -107,12 +107,10 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
   }
 
   private handleApplicationLoad() {
-    this.setState(async state => {
-      this.loadMilestones(state.view.filterExpression, state.view.sortExpressions);
-    });
+    this.loadMilestones(this.state.view.filterExpression, this.state.view.sortExpressions);
   }
 
-  private async handleApplicationMilestoneAdd({ milestone }: { milestone: IMilestone }) {
+  private handleApplicationMilestoneAdd({ milestone }: { milestone: IMilestone }) {
     this.setState(state => {
       return {
         milestones: [milestone, ...state.milestones],
@@ -121,7 +119,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
   }
 
-  private async handleApplicationMilestoneUpdate({ milestone }: { milestone: IMilestone }) {
+  private handleApplicationMilestoneUpdate({ milestone }: { milestone: IMilestone }) {
     this.setState(state => {
       return {
         milestones: ArrayHelper.replaceElement(state.milestones, milestone, milestone, entityComparer),
@@ -130,7 +128,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
   }
 
-  private async handleApplicationMilestoneDelete({ milestone }: { milestone: IMilestone }) {
+  private handleApplicationMilestoneDelete({ milestone }: { milestone: IMilestone }) {
     this.setState(state => {
       return {
         milestones: ArrayHelper.removeElement(state.milestones, milestone, entityComparer),
@@ -139,7 +137,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
   }
 
-  private async handleMilestoneViewSettingsChange(view: IView) {
+  private handleMilestoneViewSettingsChange(view: IView) {
     this.localStorage.set('milestones.view', view.toJSON());
 
     this.setState({
@@ -149,7 +147,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     this.loadMilestones(view.filterExpression, view.sortExpressions);
   }
 
-  private async handleMilestoneViewSettingsSavedViewsChange(savedViews: IView[]) {
+  private handleMilestoneViewSettingsSavedViewsChange(savedViews: IView[]) {
     this.roamingStorage.set('milestones.views', savedViews.map(view => view.toJSON()));
 
     this.setState({

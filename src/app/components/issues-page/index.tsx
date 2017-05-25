@@ -106,13 +106,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleApplicationLoad() {
-    this.setState(async state => {
-      this.loadIssues(state.view.filterExpression, state.view.sortExpressions);
-    });
+  private handleApplicationLoad() {
+    this.loadIssues(this.state.view.filterExpression, this.state.view.sortExpressions);
   }
 
-  private async handleApplicationIssueAdd({ issue }: { issue: IIssue }) {
+  private handleApplicationIssueAdd({ issue }: { issue: IIssue }) {
     this.setState(state => {
       return {
         issues: [issue, ...state.issues],
@@ -121,7 +119,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleApplicationIssueUpdate({ issue }: { issue: IIssue }) {
+  private handleApplicationIssueUpdate({ issue }: { issue: IIssue }) {
     this.setState(state => {
       return {
         issues: ArrayHelper.replaceElement(state.issues, issue, issue, entityComparer),
@@ -130,7 +128,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleApplicationIssueDelete({ issue }: { issue: IIssue }) {
+  private handleApplicationIssueDelete({ issue }: { issue: IIssue }) {
     this.setState(state => {
       return {
         issues: ArrayHelper.removeElement(state.issues, issue, entityComparer),
@@ -139,7 +137,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
   }
 
-  private async handleIssueViewSettingsChange(view: IView) {
+  private handleIssueViewSettingsChange(view: IView) {
     this.localStorage.set('issues.view', view.toJSON());
 
     this.setState({
@@ -149,7 +147,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.loadIssues(view.filterExpression, view.sortExpressions);
   }
 
-  private async handleIssueViewSettingsSavedViewsChange(savedViews: IView[]) {
+  private handleIssueViewSettingsSavedViewsChange(savedViews: IView[]) {
     this.roamingStorage.set('issues.views', savedViews.map(view => view.toJSON()));
 
     this.setState({
