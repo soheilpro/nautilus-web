@@ -88,10 +88,11 @@ export class Application extends EventEmitter implements IApplication {
   }
 
   async load() {
+    // Put most time consuming ones first
     await Promise.all([
+      this.items.load(),
       this.users.load(),
       this.projects.load(),
-      this.items.load(),
       this.itemPriorities.load(),
       this.itemStates.load(),
       this.itemTypes.load(),
