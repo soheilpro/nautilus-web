@@ -39,6 +39,9 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
   }
 
   componentWillReceiveProps(props: IViewListProps) {
+    if (this.props.views === props.views)
+      return;
+
     this.setState({
       views: props.views,
     });

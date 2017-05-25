@@ -38,6 +38,9 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
   }
 
   componentWillReceiveProps(props: IIssueTableProps) {
+    if (this.props.issues === props.issues && this.props.selectedIssue === props.selectedIssue)
+      return;
+
     this.setState({
       issues: props.issues,
       selectedIssue: props.selectedIssue,

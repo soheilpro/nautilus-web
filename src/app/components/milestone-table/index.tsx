@@ -38,6 +38,9 @@ export default class MilestoneTable extends React.PureComponent<IMilestoneTableP
   }
 
   componentWillReceiveProps(props: IMilestoneTableProps) {
+    if (this.props.milestones === props.milestones && this.props.selectedMilestone === props.selectedMilestone)
+      return;
+
     this.setState({
       milestones: props.milestones,
       selectedMilestone: props.selectedMilestone,

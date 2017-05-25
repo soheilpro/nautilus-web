@@ -71,6 +71,9 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
   }
 
   componentWillReceiveProps(props: IIssueViewViewProps) {
+    if (this.props.view === props.view && this.props.savedViews === props.savedViews)
+      return;
+
     this.setState({
       filterExpression: props.view ? props.view.filterExpression : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),

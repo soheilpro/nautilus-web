@@ -47,6 +47,9 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
   }
 
   componentWillReceiveProps(props: ITableProps) {
+    if (this.props.selectedItem === props.selectedItem)
+      return;
+
     let selectedItem = props.selectedItem;
 
     if (!selectedItem) {

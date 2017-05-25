@@ -56,6 +56,9 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   }
 
   componentWillReceiveProps(props: IListQueryBuilderProps) {
+    if (this.props.query === props.query && this.props.items === props.items)
+      return;
+
     const { includedItems, excludedItems } = this.parseQuery(props.query, props);
 
     this.setState(state => {

@@ -38,6 +38,9 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
   }
 
   componentWillReceiveProps(props: ISelectItemListProps) {
+    if (this.props.items === props.items)
+      return;
+
     this.setState({
       items: props.items,
     });
