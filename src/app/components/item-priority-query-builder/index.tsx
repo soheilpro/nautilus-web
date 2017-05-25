@@ -7,7 +7,7 @@ interface IIssuePriorityQueryBuilderProps {
   itemPriorities: IItemPriority[];
   queryItem: string;
   query?: NQL.IExpression;
-  onChange(query: NQL.IExpression, done: boolean): void;
+  onChange(query: NQL.IExpression, reset: boolean, done: boolean): void;
 }
 
 interface IIssuePriorityQueryBuilderState {

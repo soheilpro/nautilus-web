@@ -10,7 +10,7 @@ require('./index.less');
 interface IQueryBuilderProps {
   query?: NQL.IExpression;
   queryItem: string;
-  onChange(query: NQL.IExpression, done: boolean): void;
+  onChange(query: NQL.IExpression, reset: boolean, done: boolean): void;
 }
 
 declare class QueryBuilder extends React.PureComponent<IQueryBuilderProps, {}> {
@@ -81,8 +81,8 @@ export default class AndQueryBuilder extends React.PureComponent<IAndQueryBuilde
     return queries;
   }
 
-  private handleFilterChange(key: string, query: NQL.IExpression, done: boolean) {
-    const queries = _.clone(this.state.queries);
+  private handleFilterChange(key: string, query: NQL.IExpression, reset: boolean, done: boolean) {
+    const queries: IQueryObject = reset ? {} : {...this.state.queries};
 
     if (query)
       queries[key] = query;
