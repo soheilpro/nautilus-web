@@ -58,7 +58,10 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
         </div>
         <div className="table-cell title">
           <IssueTitleField issue={this.props.item} />
-          <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
+          {
+            this.props.item.state && this.props.item.state.key !== 'closed' &&
+              <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
+          }
         </div>
         <div className="table-cell project">
           <IssueProjectField issue={this.props.item} />
