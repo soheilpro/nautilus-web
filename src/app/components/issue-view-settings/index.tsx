@@ -108,7 +108,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.props.onChange(View.create());
 
     this.setState({
-      filterExpression: null,
+      filterExpression: undefined,
     });
   }
 
@@ -143,7 +143,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.props.onChange(View.create());
 
     this.setState({
-      filterExpression: null,
+      filterExpression: undefined,
     });
   }
 

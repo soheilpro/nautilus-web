@@ -93,7 +93,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     this.props.onChange(View.create());
 
     this.setState({
-      filterExpression: null,
+      filterExpression: undefined,
     });
   }
 
@@ -113,7 +113,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     this.props.onChange(View.create());
 
     this.setState({
-      filterExpression: null,
+      filterExpression: undefined,
     });
   }
 
