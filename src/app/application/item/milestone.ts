@@ -24,7 +24,7 @@ export default class Milestone implements IMilestone {
     if (project)
       return `${project.name}: ${this.title}`;
 
-    return this.title;
+    return `(Global) ${this.title}`;
   }
 
   get description() {
