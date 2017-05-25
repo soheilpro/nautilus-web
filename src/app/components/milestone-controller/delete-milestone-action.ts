@@ -6,7 +6,7 @@ export default class DeleteMilestoneAction extends BaseAction {
     super();
   }
 
-  async execute() {
+  execute() {
     this.application.items.deleteMilestone(this.milestone);
   }
 

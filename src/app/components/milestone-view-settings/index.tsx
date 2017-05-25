@@ -97,7 +97,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     });
   }
 
-  private async handleMilestoneFilterQueryBuilderChange(query: NQL.IExpression) {
+  private handleMilestoneFilterQueryBuilderChange(query: NQL.IExpression) {
     const view = View.create({
       filterExpression: query,
     });

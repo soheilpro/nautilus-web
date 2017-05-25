@@ -6,7 +6,7 @@ export default class DeleteIssueAction extends BaseAction {
     super();
   }
 
-  async execute() {
+  execute() {
     this.application.items.deleteIssue(this.issue);
   }
 

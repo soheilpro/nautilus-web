@@ -127,7 +127,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.savedViewListDropdownComponent.open();
   }
 
-  private async handleIssueFilterQueryBuilderChange(query: NQL.IExpression) {
+  private handleIssueFilterQueryBuilderChange(query: NQL.IExpression) {
     const view = View.create({
       filterExpression: query,
     });

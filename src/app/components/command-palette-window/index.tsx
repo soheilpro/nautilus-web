@@ -70,7 +70,7 @@ export default class CommandPaletteWindow extends React.PureComponent<ICommandPa
     }
   }
 
-  private async handleSearchInputChange(value: string) {
+  private handleSearchInputChange(value: string) {
     this.setState({
       searchText: value,
     });
