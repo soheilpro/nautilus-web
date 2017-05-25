@@ -24,12 +24,10 @@ interface IMilestonesPageState {
   milestones?: IMilestone[];
   selectedMilestone?: IMilestone;
   view?: IView;
-  savedViews?: IView[];
 }
 
 export default class MilestonesPage extends React.Component<IMilestonesPageProps, IMilestonesPageState> implements ICommandProvider {
   private localStorage = ServiceManager.Instance.getLocalStorage();
-  private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private milestoneDetailContainerElement: HTMLElement;
@@ -42,13 +40,11 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     this.handleApplicationMilestoneUpdate = this.handleApplicationMilestoneUpdate.bind(this);
     this.handleApplicationMilestoneDelete = this.handleApplicationMilestoneDelete.bind(this);
     this.handleMilestoneViewSettingsChange = this.handleMilestoneViewSettingsChange.bind(this);
-    this.handleMilestoneViewSettingsSavedViewsChange = this.handleMilestoneViewSettingsSavedViewsChange.bind(this);
     this.handleMilestoneTableMilestoneSelect = this.handleMilestoneTableMilestoneSelect.bind(this);
 
     this.state = {
       milestones: [],
       view: View.create(),
-      savedViews: [],
     };
   }
 
@@ -72,12 +68,6 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
 
     this.loadMilestones(view.filterExpression, view.sortExpressions);
-
-    const savedViews = (await this.roamingStorage.get('milestones.savedViews', [])).map(x => View.fromJSON(x));
-
-    this.setState({
-      savedViews: savedViews,
-    });
   }
 
   componentWillUnmount() {
@@ -147,14 +137,6 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     this.loadMilestones(view.filterExpression, view.sortExpressions);
   }
 
-  private handleMilestoneViewSettingsSavedViewsChange(savedViews: IView[]) {
-    this.roamingStorage.set('milestones.savedViews', savedViews.map(view => view.toJSON()));
-
-    this.setState({
-      savedViews,
-    });
-  }
-
   private handleMilestoneTableMilestoneSelect(milestone: IMilestone) {
     this.setState({
       selectedMilestone: milestone,
@@ -170,7 +152,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
             <CommandButton commandId="refresh" type="secondary"><Icon name="refresh" /></CommandButton>
           </div>
           <div className="view-settings row">
-            <MilestoneViewSettings view={this.state.view} savedViews={this.state.savedViews} onChange={this.handleMilestoneViewSettingsChange} onSavedViewsChange={this.handleMilestoneViewSettingsSavedViewsChange} />
+            <MilestoneViewSettings view={this.state.view} onChange={this.handleMilestoneViewSettingsChange} />
           </div>
           <div className="milestones row">
             <div className="milestone-list">
