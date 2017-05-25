@@ -2,21 +2,21 @@ import { IContextManager } from './icontext-manager';
 import { IContextProvider } from './icontext-provider';
 
 export class ContextManager implements IContextManager {
-  private contextItemProviders: IContextProvider[] = [];
+  private contextProviders: IContextProvider[] = [];
 
-  registerContextItemProvider(contextItemProvider: IContextProvider) {
-    this.contextItemProviders.push(contextItemProvider);
+  registerContextProvider(contextProvider: IContextProvider) {
+    this.contextProviders.push(contextProvider);
   }
 
-  unregisterContextItemProvider(contextItemProvider: IContextProvider) {
-    this.contextItemProviders.splice(this.contextItemProviders.indexOf(contextItemProvider), 1);
+  unregisterContextProvider(contextProvider: IContextProvider) {
+    this.contextProviders.splice(this.contextProviders.indexOf(contextProvider), 1);
   }
 
   getContext() {
     let context = {};
 
-    for (const contextItemProvider of this.contextItemProviders)
-      context = {...context, ...contextItemProvider.getContext()};
+    for (const contextProvider of this.contextProviders)
+      context = {...context, ...contextProvider.getContext()};
 
     return context;
   }
