@@ -73,7 +73,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
     this.loadIssues(view.filterExpression, view.sortExpressions);
 
-    const savedViews = (await this.roamingStorage.get('issues.views', [])).map(x => View.fromJSON(x));
+    const savedViews = (await this.roamingStorage.get('issues.savedViews', [])).map(x => View.fromJSON(x));
 
     this.setState({
       savedViews: savedViews,
@@ -148,7 +148,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   private handleIssueViewSettingsSavedViewsChange(savedViews: IView[]) {
-    this.roamingStorage.set('issues.views', savedViews.map(view => view.toJSON()));
+    this.roamingStorage.set('issues.savedViews', savedViews.map(view => view.toJSON()));
 
     this.setState({
       savedViews,

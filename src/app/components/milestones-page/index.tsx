@@ -73,7 +73,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
 
     this.loadMilestones(view.filterExpression, view.sortExpressions);
 
-    const savedViews = (await this.roamingStorage.get('milestones.views', [])).map(x => View.fromJSON(x));
+    const savedViews = (await this.roamingStorage.get('milestones.savedViews', [])).map(x => View.fromJSON(x));
 
     this.setState({
       savedViews: savedViews,
@@ -148,7 +148,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
   }
 
   private handleMilestoneViewSettingsSavedViewsChange(savedViews: IView[]) {
-    this.roamingStorage.set('milestones.views', savedViews.map(view => view.toJSON()));
+    this.roamingStorage.set('milestones.savedViews', savedViews.map(view => view.toJSON()));
 
     this.setState({
       savedViews,
