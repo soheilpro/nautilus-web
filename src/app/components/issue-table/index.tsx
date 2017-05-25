@@ -17,7 +17,6 @@ interface IIssueTableProps {
 }
 
 interface IIssueTableState {
-  issues?: IIssue[];
   selectedIssue?: IIssue;
 }
 
@@ -32,7 +31,6 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
     this.handleTableItemDelete = this.handleTableItemDelete.bind(this);
 
     this.state = {
-      issues: props.issues,
       selectedIssue: props.selectedIssue,
     };
   }
@@ -42,7 +40,6 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
       return;
 
     this.setState({
-      issues: props.issues,
       selectedIssue: props.selectedIssue,
     });
   }
@@ -66,7 +63,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
 
   render() {
     return (
-      <Table className={classNames('issue-table-component', this.props.className)} items={this.state.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
+      <Table className={classNames('issue-table-component', this.props.className)} items={this.props.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };
