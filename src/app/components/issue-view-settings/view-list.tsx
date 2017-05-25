@@ -74,10 +74,12 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
   }
 
   private handleSearchTextChange(value: string) {
+    value = value.trim();
+
     this.setState({
       searchText: value,
       views: this.filterItems(this.props.views, value),
-      activeViewIndex: 0,
+      activeViewIndex: value ? 0 : -1,
     });
   }
 
@@ -111,7 +113,7 @@ export default class ViewList extends React.PureComponent<IViewListProps, IViewL
     if (!text)
       return views;
 
-    text = text.toLowerCase().trim();
+    text = text.toLowerCase();
 
     return views.filter(view => view.name.toLowerCase().indexOf(text) !== -1);
   }

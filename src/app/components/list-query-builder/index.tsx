@@ -111,10 +111,12 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   }
 
   private handleSearchTextChange(value: string) {
+    value = value.trim();
+
     this.setState({
       searchText: value,
       items: this.filterItems(this.props.items, value),
-      activeItemIndex: -1,
+      activeItemIndex: value ? 0 : -1,
     });
   }
 
@@ -172,7 +174,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     if (!text)
       return items;
 
-    text = text.toLowerCase().trim();
+    text = text.toLowerCase();
 
     return items.filter(item => item[this.props.displayProperty].toLowerCase().indexOf(text) !== -1);
   }

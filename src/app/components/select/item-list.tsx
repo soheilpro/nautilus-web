@@ -76,10 +76,12 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
   }
 
   private handleSearchTextChange(value: string) {
+    value = value.trim();
+
     this.setState({
       searchText: value,
       items: this.filterItems(this.props.items, value),
-      activeItemIndex: 0,
+      activeItemIndex: value ? 0 : -1,
     });
   }
 
@@ -107,7 +109,7 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
     if (!text)
       return items;
 
-    text = text.toLowerCase().trim();
+    text = text.toLowerCase();
 
     return items.filter(item => item[this.props.displayProperty].toLowerCase().indexOf(text) !== -1);
   }
