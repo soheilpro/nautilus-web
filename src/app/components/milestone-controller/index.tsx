@@ -1,5 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
+import * as NQL from '../../nql';
 import { IMilestone, IMilestoneChange } from '../../application';
 import { IMilestoneController } from '../../milestones';
 import { ServiceManager } from '../../services';
@@ -20,6 +21,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private windowController = ServiceManager.Instance.getWindowController();
+  private dialogController = ServiceManager.Instance.getDialogController();
   private addMilestoneWindow: IWindow;
   private editMilestoneWindow: IWindow;
   private deleteMilestoneWindow: IWindow;
@@ -67,7 +69,26 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     this.windowController.showWindow(this.editMilestoneWindow);
   }
 
-  deleteMilestone(milestone: IMilestone) {
+  async deleteMilestone(milestone: IMilestone) {
+    const filter = new NQL.ComparisonExpression(
+      new NQL.LocalExpression('milestone'),
+      new NQL.ConstantExpression(milestone, 'Milestone'),
+      '='
+    );
+
+    const milestoneIssues = await this.application.items.getAllIssues(filter, null);
+
+    if (milestoneIssues.length > 0) {
+      const dialog = {
+        title: 'Delete Milestone',
+        content: `Cannot delete milestone #${milestone.sid}.\nThere are ${milestoneIssues.length} issue(s) attached to this milestone.`,
+      };
+
+      this.dialogController.showDialog(dialog);
+
+      return;
+    }
+
     this.deleteMilestoneWindow = {
       content: <DeleteMilestoneWindow milestone={milestone} onConfirm={_.partial(this.handleDeleteMilestoneWindowConfirm, milestone)} onCloseRequest={this.handleDeleteMilestoneWindowCloseRequest} />,
       top: 120,

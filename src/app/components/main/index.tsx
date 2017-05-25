@@ -4,6 +4,7 @@ import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import CommandController from '../command-controller';
 import ActionController from '../action-controller';
+import DialogController from '../dialog-controller';
 import IssueController from '../issue-controller';
 import MilestoneController from '../milestone-controller';
 import NotificationController from '../notification-controller';
@@ -44,6 +45,7 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
     return (
       <div className="main-component rtl">
         <WindowController />
+        <DialogController />
         <NotificationController />
         <CommandController />
         <ActionController />
