@@ -62,4 +62,19 @@ export default class Milestone implements IMilestone {
 
     return this.application.users.get(this.item.modifiedBy);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      sid: this.sid,
+      title: this.title,
+      fullTitle: this.fullTitle,
+      description: this.description,
+      state: this.state,
+      project: this.project,
+      parent: this.parent,
+      createdBy: this.createdBy,
+      modifiedBy: this.modifiedBy,
+    };
+  }
 }

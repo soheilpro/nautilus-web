@@ -82,4 +82,23 @@ export default class Issue implements IIssue {
 
     return this.application.users.get(this.item.modifiedBy);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      sid: this.sid,
+      type: this.type,
+      title: this.title,
+      description: this.description,
+      state: this.state,
+      priority: this.priority,
+      tags: this.tags,
+      project: this.project,
+      parent: this.parent,
+      milestone: this.milestone,
+      assignedTo: this.assignedTo,
+      createdBy: this.createdBy,
+      modifiedBy: this.modifiedBy,
+    };
+  }
 }
