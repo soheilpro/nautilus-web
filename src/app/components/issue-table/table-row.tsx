@@ -19,8 +19,8 @@ interface ITableRowProps {
   item: IIssue;
   index: number;
   isSelected: boolean;
-  onSelect?(): void;
-  onAction?(): void;
+  onSelect?(item: IIssue): void;
+  onAction?(item: IIssue): void;
 }
 
 interface ITableRowState {
@@ -42,12 +42,12 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
 
   private handleClick() {
     if (this.props.onSelect)
-      this.props.onSelect();
+      this.props.onSelect(this.props.item);
   }
 
   private handleDoubleClick() {
     if (this.props.onAction)
-      this.props.onAction();
+      this.props.onAction(this.props.item);
   }
 
   render() {

@@ -5,8 +5,8 @@ interface ITableRowProps {
   item: IItem;
   index: number;
   isSelected: boolean;
-  onSelect?(): void;
-  onAction?(): void;
+  onSelect?(item: IItem): void;
+  onAction?(item: IItem): void;
 }
 
 interface ITableRowState {

@@ -14,8 +14,8 @@ interface ITableRowProps {
   item: IMilestone;
   index: number;
   isSelected: boolean;
-  onSelect?(): void;
-  onAction?(): void;
+  onSelect?(item: IMilestone): void;
+  onAction?(item: IMilestone): void;
 }
 
 interface ITableRowState {
@@ -37,12 +37,12 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
 
   private handleClick() {
     if (this.props.onSelect)
-      this.props.onSelect();
+      this.props.onSelect(this.props.item);
   }
 
   private handleDoubleClick() {
     if (this.props.onAction)
-      this.props.onAction();
+      this.props.onAction(this.props.item);
   }
 
   render() {

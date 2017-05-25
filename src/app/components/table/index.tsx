@@ -1,4 +1,3 @@
-import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { KeyCode } from '../../keyboard';
@@ -150,7 +149,7 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
         {
           this.props.items.map((item, index) => {
             return (
-              <this.props.Row item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={_.partial(this.handleItemSelect, item)} onAction={_.partial(this.handleItemAction, item)} ref={e => this.selectedRow = this.state.selectedItem === item ? e : this.selectedRow} key={item.id} />
+              <this.props.Row item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={this.handleItemSelect} onAction={this.handleItemAction} ref={e => this.selectedRow = this.state.selectedItem === item ? e : this.selectedRow } key={item.id} />
             );
           })
         }
