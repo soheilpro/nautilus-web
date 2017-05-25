@@ -34,7 +34,7 @@ interface IIssueViewViewProps {
 }
 
 interface IIssueViewViewState {
-  filterExpression?: NQL.Expression;
+  filterExpression?: NQL.IExpression;
   savedViews?: IView[];
 }
 
@@ -127,7 +127,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.savedViewListDropdownComponent.open();
   }
 
-  private async handleIssueFilterQueryBuilderChange(query: NQL.Expression) {
+  private async handleIssueFilterQueryBuilderChange(query: NQL.IExpression) {
     const view = View.create({
       filterExpression: query,
     });

@@ -7,12 +7,12 @@ import { IMilestone } from './imilestone';
 import { IMilestoneChange } from './imilestone-change';
 
 export interface IItemModule extends IModule {
-  getAllIssues(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]): Promise<IItem[]>;
+  getAllIssues(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]): Promise<IItem[]>;
   getIssue(item: IItem): Promise<IItem>;
   addIssue(issue: IIssue): Promise<IIssue>;
   updateIssue(issueId: string, issueChange: IIssueChange): Promise<IIssue>;
   deleteIssue(issue: IIssue): Promise<void>;
-  getAllMilestones(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]): IMilestone[];
+  getAllMilestones(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]): IMilestone[];
   getMilestone(item: IItem): IMilestone;
   addMilestone(milestone: IMilestone): Promise<IMilestone>;
   updateMilestone(milestoneId: string, milestoneChange: IMilestoneChange): Promise<IMilestone>;

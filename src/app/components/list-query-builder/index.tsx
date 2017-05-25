@@ -17,7 +17,7 @@ interface IItem {
 interface IListQueryBuilderProps {
   items: IItem[];
   displayProperty: string;
-  query?: NQL.Expression;
+  query?: NQL.IExpression;
   queryItem: string;
   queryItemType: string;
   itemToQueryItem: (item: IItem) => Object;
@@ -245,7 +245,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     return null;
   }
 
-  private parseQuery(query: NQL.Expression, props: IListQueryBuilderProps): { includedItems: IItem[], excludedItems: IItem[]} {
+  private parseQuery(query: NQL.IExpression, props: IListQueryBuilderProps): { includedItems: IItem[], excludedItems: IItem[]} {
     if (!query)
       return {
         includedItems: [],
@@ -293,7 +293,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     throw new Error('Not supported.');
   }
 
-  static canParseQuery(query: NQL.Expression, queryItem: string, queryItemType: string) {
+  static canParseQuery(query: NQL.IExpression, queryItem: string, queryItemType: string) {
     if (!(query instanceof NQL.ComparisonExpression))
       return false;
 

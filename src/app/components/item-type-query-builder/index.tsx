@@ -6,7 +6,7 @@ import ListQueryBuilder from '../list-query-builder';
 interface IItemTypeQueryBuilderProps {
   itemTypes: IItemType[];
   queryItem: string;
-  query?: NQL.Expression;
+  query?: NQL.IExpression;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
@@ -14,7 +14,7 @@ interface IItemTypeQueryBuilderState {
 }
 
 export default class ItemTypeQueryBuilder extends React.PureComponent<IItemTypeQueryBuilderProps, IItemTypeQueryBuilderState> {
-  static canParseQuery(query: NQL.Expression, queryItem: string) {
+  static canParseQuery(query: NQL.IExpression, queryItem: string) {
     return ListQueryBuilder.canParseQuery(query, queryItem, 'ItemType');
   }
 

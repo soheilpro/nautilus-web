@@ -8,13 +8,13 @@ require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IQueryBuilderProps {
-  query?: NQL.Expression;
+  query?: NQL.IExpression;
   queryItem: string;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
 declare class QueryBuilder extends React.PureComponent<IQueryBuilderProps, {}> {
-  static canParseQuery(query: NQL.Expression, queryItem: string): void;
+  static canParseQuery(query: NQL.IExpression, queryItem: string): void;
 }
 
 export interface IQueryBuilder {
@@ -26,13 +26,13 @@ export interface IQueryBuilder {
 }
 
 interface IQueryObject {
-  [key: string]: NQL.Expression;
+  [key: string]: NQL.IExpression;
 };
 
 interface IAndQueryBuilderProps {
   queryBuilders: IQueryBuilder[];
-  query: NQL.Expression;
-  onChange(query: NQL.Expression): void;
+  query: NQL.IExpression;
+  onChange(query: NQL.IExpression): void;
 }
 
 interface IAndQueryBuilderState {
@@ -62,7 +62,7 @@ export default class AndQueryBuilder extends React.PureComponent<IAndQueryBuilde
     this.dropdownComponents[key].open();
   }
 
-  private getQueryObject(query: NQL.Expression) {
+  private getQueryObject(query: NQL.IExpression) {
     if (!query)
       return null;
 

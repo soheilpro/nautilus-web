@@ -7,7 +7,7 @@ require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IExpressionProps {
-  expression: NQL.Expression;
+  expression: NQL.IExpression;
 }
 
 interface IExpressionState {

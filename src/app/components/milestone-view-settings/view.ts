@@ -5,7 +5,7 @@ import { IView } from './iview';
 export class View implements IView {
   id: string;
   name: string;
-  filterExpression: NQL.Expression;
+  filterExpression: NQL.IExpression;
   sortExpressions: NQL.ISortExpression[];
 
   isDefault() {
@@ -33,7 +33,7 @@ export class View implements IView {
     return view;
   }
 
-  static create({ name, filterExpression }: { name?: string, filterExpression?: NQL.Expression } = {}) {
+  static create({ name, filterExpression }: { name?: string, filterExpression?: NQL.IExpression } = {}) {
     const view = new View();
     view.id = uuid().replace(/-/g, '');
     view.name = name;

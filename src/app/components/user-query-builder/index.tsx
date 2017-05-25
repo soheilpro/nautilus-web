@@ -6,7 +6,7 @@ import ListQueryBuilder from '../list-query-builder';
 interface IUserQueryBuilderProps {
   users: IUser[];
   queryItem: string;
-  query?: NQL.Expression;
+  query?: NQL.IExpression;
   onChange(query: NQL.IExpression, done: boolean): void;
 }
 
@@ -14,7 +14,7 @@ interface IUserQueryBuilderState {
 }
 
 export default class UserQueryBuilder extends React.PureComponent<IUserQueryBuilderProps, IUserQueryBuilderState> {
-  static canParseQuery(query: NQL.Expression, queryItem: string) {
+  static canParseQuery(query: NQL.IExpression, queryItem: string) {
     return ListQueryBuilder.canParseQuery(query, queryItem, 'User');
   }
 

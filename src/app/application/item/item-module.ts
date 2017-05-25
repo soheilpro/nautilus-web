@@ -42,7 +42,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     }
   }
 
-  getAllIssues(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]) {
+  getAllIssues(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]) {
     let issues = [...this.issues];
 
     const expressionNormalizer = new IssueExpressionNormalizer();
@@ -92,7 +92,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.emit('issue.delete', { issue });
   }
 
-  getAllMilestones(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]) {
+  getAllMilestones(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]) {
     let milestones = [...this.milestones];
 
     const expressionNormalizer = new MilestoneExpressionNormalizer();

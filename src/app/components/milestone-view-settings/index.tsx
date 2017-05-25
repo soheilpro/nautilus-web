@@ -27,7 +27,7 @@ interface IMilestoneViewViewProps {
 }
 
 interface IMilestoneViewViewState {
-  filterExpression?: NQL.Expression;
+  filterExpression?: NQL.IExpression;
   savedViews?: IView[];
 }
 
@@ -97,7 +97,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     });
   }
 
-  private async handleMilestoneFilterQueryBuilderChange(query: NQL.Expression) {
+  private async handleMilestoneFilterQueryBuilderChange(query: NQL.IExpression) {
     const view = View.create({
       filterExpression: query,
     });

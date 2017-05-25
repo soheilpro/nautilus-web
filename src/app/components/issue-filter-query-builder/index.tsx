@@ -11,8 +11,8 @@ import ItemStateQueryBuilder from '../item-state-query-builder';
 import UserQueryBuilder from '../user-query-builder';
 
 interface IIssueFilterQueryBuilderProps {
-  query: NQL.Expression;
-  onChange(query: NQL.Expression): void;
+  query: NQL.IExpression;
+  onChange(query: NQL.IExpression): void;
 }
 
 interface IIssueFilterQueryBuilderState {
