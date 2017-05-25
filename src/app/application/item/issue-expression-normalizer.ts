@@ -21,7 +21,7 @@ export default class ItemExpressionNormalizer extends NQL.ExpressionTransformer<
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('item'), expression.name), 'User');
 
     if (['milestone'].some(name => name === expression.name))
-      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('item'), 'milestone'), 'Milestone');
+      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('item'), expression.name), 'Milestone');
 
     throw new Error('Not supported.');
   }
