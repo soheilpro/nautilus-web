@@ -34,7 +34,7 @@ interface IIssueViewViewProps {
 }
 
 interface IIssueViewViewState {
-  filterQuery?: NQL.Expression;
+  filterExpression?: NQL.Expression;
   savedViews?: IView[];
 }
 
@@ -61,7 +61,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.handleLoadViewCommandExecute = this.handleLoadViewCommandExecute.bind(this);
 
     this.state = {
-      filterQuery: props.view ? props.view.filterQuery : undefined,
+      filterExpression: props.view ? props.view.filterExpression : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     };
   }
@@ -72,7 +72,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
   componentWillReceiveProps(props: IIssueViewViewProps) {
     this.setState({
-      filterQuery: props.view ? props.view.filterQuery : undefined,
+      filterExpression: props.view ? props.view.filterExpression : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     });
   }
@@ -83,7 +83,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
   getCommands() {
     const view = View.create({
-      filterQuery: this.state.filterQuery,
+      filterExpression: this.state.filterExpression,
     });
 
     return [
@@ -108,7 +108,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.props.onChange(View.create());
 
     this.setState({
-      filterQuery: null,
+      filterExpression: null,
     });
   }
 
@@ -129,13 +129,13 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
   private async handleIssueFilterQueryBuilderChange(query: NQL.Expression) {
     const view = View.create({
-      filterQuery: query,
+      filterExpression: query,
     });
 
     this.props.onChange(view);
 
     this.setState({
-      filterQuery: query,
+      filterExpression: query,
     });
   }
 
@@ -143,7 +143,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.props.onChange(View.create());
 
     this.setState({
-      filterQuery: null,
+      filterExpression: null,
     });
   }
 
@@ -163,7 +163,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
     const view = View.create({
       name,
-      filterQuery: this.state.filterQuery,
+      filterExpression: this.state.filterExpression,
     });
 
     const savedViews = this.state.savedViews.concat(view);
@@ -199,7 +199,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
       <div className="issue-view-settings-component">
         <div className="query">
           <div className="query-builder">
-            <IssueFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleIssueFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
+            <IssueFilterQueryBuilder query={this.state.filterExpression} onChange={this.handleIssueFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
           </div>
           <div className="reset">
             {
@@ -219,8 +219,8 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
         </div>
         <div className="query-text">
           {
-            this.state.filterQuery ?
-              <Expression expression={this.state.filterQuery} /> :
+            this.state.filterExpression ?
+              <Expression expression={this.state.filterExpression} /> :
               <span className="no-filter">No filters selected.</span>
           }
         </div>

@@ -63,7 +63,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
 
     const view = View.fromJSON(await this.localStorage.get('issues.view', View.create().toJSON()));
-    const issues = await this.application.items.getAllIssues(view.filterQuery);
+    const issues = await this.application.items.getAllIssues(view.filterExpression, view.sortExpressions);
 
     this.setState({
       issues,
@@ -94,7 +94,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
 
   private async handleApplicationLoad() {
     this.setState(async state => {
-      const issues = await this.application.items.getAllIssues(state.view.filterQuery);
+      const issues = await this.application.items.getAllIssues(state.view.filterExpression, state.view.sortExpressions);
 
       this.setState({
         issues,
@@ -133,7 +133,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private async handleIssueViewSettingsChange(view: IView) {
     this.localStorage.set('issues.view', view.toJSON());
 
-    const issues = await this.application.items.getAllIssues(view.filterQuery);
+    const issues = await this.application.items.getAllIssues(view.filterExpression, view.sortExpressions);
 
     this.setState({
       issues,

@@ -11,8 +11,9 @@ import { IMilestone } from './imilestone';
 import { IMilestoneChange } from './imilestone-change';
 import Milestone from './milestone';
 import Issue from './issue';
-import IssueFilter from './issue-filter';
-import MilestoneFilter from './milestone-filter';
+import MilestoneExpressionNormalizer from './milestone-expression-normalizer';
+import IssueExpressionNormalizer from './issue-expression-normalizer';
+import Query from './query';
 
 export class ItemModule extends BaseModule implements IItemModule {
   private milestones: IMilestone[];
@@ -43,15 +44,16 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.milestones = _.sortBy(this.milestones, milestone => milestone.fullTitle);
   }
 
-  getAllIssues(query: NQL.Expression) {
+  getAllIssues(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]) {
     let issues = [...this.issues];
 
-    if (query) {
-      const issueFilter = new IssueFilter();
-      const predicate = issueFilter.getPredicate(query);
+    const expressionNormalizer = new IssueExpressionNormalizer();
 
-      issues = issues.filter(predicate);
-    }
+    if (filterExpression)
+      issues = this.filter(issues, filterExpression, expressionNormalizer);
+
+    if (sortExpressions)
+      issues = this.sort(issues, sortExpressions, expressionNormalizer);
 
     return Promise.resolve(issues);
   }
@@ -92,15 +94,16 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.emit('issue.delete', { issue });
   }
 
-  getAllMilestones(query: NQL.Expression) {
+  getAllMilestones(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]) {
     let milestones = [...this.milestones];
 
-    if (query) {
-      const issueFilter = new MilestoneFilter();
-      const predicate = issueFilter.getPredicate(query);
+    const expressionNormalizer = new MilestoneExpressionNormalizer();
 
-      milestones = milestones.filter(predicate);
-    }
+    if (filterExpression)
+      milestones = this.filter(milestones, filterExpression, expressionNormalizer);
+
+    if (sortExpressions)
+      milestones = this.sort(milestones, sortExpressions, expressionNormalizer);
 
     return milestones;
   }
@@ -139,5 +142,33 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.milestones.splice(this.milestones.indexOf(milestone), 1);
 
     this.emit('milestone.delete', { milestone });
+  }
+
+  private filter<T>(items: T[], expression: NQL.IExpression, expressionNormalizer: NQL.ExpressionTransformer<{}>) {
+    const predicate = new Query().getPredicate<T>(expressionNormalizer.transform(expression, null));
+
+    return items = items.filter(predicate);
+  }
+
+  private sort<T>(items: T[], sortExpressions: NQL.ISortExpression[], expressionNormalizer: NQL.ExpressionTransformer<{}>) {
+    const query = new Query();
+
+    const newSortExpressions = sortExpressions.map(sortExpression => {
+      return {
+        compare: query.getComparer<T>(expressionNormalizer.transform(sortExpression.expression, null)),
+        order: sortExpression.order,
+      };
+    });
+
+    return items.sort((item1, item2) => {
+      for (const sortExpression of newSortExpressions) {
+        const result = sortExpression.compare(item1, item2);
+
+        if (result !== 0)
+          return sortExpression.order * result;
+      }
+
+      return 0;
+    });
   }
 }

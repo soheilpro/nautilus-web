@@ -11,7 +11,7 @@ import { OrExpression } from './expressions/or';
 import { PropertyExpression } from './expressions/property';
 
 export class ExpressionTransformer<TContext> extends ExpressionVisitor<IExpression, TContext> {
-  tranform(expression: IExpression, context: TContext): IExpression {
+  transform(expression: IExpression, context: TContext): IExpression {
     return this.visit(expression, context);
   }
 

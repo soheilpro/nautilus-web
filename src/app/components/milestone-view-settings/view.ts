@@ -5,10 +5,11 @@ import { IView } from './iview';
 export class View implements IView {
   id: string;
   name: string;
-  filterQuery: NQL.Expression;
+  filterExpression: NQL.Expression;
+  sortExpressions: NQL.ISortExpression[];
 
   isDefault() {
-    return !this.filterQuery;
+    return !this.filterExpression;
   }
 
   toJSON() {
@@ -17,7 +18,7 @@ export class View implements IView {
     return {
       id: this.id,
       name: this.name,
-      filterQuery: this.filterQuery ? expressionObjectConverter.convert(this.filterQuery) : undefined,
+      filterExpression: this.filterExpression ? expressionObjectConverter.convert(this.filterExpression) : undefined,
     };
   }
 
@@ -27,16 +28,16 @@ export class View implements IView {
     const view = new View();
     view.id = json.id;
     view.name = json.name;
-    view.filterQuery = json.filterQuery ? expressionObjectConverter.parse(json.filterQuery) : undefined;
+    view.filterExpression = json.filterExpression ? expressionObjectConverter.parse(json.filterExpression) : undefined;
 
     return view;
   }
 
-  static create({ name, filterQuery }: { name?: string, filterQuery?: NQL.Expression } = {}) {
+  static create({ name, filterExpression }: { name?: string, filterExpression?: NQL.Expression } = {}) {
     const view = new View();
     view.id = uuid().replace(/-/g, '');
     view.name = name;
-    view.filterQuery = filterQuery;
+    view.filterExpression = filterExpression;
 
     return view;
   }

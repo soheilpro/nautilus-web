@@ -3,7 +3,8 @@ import * as NQL from '../../nql';
 export interface IView {
   id: string;
   name: string;
-  filterQuery?: NQL.Expression;
+  filterExpression?: NQL.Expression;
+  sortExpressions?: NQL.ISortExpression[];
   isDefault(): boolean;
   toJSON(): Object;
 }

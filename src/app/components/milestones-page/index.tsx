@@ -63,7 +63,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
 
     const view = View.fromJSON(await this.localStorage.get('milestones.view', View.create().toJSON()));
-    const milestones = await this.application.items.getAllMilestones(view.filterQuery);
+    const milestones = await this.application.items.getAllMilestones(view.filterExpression, view.sortExpressions);
 
     this.setState({
       milestones,
@@ -94,7 +94,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
 
   private async handleApplicationLoad() {
     this.setState(async state => {
-      const milestones = await this.application.items.getAllMilestones(state.view.filterQuery);
+      const milestones = await this.application.items.getAllMilestones(state.view.filterExpression, state.view.sortExpressions);
 
       this.setState({
         milestones,
@@ -133,7 +133,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
   private async handleMilestoneViewSettingsChange(view: IView) {
     this.localStorage.set('milestones.view', view.toJSON());
 
-    const milestones = await this.application.items.getAllMilestones(view.filterQuery);
+    const milestones = await this.application.items.getAllMilestones(view.filterExpression, view.sortExpressions);
 
     this.setState({
       milestones,

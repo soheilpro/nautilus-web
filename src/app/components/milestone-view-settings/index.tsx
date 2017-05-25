@@ -27,7 +27,7 @@ interface IMilestoneViewViewProps {
 }
 
 interface IMilestoneViewViewState {
-  filterQuery?: NQL.Expression;
+  filterExpression?: NQL.Expression;
   savedViews?: IView[];
 }
 
@@ -52,7 +52,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     this.handleResetViewCommandExecute = this.handleResetViewCommandExecute.bind(this);
 
     this.state = {
-      filterQuery: props.view ? props.view.filterQuery : undefined,
+      filterExpression: props.view ? props.view.filterExpression : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     };
   }
@@ -63,7 +63,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
 
   componentWillReceiveProps(props: IMilestoneViewViewProps) {
     this.setState({
-      filterQuery: props.view ? props.view.filterQuery : undefined,
+      filterExpression: props.view ? props.view.filterExpression : undefined,
       savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
     });
   }
@@ -74,7 +74,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
 
   getCommands() {
     const view = View.create({
-      filterQuery: this.state.filterQuery,
+      filterExpression: this.state.filterExpression,
     });
 
     return [
@@ -93,19 +93,19 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     this.props.onChange(View.create());
 
     this.setState({
-      filterQuery: null,
+      filterExpression: null,
     });
   }
 
   private async handleMilestoneFilterQueryBuilderChange(query: NQL.Expression) {
     const view = View.create({
-      filterQuery: query,
+      filterExpression: query,
     });
 
     this.props.onChange(view);
 
     this.setState({
-      filterQuery: query,
+      filterExpression: query,
     });
   }
 
@@ -113,7 +113,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     this.props.onChange(View.create());
 
     this.setState({
-      filterQuery: null,
+      filterExpression: null,
     });
   }
 
@@ -133,7 +133,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
 
     const view = View.create({
       name,
-      filterQuery: this.state.filterQuery,
+      filterExpression: this.state.filterExpression,
     });
 
     const savedViews = this.state.savedViews.concat(view);
@@ -169,7 +169,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
       <div className="milestone-view-settings-component">
         <div className="query">
           <div className="query-builder">
-            <MilestoneFilterQueryBuilder query={this.state.filterQuery} onChange={this.handleMilestoneFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
+            <MilestoneFilterQueryBuilder query={this.state.filterExpression} onChange={this.handleMilestoneFilterQueryBuilderChange} ref={e => this.queryBuilderComponent = e} />
           </div>
           <div className="reset">
             {
@@ -180,8 +180,8 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
         </div>
         <div className="query-text">
           {
-            this.state.filterQuery ?
-              <Expression expression={this.state.filterQuery} /> :
+            this.state.filterExpression ?
+              <Expression expression={this.state.filterExpression} /> :
               <span className="no-filter">No filters selected.</span>
           }
         </div>

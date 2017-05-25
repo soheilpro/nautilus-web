@@ -175,7 +175,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
   }
 
   private getMilestones(project: IProject) {
-    const milestones = this.application.items.getAllMilestones(null);
+    const milestones = this.application.items.getAllMilestones(null, null);
 
     if (!project)
       return milestones;

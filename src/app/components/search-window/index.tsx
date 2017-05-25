@@ -1,7 +1,6 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
-import * as NQL from '../../nql';
 import { IIssue } from '../../application';
 import { KeyCode } from '../../keyboard';
 import { ServiceManager } from '../../services';
@@ -140,7 +139,7 @@ export default class SearchWindow extends React.PureComponent<ISearchWindowProps
   }
 
   private async search(query: string) {
-    const issues = await this.application.items.getAllIssues(new NQL.ConstantExpression(true, 'Boolean'));
+    const issues = await this.application.items.getAllIssues(null, null);
 
     return issues.map(issue => {
       return {
