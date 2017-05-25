@@ -1,9 +1,12 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IMilestone, entityComparer } from '../../application';
-import { IContextProvider } from '../../context';
+import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
+import NewMilestoneCommand from '../../milestones/new-milestone-command';
+import EditMilestoneCommand from '../../milestones/edit-milestone-command';
+import DeleteMilestoneCommand from '../../milestones/delete-milestone-command';
 import MilestoneViewSettings, { IView, View } from '../milestone-view-settings';
 import MilestoneDetail from '../milestone-detail';
 import MilestoneTable from '../milestone-table';
@@ -24,11 +27,11 @@ interface IMilestonesPageState {
   savedViews?: IView[];
 }
 
-export default class MilestonesPage extends React.Component<IMilestonesPageProps, IMilestonesPageState> implements IContextProvider {
+export default class MilestonesPage extends React.Component<IMilestonesPageProps, IMilestonesPageState> implements ICommandProvider {
   private localStorage = ServiceManager.Instance.getLocalStorage();
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
-  private contextManager = ServiceManager.Instance.getContextManager();
+  private commandManager = ServiceManager.Instance.getCommandManager();
   private milestoneDetailContainerElement: HTMLElement;
 
   constructor() {
@@ -50,7 +53,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
   }
 
   componentWillMount() {
-    this.contextManager.registerContextItemProvider(this);
+    this.commandManager.registerCommandProvider(this);
     this.application.on('load', this.handleApplicationLoad);
     this.application.items.on('milestone.add', this.handleApplicationMilestoneAdd);
     this.application.items.on('milestone.update', this.handleApplicationMilestoneUpdate);
@@ -82,13 +85,15 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     this.application.items.off('milestone.update', this.handleApplicationMilestoneUpdate);
     this.application.items.off('milestone.add', this.handleApplicationMilestoneAdd);
     this.application.off('load', this.handleApplicationLoad);
-    this.contextManager.unregisterContextItemProvider(this);
+    this.commandManager.unregisterCommandProvider(this);
   }
 
-  getContext() {
-    return {
-      'activeMilestone': this.state.selectedMilestone,
-    };
+  getCommands() {
+    return [
+      new NewMilestoneCommand(),
+      new EditMilestoneCommand(this.state.selectedMilestone),
+      new DeleteMilestoneCommand(this.state.selectedMilestone),
+    ];
   }
 
   private loadMilestones(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]) {

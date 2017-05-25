@@ -1,7 +1,7 @@
-import { IIssue } from '../../application';
-import { BaseCommand } from '../../commands';
-import { KeyCode } from '../../keyboard';
-import { ServiceManager } from '../../services';
+import { IIssue } from '../application';
+import { BaseCommand } from '../commands';
+import { KeyCode } from '../keyboard';
+import { ServiceManager } from '../services';
 
 export default class EditIssueCommand extends BaseCommand {
   private issueController = ServiceManager.Instance.getIssueController();

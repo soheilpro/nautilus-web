@@ -1,15 +1,11 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import { IIssue, IIssueChange } from '../../application';
-import { ICommandProvider } from '../../commands';
 import { IIssueController } from '../../issues';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import AddEditIssueWindow from '../add-edit-issue-window';
 import DeleteIssueWindow from '../delete-issue-window';
-import NewIssueCommand from './new-issue-command';
-import EditIssueCommand from './edit-issue-command';
-import DeleteIssueCommand from './delete-issue-command';
 import AddIssueAction from './add-issue-action';
 import UpdateIssueAction from './update-issue-action';
 import DeleteIssueAction from './delete-issue-action';
@@ -20,11 +16,9 @@ interface IIssueControllerProps {
 interface IIssueControllerState {
 }
 
-export default class IssueController extends React.PureComponent<IIssueControllerProps, IIssueControllerState> implements IIssueController, ICommandProvider {
+export default class IssueController extends React.PureComponent<IIssueControllerProps, IIssueControllerState> implements IIssueController {
   private application = ServiceManager.Instance.getApplication();
-  private contextManager = ServiceManager.Instance.getContextManager();
   private actionManager = ServiceManager.Instance.getActionManager();
-  private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private addIssueWindow: IWindow;
   private editIssueWindow: IWindow;
@@ -45,23 +39,10 @@ export default class IssueController extends React.PureComponent<IIssueControlle
 
   componentWillMount() {
     ServiceManager.Instance.setIssueController(this);
-    this.commandManager.registerCommandProvider(this);
   }
 
   componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
     ServiceManager.Instance.setIssueController(undefined);
-  }
-
-  getCommands() {
-    const context = this.contextManager.getContext();
-    const activeIssue = context['activeIssue'];
-
-    return [
-      new NewIssueCommand(),
-      new EditIssueCommand(activeIssue),
-      new DeleteIssueCommand(activeIssue),
-    ];
   }
 
   addIssue() {

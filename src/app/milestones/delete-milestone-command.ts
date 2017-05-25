@@ -1,7 +1,7 @@
-import { IMilestone } from '../../application';
-import { BaseCommand } from '../../commands';
-import { KeyCode } from '../../keyboard';
-import { ServiceManager } from '../../services';
+import { IMilestone } from '../application';
+import { BaseCommand } from '../commands';
+import { KeyCode } from '../keyboard';
+import { ServiceManager } from '../services';
 
 export default class DeleteMilestoneCommand extends BaseCommand {
   private milestoneController = ServiceManager.Instance.getMilestoneController();

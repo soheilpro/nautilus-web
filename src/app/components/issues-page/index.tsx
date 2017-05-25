@@ -1,9 +1,12 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IIssue, entityComparer } from '../../application';
-import { IContextProvider } from '../../context';
+import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
+import NewIssueCommand from '../../issues/new-issue-command';
+import EditIssueCommand from '../../issues/edit-issue-command';
+import DeleteIssueCommand from '../../issues/delete-issue-command';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
 import IssueTable from '../issue-table';
@@ -24,11 +27,11 @@ interface IIssuesPageState {
   savedViews?: IView[];
 }
 
-export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements IContextProvider {
+export default class IssuesPage extends React.Component<IIssuesPageProps, IIssuesPageState> implements ICommandProvider {
   private localStorage = ServiceManager.Instance.getLocalStorage();
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
-  private contextManager = ServiceManager.Instance.getContextManager();
+  private commandManager = ServiceManager.Instance.getCommandManager();
   private issueDetailContainerElement: HTMLElement;
 
   constructor() {
@@ -50,7 +53,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   componentWillMount() {
-    this.contextManager.registerContextItemProvider(this);
+    this.commandManager.registerCommandProvider(this);
     this.application.on('load', this.handleApplicationLoad);
     this.application.items.on('issue.add', this.handleApplicationIssueAdd);
     this.application.items.on('issue.update', this.handleApplicationIssueUpdate);
@@ -82,13 +85,15 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     this.application.items.off('issue.update', this.handleApplicationIssueUpdate);
     this.application.items.off('issue.add', this.handleApplicationIssueAdd);
     this.application.off('load', this.handleApplicationLoad);
-    this.contextManager.unregisterContextItemProvider(this);
+    this.commandManager.unregisterCommandProvider(this);
   }
 
-  getContext() {
-    return {
-      'activeIssue': this.state.selectedIssue,
-    };
+  getCommands() {
+    return [
+      new NewIssueCommand(),
+      new EditIssueCommand(this.state.selectedIssue),
+      new DeleteIssueCommand(this.state.selectedIssue),
+    ];
   }
 
   private async loadIssues(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]) {

@@ -1,15 +1,11 @@
 import * as _ from 'underscore';
 import * as React from 'react';
 import { IMilestone, IMilestoneChange } from '../../application';
-import { ICommandProvider } from '../../commands';
 import { IMilestoneController } from '../../milestones';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import AddEditMilestoneWindow from '../add-edit-milestone-window';
 import DeleteMilestoneWindow from '../delete-milestone-window';
-import NewMilestoneCommand from './new-milestone-command';
-import EditMilestoneCommand from './edit-milestone-command';
-import DeleteMilestoneCommand from './delete-milestone-command';
 import AddMilestoneAction from './add-milestone-action';
 import UpdateMilestoneAction from './update-milestone-action';
 import DeleteMilestoneAction from './delete-milestone-action';
@@ -20,11 +16,9 @@ interface IMilestoneControllerProps {
 interface IMilestoneControllerState {
 }
 
-export default class MilestoneController extends React.PureComponent<IMilestoneControllerProps, IMilestoneControllerState> implements IMilestoneController, ICommandProvider {
+export default class MilestoneController extends React.PureComponent<IMilestoneControllerProps, IMilestoneControllerState> implements IMilestoneController {
   private application = ServiceManager.Instance.getApplication();
-  private contextManager = ServiceManager.Instance.getContextManager();
   private actionManager = ServiceManager.Instance.getActionManager();
-  private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private addMilestoneWindow: IWindow;
   private editMilestoneWindow: IWindow;
@@ -45,23 +39,10 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
 
   componentWillMount() {
     ServiceManager.Instance.setMilestoneController(this);
-    this.commandManager.registerCommandProvider(this);
   }
 
   componentWillUnmount() {
-    this.commandManager.unregisterCommandProvider(this);
     ServiceManager.Instance.setMilestoneController(undefined);
-  }
-
-  getCommands() {
-    const context = this.contextManager.getContext();
-    const activeMilestone = context['activeMilestone'];
-
-    return [
-      new NewMilestoneCommand(),
-      new EditMilestoneCommand(activeMilestone),
-      new DeleteMilestoneCommand(activeMilestone),
-    ];
   }
 
   addMilestone() {

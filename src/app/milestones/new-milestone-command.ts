@@ -1,6 +1,6 @@
-import { BaseCommand } from '../../commands';
-import { KeyCode } from '../../keyboard';
-import { ServiceManager } from '../../services';
+import { BaseCommand } from '../commands';
+import { KeyCode } from '../keyboard';
+import { ServiceManager } from '../services';
 
 export default class NewMilestoneCommand extends BaseCommand {
   private milestoneController = ServiceManager.Instance.getMilestoneController();
