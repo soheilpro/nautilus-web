@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
 import * as React from 'react';
+import * as NQL from '../../nql';
 import { IIssue, entityComparer } from '../../application';
 import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
@@ -63,13 +63,12 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     });
 
     const view = View.fromJSON(await this.localStorage.get('issues.view', View.create().toJSON()));
-    const issues = await this.application.items.getAllIssues(view.filterExpression, view.sortExpressions);
 
     this.setState({
-      issues,
-      selectedIssue: _.last(issues),
       view,
     });
+
+    this.loadIssues(view.filterExpression, view.sortExpressions);
 
     const savedViews = (await this.roamingStorage.get('issues.views', [])).map(x => View.fromJSON(x));
 
@@ -92,21 +91,26 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     };
   }
 
+  private async loadIssues(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]) {
+    sortExpressions = [new NQL.SortExpression(new NQL.LocalExpression('sid'), -1)];
+    const issues = await this.application.items.getAllIssues(filterExpression, sortExpressions);
+
+    this.setState({
+      issues,
+      selectedIssue: issues[0],
+    });
+  }
+
   private async handleApplicationLoad() {
     this.setState(async state => {
-      const issues = await this.application.items.getAllIssues(state.view.filterExpression, state.view.sortExpressions);
-
-      this.setState({
-        issues,
-        selectedIssue: _.last(issues),
-      });
+      this.loadIssues(state.view.filterExpression, state.view.sortExpressions);
     });
   }
 
   private async handleApplicationIssueAdd({ issue }: { issue: IIssue }) {
     this.setState(state => {
       return {
-        issues: state.issues.concat(issue),
+        issues: [issue, ...state.issues],
         selectedIssue: issue,
       };
     });
@@ -133,13 +137,11 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private async handleIssueViewSettingsChange(view: IView) {
     this.localStorage.set('issues.view', view.toJSON());
 
-    const issues = await this.application.items.getAllIssues(view.filterExpression, view.sortExpressions);
-
     this.setState({
-      issues,
-      selectedIssue: _.last(issues),
       view,
     });
+
+    this.loadIssues(view.filterExpression, view.sortExpressions);
   }
 
   private async handleIssueViewSettingsSavedViewsChange(savedViews: IView[]) {

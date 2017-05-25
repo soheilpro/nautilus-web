@@ -40,8 +40,6 @@ export class ItemModule extends BaseModule implements IItemModule {
           break;
       }
     }
-
-    this.milestones = _.sortBy(this.milestones, milestone => milestone.fullTitle);
   }
 
   getAllIssues(filterExpression: NQL.Expression, sortExpressions: NQL.ISortExpression[]) {

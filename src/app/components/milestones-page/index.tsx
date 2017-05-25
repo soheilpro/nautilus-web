@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
 import * as React from 'react';
+import * as NQL from '../../nql';
 import { IMilestone, entityComparer } from '../../application';
 import { IContextProvider } from '../../context';
 import { ServiceManager } from '../../services';
@@ -63,13 +63,12 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     });
 
     const view = View.fromJSON(await this.localStorage.get('milestones.view', View.create().toJSON()));
-    const milestones = await this.application.items.getAllMilestones(view.filterExpression, view.sortExpressions);
 
     this.setState({
-      milestones,
-      selectedMilestone: _.last(milestones),
       view,
     });
+
+    this.loadMilestones(view.filterExpression, view.sortExpressions);
 
     const savedViews = (await this.roamingStorage.get('milestones.views', [])).map(x => View.fromJSON(x));
 
@@ -92,21 +91,26 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
     };
   }
 
-  private async handleApplicationLoad() {
-    this.setState(async state => {
-      const milestones = await this.application.items.getAllMilestones(state.view.filterExpression, state.view.sortExpressions);
+  private loadMilestones(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]) {
+    sortExpressions = [new NQL.SortExpression(new NQL.LocalExpression('fullTitle'))];
+    const milestones = this.application.items.getAllMilestones(filterExpression, sortExpressions);
 
-      this.setState({
-        milestones,
-        selectedMilestone: _.last(milestones),
-      });
+    this.setState({
+      milestones,
+      selectedMilestone: milestones[0],
+    });
+  }
+
+  private handleApplicationLoad() {
+    this.setState(async state => {
+      this.loadMilestones(state.view.filterExpression, state.view.sortExpressions);
     });
   }
 
   private async handleApplicationMilestoneAdd({ milestone }: { milestone: IMilestone }) {
     this.setState(state => {
       return {
-        milestones: state.milestones.concat(milestone),
+        milestones: [milestone, ...state.milestones],
         selectedMilestone: milestone,
       };
     });
@@ -133,13 +137,11 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
   private async handleMilestoneViewSettingsChange(view: IView) {
     this.localStorage.set('milestones.view', view.toJSON());
 
-    const milestones = await this.application.items.getAllMilestones(view.filterExpression, view.sortExpressions);
-
     this.setState({
-      milestones,
-      selectedMilestone: _.last(milestones),
       view,
     });
+
+    this.loadMilestones(view.filterExpression, view.sortExpressions);
   }
 
   private async handleMilestoneViewSettingsSavedViewsChange(savedViews: IView[]) {

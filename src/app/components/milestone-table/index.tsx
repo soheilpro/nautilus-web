@@ -1,4 +1,3 @@
-import * as _ from 'underscore';
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IMilestone } from '../../application';
@@ -33,14 +32,14 @@ export default class MilestoneTable extends React.PureComponent<IMilestoneTableP
     this.handleTableItemDelete = this.handleTableItemDelete.bind(this);
 
     this.state = {
-      milestones: this.sortMilestones(props.milestones),
+      milestones: props.milestones,
       selectedMilestone: props.selectedMilestone,
     };
   }
 
   componentWillReceiveProps(props: IMilestoneTableProps) {
     this.setState({
-      milestones: this.sortMilestones(props.milestones),
+      milestones: props.milestones,
       selectedMilestone: props.selectedMilestone,
     });
   }
@@ -60,54 +59,6 @@ export default class MilestoneTable extends React.PureComponent<IMilestoneTableP
 
   private handleTableItemDelete(milestone: IMilestone) {
     return this.milestoneController.deleteMilestone(milestone);
-  }
-
-  private sortMilestones(milestones: IMilestone[]) {
-    const findMilestoneById = _.memoize((id: string) => {
-      return _.find(milestones, milestone => milestone.id === id);
-    });
-
-    const getParents = (milestone: IMilestone): IMilestone[] => {
-      if (!milestone.parent)
-        return [];
-
-      const parent = findMilestoneById(milestone.parent.id);
-
-      if (!parent)
-        return [];
-
-      return getParents(parent).concat(parent);
-    };
-
-    const milestonesWithPath = milestones.map(milestone => {
-      return {
-        milestone,
-        path: getParents(milestone).concat(milestone).map(milestone => milestone.sid),
-      };
-    });
-
-    milestonesWithPath.sort((x, y) => {
-      for (let i = 0; ; i++) {
-        const xNode = x.path[i];
-        const yNode = y.path[i];
-
-        if (!xNode && !yNode)
-          return 0;
-
-        if (!xNode)
-          return -1;
-
-        if (!yNode)
-          return 1;
-
-        const result = -1 * xNode.localeCompare(yNode);
-
-        if (result !== 0)
-          return result;
-      }
-    });
-
-    return milestonesWithPath.map(milestoneWithPath => milestoneWithPath.milestone);
   }
 
   render() {
