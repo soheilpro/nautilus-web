@@ -15,6 +15,10 @@ case "$COMMAND" in
     (cd ./src && npm run build)
     ;;
 
+  release)
+    (NODE_ENV=production && cd ./src && npm run build)
+    ;;
+
   clean)
     (cd ./src && npm run clean)
     ;;
@@ -32,6 +36,7 @@ case "$COMMAND" in
     echo "  $(basename "$0") config"
     echo "  $(basename "$0") install"
     echo "  $(basename "$0") build"
+    echo "  $(basename "$0") release"
     echo "  $(basename "$0") clean"
     echo "  $(basename "$0") start"
     echo "  $(basename "$0") watch"
