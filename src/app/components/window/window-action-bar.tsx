@@ -13,6 +13,7 @@ export class WindowActionBar extends React.PureComponent<IWindowActionBarProps, 
   render() {
     return (
       <div className="window-action-bar-component">
+        <div className="line"></div>
         {this.props.children}
       </div>
     );
