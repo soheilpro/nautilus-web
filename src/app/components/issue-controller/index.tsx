@@ -27,9 +27,9 @@ export default class IssueController extends React.PureComponent<IIssueControlle
     super();
 
     this.handleAddIssueWindowAdd = this.handleAddIssueWindowAdd.bind(this);
-    this.handleAddIssueWindowCloseRequest = this.handleAddIssueWindowCloseRequest.bind(this);
+    this.handleAddIssueWindowClose = this.handleAddIssueWindowClose.bind(this);
     this.handleEditIssueWindowUpdate = this.handleEditIssueWindowUpdate.bind(this);
-    this.handleEditIssueWindowCloseRequest = this.handleEditIssueWindowCloseRequest.bind(this);
+    this.handleEditIssueWindowClose = this.handleEditIssueWindowClose.bind(this);
 
     this.state = {};
   }
@@ -44,7 +44,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
 
   addIssue() {
     this.addIssueWindow = {
-      content: <AddEditIssueWindow mode="add" onAdd={this.handleAddIssueWindowAdd} onCloseRequest={this.handleAddIssueWindowCloseRequest} />,
+      content: <AddEditIssueWindow mode="add" onAdd={this.handleAddIssueWindowAdd} onClose={this.handleAddIssueWindowClose} />,
       top: 120,
       width: 800,
       modal: true,
@@ -55,7 +55,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
 
   editIssue(issue: IIssue) {
     this.editIssueWindow = {
-      content: <AddEditIssueWindow mode="edit" issue={issue} onUpdate={_.partial(this.handleEditIssueWindowUpdate, issue)} onCloseRequest={this.handleEditIssueWindowCloseRequest} />,
+      content: <AddEditIssueWindow mode="edit" issue={issue} onUpdate={_.partial(this.handleEditIssueWindowUpdate, issue)} onClose={this.handleEditIssueWindowClose} />,
       top: 120,
       width: 800,
       modal: true,
@@ -81,7 +81,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
     this.windowController.closeWindow(this.addIssueWindow);
   }
 
-  private handleAddIssueWindowCloseRequest() {
+  private handleAddIssueWindowClose() {
     this.windowController.closeWindow(this.addIssueWindow);
   }
 
@@ -90,7 +90,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
     this.windowController.closeWindow(this.editIssueWindow);
   }
 
-  private handleEditIssueWindowCloseRequest() {
+  private handleEditIssueWindowClose() {
     this.windowController.closeWindow(this.editIssueWindow);
   }
 

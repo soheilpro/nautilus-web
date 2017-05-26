@@ -28,9 +28,9 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     super();
 
     this.handleAddMilestoneWindowAdd = this.handleAddMilestoneWindowAdd.bind(this);
-    this.handleAddMilestoneWindowCloseRequest = this.handleAddMilestoneWindowCloseRequest.bind(this);
+    this.handleAddMilestoneWindowClose = this.handleAddMilestoneWindowClose.bind(this);
     this.handleEditMilestoneWindowUpdate = this.handleEditMilestoneWindowUpdate.bind(this);
-    this.handleEditMilestoneWindowCloseRequest = this.handleEditMilestoneWindowCloseRequest.bind(this);
+    this.handleEditMilestoneWindowClose = this.handleEditMilestoneWindowClose.bind(this);
 
     this.state = {};
   }
@@ -45,7 +45,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
 
   addMilestone() {
     this.addMilestoneWindow = {
-      content: <AddEditMilestoneWindow mode="add" onAdd={this.handleAddMilestoneWindowAdd} onCloseRequest={this.handleAddMilestoneWindowCloseRequest} />,
+      content: <AddEditMilestoneWindow mode="add" onAdd={this.handleAddMilestoneWindowAdd} onClose={this.handleAddMilestoneWindowClose} />,
       top: 120,
       width: 800,
       modal: true,
@@ -56,7 +56,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
 
   editMilestone(milestone: IMilestone) {
     this.editMilestoneWindow = {
-      content: <AddEditMilestoneWindow mode="edit" milestone={milestone} onUpdate={_.partial(this.handleEditMilestoneWindowUpdate, milestone)} onCloseRequest={this.handleEditMilestoneWindowCloseRequest} />,
+      content: <AddEditMilestoneWindow mode="edit" milestone={milestone} onUpdate={_.partial(this.handleEditMilestoneWindowUpdate, milestone)} onClose={this.handleEditMilestoneWindowClose} />,
       top: 120,
       width: 800,
       modal: true,
@@ -99,7 +99,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     this.windowController.closeWindow(this.addMilestoneWindow);
   }
 
-  private handleAddMilestoneWindowCloseRequest() {
+  private handleAddMilestoneWindowClose() {
     this.windowController.closeWindow(this.addMilestoneWindow);
   }
 
@@ -108,7 +108,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     this.windowController.closeWindow(this.editMilestoneWindow);
   }
 
-  private handleEditMilestoneWindowCloseRequest() {
+  private handleEditMilestoneWindowClose() {
     this.windowController.closeWindow(this.editMilestoneWindow);
   }
 

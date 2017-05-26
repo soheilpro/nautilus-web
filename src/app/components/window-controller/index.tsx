@@ -30,7 +30,7 @@ export default class WindowController extends React.PureComponent<IWindowControl
   constructor() {
     super();
 
-    this.handleWindowContainerCloseRequest = this.handleWindowContainerCloseRequest.bind(this);
+    this.handleWindowContainerClose = this.handleWindowContainerClose.bind(this);
 
     this.state = {
       windows: [],
@@ -76,7 +76,7 @@ export default class WindowController extends React.PureComponent<IWindowControl
       this.commandController.enableCommandShortcuts();
   }
 
-  private handleWindowContainerCloseRequest(window: IExtendedWindow) {
+  private handleWindowContainerClose(window: IExtendedWindow) {
     this.closeWindow(window);
   }
 
@@ -91,7 +91,7 @@ export default class WindowController extends React.PureComponent<IWindowControl
                 window.modal &&
                   <div className="overlay"></div>
               }
-              <WindowContainer top={window.top} width={window.width} onCloseRequest={_.partial(this.handleWindowContainerCloseRequest, window)} >
+              <WindowContainer top={window.top} width={window.width} onClose={_.partial(this.handleWindowContainerClose, window)} >
                 {window.content}
               </WindowContainer>
             </div>

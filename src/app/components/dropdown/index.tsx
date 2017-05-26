@@ -30,7 +30,7 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.handleButtonKeyDown = this.handleButtonKeyDown.bind(this);
-    this.handleWindowContainerCloseRequest = this.handleWindowContainerCloseRequest.bind(this);
+    this.handleWindowContainerClose = this.handleWindowContainerClose.bind(this);
 
     this.state = {};
   }
@@ -111,7 +111,7 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
     }
   }
 
-  private handleWindowContainerCloseRequest() {
+  private handleWindowContainerClose() {
     this.close();
   }
 
@@ -124,7 +124,7 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
         </div>
         {
           this.state.isOpen &&
-            <WindowContainer blurCheckElement={this.componentElement} onCloseRequest={this.handleWindowContainerCloseRequest} ref={e => this.windowContainerComponent = e}>
+            <WindowContainer blurCheckElement={this.componentElement} onClose={this.handleWindowContainerClose} ref={e => this.windowContainerComponent = e}>
               <Window className="window">
                 {this.props.children}
               </Window>

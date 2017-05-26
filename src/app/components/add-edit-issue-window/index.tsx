@@ -19,7 +19,7 @@ interface IAddEditIssueWindowProps {
   issue?: IIssue;
   onAdd?(issue: IIssue): void;
   onUpdate?(issueChange: IIssueChange): void;
-  onCloseRequest(): void;
+  onClose(): void;
 }
 
 interface IAddEditIssueWindowState {
@@ -259,7 +259,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
           </form>
         </WindowContent>
         <WindowActionBar>
-          <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
+          <Button type="secondary" onClick={this.props.onClose}>Cancel</Button>
           {
             this.props.mode === 'add' &&
               <Button type="submit" form="addEditIssueForm">Add Issue</Button>

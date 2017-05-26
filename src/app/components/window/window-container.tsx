@@ -10,7 +10,7 @@ interface IWindowContainerProps {
   closeOnBlur?: boolean;
   closeOnEsc?: boolean;
   blurCheckElement?: HTMLElement;
-  onCloseRequest?(): void;
+  onClose?(): void;
 }
 
 interface IWindowContainerState {
@@ -47,7 +47,7 @@ export class WindowContainer extends React.PureComponent<IWindowContainerProps, 
       event.preventDefault();
 
       if (this.props.closeOnEsc)
-        this.props.onCloseRequest();
+        this.props.onClose();
     }
   }
 
@@ -60,7 +60,7 @@ export class WindowContainer extends React.PureComponent<IWindowContainerProps, 
         return;
 
       if (this.props.closeOnEsc)
-        this.props.onCloseRequest();
+        this.props.onClose();
     }, 0);
   }
 

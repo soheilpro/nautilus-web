@@ -52,7 +52,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.handleResetButtonClick = this.handleResetButtonClick.bind(this);
     this.handleSaveButtonClick = this.handleSaveButtonClick.bind(this);
     this.handleSavePromptWindowConfirm = this.handleSavePromptWindowConfirm.bind(this);
-    this.handleSavePromptWindowCloseRequest = this.handleSavePromptWindowCloseRequest.bind(this);
+    this.handleSavePromptWindowClose = this.handleSavePromptWindowClose.bind(this);
     this.handleViewListDelete = this.handleViewListDelete.bind(this);
     this.handleViewListSelect = this.handleViewListSelect.bind(this);
     this.handleOpenFilterCommandExecute = this.handleOpenFilterCommandExecute.bind(this);
@@ -117,7 +117,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
   private handleSaveViewCommandExecute() {
     this.promptWindow = {
-      content: <PromptWindow title="Save" placeholder="Name" confirmButtonText="Save" onConfirm={this.handleSavePromptWindowConfirm} onCloseRequest={this.handleSavePromptWindowCloseRequest} />,
+      content: <PromptWindow title="Save" placeholder="Name" confirmButtonText="Save" onConfirm={this.handleSavePromptWindowConfirm} onClose={this.handleSavePromptWindowClose} />,
       top: 120,
       width: 500,
       modal: true,
@@ -152,7 +152,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
 
   private handleSaveButtonClick() {
     this.promptWindow = {
-      content: <PromptWindow title="Save" placeholder="Name" confirmButtonText="Save" onConfirm={this.handleSavePromptWindowConfirm} onCloseRequest={this.handleSavePromptWindowCloseRequest} />,
+      content: <PromptWindow title="Save" placeholder="Name" confirmButtonText="Save" onConfirm={this.handleSavePromptWindowConfirm} onClose={this.handleSavePromptWindowClose} />,
       top: 120,
       width: 500,
       modal: true,
@@ -178,7 +178,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     });
   }
 
-  private handleSavePromptWindowCloseRequest() {
+  private handleSavePromptWindowClose() {
     this.windowController.closeWindow(this.promptWindow);
   }
 

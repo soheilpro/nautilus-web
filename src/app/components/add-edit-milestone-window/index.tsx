@@ -15,7 +15,7 @@ interface IAddEditMilestoneWindowProps {
   milestone?: IMilestone;
   onAdd?(milestone: IMilestone): void;
   onUpdate?(milestoneChange: IMilestoneChange): void;
-  onCloseRequest(): void;
+  onClose(): void;
 }
 
 interface IAddEditMilestoneWindowState {
@@ -157,7 +157,7 @@ export default class AddEditMilestoneWindow extends React.PureComponent<IAddEdit
           </form>
         </WindowContent>
         <WindowActionBar>
-          <Button type="secondary" onClick={this.props.onCloseRequest}>Cancel</Button>
+          <Button type="secondary" onClick={this.props.onClose}>Cancel</Button>
           {
             this.props.mode === 'add' &&
               <Button type="submit" form="addEditMilestoneForm">Add Milestone</Button>
