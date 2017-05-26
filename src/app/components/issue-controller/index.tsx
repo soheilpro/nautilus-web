@@ -69,7 +69,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
       title: 'Delete Issue',
       message: `Are you sure you want to delete issue #${issue.sid}?`,
       buttonTitle: 'Delete Issue',
-      isDestructive: true,
+      destructive: true,
       onConfirm: () => {
         this.actionManager.execute(new DeleteIssueAction(issue, this.application));
       },

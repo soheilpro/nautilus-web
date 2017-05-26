@@ -87,7 +87,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
       title: 'Delete Milestone',
       message: `Are you sure you want to delete milestone #${milestone.sid}?`,
       buttonTitle: 'Delete Milestone',
-      isDestructive: true,
+      destructive: true,
       onConfirm: () => {
         this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
       },

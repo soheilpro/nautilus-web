@@ -55,13 +55,13 @@ export default class DialogController extends React.PureComponent<IDialogControl
     this.showDialog(dialog);
   }
 
-  showConfirmDialog(options: { title: string, message: string, buttonTitle: string, isDestructive: boolean, onConfirm: () => void }): void {
+  showConfirmDialog(options: { title: string, message: string, buttonTitle: string, destructive: boolean, onConfirm: () => void }): void {
     const dialog: IDialog = {
       title: options.title,
       content: options.message,
       buttons: [
         { key: 'cancel', title: 'Cancel', type: 'cancel' },
-        { key: 'ok', title: options.buttonTitle || 'OK', type: options.isDestructive ? 'destructive' : 'default' },
+        { key: 'ok', title: options.buttonTitle || 'OK', type: options.destructive ? 'destructive' : 'default' },
       ],
       onButtonClick: button => {
         this.windowController.closeWindow(this.dialogWindow, () => {
