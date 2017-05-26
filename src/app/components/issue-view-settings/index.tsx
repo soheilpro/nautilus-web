@@ -26,26 +26,26 @@ import LoadViewCommand from './load-view-command';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IIssueViewViewProps {
+interface IIssueViewSettingsProps {
   view?: IView;
   savedViews?: IView[];
   onChange(view: IView): void;
   onSavedViewsChange(savedViews: IView[]): void;
 }
 
-interface IIssueViewViewState {
+interface IIssueViewSettingsState {
   filterExpression?: NQL.IExpression;
   savedViews?: IView[];
 }
 
-export default class IssueViewView extends React.PureComponent<IIssueViewViewProps, IIssueViewViewState> implements ICommandProvider {
+export default class IssueViewSettings extends React.PureComponent<IIssueViewSettingsProps, IIssueViewSettingsState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private queryBuilderComponent: IssueFilterQueryBuilder;
   private savedViewListDropdownComponent: Dropdown;
   private promptWindow: IWindow;
 
-  constructor(props: IIssueViewViewProps) {
+  constructor(props: IIssueViewSettingsProps) {
     super(props);
 
     this.handleIssueFilterQueryBuilderChange = this.handleIssueFilterQueryBuilderChange.bind(this);
@@ -70,7 +70,7 @@ export default class IssueViewView extends React.PureComponent<IIssueViewViewPro
     this.commandManager.registerCommandProvider(this);
   }
 
-  componentWillReceiveProps(props: IIssueViewViewProps) {
+  componentWillReceiveProps(props: IIssueViewSettingsProps) {
     if (this.props.view === props.view && this.props.savedViews === props.savedViews)
       return;
 

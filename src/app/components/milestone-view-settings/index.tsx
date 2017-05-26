@@ -16,20 +16,20 @@ import ResetViewCommand from './reset-view-command';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
-interface IMilestoneViewViewProps {
+interface IMilestoneViewSettingsProps {
   view?: IView;
   onChange(view: IView): void;
 }
 
-interface IMilestoneViewViewState {
+interface IMilestoneViewSettingsState {
   filterExpression?: NQL.IExpression;
 }
 
-export default class MilestoneViewView extends React.PureComponent<IMilestoneViewViewProps, IMilestoneViewViewState> implements ICommandProvider {
+export default class MilestoneViewSettings extends React.PureComponent<IMilestoneViewSettingsProps, IMilestoneViewSettingsState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
   private queryBuilderComponent: MilestoneFilterQueryBuilder;
 
-  constructor(props: IMilestoneViewViewProps) {
+  constructor(props: IMilestoneViewSettingsProps) {
     super(props);
 
     this.handleMilestoneFilterQueryBuilderChange = this.handleMilestoneFilterQueryBuilderChange.bind(this);
@@ -46,7 +46,7 @@ export default class MilestoneViewView extends React.PureComponent<IMilestoneVie
     this.commandManager.registerCommandProvider(this);
   }
 
-  componentWillReceiveProps(props: IMilestoneViewViewProps) {
+  componentWillReceiveProps(props: IMilestoneViewSettingsProps) {
     if (this.props.view === props.view)
       return;
 
