@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as NQL from '../../nql';
 import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser, entityComparer } from '../../application';
 import { ServiceManager } from '../../services';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
@@ -175,7 +176,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
   }
 
   private getMilestones(project: IProject) {
-    const milestones = this.application.items.getAllMilestones(null, null);
+    const milestones = this.application.items.getAllMilestones(null, [new NQL.SortExpression(new NQL.LocalExpression('fullTitle'))]);
 
     if (!project)
       return milestones;
