@@ -91,7 +91,7 @@ export default class WindowController extends React.PureComponent<IWindowControl
                 window.modal &&
                   <div className="overlay"></div>
               }
-              <WindowContainer position="fixed" top={window.top} width={window.width} onClose={_.partial(this.handleWindowContainerClose, window)} >
+              <WindowContainer position="absolute" top={window.top} width={window.width} onClose={_.partial(this.handleWindowContainerClose, window)} >
                 {window.content}
               </WindowContainer>
             </div>

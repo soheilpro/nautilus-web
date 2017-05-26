@@ -42,11 +42,6 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
 
       if (windowContainerElementRect.right > window.innerWidth)
         windowContainerElement.style.left = (this.buttonElement.offsetLeft + this.buttonElement.offsetWidth - windowContainerElementRect.width) + 'px';
-
-      if (windowContainerElementRect.bottom > window.innerHeight) {
-        const topDiff = windowContainerElementRect.top - windowContainerElement.offsetTop;
-        windowContainerElement.style.top = (windowContainerElementRect.top - (windowContainerElementRect.bottom - window.innerHeight) - topDiff) + 'px';
-      }
     }
   }
 
