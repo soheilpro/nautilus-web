@@ -6,9 +6,6 @@ import Table from '../table';
 import TableHeader from './table-header';
 import TableRow from './table-row';
 
-require('../../assets/stylesheets/base.less');
-require('./index.less');
-
 interface IMilestoneTableProps {
   milestones?: IMilestone[];
   selectedMilestone?: IMilestone;
