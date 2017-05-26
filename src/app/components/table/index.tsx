@@ -221,7 +221,7 @@ class Chunk extends React.PureComponent<IChunkProps, IChunkState> {
   private selectedRow: TableRow;
 
   focus() {
-    // this.selectedRow.focus();
+    this.selectedRow.focus();
   }
 
   render() {
