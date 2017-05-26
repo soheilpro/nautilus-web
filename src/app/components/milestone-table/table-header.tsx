@@ -12,12 +12,12 @@ interface ITableHeaderState {
 export default class TableHeader extends React.PureComponent<ITableHeaderProps, ITableHeaderState> {
   render() {
     return (
-      <div className="table-header-component table-header">
-        <div className="table-cell sid">#</div>
-        <div className="table-cell project">Project</div>
-        <div className="table-cell title">Title</div>
-        <div className="table-cell state">State</div>
-      </div>
+      <tr className="table-header-component table-row">
+        <td className="table-cell sid">#</td>
+        <td className="table-cell project">Project</td>
+        <td className="table-cell title">Title</td>
+        <td className="table-cell state">State</td>
+      </tr>
     );
   }
 };

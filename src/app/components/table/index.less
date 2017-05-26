@@ -1,28 +1,24 @@
 @import '../../assets/stylesheets/common';
 
 .table-component {
-  display: table;
-
   .table-header {
-    display: table-row;
-
-    .table-cell {
-      display: table-cell;
-      border-bottom: 1px solid @darkgray;
+    .table-row {
+      .table-cell {
+        border-bottom: 1px solid @darkgray;
+      }
     }
   }
 
-  .table-row {
-    display: table-row;
-
-    .table-cell {
-      display: table-cell;
-      border-bottom: 1px solid @gray;
-    }
-
-    &.selected {
+  .table-body {
+    .table-row {
       .table-cell {
-        background-color: #f6f6f6;
+        border-bottom: 1px solid @gray;
+      }
+
+      &.selected {
+        .table-cell {
+          background-color: #f6f6f6;
+        }
       }
     }
   }

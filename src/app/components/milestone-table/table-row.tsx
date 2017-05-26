@@ -47,20 +47,20 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
 
   render() {
     return (
-      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
-        <div className="table-cell sid">
+      <tr className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
+        <td className="table-cell sid">
           <MilestoneSidField milestone={this.props.item} bold={this.props.isSelected} />
-        </div>
-        <div className="table-cell project">
+        </td>
+        <td className="table-cell project">
           <MilestoneProjectField milestone={this.props.item} />
-        </div>
-        <div className="table-cell title">
+        </td>
+        <td className="table-cell title">
           <MilestoneTitleField milestone={this.props.item} />
-        </div>
-        <div className="table-cell state">
+        </td>
+        <td className="table-cell state">
           <MilestoneStateField milestone={this.props.item} />
-        </div>
-      </div>
+        </td>
+      </tr>
     );
   }
 };

@@ -2,8 +2,11 @@
   .issue-table-component {
     direction: rtl;
 
-    > * {
-      direction: initial;
+    .table-header,
+    .table-body {
+      > * {
+        direction: initial;
+      }
     }
   }
 }

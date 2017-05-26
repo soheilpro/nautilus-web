@@ -52,36 +52,36 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
 
   render() {
     return (
-      <div className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
-        <div className="table-cell sid">
+      <tr className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
+        <td className="table-cell sid">
           <IssueSidField issue={this.props.item} bold={this.props.isSelected} />
-        </div>
-        <div className="table-cell title">
+        </td>
+        <td className="table-cell title">
           <IssueTitleField issue={this.props.item} />
           {
             this.props.item.state && this.props.item.state.key !== 'closed' &&
               <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
           }
-        </div>
-        <div className="table-cell project">
+        </td>
+        <td className="table-cell project">
           <IssueProjectField issue={this.props.item} />
-        </div>
-        <div className="table-cell type">
+        </td>
+        <td className="table-cell type">
           <IssueTypeField issue={this.props.item} />
-        </div>
-        <div className="table-cell priority">
+        </td>
+        <td className="table-cell priority">
           <IssuePriorityField issue={this.props.item} />
-        </div>
-        <div className="table-cell state">
+        </td>
+        <td className="table-cell state">
           <IssueStateField issue={this.props.item} />
-        </div>
-        <div className="table-cell assigned-to">
+        </td>
+        <td className="table-cell assigned-to">
           <IssueAssignedTo issue={this.props.item} />
-        </div>
-        <div className="table-cell milestone">
+        </td>
+        <td className="table-cell milestone">
           <IssueMilestoneField issue={this.props.item} />
-        </div>
-      </div>
+        </td>
+      </tr>
     );
   }
 };

@@ -8,11 +8,17 @@ import TableRow from './table-row';
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
+const CHUNK_SIZE = 70;
+
+interface IChunk {
+  items: IItem[];
+}
+
 interface ITableProps {
   items: IItem[];
   selectedItem?: IItem;
-  Header?: typeof TableHeader;
-  Row?: typeof TableRow;
+  Header: typeof TableHeader;
+  Row: typeof TableRow;
   className?: string;
   onItemSelect?(item: IItem): void;
   onItemAction?(item: IItem): void;
@@ -20,12 +26,13 @@ interface ITableProps {
 }
 
 interface ITableState {
+  chunks?: IChunk[];
   selectedItem?: IItem;
 }
 
 export default class Table extends React.PureComponent<ITableProps, ITableState> {
   private componentElement: HTMLElement;
-  private selectedRow: TableRow;
+  private selectedChunkComponent: Chunk;
 
   constructor(props: ITableProps) {
     super(props);
@@ -36,14 +43,16 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
     this.handleItemSelect = this.handleItemSelect.bind(this);
     this.handleItemAction = this.handleItemAction.bind(this);
 
+    const chunks = this.getChunks(props.items);
+
     this.state = {
-      selectedItem: props.selectedItem,
+      chunks: chunks,
     };
   }
 
   componentDidUpdate() {
-    if ($(this.componentElement).hasClass('focus') && this.selectedRow)
-      this.selectedRow.focus();
+    if ($(this.componentElement).hasClass('focus') && this.selectedChunkComponent)
+      this.selectedChunkComponent.focus();
   }
 
   componentWillReceiveProps(props: ITableProps) {
@@ -70,12 +79,18 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
       }
     }
 
+    if (this.props.items !== props.items) {
+      this.setState({
+        chunks: this.getChunks(props.items),
+      });
+    }
+
     this.setState({
       selectedItem,
     });
   }
 
-  private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  private handleKeyDown(event: React.KeyboardEvent<HTMLTableElement>) {
     if (event.which === KeyCode.DownArrow) {
       const selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
 
@@ -85,7 +100,7 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
         const selectedItem = this.props.items[selectedItemIndex + 1];
 
         this.setState({
-          selectedItem,
+          selectedItem: selectedItem,
         });
 
         this.props.onItemSelect(selectedItem);
@@ -100,7 +115,7 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
         const selectedItem = this.props.items[selectedItemIndex - 1];
 
         this.setState({
-          selectedItem,
+          selectedItem: selectedItem,
         });
 
         this.props.onItemSelect(selectedItem);
@@ -142,21 +157,86 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
       this.props.onItemAction(item);
   }
 
+  private getChunks(items: IItem[]) {
+    const totalChunks = Math.ceil(items.length / CHUNK_SIZE);
+    const chunks: IChunk[] = [];
+
+    for (let i = 0; i < totalChunks; i++) {
+      const chunk = {
+        items: items.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE),
+      };
+
+      chunks.push(chunk);
+    }
+
+    return chunks;
+  }
+
+  private getSelectedChunk(chunks: IChunk[], selectedItem: IItem) {
+    for (const chunk of chunks)
+      if (chunk.items.indexOf(selectedItem) !== -1)
+        return chunk;
+
+    return null;
+  }
+
   render() {
+    const selectedChunk = this.getSelectedChunk(this.state.chunks, this.state.selectedItem);
+
     return (
-      <div className={classNames('table-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+      <table className={classNames('table-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+        <thead className="table-header">
+          {
+            this.props.Header &&
+              <this.props.Header />
+          }
+        </thead>
         {
-          this.props.Header &&
-            <this.props.Header />
-        }
-        {
-          this.props.items.map((item, index) => {
+          this.state.chunks.map((chunk, index) => {
+            const isSelected = (selectedChunk === chunk);
+
             return (
-              <this.props.Row item={item} index={index} isSelected={this.state.selectedItem === item} onSelect={this.handleItemSelect} onAction={this.handleItemAction} ref={e => this.selectedRow = this.state.selectedItem === item ? e : this.selectedRow } key={item.id} />
+              <Chunk index={index} items={chunk.items} selectedItem={isSelected ? this.state.selectedItem : null} Row={this.props.Row} onItemSelect={this.handleItemSelect} onItemAction={this.handleItemAction} ref={e => this.selectedChunkComponent = isSelected ? e : this.selectedChunkComponent} key={index} />
             );
           })
         }
-      </div>
+      </table>
+    );
+  }
+};
+
+interface IChunkProps {
+  index: number;
+  items: IItem[];
+  selectedItem: IItem;
+  Row: typeof TableRow;
+  onItemSelect(item: IItem): void;
+  onItemAction(item: IItem): void;
+}
+
+interface IChunkState {
+}
+
+class Chunk extends React.PureComponent<IChunkProps, IChunkState> {
+  private selectedRow: TableRow;
+
+  focus() {
+    // this.selectedRow.focus();
+  }
+
+  render() {
+    return (
+      <tbody className="table-body">
+        {
+          this.props.items.map((item, index) => {
+            const isSelected = (this.props.selectedItem === item);
+
+            return (
+              <this.props.Row item={item} index={index} isSelected={isSelected} onSelect={this.props.onItemSelect} onAction={this.props.onItemAction} ref={e => this.selectedRow = isSelected ? e : this.selectedRow} key={item.id} />
+            );
+          })
+        }
+      </tbody>
     );
   }
 };
