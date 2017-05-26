@@ -124,7 +124,7 @@ export default class Dropdown extends React.PureComponent<IDropdownProps, IDropd
         </div>
         {
           this.state.isOpen &&
-            <WindowContainer blurCheckElement={this.componentElement} onClose={this.handleWindowContainerClose} ref={e => this.windowContainerComponent = e}>
+            <WindowContainer position="absolute" blurCheckElement={this.componentElement} onClose={this.handleWindowContainerClose} ref={e => this.windowContainerComponent = e}>
               <Window className="window">
                 {this.props.children}
               </Window>

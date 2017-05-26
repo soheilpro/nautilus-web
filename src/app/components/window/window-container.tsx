@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { KeyCode } from '../../keyboard';
 
-require('../../assets/stylesheets/base.less');
-require('./window-container.less');
-
 interface IWindowContainerProps {
+  position: 'absolute' | 'fixed';
   top?: number;
   width?: number;
   closeOnBlur?: boolean;
@@ -66,7 +64,7 @@ export class WindowContainer extends React.PureComponent<IWindowContainerProps, 
 
   render() {
     return (
-      <div className="window-container-component" style={{ top: this.props.top, left: `calc(100% / 2 - ${this.props.width}px / 2)`, width: this.props.width, zIndex: this.state.zIndex }} tabIndex={0} onKeyDown={this.handleKeyDown} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+      <div className="window-container-component" style={{ position: this.props.position, top: this.props.top, left: `calc(100% / 2 - ${this.props.width}px / 2)`, width: this.props.width, zIndex: this.state.zIndex }} tabIndex={0} onKeyDown={this.handleKeyDown} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
         {this.props.children}
       </div>
     );
