@@ -6,7 +6,6 @@ import { IMilestoneController } from '../../milestones';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import AddEditMilestoneWindow from '../add-edit-milestone-window';
-import DeleteMilestoneWindow from '../delete-milestone-window';
 import AddMilestoneAction from './add-milestone-action';
 import UpdateMilestoneAction from './update-milestone-action';
 import DeleteMilestoneAction from './delete-milestone-action';
@@ -24,7 +23,6 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
   private dialogController = ServiceManager.Instance.getDialogController();
   private addMilestoneWindow: IWindow;
   private editMilestoneWindow: IWindow;
-  private deleteMilestoneWindow: IWindow;
 
   constructor() {
     super();
@@ -33,8 +31,6 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     this.handleAddMilestoneWindowCloseRequest = this.handleAddMilestoneWindowCloseRequest.bind(this);
     this.handleEditMilestoneWindowUpdate = this.handleEditMilestoneWindowUpdate.bind(this);
     this.handleEditMilestoneWindowCloseRequest = this.handleEditMilestoneWindowCloseRequest.bind(this);
-    this.handleDeleteMilestoneWindowConfirm = this.handleDeleteMilestoneWindowConfirm.bind(this);
-    this.handleDeleteMilestoneWindowCloseRequest = this.handleDeleteMilestoneWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -79,24 +75,23 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     const milestoneIssues = await this.application.items.getAllIssues(filter, null);
 
     if (milestoneIssues.length > 0) {
-      const dialog = {
+      this.dialogController.showErrorDialog({
         title: 'Delete Milestone',
-        content: `Cannot delete milestone #${milestone.sid}.\nThere are ${milestoneIssues.length} issue(s) attached to this milestone.`,
-      };
-
-      this.dialogController.showDialog(dialog);
+        message: `Cannot delete milestone #${milestone.sid}.\nThere are ${milestoneIssues.length} issue(s) attached to this milestone.`},
+      );
 
       return;
     }
 
-    this.deleteMilestoneWindow = {
-      content: <DeleteMilestoneWindow milestone={milestone} onConfirm={_.partial(this.handleDeleteMilestoneWindowConfirm, milestone)} onCloseRequest={this.handleDeleteMilestoneWindowCloseRequest} />,
-      top: 120,
-      width: 600,
-      modal: true,
-    };
-
-    this.windowController.showWindow(this.deleteMilestoneWindow);
+    this.dialogController.showConfirmDialog({
+      title: 'Delete Milestone',
+      message: `Are you sure you want to delete milestone #${milestone.sid}?`,
+      buttonTitle: 'Delete Milestone',
+      isDestructive: true,
+      onConfirm: () => {
+        this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
+      },
+    });
   }
 
   private handleAddMilestoneWindowAdd(milestone: IMilestone) {
@@ -115,15 +110,6 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
 
   private handleEditMilestoneWindowCloseRequest() {
     this.windowController.closeWindow(this.editMilestoneWindow);
-  }
-
-  private handleDeleteMilestoneWindowConfirm(milestone: IMilestone) {
-    this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
-    this.windowController.closeWindow(this.deleteMilestoneWindow);
-  }
-
-  private handleDeleteMilestoneWindowCloseRequest() {
-    this.windowController.closeWindow(this.deleteMilestoneWindow);
   }
 
   render() {

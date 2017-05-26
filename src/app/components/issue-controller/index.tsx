@@ -5,7 +5,6 @@ import { IIssueController } from '../../issues';
 import { ServiceManager } from '../../services';
 import { IWindow } from '../../windows';
 import AddEditIssueWindow from '../add-edit-issue-window';
-import DeleteIssueWindow from '../delete-issue-window';
 import AddIssueAction from './add-issue-action';
 import UpdateIssueAction from './update-issue-action';
 import DeleteIssueAction from './delete-issue-action';
@@ -20,9 +19,9 @@ export default class IssueController extends React.PureComponent<IIssueControlle
   private application = ServiceManager.Instance.getApplication();
   private actionManager = ServiceManager.Instance.getActionManager();
   private windowController = ServiceManager.Instance.getWindowController();
+  private dialogController = ServiceManager.Instance.getDialogController();
   private addIssueWindow: IWindow;
   private editIssueWindow: IWindow;
-  private deleteIssueWindow: IWindow;
 
   constructor() {
     super();
@@ -31,8 +30,6 @@ export default class IssueController extends React.PureComponent<IIssueControlle
     this.handleAddIssueWindowCloseRequest = this.handleAddIssueWindowCloseRequest.bind(this);
     this.handleEditIssueWindowUpdate = this.handleEditIssueWindowUpdate.bind(this);
     this.handleEditIssueWindowCloseRequest = this.handleEditIssueWindowCloseRequest.bind(this);
-    this.handleDeleteIssueWindowConfirm = this.handleDeleteIssueWindowConfirm.bind(this);
-    this.handleDeleteIssueWindowCloseRequest = this.handleDeleteIssueWindowCloseRequest.bind(this);
 
     this.state = {};
   }
@@ -68,14 +65,15 @@ export default class IssueController extends React.PureComponent<IIssueControlle
   }
 
   deleteIssue(issue: IIssue) {
-    this.deleteIssueWindow = {
-      content: <DeleteIssueWindow issue={issue} onConfirm={_.partial(this.handleDeleteIssueWindowConfirm, issue)} onCloseRequest={this.handleDeleteIssueWindowCloseRequest} />,
-      top: 120,
-      width: 600,
-      modal: true,
-    };
-
-    this.windowController.showWindow(this.deleteIssueWindow);
+    this.dialogController.showConfirmDialog({
+      title: 'Delete Issue',
+      message: `Are you sure you want to delete issue #${issue.sid}?`,
+      buttonTitle: 'Delete Issue',
+      isDestructive: true,
+      onConfirm: () => {
+        this.actionManager.execute(new DeleteIssueAction(issue, this.application));
+      },
+    });
   }
 
   private handleAddIssueWindowAdd(issue: IIssue) {
@@ -94,15 +92,6 @@ export default class IssueController extends React.PureComponent<IIssueControlle
 
   private handleEditIssueWindowCloseRequest() {
     this.windowController.closeWindow(this.editIssueWindow);
-  }
-
-  private handleDeleteIssueWindowConfirm(issue: IIssue) {
-    this.actionManager.execute(new DeleteIssueAction(issue, this.application));
-    this.windowController.closeWindow(this.deleteIssueWindow);
-  }
-
-  private handleDeleteIssueWindowCloseRequest() {
-    this.windowController.closeWindow(this.deleteIssueWindow);
   }
 
   render() {

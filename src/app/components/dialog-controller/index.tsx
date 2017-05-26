@@ -1,6 +1,7 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import { ServiceManager } from '../../services';
-import { IDialog, IDialogController } from '../../dialog';
+import { IDialog, IDialogButton, IDialogController } from '../../dialog';
 import { IWindow } from '../../windows';
 import DialogWindow from '../dialog-window';
 
@@ -17,7 +18,7 @@ export default class DialogController extends React.PureComponent<IDialogControl
   constructor() {
     super();
 
-    this.handleDialogWindowCloseRequest = this.handleDialogWindowCloseRequest.bind(this);
+    this.handleDialogWindowButtonClick = this.handleDialogWindowButtonClick.bind(this);
   }
 
   componentWillMount() {
@@ -30,7 +31,7 @@ export default class DialogController extends React.PureComponent<IDialogControl
 
   showDialog(dialog: IDialog) {
     this.dialogWindow = {
-      content: <DialogWindow dialog={dialog} onCloseRequest={this.handleDialogWindowCloseRequest} />,
+      content: <DialogWindow dialog={dialog} onButtonClick={_.partial(this.handleDialogWindowButtonClick, dialog)} />,
       top: 120,
       width: 600,
       modal: true,
@@ -39,8 +40,42 @@ export default class DialogController extends React.PureComponent<IDialogControl
     this.windowController.showWindow(this.dialogWindow);
   }
 
-  private handleDialogWindowCloseRequest() {
-    this.windowController.closeWindow(this.dialogWindow);
+  showErrorDialog(options: { title: string, message: string }) {
+    const dialog: IDialog = {
+      title: options.title,
+      content: options.message,
+      buttons: [
+        { key: 'ok', title: 'OK', type: 'default' },
+      ],
+      onButtonClick: button => {
+        this.windowController.closeWindow(this.dialogWindow);
+      },
+    };
+
+    this.showDialog(dialog);
+  }
+
+  showConfirmDialog(options: { title: string, message: string, buttonTitle: string, isDestructive: boolean, onConfirm: () => void }): void {
+    const dialog: IDialog = {
+      title: options.title,
+      content: options.message,
+      buttons: [
+        { key: 'cancel', title: 'Cancel', type: 'cancel' },
+        { key: 'ok', title: options.buttonTitle || 'OK', type: options.isDestructive ? 'destructive' : 'default' },
+      ],
+      onButtonClick: button => {
+        this.windowController.closeWindow(this.dialogWindow, () => {
+          if (button.key === 'ok')
+            options.onConfirm();
+        });
+      },
+    };
+
+    this.showDialog(dialog);
+  }
+
+  private handleDialogWindowButtonClick(dialog: IDialog, button: IDialogButton) {
+    dialog.onButtonClick(button);
   }
 
   render() {
