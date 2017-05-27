@@ -62,8 +62,16 @@ export class ItemModule extends BaseModule implements IItemModule {
 
   async addIssue(issue: IIssue) {
     const item = {
-      ...issue,
       kind: 'issue',
+      type: issue.type,
+      title: issue.title,
+      description: issue.description,
+      state: issue.state,
+      priority: issue.priority,
+      tags: issue.tags,
+      project: issue.project,
+      parent: issue.milestone,
+      assignedTo: issue.assignedTo,
     };
 
     issue = new Issue(await this.client.items.insert(item), this.application);
@@ -75,7 +83,19 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   async updateIssue(issueId: string, issueChange: IIssueChange) {
-    const issue = new Issue(await this.client.items.update(issueId, issueChange), this.application);
+    const itemChange = {
+      type: issueChange.type,
+      title: issueChange.title,
+      description: issueChange.description,
+      state: issueChange.state,
+      priority: issueChange.priority,
+      tags: issueChange.tags,
+      project: issueChange.project,
+      parent: issueChange.milestone,
+      assignedTo: issueChange.assignedTo,
+    };
+
+    const issue = new Issue(await this.client.items.update(issueId, itemChange), this.application);
 
     this.issues[_.findIndex(this.issues, issue => issue.id === issueId)] = issue;
 
@@ -112,8 +132,11 @@ export class ItemModule extends BaseModule implements IItemModule {
 
   async addMilestone(milestone: IMilestone) {
     const item = {
-      ...milestone,
       kind: 'milestone',
+      title: milestone.title,
+      description: milestone.description,
+      state: milestone.state,
+      project: milestone.project,
     };
 
     milestone = new Milestone(await this.client.items.insert(item), this.application);
@@ -125,7 +148,14 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   async updateMilestone(milestoneId: string, milestoneChange: IMilestoneChange) {
-    const milestone = new Milestone(await this.client.items.update(milestoneId, milestoneChange), this.application);
+    const itemChange = {
+      title: milestoneChange.title,
+      description: milestoneChange.description,
+      state: milestoneChange.state,
+      project: milestoneChange.project,
+    };
+
+    const milestone = new Milestone(await this.client.items.update(milestoneId, itemChange), this.application);
 
     this.milestones[_.findIndex(this.milestones, milestone => milestone.id === milestoneId)] = milestone;
 
