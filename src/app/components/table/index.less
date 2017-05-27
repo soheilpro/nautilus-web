@@ -23,12 +23,10 @@
     }
   }
 
-  &.focus {
-    .table-row {
-      &.selected {
-        .table-cell {
-          background-color: #e9e9e9;
-        }
+  .table-row {
+    &.selected:focus {
+      .table-cell {
+        background-color: #e9e9e9;
       }
     }
   }

@@ -38,8 +38,6 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
     super(props);
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
     this.handleItemSelect = this.handleItemSelect.bind(this);
     this.handleItemAction = this.handleItemAction.bind(this);
 
@@ -51,7 +49,7 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
   }
 
   componentDidUpdate() {
-    if ($(this.componentElement).hasClass('focus') && this.selectedChunkComponent)
+    if (this.componentElement.contains(document.activeElement) && this.selectedChunkComponent)
       this.selectedChunkComponent.focus();
   }
 
@@ -135,14 +133,6 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
     }
   }
 
-  private handleFocus() {
-    $(this.componentElement).addClass('focus');
-  }
-
-  private handleBlur() {
-    $(this.componentElement).removeClass('focus');
-  }
-
   private handleItemSelect(item: IItem) {
     if (this.props.onItemSelect)
       this.props.onItemSelect(item);
@@ -184,7 +174,7 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
     const selectedChunk = this.getSelectedChunk(this.state.chunks, this.state.selectedItem);
 
     return (
-      <table className={classNames('table-component', this.props.className)} onKeyDown={this.handleKeyDown} onFocus={this.handleFocus} onBlur={this.handleBlur} ref={e => this.componentElement = e}>
+      <table className={classNames('table-component', this.props.className)} onKeyDown={this.handleKeyDown} ref={e => this.componentElement = e}>
         <thead className="table-header">
           {
             this.props.Header &&
