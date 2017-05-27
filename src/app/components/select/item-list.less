@@ -19,14 +19,19 @@
           text-decoration: none;
           color: @text;
 
-            .icon {
-              margin-right: 8px;
-              visibility: hidden;
+          .icon {
+            margin-right: 8px;
+            visibility: hidden;
 
-              &.selected {
-                visibility: visible;
-              }
+            &.selected {
+              visibility: visible;
             }
+          }
+
+          &.empty {
+            color: @darkdarkgray;
+            text-transform: lowercase;
+          }
         }
 
         &.active {

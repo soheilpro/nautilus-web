@@ -9,6 +9,10 @@ import { ISelectItem } from './iselect-item';
 require('../../assets/stylesheets/base.less');
 require('./item-list.less');
 
+const emptySelectItem: ISelectItem = {
+  id: ''
+};
+
 interface ISelectItemListProps {
   items: ISelectItem[];
   selectedItem: ISelectItem;
@@ -33,7 +37,7 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
     this.handleItemTitleClick = this.handleItemTitleClick.bind(this);
 
     this.state = {
-      items: props.items,
+      items: [emptySelectItem, ...props.items],
     };
   }
 
@@ -42,7 +46,7 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
       return;
 
     this.setState({
-      items: props.items,
+      items: [emptySelectItem, ...props.items],
     });
   }
 
@@ -83,8 +87,8 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
 
     this.setState({
       searchText: value,
-      items: this.filterItems(this.props.items, value),
-      activeItemIndex: value ? 0 : -1,
+      items: [emptySelectItem, ...this.filterItems(this.props.items, value)],
+      activeItemIndex: value ? 1 : -1,
     });
   }
 
@@ -105,6 +109,9 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
   private handleItemTitleClick(item: ISelectItem, event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
 
+    if (item === emptySelectItem)
+      item = null;
+
     this.props.onSelect(item);
   }
 
@@ -114,7 +121,7 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
 
     text = text.toLowerCase();
 
-    return items.filter(item => item[this.props.displayProperty].toLowerCase().indexOf(text) !== -1);
+    return items.filter(item => item === emptySelectItem || (item[this.props.displayProperty] || '').toLowerCase().indexOf(text) !== -1);
   }
 
   render() {
@@ -126,9 +133,13 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
             this.state.items.map((item, index) => {
               return (
                 <div className={classNames('item', 'row', { 'active': index === this.state.activeItemIndex })} onMouseEnter={_.partial(this.handleItemMouseEnter, item)} key={item.id}>
-                  <a className="title" href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
+                  <a className={classNames('title', { empty: item === emptySelectItem }) } href="#" onClick={_.partial(this.handleItemTitleClick, item)}>
                     <Icon className={classNames('icon', { 'selected': item === this.props.selectedItem })} name="check" />
-                    {item[this.props.displayProperty]}
+                    {
+                      item !== emptySelectItem ?
+                        item[this.props.displayProperty] :
+                        '(None)'
+                    }
                   </a>
                 </div>
               );
