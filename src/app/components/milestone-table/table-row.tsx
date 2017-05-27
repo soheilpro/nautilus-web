@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import { IMilestone } from '../../application';
-import MilestoneSidField from '../milestone-sid-field';
-import MilestoneTitleField from '../milestone-title-field';
-import MilestoneProjectField from '../milestone-project-field';
-import MilestoneStateField from '../milestone-state-field';
 import { ITableRow } from '../table';
+import ItemStateField from '../item-state-field';
+import ProjectField from '../project-field';
+import SidField from '../sid-field';
+import TitleField from '../title-field';
 
 require('../../assets/stylesheets/base.less');
 require('./table-row.less');
@@ -49,16 +49,16 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
     return (
       <tr className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
         <td className="table-cell sid">
-          <MilestoneSidField milestone={this.props.item} bold={this.props.isSelected} />
+          <SidField sid={this.props.item.sid} bold={this.props.isSelected} />
         </td>
         <td className="table-cell project">
-          <MilestoneProjectField milestone={this.props.item} />
+          <ProjectField project={this.props.item.project} />
         </td>
         <td className="table-cell title">
-          <MilestoneTitleField milestone={this.props.item} />
+          <TitleField title={this.props.item.title} state={this.props.item.state} />
         </td>
         <td className="table-cell state">
-          <MilestoneStateField milestone={this.props.item} />
+          <ItemStateField itemState={this.props.item.state} />
         </td>
       </tr>
     );
