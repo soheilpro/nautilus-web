@@ -3,7 +3,6 @@ import * as NQL from '../../nql';
 import { IClient, IItem } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { BaseModule } from '../base-module';
-import { entityComparer } from '../entity-comparer';
 import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
 import { IIssueChange } from './iissue-change';
@@ -16,8 +15,10 @@ import IssueExpressionNormalizer from './issue-expression-normalizer';
 import Query from './query';
 
 export class ItemModule extends BaseModule implements IItemModule {
-  private milestones: IMilestone[];
   private issues: IIssue[];
+  private milestones: IMilestone[];
+  private issuesMap: { [id: string]: IItem };
+  private milestonesMap: { [id: string]: IItem };
 
   constructor(private application: IApplication, private client: IClient) {
     super();
@@ -26,17 +27,23 @@ export class ItemModule extends BaseModule implements IItemModule {
   async load() {
     const items = await this.client.items.getAll({});
 
-    this.milestones = [];
     this.issues = [];
+    this.milestones = [];
+    this.issuesMap = {};
+    this.milestonesMap = {};
 
     for (const item of items) {
       switch (item.kind) {
-        case 'milestone':
-          this.milestones.push(new Milestone(item, this.application));
+        case 'issue':
+          const issue = new Issue(item, this.application);
+          this.issues.push(issue);
+          this.issuesMap[issue.id] = issue;
           break;
 
-        case 'issue':
-          this.issues.push(new Issue(item, this.application));
+        case 'milestone':
+          const milestone = new Milestone(item, this.application);
+          this.milestones.push(milestone);
+          this.milestonesMap[milestone.id] = milestone;
           break;
       }
     }
@@ -57,7 +64,7 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   getIssue(item: IItem) {
-    return Promise.resolve(_.find(this.issues, _.partial(entityComparer, item)));
+    return Promise.resolve(item ? this.issuesMap[item.id] : null);
   }
 
   async addIssue(issue: IIssue) {
@@ -127,7 +134,7 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   getMilestone(item: IItem) {
-    return _.find(this.milestones, _.partial(entityComparer, item));
+    return item ? this.milestonesMap[item.id] : null;
   }
 
   async addMilestone(milestone: IMilestone) {
