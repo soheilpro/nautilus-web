@@ -20,6 +20,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
   private actionManager = ServiceManager.Instance.getActionManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private dialogController = ServiceManager.Instance.getDialogController();
+  private notificationController = ServiceManager.Instance.getNotificationController();
   private addIssueWindow: IWindow;
   private editIssueWindow: IWindow;
 
@@ -70,24 +71,50 @@ export default class IssueController extends React.PureComponent<IIssueControlle
       message: `Are you sure you want to delete issue #${issue.sid}?`,
       buttonTitle: 'Delete Issue',
       destructive: true,
-      onConfirm: () => {
-        this.actionManager.execute(new DeleteIssueAction(issue, this.application));
+      onConfirm: async () => {
+        const notification = {
+          title: 'Deleting issue...',
+        };
+
+        this.notificationController.showNotification(notification);
+
+        await this.actionManager.execute(new DeleteIssueAction(issue, this.application));
+
+        this.notificationController.hideNotification(notification);
       },
     });
   }
 
-  private handleAddIssueWindowAdd(issue: IIssue) {
-    this.actionManager.execute(new AddIssueAction(issue, this.application));
+  private async handleAddIssueWindowAdd(issue: IIssue) {
     this.windowController.closeWindow(this.addIssueWindow);
+
+    const notification = {
+      title: 'Adding issue...',
+    };
+
+    this.notificationController.showNotification(notification);
+
+    await this.actionManager.execute(new AddIssueAction(issue, this.application));
+
+    this.notificationController.hideNotification(notification);
   }
 
   private handleAddIssueWindowClose() {
     this.windowController.closeWindow(this.addIssueWindow);
   }
 
-  private handleEditIssueWindowUpdate(issue: IIssue, issueChange: IIssueChange) {
-    this.actionManager.execute(new UpdateIssueAction(issue, issueChange, this.application));
+  private async handleEditIssueWindowUpdate(issue: IIssue, issueChange: IIssueChange) {
     this.windowController.closeWindow(this.editIssueWindow);
+
+    const notification = {
+      title: 'Editing issue...',
+    };
+
+    this.notificationController.showNotification(notification);
+
+    await this.actionManager.execute(new UpdateIssueAction(issue, issueChange, this.application));
+
+    this.notificationController.hideNotification(notification);
   }
 
   private handleEditIssueWindowClose() {

@@ -21,6 +21,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
   private actionManager = ServiceManager.Instance.getActionManager();
   private windowController = ServiceManager.Instance.getWindowController();
   private dialogController = ServiceManager.Instance.getDialogController();
+  private notificationController = ServiceManager.Instance.getNotificationController();
   private addMilestoneWindow: IWindow;
   private editMilestoneWindow: IWindow;
 
@@ -88,24 +89,50 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
       message: `Are you sure you want to delete milestone #${milestone.sid}?`,
       buttonTitle: 'Delete Milestone',
       destructive: true,
-      onConfirm: () => {
-        this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
+      onConfirm: async () => {
+        const notification = {
+          title: 'Deleting milestone...',
+        };
+
+        this.notificationController.showNotification(notification);
+
+        await this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
+
+        this.notificationController.hideNotification(notification);
       },
     });
   }
 
-  private handleAddMilestoneWindowAdd(milestone: IMilestone) {
-    this.actionManager.execute(new AddMilestoneAction(milestone, this.application));
+  private async handleAddMilestoneWindowAdd(milestone: IMilestone) {
     this.windowController.closeWindow(this.addMilestoneWindow);
+
+    const notification = {
+      title: 'Adding milestone...',
+    };
+
+    this.notificationController.showNotification(notification);
+
+    await this.actionManager.execute(new AddMilestoneAction(milestone, this.application));
+
+    this.notificationController.hideNotification(notification);
   }
 
   private handleAddMilestoneWindowClose() {
     this.windowController.closeWindow(this.addMilestoneWindow);
   }
 
-  private handleEditMilestoneWindowUpdate(milestone: IMilestone, milestoneChange: IMilestoneChange) {
-    this.actionManager.execute(new UpdateMilestoneAction(milestone, milestoneChange, this.application));
+  private async handleEditMilestoneWindowUpdate(milestone: IMilestone, milestoneChange: IMilestoneChange) {
     this.windowController.closeWindow(this.editMilestoneWindow);
+
+    const notification = {
+      title: 'Updating milestone...',
+    };
+
+    this.notificationController.showNotification(notification);
+
+    await this.actionManager.execute(new UpdateMilestoneAction(milestone, milestoneChange, this.application));
+
+    this.notificationController.hideNotification(notification);
   }
 
   private handleEditMilestoneWindowClose() {
