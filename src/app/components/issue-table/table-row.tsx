@@ -59,7 +59,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
         <td className="table-cell title">
           <TitleField title={this.props.item.title} state={this.props.item.state} />
           {
-            this.props.item.state && this.props.item.state.key !== 'closed' &&
+            (!this.props.item.state || this.props.item.state.key !== 'closed') &&
               <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
           }
         </td>
