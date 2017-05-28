@@ -10,7 +10,7 @@ export default class AddMilestoneAction extends BaseAction {
     this.milestone = await this.application.items.addMilestone(this.milestone);
   }
 
-  undo() {
-    this.application.items.deleteMilestone(this.milestone);
+  async undo() {
+    await this.application.items.deleteMilestone(this.milestone);
   }
 }

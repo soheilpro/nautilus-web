@@ -1,4 +1,4 @@
 export interface IAction {
-  execute(): void;
-  undo(): void;
+  execute(): Promise<void>;
+  undo(): Promise<void>;
 }

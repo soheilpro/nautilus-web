@@ -8,13 +8,13 @@ export class ActionManager implements IActionManager {
     return this.actions;
   }
 
-  execute(action: IAction) {
-    action.execute();
+  async execute(action: IAction) {
+    await action.execute();
     this.actions.push(action);
   }
 
-  undo(): void {
+  async undo() {
     const lastAction = this.actions.pop();
-    lastAction.undo();
+    await lastAction.undo();
   }
 }

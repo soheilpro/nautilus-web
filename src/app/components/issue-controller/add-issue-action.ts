@@ -10,7 +10,7 @@ export default class AddIssueAction extends BaseAction {
     this.issue = await this.application.items.addIssue(this.issue);
   }
 
-  undo() {
-    this.application.items.deleteIssue(this.issue);
+  async undo() {
+    await this.application.items.deleteIssue(this.issue);
   }
 }

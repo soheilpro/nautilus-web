@@ -10,6 +10,6 @@ export default class UpdateMilestoneAction extends BaseAction {
     this.milestone = await this.application.items.updateMilestone(this.milestone.id, this.milestoneChange);
   }
 
-  undo() {
+  async undo() {
   }
 }

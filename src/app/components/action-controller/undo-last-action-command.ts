@@ -21,7 +21,7 @@ export default class UndoLastActionCommand extends BaseCommand {
     return this.actionManager.getActions().length > 0;
   }
 
-  execute() {
-    this.actionManager.undo();
+  async execute() {
+    await this.actionManager.undo();
   }
 }

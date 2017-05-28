@@ -1,8 +1,8 @@
 import { IAction } from './iaction';
 
 export abstract class BaseAction implements IAction {
-  abstract execute(): void;
+  abstract execute(): Promise<void>
 
-  undo(): void {
-  };
+  async undo() {
+  }
 }
