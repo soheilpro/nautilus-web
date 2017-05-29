@@ -5,6 +5,7 @@ import { ServiceManager } from '../../services';
 import Table from '../table';
 import TableHeader from './table-header';
 import TableRow from './table-row';
+import TableFooter from './table-footer';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -63,7 +64,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
 
   render() {
     return (
-      <Table className={classNames('issue-table-component', this.props.className)} items={this.props.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
+      <Table className={classNames('issue-table-component', this.props.className)} items={this.props.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} Footer={TableFooter} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };

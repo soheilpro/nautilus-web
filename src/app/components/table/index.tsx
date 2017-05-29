@@ -4,6 +4,7 @@ import { KeyCode } from '../../keyboard';
 import { IItem } from './iitem';
 import TableHeader from './table-header';
 import TableRow from './table-row';
+import TableFooter from './table-footer';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -17,8 +18,9 @@ interface IChunk {
 interface ITableProps {
   items: IItem[];
   selectedItem?: IItem;
-  Header: typeof TableHeader;
+  Header?: typeof TableHeader;
   Row: typeof TableRow;
+  Footer?: typeof TableFooter;
   className?: string;
   onItemSelect?(item: IItem): void;
   onItemAction?(item: IItem): void;
@@ -190,6 +192,12 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
             );
           })
         }
+        <tfoot className="table-footer">
+          {
+            this.props.Footer &&
+              <this.props.Footer items={this.props.items} />
+          }
+        </tfoot>
       </table>
     );
   }
