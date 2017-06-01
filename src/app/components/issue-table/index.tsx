@@ -18,6 +18,7 @@ interface IIssueTableProps {
 }
 
 interface IIssueTableState {
+  issues?: IIssue[];
   selectedIssue?: IIssue;
 }
 
@@ -32,6 +33,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
     this.handleTableItemDelete = this.handleTableItemDelete.bind(this);
 
     this.state = {
+      issues: this.makeTree(props.issues),
       selectedIssue: props.selectedIssue,
     };
   }
@@ -41,6 +43,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
       return;
 
     this.setState({
+      issues: this.makeTree(props.issues),
       selectedIssue: props.selectedIssue,
     });
   }
@@ -62,9 +65,44 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
     return this.issueController.deleteIssue(issue);
   }
 
+  private makeTree(issues: IIssue[]) {
+    // This method turns an ordered list of issues into a tree-like list where each sub-issue
+    // is placed after its parent (and after any other sub-issues to preserve original order)
+
+    issues = [...issues];
+
+    const subIssues = issues.filter(issue => issue.parent);
+
+    for (const subIssue of subIssues) {
+      const parent = subIssue.parent;
+      const subIssueIndex = issues.indexOf(subIssue);
+      const parentIndex = issues.indexOf(parent);
+
+      // Sub-issue must be placed after its parent
+      let newSubIssueIndex = parentIndex + 1;
+
+      // But after all other sub-issues so that the original list order is preserved
+      while (issues[newSubIssueIndex].parent === parent)
+        newSubIssueIndex++;
+
+      if (newSubIssueIndex < subIssueIndex) {
+        // Since sub-issue must be moved up, removing it first will not change the new position
+        issues.splice(subIssueIndex, 1); // Remove
+        issues.splice(newSubIssueIndex, 0, subIssue); // Add
+      }
+      else {
+        // Since sub-issue must be moved down, adding it first will not change the old position
+        issues.splice(newSubIssueIndex, 0, subIssue); // Add
+        issues.splice(subIssueIndex, 1); // Remove
+      }
+    }
+
+    return issues;
+  }
+
   render() {
     return (
-      <Table className={classNames('issue-table-component', this.props.className)} items={this.props.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} Footer={TableFooter} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
+      <Table className={classNames('issue-table-component', this.props.className)} items={this.state.issues} selectedItem={this.state.selectedIssue} Header={TableHeader} Row={TableRow} Footer={TableFooter} onItemSelect={this.handleTableItemSelect} onItemAction={this.handleTableItemAction} onItemDelete={this.handleTableItemDelete} />
     );
   }
 };

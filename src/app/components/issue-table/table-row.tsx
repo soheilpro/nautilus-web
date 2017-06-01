@@ -6,7 +6,7 @@ import ItemPriorityField from '../item-priority-field';
 import ItemPriorityIndicator from '../item-priority-indicator';
 import ItemStateField from '../item-state-field';
 import ItemTypeField from '../item-type-field';
-import MilestoneField from '../milestone-field';
+// import MilestoneField from '../milestone-field';
 import ProjectField from '../project-field';
 import SidField from '../sid-field';
 import TitleField from '../title-field';
@@ -50,13 +50,36 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
       this.props.onAction(this.props.item);
   }
 
+  private getIndentationLevel() {
+    let indentationLevel = 0;
+
+    let parent = this.props.item.parent;
+
+    while (parent) {
+      indentationLevel++;
+      parent = parent.parent;
+    }
+
+    return indentationLevel;
+  }
+
   render() {
+    let indentationLevel = this.getIndentationLevel();
+
     return (
       <tr className={classNames('table-row-component', 'table-row', { 'selected': this.props.isSelected })} tabIndex={0} onClick={this.handleClick} onDoubleClick={this.handleDoubleClick} ref={e => this.componentElement = e}>
         <td className="table-cell sid">
           <SidField sid={this.props.item.sid} bold={this.props.isSelected} />
         </td>
         <td className="table-cell title">
+          {
+            indentationLevel > 0 &&
+              <span className="indentation" style={{paddingLeft: indentationLevel * 10}}></span>
+          }
+          {
+            indentationLevel > 0 &&
+              <span className="arrow"></span>
+          }
           <TitleField title={this.props.item.title} state={this.props.item.state} />
           {
             (!this.props.item.state || this.props.item.state.key !== 'closed') &&
@@ -79,7 +102,8 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
           <UserField user={this.props.item.assignedTo} />
         </td>
         <td className="table-cell milestone">
-          <MilestoneField milestone={this.props.item.milestone} />
+          {/*<MilestoneField milestone={this.props.item.milestone} />*/}
+          {this.props.item.parent && this.props.item.parent.sid}
         </td>
       </tr>
     );

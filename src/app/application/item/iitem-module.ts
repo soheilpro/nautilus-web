@@ -9,6 +9,7 @@ import { IMilestoneChange } from './imilestone-change';
 export interface IItemModule extends IModule {
   getAllIssues(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]): Promise<IItem[]>;
   getIssue(item: IItem): Promise<IItem>;
+  getIssueSync(item: IItem): IItem;
   addIssue(issue: IIssue): Promise<IIssue>;
   updateIssue(issueId: string, issueChange: IIssueChange): Promise<IIssue>;
   deleteIssue(issue: IIssue): Promise<void>;

@@ -67,6 +67,10 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(item ? this.issuesMap[item.id] : null);
   }
 
+  getIssueSync(item: IItem) {
+    return item ? this.issuesMap[item.id] : null;
+  }
+
   async addIssue(issue: IIssue) {
     const item = {
       kind: 'issue',

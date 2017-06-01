@@ -55,7 +55,7 @@ export default class Issue implements IIssue {
   }
 
   get parent() {
-    return null as IIssue;
+    return this.application.items.getIssueSync(this.item.parent);
   }
 
   get milestone() {
