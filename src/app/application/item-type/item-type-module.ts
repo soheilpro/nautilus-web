@@ -27,6 +27,9 @@ export class ItemTypeModule extends BaseModule implements IItemTypeModule {
   }
 
   get(itemType: IItemType) {
+    if (!itemType)
+      return null;
+
     return this.itemTypesMap[itemType.id];
   }
 }

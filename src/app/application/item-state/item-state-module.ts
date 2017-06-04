@@ -27,6 +27,9 @@ export class ItemStateModule extends BaseModule implements IItemStateModule {
   }
 
   get(itemState: IItemState) {
+    if (!itemState)
+      return null;
+
     return this.itemStatesMap[itemState.id];
   }
 }

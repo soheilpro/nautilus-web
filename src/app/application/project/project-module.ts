@@ -25,6 +25,9 @@ export class ProjectModule extends BaseModule implements IProjectModule {
   }
 
   get(project: IProject) {
+    if (!project)
+      return null;
+
     return this.projectsMap[project.id];
   }
 }

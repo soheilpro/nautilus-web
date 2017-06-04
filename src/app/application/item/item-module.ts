@@ -78,10 +78,6 @@ export class ItemModule extends BaseModule implements IItemModule {
     return Promise.resolve(item ? this.issuesMap[item.id] : null);
   }
 
-  getIssueSync(item: IItem) {
-    return item ? this.issuesMap[item.id] : null;
-  }
-
   getIssueParent(issue: IIssue) {
     const relationship = _.find(this.relationship1Map[issue.id], relationship => relationship.type === 'parent');
 
@@ -166,8 +162,20 @@ export class ItemModule extends BaseModule implements IItemModule {
     return milestones;
   }
 
-  getMilestone(item: IItem) {
-    return item ? this.milestonesMap[item.id] : null;
+  getMilestone(milestone: IItem) {
+    if (!milestone)
+      return null;
+
+    return this.milestonesMap[milestone.id];
+  }
+
+  getMilestoneParent(milestone: IMilestone) {
+    const relationship = _.find(this.relationship1Map[milestone.id], relationship => relationship.type === 'parent');
+
+    if (!relationship)
+      return null;
+
+    return this.milestonesMap[relationship.item2.id];
   }
 
   async addMilestone(milestone: IMilestone) {

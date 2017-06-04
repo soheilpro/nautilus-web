@@ -25,6 +25,9 @@ export class UserModule extends BaseModule implements IUserModule {
   }
 
   get(user: IUser) {
+    if (!user)
+      return null;
+
     return this.usersMap[user.id];
   }
 }

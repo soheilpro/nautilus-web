@@ -27,6 +27,9 @@ export class ItemPriorityModule extends BaseModule implements IItemPriorityModul
   }
 
   get(itemPriority: IItemPriority) {
+    if (!itemPriority)
+      return null;
+
     return this.itemPrioritiesMap[itemPriority.id];
   }
 }

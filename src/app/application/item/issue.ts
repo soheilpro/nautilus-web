@@ -1,8 +1,19 @@
-import { IItem } from '../../sdk';
+import { IItem, IItemType, IItemState, IItemPriority, IProject, IUser } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { IIssue } from './iissue';
+import { IMilestone } from './imilestone';
 
 export default class Issue implements IIssue {
+  private _type: IItemType;
+  private _state: IItemState;
+  private _priority: IItemPriority;
+  private _project: IProject;
+  private _assignedTo: IUser;
+  private _createdBy: IUser;
+  private _modifiedBy: IUser;
+  private _parent: IIssue;
+  private _milestone: IMilestone;
+
   constructor(private item: IItem, private application: IApplication) {
   }
 
@@ -15,10 +26,10 @@ export default class Issue implements IIssue {
   }
 
   get type() {
-    if (!this.item.type)
-      return null;
+    if (this._type === undefined)
+      this._type = this.application.itemTypes.get(this.item.type) || null;
 
-    return this.application.itemTypes.get(this.item.type);
+    return this._type;
   }
 
   get title() {
@@ -30,17 +41,17 @@ export default class Issue implements IIssue {
   }
 
   get state() {
-    if (!this.item.state)
-      return null;
+    if (this._state === undefined)
+      this._state = this.application.itemStates.get(this.item.state) || null;
 
-    return this.application.itemStates.get(this.item.state);
+    return this._state;
   }
 
   get priority() {
-    if (!this.item.priority)
-      return null;
+    if (this._priority === undefined)
+      this._priority = this.application.itemPriorities.get(this.item.priority) || null;
 
-    return this.application.itemPriorities.get(this.item.priority);
+    return this._priority;
   }
 
   get tags() {
@@ -48,39 +59,45 @@ export default class Issue implements IIssue {
   }
 
   get project() {
-    if (!this.item.project)
-      return null;
+    if (this._project === undefined)
+      this._project =  this.application.projects.get(this.item.project) || null;
 
-    return this.application.projects.get(this.item.project);
-  }
-
-  get parent() {
-    return this.application.items.getIssueParent(this.item);
-  }
-
-  get milestone() {
-    return this.application.items.getIssueMilestone(this.item);
+    return this._project;
   }
 
   get assignedTo() {
-    if (!this.item.assignedTo)
-      return null;
+    if (this._assignedTo === undefined)
+      this._assignedTo = this.application.users.get(this.item.assignedTo) || null;
 
-    return this.application.users.get(this.item.assignedTo);
+    return this._assignedTo;
   }
 
   get createdBy() {
-    if (!this.item.createdBy)
-      return null;
+    if (this._createdBy === undefined)
+      this._createdBy = this.application.users.get(this.item.createdBy) || null;
 
-    return this.application.users.get(this.item.createdBy);
+    return this._createdBy;
   }
 
   get modifiedBy() {
-    if (!this.item.modifiedBy)
-      return null;
+    if (this._modifiedBy === undefined)
+      this._modifiedBy = this.application.users.get(this.item.modifiedBy) || null;
 
-    return this.application.users.get(this.item.modifiedBy);
+    return this._modifiedBy;
+  }
+
+  get parent() {
+    if (this._parent === undefined)
+      this._parent = this.application.items.getIssueParent(this.item) || null;
+
+    return this._parent;
+  }
+
+  get milestone() {
+    if (this._milestone === undefined)
+      this._milestone = this.application.items.getIssueMilestone(this.item) || null;
+
+    return this._milestone;
   }
 
   toJSON() {
@@ -94,11 +111,11 @@ export default class Issue implements IIssue {
       priority: this.priority,
       tags: this.tags,
       project: this.project,
-      parent: this.parent,
-      milestone: this.milestone,
       assignedTo: this.assignedTo,
       createdBy: this.createdBy,
       modifiedBy: this.modifiedBy,
+      parent: this.parent,
+      milestone: this.milestone,
     };
   }
 }
