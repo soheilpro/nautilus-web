@@ -1,4 +1,5 @@
 import { IClient } from './iclient';
+import { IItemRelationshipService, ItemRelationshipService } from './item-relationship';
 import { ItemPriorityService, IItemPriorityService } from './item-priority';
 import { ItemService, IItemService } from './item';
 import { ItemStateService, IItemStateService } from './item-state';
@@ -21,6 +22,7 @@ export class Client implements IClient {
   itemStates: IItemStateService;
   itemTypes: IItemTypeService;
   items: IItemService;
+  itemRelationships: IItemRelationshipService;
 
   constructor({ address }: IClientConfig) {
     this.address = address;
@@ -31,5 +33,6 @@ export class Client implements IClient {
     this.itemStates = new ItemStateService(this);
     this.itemTypes = new ItemTypeService(this);
     this.items = new ItemService(this);
+    this.itemRelationships = new ItemRelationshipService(this);
   }
 }
