@@ -16,7 +16,9 @@ export class ItemPriorityModule extends BaseModule implements IItemPriorityModul
   }
 
   async load() {
-    this.itemPriorities = _.sortBy(await this.client.itemPriorities.getAll({}), itemPriority => itemPriority.order);
+    const result = await this.client.itemPriorities.get(null);
+
+    this.itemPriorities = _.sortBy(result.entities, itemPriority => itemPriority.order);
     this.itemPrioritiesMap = ArrayHelper.toMap(this.itemPriorities, itemPriority => itemPriority.id);
   }
 

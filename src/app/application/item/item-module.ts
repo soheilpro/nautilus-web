@@ -1,7 +1,8 @@
 import * as _ from 'underscore';
 import * as NQL from '../../nql';
-import { IClient, IItem } from '../../sdk';
+import { IClient, IItem, IItemRelationship } from '../../sdk';
 import { IApplication } from '../iapplication';
+import { entityComparer } from '../entity-comparer';
 import { BaseModule } from '../base-module';
 import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
@@ -19,20 +20,22 @@ export class ItemModule extends BaseModule implements IItemModule {
   private milestones: IMilestone[];
   private issuesMap: { [id: string]: IItem };
   private milestonesMap: { [id: string]: IItem };
+  private relationships: IItemRelationship[];
 
   constructor(private application: IApplication, private client: IClient) {
     super();
   }
 
   async load() {
-    const items = await this.client.items.getAll({});
+    const result = await this.client.items.get(null, ['relationships']);
 
     this.issues = [];
     this.milestones = [];
     this.issuesMap = {};
     this.milestonesMap = {};
+    this.relationships = result.relationships;
 
-    for (const item of items) {
+    for (const item of result.entities) {
       switch (item.kind) {
         case 'issue':
           const issue = new Issue(item, this.application);
@@ -69,6 +72,24 @@ export class ItemModule extends BaseModule implements IItemModule {
 
   getIssueSync(item: IItem) {
     return item ? this.issuesMap[item.id] : null;
+  }
+
+  getIssueParent(issue: IIssue) {
+    const relationship = _.find(this.relationships, relationship => relationship.type === 'parent' && entityComparer(relationship.item1, issue));
+
+    if (!relationship)
+      return null;
+
+    return this.issuesMap[relationship.item2.id];
+  }
+
+  getIssueMilestone(issue: IIssue) {
+    const relationship = _.find(this.relationships, relationship => relationship.type === 'milestone' && entityComparer(relationship.item1, issue));
+
+    if (!relationship)
+      return null;
+
+    return this.milestonesMap[relationship.item2.id];
   }
 
   async addIssue(issue: IIssue) {

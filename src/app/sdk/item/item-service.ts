@@ -2,20 +2,22 @@ import { ServiceBase } from '../service-base';
 import { IItem } from './iitem';
 import { IItemChange } from './iitem-change';
 import { IItemFilter } from './iitem-filter';
+import { IItemGetResult } from './iitem-get-result';
+
 import { IItemService } from './iitem-service';
 
-export class ItemService extends ServiceBase<IItem, IItemFilter, IItemChange> implements IItemService {
+export class ItemService extends ServiceBase<IItem, IItemFilter, IItemChange, IItemGetResult> implements IItemService {
   basePath(): string {
     return '/items';
   }
 
-  filterToParams(filter: IItemFilter): Object {
+  serializeFilter(filter: IItemFilter): Object {
     return {
-      type: filter.type
+      type: filter.type,
     };
   }
 
-  entityToParams(entity: IItem): Object {
+  serializeEntity(entity: IItem): Object {
     return {
       kind: entity.kind,
       type_id: this.toId(entity.type),
@@ -25,12 +27,11 @@ export class ItemService extends ServiceBase<IItem, IItemFilter, IItemChange> im
       priority_id: this.toId(entity.priority),
       tags: entity.tags ? entity.tags.join(' ') : undefined,
       project_id: this.toId(entity.project),
-      parent_id: this.toId(entity.parent),
       assigned_to_id: this.toId(entity.assignedTo),
     };
   }
 
-  changeToParams(change: IItemChange): Object {
+  serializeChange(change: IItemChange): Object {
     return {
       type_id: this.toId(change.type),
       title: change.title,
@@ -39,8 +40,16 @@ export class ItemService extends ServiceBase<IItem, IItemFilter, IItemChange> im
       priority_id: this.toId(change.priority),
       tags: change.tags ? change.tags.join(' ') : undefined,
       project_id: this.toId(change.project),
-      parent_id: this.toId(change.parent),
       assigned_to_id: this.toId(change.assignedTo),
     };
+  }
+
+  protected deserializeGetResult(data: any): IItemGetResult {
+    const result: IItemGetResult = {
+      ...super.deserializeGetResult(data),
+      relationships: data.supplements.relationships,
+    };
+
+    return result;
   }
 }

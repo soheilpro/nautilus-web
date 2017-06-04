@@ -2,22 +2,23 @@ import { ServiceBase } from '../service-base';
 import { ISession } from './isession';
 import { ISessionChange } from './isession-change';
 import { ISessionFilter } from './isession-filter';
+import { ISessionGetResult } from './isession-get-result';
 import { ISessionService } from './isession-service';
 
-export class SessionService extends ServiceBase<ISession, ISessionFilter, ISessionChange> implements ISessionService {
+export class SessionService extends ServiceBase<ISession, ISessionFilter, ISessionChange, ISessionGetResult> implements ISessionService {
   basePath(): string {
     return '/sessions';
   }
 
-  filterToParams(filter: ISessionFilter): Object {
+  serializeFilter(filter: ISessionFilter): Object {
     return undefined;
   }
 
-  entityToParams(entity: ISession): Object {
+  serializeEntity(entity: ISession): Object {
     return undefined;
   }
 
-  changeToParams(change: ISessionChange): Object {
+  serializeChange(change: ISessionChange): Object {
     return undefined;
   }
 
@@ -27,8 +28,8 @@ export class SessionService extends ServiceBase<ISession, ISessionFilter, ISessi
       path: this.basePath(),
       params: {
         username: username,
-        password: password
-      }
+        password: password,
+      },
     };
 
     return this.invoke(options);

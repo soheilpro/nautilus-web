@@ -1,11 +1,20 @@
 import * as _ from 'underscore';
 import axios, { AxiosRequestConfig } from 'axios';
+import { IService } from './iservice';
 import { IChange } from './ichange';
 import { IClient } from './iclient';
 import { IEntity } from './ientity';
 import { IFilter } from './ifilter';
+import { IGetResult } from './iget-result';
 
-export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange> {
+export interface IInvokeOptions {
+  method: string;
+  path: string;
+  query?: Object;
+  data?: Object;
+}
+
+export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilter, TChange extends IChange, TGetResult extends IGetResult<TEntity>> implements IService<TEntity, TFilter, TChange, TGetResult> {
   private client: IClient;
 
   constructor(client: IClient) {
@@ -13,78 +22,85 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
   }
 
   abstract basePath(): string;
-  abstract filterToParams(filter: TFilter): Object;
-  abstract entityToParams(entity: TEntity): Object;
-  abstract changeToParams(change: TChange): Object;
 
-  getAll(filter: TFilter): Promise<TEntity[]> {
-    const options = {
-      method: 'GET',
-      path: this.basePath(),
-      params: this.filterToParams(filter)
+  abstract serializeFilter(filter: TFilter): Object;
+
+  abstract serializeEntity(entity: TEntity): Object;
+
+  abstract serializeChange(change: TChange): Object;
+
+  protected deserializeGetResult(data: any): TGetResult {
+    const result: IGetResult<TEntity> = {
+      entities: data.data as TEntity[],
     };
 
-    return this.invoke(options);
+    return result as TGetResult;
   }
 
-  get(filter: TFilter): Promise<TEntity> {
-    const options = {
+  async get(filter: TFilter, supplement?: string[]) {
+    const invokeOptions: IInvokeOptions = {
       method: 'GET',
       path: this.basePath(),
-      params: this.filterToParams(filter)
+      query: {
+        ...(filter ? this.serializeFilter(filter) : {}),
+        ...{supplement},
+      },
     };
 
-    return this.invoke(options);
+    const data = (await this.invoke(invokeOptions)).data;
+
+    return this.deserializeGetResult(data);
   }
 
-  insert(entity: TEntity): Promise<TEntity> {
-    const options = {
+  async insert(entity: TEntity) {
+    const invokeOptions: IInvokeOptions = {
       method: 'POST',
       path: this.basePath(),
-      params: this.entityToParams(entity)
+      data: this.serializeEntity(entity),
     };
 
-    return this.invoke(options);
+    return (await this.invoke(invokeOptions)).data.data;
   }
 
-  update(id: string, change: TChange): Promise<TEntity> {
-    const options = {
+  async update(id: string, change: TChange) {
+    const invokeOptions: IInvokeOptions = {
       method: 'PATCH',
-      path: this.basePath() + '/' + id,
-      params: this.changeToParams(change)
+      path: `${this.basePath()}/${id}`,
+      data: this.serializeChange(change),
     };
 
-    return this.invoke(options);
+    return (await this.invoke(invokeOptions)).data.data;
   }
 
-  delete(id: string): Promise<void> {
-    const options = {
+  delete(id: string) {
+    const invokeOptions: IInvokeOptions = {
       method: 'DELETE',
-      path: this.basePath() + '/' + id
+      path: `${this.basePath()}/${id}`,
     };
 
-    return this.invoke(options);
+    return this.invoke(invokeOptions);
   }
 
-  protected invoke(options: {method: string, path: string; params?: Object}): Promise<any> {
+  protected invoke(options: IInvokeOptions) {
     const config: AxiosRequestConfig = {
       method: options.method,
       url: this.client.address + options.path,
-      data: _.pick(options.params, (value: any) => value !== undefined),
-      validateStatus: () => true
+      params: _.pick(options.query, (value: any) => value !== undefined),
+      data: _.pick(options.data, (value: any) => value !== undefined),
+      validateStatus: () => true,
     };
 
     if (this.client.session) {
       config.auth = {
         username: this.client.session.accessToken,
-        password: '-'
+        password: '-',
       };
     }
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
       try {
         const result = await axios.request(config);
-        resolve(result.data.data);
+        resolve(result);
       }
       catch (error) {
         reject(error);
@@ -92,7 +108,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
     });
   }
 
-  protected toId(object: IEntity): string {
+  protected toId(object: IEntity) {
     if (object === undefined)
       return undefined;
 
@@ -102,11 +118,11 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
     return object.id;
   }
 
-  protected toIdArray(entities: IEntity[]): string {
+  protected toIdArray(entities: IEntity[]) {
     if (!entities)
       return undefined;
 
-    const result = entities.map<IEntity>(this.toId.bind(this));
+    const result = entities.map(this.toId.bind(this));
 
     if (result.length === 0)
       return undefined;

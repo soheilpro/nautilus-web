@@ -14,7 +14,9 @@ export class ProjectModule extends BaseModule implements IProjectModule {
   }
 
   async load() {
-    this.projects = _.sortBy(await this.client.projects.getAll({}), project => project.name);
+    const result = await this.client.projects.get(null);
+
+    this.projects = _.sortBy(result.entities, project => project.name);
     this.projectsMap = ArrayHelper.toMap(this.projects, project => project.id);
   }
 

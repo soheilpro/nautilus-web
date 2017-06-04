@@ -6,7 +6,7 @@ import ItemPriorityField from '../item-priority-field';
 import ItemPriorityIndicator from '../item-priority-indicator';
 import ItemStateField from '../item-state-field';
 import ItemTypeField from '../item-type-field';
-// import MilestoneField from '../milestone-field';
+import MilestoneField from '../milestone-field';
 import ProjectField from '../project-field';
 import SidField from '../sid-field';
 import TitleField from '../title-field';
@@ -102,8 +102,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
           <UserField user={this.props.item.assignedTo} />
         </td>
         <td className="table-cell milestone">
-          {/*<MilestoneField milestone={this.props.item.milestone} />*/}
-          {this.props.item.parent && this.props.item.parent.sid}
+          <MilestoneField milestone={this.props.item.milestone} />
         </td>
       </tr>
     );

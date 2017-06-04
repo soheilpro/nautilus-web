@@ -9,6 +9,5 @@ export interface IItemChange extends IChange {
   priority?: IEntity;
   tags?: string[];
   project?: IEntity;
-  parent?: IEntity;
   assignedTo?: IEntity;
 }

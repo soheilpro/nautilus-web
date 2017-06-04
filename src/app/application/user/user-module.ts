@@ -14,7 +14,9 @@ export class UserModule extends BaseModule implements IUserModule {
   }
 
   async load() {
-    this.users = _.sortBy(await this.client.users.getAll({}), user => user.name);
+    const result = await this.client.users.get(null);
+
+    this.users = _.sortBy(result.entities, user => user.name);
     this.usersMap = ArrayHelper.toMap(this.users, user => user.id);
   }
 

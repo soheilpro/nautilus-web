@@ -2,33 +2,34 @@ import { ServiceBase } from '../service-base';
 import { IUser } from './iuser';
 import { IUserChange } from './iuser-change';
 import { IUserFilter } from './iuser-filter';
+import { IUserGetResult } from './iuser-get-result';
 import { IUserPermission } from './iuser-permission';
 import { IUserService } from './iuser-service';
 
-export class UserService extends ServiceBase<IUser, IUserFilter, IUserChange> implements IUserService {
+export class UserService extends ServiceBase<IUser, IUserFilter, IUserChange, IUserGetResult> implements IUserService {
   basePath(): string {
     return '/users';
   }
 
-  filterToParams(filter: IUserFilter): Object {
+  serializeFilter(filter: IUserFilter): Object {
     return {
-      username: filter.username
+      username: filter.username,
     };
   }
 
-  entityToParams(entity: IUser): Object {
+  serializeEntity(entity: IUser): Object {
     return {
       username: entity.username,
       name: entity.name,
-      email: entity.email
+      email: entity.email,
     };
   }
 
-  changeToParams(change: IUserChange): Object {
+  serializeChange(change: IUserChange): Object {
     return {
       username: change.username,
       name: change.name,
-      email: change.email
+      email: change.email,
     };
   }
 

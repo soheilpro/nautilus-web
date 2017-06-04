@@ -55,11 +55,11 @@ export default class Issue implements IIssue {
   }
 
   get parent() {
-    return this.application.items.getIssueSync(this.item.parent);
+    return this.application.items.getIssueParent(this.item);
   }
 
   get milestone() {
-    return this.application.items.getMilestone(this.item.parent);
+    return this.application.items.getIssueMilestone(this.item);
   }
 
   get assignedTo() {

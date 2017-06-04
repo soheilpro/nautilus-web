@@ -39,13 +39,17 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
   }
 
   componentWillReceiveProps(props: IIssueTableProps) {
-    if (this.props.issues === props.issues && this.props.selectedIssue === props.selectedIssue)
-      return;
+    if (this.props.issues !== props.issues) {
+      this.setState({
+        issues: this.makeTree(props.issues),
+      });
+    }
 
-    this.setState({
-      issues: this.makeTree(props.issues),
-      selectedIssue: props.selectedIssue,
-    });
+    if (this.props.selectedIssue !== props.selectedIssue) {
+      this.setState({
+        selectedIssue: props.selectedIssue,
+      });
+    }
   }
 
   private handleTableItemSelect(issue: IIssue) {
@@ -66,38 +70,39 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
   }
 
   private makeTree(issues: IIssue[]) {
-    // This method turns an ordered list of issues into a tree-like list where each sub-issue
-    // is placed after its parent (and after any other sub-issues to preserve original order)
-
-    issues = [...issues];
-
-    const subIssues = issues.filter(issue => issue.parent);
-
-    for (const subIssue of subIssues) {
-      const parent = subIssue.parent;
-      const subIssueIndex = issues.indexOf(subIssue);
-      const parentIndex = issues.indexOf(parent);
-
-      // Sub-issue must be placed after its parent
-      let newSubIssueIndex = parentIndex + 1;
-
-      // But after all other sub-issues so that the original list order is preserved
-      while (issues[newSubIssueIndex].parent === parent)
-        newSubIssueIndex++;
-
-      if (newSubIssueIndex < subIssueIndex) {
-        // Since sub-issue must be moved up, removing it first will not change the new position
-        issues.splice(subIssueIndex, 1); // Remove
-        issues.splice(newSubIssueIndex, 0, subIssue); // Add
-      }
-      else {
-        // Since sub-issue must be moved down, adding it first will not change the old position
-        issues.splice(newSubIssueIndex, 0, subIssue); // Add
-        issues.splice(subIssueIndex, 1); // Remove
-      }
+    interface IIssueWithChildren extends IIssue {
+      __children: IIssue[];
     }
 
-    return issues;
+    // First find all sub-issues and add them as children to their parents
+    const subIssues = issues.filter(issue => !!issue.parent);
+
+    for (const subIssue of subIssues) {
+      const parent = subIssue.parent as IIssueWithChildren;
+      parent.__children = (parent.__children || []).concat(subIssue);
+
+      const subIssueIndex = issues.indexOf(subIssue);
+      issues.splice(subIssueIndex, 1);
+    }
+
+    // Now recursively turn that tree into a flat list
+    function flatten(issues: IIssue[]) {
+      let result: IIssue[] = [];
+
+      for (const issue of issues as IIssueWithChildren[]) {
+        result = [
+          ...result,
+          issue,
+          ...(issue.__children ? flatten(issue.__children) : []),
+        ];
+
+        issue.__children = undefined;
+      }
+
+      return result;
+    }
+
+    return flatten(issues);
   }
 
   render() {
