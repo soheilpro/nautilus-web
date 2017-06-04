@@ -7,7 +7,7 @@ export default class UpdateIssueAction extends BaseAction {
   }
 
   async execute() {
-    this.issue = await this.application.items.updateIssue(this.issue.id, this.issueChange);
+    this.issue = await this.application.items.updateIssue(this.issue, this.issueChange);
   }
 
   async undo() {

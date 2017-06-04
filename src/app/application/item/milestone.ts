@@ -7,7 +7,6 @@ export default class Milestone implements IMilestone {
   private _project: IProject;
   private _createdBy: IUser;
   private _modifiedBy: IUser;
-  private _parent: IMilestone;
 
   constructor(private item: IItem, private application: IApplication) {
   }
@@ -65,13 +64,6 @@ export default class Milestone implements IMilestone {
     return this._modifiedBy;
   }
 
-  get parent() {
-    if (this._parent === undefined)
-      this._parent = this.application.items.getMilestoneParent(this.item) || null;
-
-    return this._parent;
-  }
-
   toJSON() {
     return {
       id: this.id,
@@ -81,7 +73,6 @@ export default class Milestone implements IMilestone {
       description: this.description,
       state: this.state,
       project: this.project,
-      parent: this.parent,
       createdBy: this.createdBy,
       modifiedBy: this.modifiedBy,
     };

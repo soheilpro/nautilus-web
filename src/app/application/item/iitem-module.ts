@@ -11,12 +11,11 @@ export interface IItemModule extends IModule {
   getIssueParent(issue: IIssue): IIssue;
   getIssueMilestone(issue: IIssue): IMilestone;
   addIssue(issue: IIssue): Promise<IIssue>;
-  updateIssue(issueId: string, issueChange: IIssueChange): Promise<IIssue>;
+  updateIssue(issue: IIssue, issueChange: IIssueChange): Promise<IIssue>;
   deleteIssue(issue: IIssue): Promise<void>;
   getAllMilestones(filterExpression: NQL.IExpression, sortExpressions: NQL.ISortExpression[]): IMilestone[];
   getMilestone(milestone: IMilestone): IMilestone;
-  getMilestoneParent(milestone: IMilestone): IMilestone;
   addMilestone(milestone: IMilestone): Promise<IMilestone>;
-  updateMilestone(milestoneId: string, milestoneChange: IMilestoneChange): Promise<IMilestone>;
+  updateMilestone(milestone: IMilestone, milestoneChange: IMilestoneChange): Promise<IMilestone>;
   deleteMilestone(milestone: IMilestone): Promise<void>;
 }

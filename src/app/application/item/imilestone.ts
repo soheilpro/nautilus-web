@@ -9,5 +9,4 @@ export interface IMilestone extends IEntity {
   project?: IProject;
   createdBy?: IUser;
   modifiedBy?: IUser;
-  parent?: IMilestone;
 }
