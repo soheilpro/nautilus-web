@@ -2,7 +2,6 @@ import * as _ from 'underscore';
 import * as NQL from '../../nql';
 import { IClient, IItem, IItemRelationship } from '../../sdk';
 import { IApplication } from '../iapplication';
-import { entityComparer } from '../entity-comparer';
 import { BaseModule } from '../base-module';
 import { IItemModule } from './iitem-module';
 import { IIssue } from './iissue';
@@ -18,9 +17,11 @@ import Query from './query';
 export class ItemModule extends BaseModule implements IItemModule {
   private issues: IIssue[];
   private milestones: IMilestone[];
-  private issuesMap: { [id: string]: IItem };
-  private milestonesMap: { [id: string]: IItem };
   private relationships: IItemRelationship[];
+  private issuesMap: { [id: string]: IIssue };
+  private milestonesMap: { [id: string]: IMilestone };
+  private relationship1Map: { [id: string]: IItemRelationship[] };
+  private relationship2Map: { [id: string]: IItemRelationship[] };
 
   constructor(private application: IApplication, private client: IClient) {
     super();
@@ -31,9 +32,11 @@ export class ItemModule extends BaseModule implements IItemModule {
 
     this.issues = [];
     this.milestones = [];
+    this.relationships = result.relationships;
     this.issuesMap = {};
     this.milestonesMap = {};
-    this.relationships = result.relationships;
+    this.relationship1Map = {};
+    this.relationship2Map = {};
 
     for (const item of result.entities) {
       switch (item.kind) {
@@ -49,6 +52,11 @@ export class ItemModule extends BaseModule implements IItemModule {
           this.milestonesMap[milestone.id] = milestone;
           break;
       }
+    }
+
+    for (const relationship of this.relationships) {
+      this.relationship1Map[relationship.item1.id] = [...this.relationship1Map[relationship.item1.id] || [], relationship];
+      this.relationship2Map[relationship.item2.id] = [...this.relationship2Map[relationship.item2.id] || [], relationship];
     }
   }
 
@@ -75,7 +83,7 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   getIssueParent(issue: IIssue) {
-    const relationship = _.find(this.relationships, relationship => relationship.type === 'parent' && entityComparer(relationship.item1, issue));
+    const relationship = _.find(this.relationship1Map[issue.id], relationship => relationship.type === 'parent');
 
     if (!relationship)
       return null;
@@ -84,7 +92,7 @@ export class ItemModule extends BaseModule implements IItemModule {
   }
 
   getIssueMilestone(issue: IIssue) {
-    const relationship = _.find(this.relationships, relationship => relationship.type === 'milestone' && entityComparer(relationship.item1, issue));
+    const relationship = _.find(this.relationship1Map[issue.id], relationship => relationship.type === 'milestone');
 
     if (!relationship)
       return null;
