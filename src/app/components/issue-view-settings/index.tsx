@@ -71,13 +71,17 @@ export default class IssueViewSettings extends React.PureComponent<IIssueViewSet
   }
 
   componentWillReceiveProps(props: IIssueViewSettingsProps) {
-    if (this.props.view === props.view && this.props.savedViews === props.savedViews)
-      return;
+    if (this.props.view !== props.view) {
+      this.setState({
+        filterExpression: props.view ? props.view.filterExpression : undefined,
+      });
+    }
 
-    this.setState({
-      filterExpression: props.view ? props.view.filterExpression : undefined,
-      savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
-    });
+    if (this.props.savedViews !== props.savedViews) {
+      this.setState({
+        savedViews: _.sortBy(props.savedViews, savedView => savedView.name),
+      });
+    }
   }
 
   componentWillUnmount() {

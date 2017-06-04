@@ -56,18 +56,17 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   }
 
   componentWillReceiveProps(props: IListQueryBuilderProps) {
-    if (this.props.query === props.query && this.props.items === props.items)
-      return;
+    if (this.props.query !== props.query || this.props.items !== props.items) {
+      const { includedItems, excludedItems } = this.parseQuery(props.query, props);
 
-    const { includedItems, excludedItems } = this.parseQuery(props.query, props);
-
-    this.setState(state => {
-      return {
-        items: this.filterItems(props.items, state.searchText),
-        includedItems,
-        excludedItems,
-      };
-    });
+      this.setState(state => {
+        return {
+          items: this.filterItems(props.items, state.searchText),
+          includedItems,
+          excludedItems,
+        };
+      });
+    }
   }
 
   private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {

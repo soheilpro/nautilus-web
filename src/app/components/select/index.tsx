@@ -34,17 +34,16 @@ export default class Select extends React.PureComponent<ISelectProps, ISelectSta
   }
 
   componentWillReceiveProps(props: ISelectProps) {
-    if (this.props.items === props.items && this.props.selectedItem === props.selectedItem)
-      return;
+    if (this.props.items !== props.items || this.props.selectedItem !== props.selectedItem) {
+      const selectedItem = this.getSelectedItem(props.selectedItem, props.items);
 
-    const selectedItem = this.getSelectedItem(props.selectedItem, props.items);
+      if (selectedItem !== props.selectedItem)
+        this.props.onChange(null);
 
-    if (selectedItem !== props.selectedItem)
-      this.props.onChange(null);
-
-    this.setState({
-      selectedItem,
-    });
+      this.setState({
+        selectedItem,
+      });
+    }
   }
 
   private handleItemListSelect(item: ISelectItem) {

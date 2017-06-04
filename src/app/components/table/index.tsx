@@ -56,38 +56,37 @@ export default class Table extends React.PureComponent<ITableProps, ITableState>
   }
 
   componentWillReceiveProps(props: ITableProps) {
-    if (this.props.items === props.items && this.props.selectedItem === props.selectedItem)
-      return;
+    if (this.props.items !== props.items || this.props.selectedItem !== props.selectedItem) {
+      let selectedItem = props.selectedItem;
 
-    let selectedItem = props.selectedItem;
+      if (!selectedItem) {
+        // Handle deleted item
+        if (props.items.indexOf(this.state.selectedItem) === -1) {
+          let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
 
-    if (!selectedItem) {
-      // Handle deleted item
-      if (props.items.indexOf(this.state.selectedItem) === -1) {
-        let selectedItemIndex = this.props.items.indexOf(this.state.selectedItem);
+          if (selectedItemIndex > props.items.length - 1)
+            selectedItemIndex = props.items.length - 1;
+          else if (selectedItemIndex < 0)
+            selectedItemIndex = 0;
 
-        if (selectedItemIndex > props.items.length - 1)
-          selectedItemIndex = props.items.length - 1;
-        else if (selectedItemIndex < 0)
-          selectedItemIndex = 0;
+          selectedItem = props.items[selectedItemIndex];
 
-        selectedItem = props.items[selectedItemIndex];
-
-        if (selectedItem)
-          if (props.onItemSelect)
-            props.onItemSelect(selectedItem);
+          if (selectedItem)
+            if (props.onItemSelect)
+              props.onItemSelect(selectedItem);
+        }
       }
-    }
 
-    if (this.props.items !== props.items) {
+      if (this.props.items !== props.items) {
+        this.setState({
+          chunks: this.getChunks(props.items),
+        });
+      }
+
       this.setState({
-        chunks: this.getChunks(props.items),
+        selectedItem,
       });
     }
-
-    this.setState({
-      selectedItem,
-    });
   }
 
   private handleKeyDown(event: React.KeyboardEvent<HTMLTableElement>) {

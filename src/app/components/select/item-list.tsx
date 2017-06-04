@@ -42,12 +42,11 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
   }
 
   componentWillReceiveProps(props: ISelectItemListProps) {
-    if (this.props.items === props.items)
-      return;
-
-    this.setState({
-      items: [emptySelectItem, ...props.items],
-    });
+    if (this.props.items !== props.items) {
+      this.setState({
+        items: [emptySelectItem, ...props.items],
+      });
+    }
   }
 
   private handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {

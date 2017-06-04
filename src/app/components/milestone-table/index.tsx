@@ -34,12 +34,11 @@ export default class MilestoneTable extends React.PureComponent<IMilestoneTableP
   }
 
   componentWillReceiveProps(props: IMilestoneTableProps) {
-    if (this.props.milestones === props.milestones && this.props.selectedMilestone === props.selectedMilestone)
-      return;
-
-    this.setState({
-      selectedMilestone: props.selectedMilestone,
-    });
+    if (this.props.selectedMilestone !== props.selectedMilestone) {
+      this.setState({
+        selectedMilestone: props.selectedMilestone,
+      });
+    }
   }
 
   private handleTableItemSelect(milestone: IMilestone) {

@@ -47,12 +47,11 @@ export default class MilestoneViewSettings extends React.PureComponent<IMileston
   }
 
   componentWillReceiveProps(props: IMilestoneViewSettingsProps) {
-    if (this.props.view === props.view)
-      return;
-
-    this.setState({
-      filterExpression: props.view ? props.view.filterExpression : undefined,
-    });
+    if (this.props.view !== props.view) {
+      this.setState({
+        filterExpression: props.view ? props.view.filterExpression : undefined,
+      });
+    }
   }
 
   componentWillUnmount() {

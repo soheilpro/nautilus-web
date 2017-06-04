@@ -53,12 +53,11 @@ export default class AndQueryBuilder extends React.PureComponent<IAndQueryBuilde
   }
 
   componentWillReceiveProps(props: IAndQueryBuilderProps) {
-    if (props.query === this.props.query)
-      return;
-
-    this.setState({
-      queries: this.getQueryObject(props.query) || {},
-    });
+    if (props.query !== this.props.query) {
+      this.setState({
+        queries: this.getQueryObject(props.query) || {},
+      });
+    }
   }
 
   open(key: string) {
