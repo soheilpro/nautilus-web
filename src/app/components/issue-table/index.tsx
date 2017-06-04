@@ -74,6 +74,8 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
       __children: IIssue[];
     }
 
+    issues = [...issues];
+
     // First find all sub-issues and add them as children to their parents
     const subIssues = issues.filter(issue => !!issue.parent);
 
