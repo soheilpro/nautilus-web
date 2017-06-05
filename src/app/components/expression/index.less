@@ -14,7 +14,22 @@
   }
 
   .expression-constant {
-    color: @green;
     font-weight: bold;
+  }
+
+  .expression-comparison {
+    &.expression-comparison-operator-eq,
+    &.expression-comparison-operator-in {
+      .expression-constant {
+        color: @green;
+      }
+    }
+
+    &.expression-comparison-operator-neq,
+    &.expression-comparison-operator-nin {
+      .expression-constant {
+        color: @red;
+      }
+    }
   }
 }

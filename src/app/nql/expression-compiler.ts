@@ -40,12 +40,12 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
 
   visitComparison(expression: ComparisonExpression, context: IContext): string {
     switch (expression.operator) {
-      case '=':
-      case '!=':
+      case 'eq':
+      case 'neq':
         return this.visitComparisonEquality(expression.left, expression.right, expression.operator, context);
 
-      case 'IN':
-      case 'NOT IN':
+      case 'in':
+      case 'nin':
         return this.visitComparisonInclusion(expression.left, expression.right, expression.operator, context);
 
       default:
@@ -79,10 +79,10 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   private javaScriptOperatorFromComparisonOperator(operator: string) {
-      if (operator === '=')
+      if (operator === 'eq')
         return '===';
 
-      if (operator === '!=')
+      if (operator === 'neq')
         return '!==';
 
       throw new Error('Not supported.');
@@ -98,11 +98,11 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
         throw new Error(`${operator} operator expects a List.`);
 
     switch (operator) {
-      case 'IN':
-        return right.children.map(child => this.visitComparisonEquality(left, child, '=', context)).join(' || ');
+      case 'in':
+        return right.children.map(child => this.visitComparisonEquality(left, child, 'eq', context)).join(' || ');
 
-      case 'NOT IN':
-        return right.children.map(child => this.visitComparisonEquality(left, child, '!=', context)).join(' && ');
+      case 'nin':
+        return right.children.map(child => this.visitComparisonEquality(left, child, 'neq', context)).join(' && ');
 
       default:
         throw new Error('Not supported.');

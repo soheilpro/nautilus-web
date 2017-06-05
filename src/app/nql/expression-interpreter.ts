@@ -89,22 +89,22 @@ export class ExpressionInterpreter extends ExpressionVisitor<any, IInterpretatio
       const rightReturnType = right.returnType;
 
       if (rightReturnType !== 'List')
-        throw new Error(`IN/NOT IN operators expect a List but got '${rightReturnType}' instead.`);
+        throw new Error(`in/nin operators expect a List but got '${rightReturnType}' instead.`);
 
       return (right as ListExpression).children.some(e => areEqual(left, e));
     };
 
     switch (expression.operator) {
-      case '=':
+      case 'eq':
         return areEqual(expression.left, expression.right);
 
-      case '!=':
+      case 'neq':
         return !areEqual(expression.left, expression.right);
 
-      case 'IN':
+      case 'in':
         return isIn(expression.left, expression.right);
 
-      case 'NOT IN':
+      case 'nin':
         return !isIn(expression.left, expression.right);
 
       default:

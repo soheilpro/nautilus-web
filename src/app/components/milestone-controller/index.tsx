@@ -70,7 +70,7 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
     const filter = new NQL.ComparisonExpression(
       new NQL.LocalExpression('milestone'),
       new NQL.ConstantExpression(milestone, 'Milestone'),
-      '='
+      'eq'
     );
 
     const milestoneIssues = await this.application.items.getAllIssues(filter, null);

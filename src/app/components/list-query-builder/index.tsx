@@ -222,28 +222,28 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
         new NQL.ConstantExpression(props.itemToQueryItem(includedItems[0]), props.queryItemType),
-        '=');
+        'eq');
     }
 
     if (includedItems.length > 1) {
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
         new NQL.ListExpression(includedItems.map(item => new NQL.ConstantExpression(props.itemToQueryItem(item), props.queryItemType))),
-        'IN');
+        'in');
     }
 
     if (excludedItems.length === 1) {
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
         new NQL.ConstantExpression(props.itemToQueryItem(excludedItems[0]), props.queryItemType),
-        '!=');
+        'neq');
     }
 
     if (excludedItems.length > 1) {
       return new NQL.ComparisonExpression(
         new NQL.LocalExpression(props.queryItem),
         new NQL.ListExpression(excludedItems.map(item => new NQL.ConstantExpression(props.itemToQueryItem(item), props.queryItemType))),
-        'NOT IN');
+        'nin');
     }
 
     return null;
@@ -258,7 +258,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
     const comparisonQuery = query as NQL.ComparisonExpression;
 
-    if (comparisonQuery.operator === '=') {
+    if (comparisonQuery.operator === 'eq') {
       const item = (comparisonQuery.right as NQL.ConstantExpression).value;
 
       return {
@@ -267,7 +267,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
       };
     }
 
-    if (comparisonQuery.operator === 'IN') {
+    if (comparisonQuery.operator === 'in') {
       const items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
 
       return {
@@ -276,7 +276,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
       };
     }
 
-    if (comparisonQuery.operator === '!=') {
+    if (comparisonQuery.operator === 'neq') {
       const item = (comparisonQuery.right as NQL.ConstantExpression).value;
 
       return {
@@ -285,7 +285,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
       };
     }
 
-    if (comparisonQuery.operator === 'NOT IN') {
+    if (comparisonQuery.operator === 'nin') {
       const items = ((comparisonQuery.right as NQL.ListExpression).children).map(child => (child as NQL.ConstantExpression).value);
 
       return {
@@ -307,7 +307,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
     if (query.left.name !== queryItem)
       return false;
 
-    if (query.operator === '=' || query.operator === '!=') {
+    if (query.operator === 'eq' || query.operator === 'neq') {
       if (!(query.right instanceof NQL.ConstantExpression))
         return false;
 
@@ -317,7 +317,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
       return true;
     }
 
-    if (query.operator === 'IN' || query.operator === 'NOT IN') {
+    if (query.operator === 'in' || query.operator === 'nin') {
       if (!(query.right instanceof NQL.ListExpression))
         return false;
 

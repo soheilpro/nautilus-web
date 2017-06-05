@@ -24,33 +24,11 @@ export default class HTMLExpressionFormatter extends NQL.ExpressionVisitor<strin
   }
 
   visitComparison(expression: NQL.ComparisonExpression, context: {}) {
-    return `<span class="expression expression-comparison">${this.visit(expression.left, context)} <span class="expression-comparison-operator">${expression.operator}</span> ${this.visit(expression.right, context)}</span>`;
+    return `<span class="expression expression-comparison expression-comparison-operator-${expression.operator}">${this.visit(expression.left, context)} <span class="expression-comparison-operator">${this.titleForComparisonOperator(expression.operator)}</span> ${this.visit(expression.right, context)}</span>`;
   }
 
   visitConstant(expression: NQL.ConstantExpression, context: {}) {
     return `<span class="expression expression-constant"><span class="${expression.type.toLowerCase()}">${this.titleForConstant(expression)}</span></span>`;
-  }
-
-  private titleForConstant(expression: NQL.ConstantExpression) {
-    if (expression.type === 'User')
-      return this.application.users.get(expression.value).name;
-
-    if (expression.type === 'Project')
-      return this.application.projects.get(expression.value).name;
-
-    if (expression.type === 'ItemType')
-      return this.application.itemTypes.get(expression.value).title;
-
-    if (expression.type === 'ItemPriority')
-      return this.application.itemPriorities.get(expression.value).title;
-
-    if (expression.type === 'ItemState')
-      return this.application.itemStates.get(expression.value).title;
-
-    if (expression.type === 'Milestone')
-      return this.application.items.getMilestone(expression.value).fullTitle;
-
-    throw new Error('Not supported.');
   }
 
   visitList(expression: NQL.ListExpression, context: {}) {
@@ -76,5 +54,43 @@ export default class HTMLExpressionFormatter extends NQL.ExpressionVisitor<strin
 
   visitProperty(expression: NQL.PropertyExpression, context: {}) {
     return `<span class="expression expression-property">${this.visit(expression.target, context)}.${expression.name}</span>`;
+  }
+
+  private titleForComparisonOperator(operator: string) {
+    if (operator === 'eq')
+      return '=';
+
+    if (operator === 'neq')
+      return '!=';
+
+    if (operator === 'in')
+      return 'in';
+
+    if (operator === 'nin')
+      return 'not in';
+
+    throw new Error('Not supported.');
+  }
+
+  private titleForConstant(expression: NQL.ConstantExpression) {
+    if (expression.type === 'User')
+      return this.application.users.get(expression.value).name;
+
+    if (expression.type === 'Project')
+      return this.application.projects.get(expression.value).name;
+
+    if (expression.type === 'ItemType')
+      return this.application.itemTypes.get(expression.value).title;
+
+    if (expression.type === 'ItemPriority')
+      return this.application.itemPriorities.get(expression.value).title;
+
+    if (expression.type === 'ItemState')
+      return this.application.itemStates.get(expression.value).title;
+
+    if (expression.type === 'Milestone')
+      return this.application.items.getMilestone(expression.value).fullTitle;
+
+    throw new Error('Not supported.');
   }
 }
