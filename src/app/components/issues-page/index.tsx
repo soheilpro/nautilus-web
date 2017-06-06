@@ -5,6 +5,7 @@ import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
 import NewIssueCommand from '../../issues/new-issue-command';
+import NewSubIssueCommand from '../../issues/new-sub-issue-command';
 import EditIssueCommand from '../../issues/edit-issue-command';
 import DeleteIssueCommand from '../../issues/delete-issue-command';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
@@ -91,6 +92,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   getCommands() {
     return [
       new NewIssueCommand(),
+      new NewSubIssueCommand(this.state.selectedIssue),
       new EditIssueCommand(this.state.selectedIssue),
       new DeleteIssueCommand(this.state.selectedIssue),
     ];
@@ -167,6 +169,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
         <div className="issues-page-component">
           <div className="action-bar">
             <CommandButton commandId="new-issue"><Icon name="plus" position="before" /> New Issue</CommandButton>
+            <CommandButton commandId="new-sub-issue" type="secondary"><Icon name="plus" position="before" /> New Sub-Issue</CommandButton>
             <CommandButton commandId="refresh" type="secondary"><Icon name="refresh" /></CommandButton>
           </div>
           <div className="view-settings row">

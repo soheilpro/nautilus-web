@@ -4,7 +4,6 @@ import * as NQL from '../../nql';
 import { IMilestone, IMilestoneChange } from '../../application';
 import { IMilestoneController } from '../../milestones';
 import { ServiceManager } from '../../services';
-import { IWindow } from '../../windows';
 import AddEditMilestoneWindow from '../add-edit-milestone-window';
 import AddMilestoneAction from './add-milestone-action';
 import UpdateMilestoneAction from './update-milestone-action';
@@ -22,16 +21,9 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
   private windowController = ServiceManager.Instance.getWindowController();
   private dialogController = ServiceManager.Instance.getDialogController();
   private notificationController = ServiceManager.Instance.getNotificationController();
-  private addMilestoneWindow: IWindow;
-  private editMilestoneWindow: IWindow;
 
   constructor() {
     super();
-
-    this.handleAddMilestoneWindowAdd = this.handleAddMilestoneWindowAdd.bind(this);
-    this.handleAddMilestoneWindowClose = this.handleAddMilestoneWindowClose.bind(this);
-    this.handleEditMilestoneWindowUpdate = this.handleEditMilestoneWindowUpdate.bind(this);
-    this.handleEditMilestoneWindowClose = this.handleEditMilestoneWindowClose.bind(this);
 
     this.state = {};
   }
@@ -45,25 +37,61 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
   }
 
   addMilestone() {
-    this.addMilestoneWindow = {
-      content: <AddEditMilestoneWindow mode="add" onAdd={this.handleAddMilestoneWindowAdd} onClose={this.handleAddMilestoneWindowClose} />,
+    const handleAddMilestoneWindowAdd = async (milestone: IMilestone) => {
+      this.windowController.closeWindow(addMilestoneWindow);
+
+      const notification = {
+        title: 'Adding milestone...',
+      };
+
+      this.notificationController.showNotification(notification);
+
+      await this.actionManager.execute(new AddMilestoneAction(milestone, this.application));
+
+      this.notificationController.hideNotification(notification);
+    };
+
+    const handleAddMilestoneWindowClose = () => {
+      this.windowController.closeWindow(addMilestoneWindow);
+    };
+
+    const addMilestoneWindow = {
+      content: <AddEditMilestoneWindow mode="add" onAdd={handleAddMilestoneWindowAdd} onClose={handleAddMilestoneWindowClose} />,
       top: 120,
       width: 800,
       modal: true,
     };
 
-    this.windowController.showWindow(this.addMilestoneWindow);
+    this.windowController.showWindow(addMilestoneWindow);
   }
 
   editMilestone(milestone: IMilestone) {
-    this.editMilestoneWindow = {
-      content: <AddEditMilestoneWindow mode="edit" milestone={milestone} onUpdate={_.partial(this.handleEditMilestoneWindowUpdate, milestone)} onClose={this.handleEditMilestoneWindowClose} />,
+    const handleEditMilestoneWindowUpdate = async (milestone: IMilestone, milestoneChange: IMilestoneChange) => {
+      this.windowController.closeWindow(editMilestoneWindow);
+
+      const notification = {
+        title: 'Updating milestone...',
+      };
+
+      this.notificationController.showNotification(notification);
+
+      await this.actionManager.execute(new UpdateMilestoneAction(milestone, milestoneChange, this.application));
+
+      this.notificationController.hideNotification(notification);
+    };
+
+    const handleEditMilestoneWindowClose = () => {
+      this.windowController.closeWindow(editMilestoneWindow);
+    };
+
+    const editMilestoneWindow = {
+      content: <AddEditMilestoneWindow mode="edit" milestone={milestone} onUpdate={_.partial(handleEditMilestoneWindowUpdate, milestone)} onClose={handleEditMilestoneWindowClose} />,
       top: 120,
       width: 800,
       modal: true,
     };
 
-    this.windowController.showWindow(this.editMilestoneWindow);
+    this.windowController.showWindow(editMilestoneWindow);
   }
 
   async deleteMilestone(milestone: IMilestone) {
@@ -84,59 +112,25 @@ export default class MilestoneController extends React.PureComponent<IMilestoneC
       return;
     }
 
+    const handleConfirm = async () => {
+      const notification = {
+        title: 'Deleting milestone...',
+      };
+
+      this.notificationController.showNotification(notification);
+
+      await this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
+
+      this.notificationController.hideNotification(notification);
+    };
+
     this.dialogController.showConfirmDialog({
       title: 'Delete Milestone',
       message: `Are you sure you want to delete milestone #${milestone.sid}?`,
       buttonTitle: 'Delete Milestone',
       destructive: true,
-      onConfirm: async () => {
-        const notification = {
-          title: 'Deleting milestone...',
-        };
-
-        this.notificationController.showNotification(notification);
-
-        await this.actionManager.execute(new DeleteMilestoneAction(milestone, this.application));
-
-        this.notificationController.hideNotification(notification);
-      },
+      onConfirm: handleConfirm,
     });
-  }
-
-  private async handleAddMilestoneWindowAdd(milestone: IMilestone) {
-    this.windowController.closeWindow(this.addMilestoneWindow);
-
-    const notification = {
-      title: 'Adding milestone...',
-    };
-
-    this.notificationController.showNotification(notification);
-
-    await this.actionManager.execute(new AddMilestoneAction(milestone, this.application));
-
-    this.notificationController.hideNotification(notification);
-  }
-
-  private handleAddMilestoneWindowClose() {
-    this.windowController.closeWindow(this.addMilestoneWindow);
-  }
-
-  private async handleEditMilestoneWindowUpdate(milestone: IMilestone, milestoneChange: IMilestoneChange) {
-    this.windowController.closeWindow(this.editMilestoneWindow);
-
-    const notification = {
-      title: 'Updating milestone...',
-    };
-
-    this.notificationController.showNotification(notification);
-
-    await this.actionManager.execute(new UpdateMilestoneAction(milestone, milestoneChange, this.application));
-
-    this.notificationController.hideNotification(notification);
-  }
-
-  private handleEditMilestoneWindowClose() {
-    this.windowController.closeWindow(this.editMilestoneWindow);
   }
 
   render() {

@@ -96,7 +96,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     return this.milestonesMap[relationship.item2.id];
   }
 
-  async addIssue(issue: IIssue) {
+  async addIssue(issue: IIssue, parentIssue?: IIssue) {
     const item: IItem = {
       kind: 'issue',
       type: issue.type,
@@ -113,6 +113,16 @@ export class ItemModule extends BaseModule implements IItemModule {
 
     this.issues.push(addedIssue);
     this.issuesMap[addedIssue.id] = addedIssue;
+
+    if (parentIssue) {
+      let relationship: IItemRelationship = {
+        item1: addedIssue,
+        item2: parentIssue,
+        type: 'parent',
+      };
+
+      await this.addRelationship(relationship);
+    }
 
     if (issue.milestone) {
       let relationship: IItemRelationship = {

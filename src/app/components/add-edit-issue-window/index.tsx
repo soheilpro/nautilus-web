@@ -18,6 +18,7 @@ require('./index.less');
 interface IAddEditIssueWindowProps {
   mode: 'add' | 'edit';
   issue?: IIssue;
+  parentIssue?: IIssue;
   onAdd?(issue: IIssue): void;
   onUpdate?(issueChange: IIssueChange): void;
   onClose(): void;
@@ -188,11 +189,30 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     return (
       <Window className="add-edit-issue-window-component">
         <WindowHeader>
-          { this.props.mode === 'add' && 'New Issue' }
-          { this.props.mode === 'edit' && `Edit Issue #${this.props.issue.sid}` }
+          {
+            this.props.mode === 'add' &&
+              (!this.props.parentIssue ? 'New Issue' : 'New Sub-Issue')
+          }
+          {
+            this.props.mode === 'edit' &&
+              `Edit Issue #${this.props.issue.sid}`
+          }
         </WindowHeader>
         <WindowContent>
           <form className="form" id="addEditIssueForm" onSubmit={this.handleFormSubmit}>
+            {
+              this.props.parentIssue &&
+                <div className="field">
+                  <div className="label">
+                    Parent:
+                  </div>
+                  <div className="value">
+                    <div className="parent">
+                      <span className="sid">#{this.props.parentIssue.sid}</span> {this.props.parentIssue.title}
+                    </div>
+                  </div>
+                </div>
+            }
             <div className="field">
               <div className="label">
                 Title:
