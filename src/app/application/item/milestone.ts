@@ -1,13 +1,8 @@
-import { IItem, IItemState, IProject, IUser } from '../../sdk';
+import { IItem } from '../../sdk';
 import { IApplication } from '../iapplication';
 import { IMilestone } from './imilestone';
 
 export default class Milestone implements IMilestone {
-  private _state: IItemState;
-  private _project: IProject;
-  private _createdBy: IUser;
-  private _modifiedBy: IUser;
-
   constructor(private item: IItem, private application: IApplication) {
   }
 
@@ -37,31 +32,19 @@ export default class Milestone implements IMilestone {
   }
 
   get state() {
-    if (this._state === undefined)
-      this._state = this.application.itemStates.get(this.item.state) || null;
-
-    return this._state;
+    return this.application.itemStates.get(this.item.state);
   }
 
   get project() {
-    if (this._project === undefined)
-      this._project =  this.application.projects.get(this.item.project) || null;
-
-    return this._project;
+    return this.application.projects.get(this.item.project);
   }
 
   get createdBy() {
-    if (this._createdBy === undefined)
-      this._createdBy = this.application.users.get(this.item.createdBy) || null;
-
-    return this._createdBy;
+    return this.application.users.get(this.item.createdBy);
   }
 
   get modifiedBy() {
-    if (this._modifiedBy === undefined)
-      this._modifiedBy = this.application.users.get(this.item.modifiedBy) || null;
-
-    return this._modifiedBy;
+    return this.application.users.get(this.item.modifiedBy);
   }
 
   toJSON() {
