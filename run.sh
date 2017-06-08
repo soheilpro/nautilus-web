@@ -16,7 +16,7 @@ case "$COMMAND" in
     ;;
 
   release)
-    (NODE_ENV=production && cd ./src && npm run build)
+    (cd ./src && npm run release)
     ;;
 
   clean)

@@ -41,13 +41,3 @@ module.exports = {
   ],
   devtool: 'source-map',
 };
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-    })
-  );
-}

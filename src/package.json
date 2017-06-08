@@ -5,6 +5,7 @@
   "scripts": {
     "build": "buno webpack",
     "clean": "rm -rf ./out",
+    "release": "buno -- webpack -p",
     "start": "node www.js",
     "watch": "webpack --watch"
   },
