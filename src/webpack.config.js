@@ -1,7 +1,7 @@
-let webpack = require('webpack');
-let failPlugin = require('webpack-fail-plugin');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+const failPlugin = require('webpack-fail-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -23,6 +23,7 @@ module.exports = {
       { test: /\.svg(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.woff2?(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.html$/, loader: 'html-loader' },
     ],
     preLoaders: [
       { test: /\.js$/, loader: "source-map-loader" },
@@ -36,8 +37,8 @@ module.exports = {
     new ExtractTextPlugin('[name].css'),
     new webpack.optimize.CommonsChunkPlugin('vendor', '[name].js'),
     new HtmlWebpackPlugin({
-      filename: '../index.html',
-      template: './app/index.ejs',
+      filename: '../index.ejs',
+      template: './app/index.html',
     }),
   ],
   devtool: 'source-map',

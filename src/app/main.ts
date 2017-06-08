@@ -8,6 +8,12 @@ import { ServiceManager } from './services';
 import { LocalStorage, SessionStorage } from './storage';
 import App from './components/app';
 
+declare var config: {
+  api: {
+    address: string;
+  }
+};
+
 async function main() {
   ServiceManager.Instance = new ServiceManager();
 
@@ -20,7 +26,7 @@ async function main() {
   const roamingStorage = new LocalStorage();
   ServiceManager.Instance.setRoamingStorage(roamingStorage);
 
-  const application = new Application({ address: 'http://localhost:3000' });
+  const application = new Application({ address: config.api.address });
   await application.initialize();
   ServiceManager.Instance.setApplication(application);
 
