@@ -97,14 +97,14 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     switch (this.props.mode) {
       case 'add':
         const issue: IIssue = {
-          title: this.state.title,
-          description: this.state.description,
-          project: this.state.project,
-          type: this.state.type,
-          priority: this.state.priority,
-          state: this.state.state,
-          assignedTo: this.state.assignedTo,
-          milestone: this.state.milestone,
+          title: this.state.title || undefined,
+          description: this.state.description || undefined,
+          project: this.state.project || undefined,
+          type: this.state.type || undefined,
+          priority: this.state.priority || undefined,
+          state: this.state.state || undefined,
+          assignedTo: this.state.assignedTo || undefined,
+          milestone: this.state.milestone || undefined,
         };
 
         this.props.onAdd(issue);
@@ -112,14 +112,14 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
 
       case 'edit':
         const issueChange: IIssueChange = {
-          title: this.state.title,
-          description: this.state.description,
-          project: this.state.project || null,
-          type: this.state.type || null,
-          priority: this.state.priority || null,
-          state: this.state.state || null,
-          assignedTo: this.state.assignedTo || null,
-          milestone: this.state.milestone || null,
+          title: (this.state.title !== this.props.issue.title ? this.state.title || null : undefined),
+          description: (this.state.description !== this.props.issue.description ? this.state.description || null : undefined),
+          project: (this.state.project !== this.props.issue.project ? this.state.project || null : undefined),
+          type: (this.state.type !== this.props.issue.type ? this.state.type || null : undefined),
+          priority: (this.state.priority !== this.props.issue.priority ? this.state.priority || null : undefined),
+          state: (this.state.state !== this.props.issue.state ? this.state.state || null : undefined),
+          assignedTo: (this.state.assignedTo !== this.props.issue.assignedTo ? this.state.assignedTo || null : undefined),
+          milestone: (this.state.milestone !== this.props.issue.milestone ? this.state.milestone || null : undefined),
         };
 
         this.props.onUpdate(issueChange);
