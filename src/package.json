@@ -40,7 +40,7 @@
     "awesome-typescript-loader": "^3.0.0-beta.17",
     "buno": "^1.0.0",
     "css-loader": "^0.26.1",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.24.1",
@@ -52,7 +52,7 @@
     "tslint": "^4.0.2",
     "typescript": "^2.2.1",
     "url-loader": "^0.5.7",
-    "webpack": "^1.14.0",
+    "webpack": "^2.6.1",
     "webpack-fail-plugin": "^1.0.5"
   }
 }
