@@ -81,7 +81,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
 
     for (const subIssue of subIssues) {
       const parent = subIssue.parent as IIssueWithChildren;
-      parent.__children = (parent.__children || []).concat(subIssue);
+      parent.__children = [...(parent.__children || []), subIssue];
 
       const subIssueIndex = issues.indexOf(subIssue);
       issues.splice(subIssueIndex, 1);

@@ -173,7 +173,7 @@ export default class IssueViewSettings extends React.PureComponent<IIssueViewSet
       filterExpression: this.state.filterExpression,
     });
 
-    const savedViews = this.state.savedViews.concat(view);
+    const savedViews = [...this.state.savedViews, view];
 
     this.props.onSavedViewsChange(savedViews);
 

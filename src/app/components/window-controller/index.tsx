@@ -58,7 +58,7 @@ export default class WindowController extends React.PureComponent<IWindowControl
     this.elementToFocus = null;
 
     this.setState(state => ({
-      windows: state.windows.concat(extendedWindow),
+      windows: [...state.windows, extendedWindow],
     }), callback);
 
     if (window.modal)

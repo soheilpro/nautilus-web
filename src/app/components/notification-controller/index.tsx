@@ -45,7 +45,7 @@ export default class NotificationController extends React.PureComponent<INotific
     extendedNotification.key = this.notificationKeyCounter++;
 
     this.setState(state => ({
-      notifications: state.notifications.concat(extendedNotification),
+      notifications: [...state.notifications, extendedNotification],
     }));
   }
 

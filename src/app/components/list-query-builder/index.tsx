@@ -195,7 +195,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
 
   private toggleItemExclude(item: IItem) {
     const includedItems: IItem[] = [];
-    const excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? this.state.excludedItems.concat(item) : this.state.excludedItems.filter(x => x !== item);
+    const excludedItems = (this.state.excludedItems.indexOf(item) === -1) ? [...this.state.excludedItems, item] : this.state.excludedItems.filter(x => x !== item);
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false, false);
 
@@ -206,7 +206,7 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   }
 
   private toggleItemInclude(item: IItem) {
-    const includedItems = (this.state.includedItems.indexOf(item) === -1) ? this.state.includedItems.concat(item) : this.state.includedItems.filter(x => x !== item);
+    const includedItems = (this.state.includedItems.indexOf(item) === -1) ? [...this.state.includedItems, item] : this.state.includedItems.filter(x => x !== item);
     const excludedItems: IItem[] = [];
 
     this.props.onChange(this.getQuery(includedItems, excludedItems, this.props), false, false);
