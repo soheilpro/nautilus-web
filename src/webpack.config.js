@@ -11,7 +11,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, './out/assets'),
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
   },
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
@@ -32,8 +32,8 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: "jquery",
     }),
-    new ExtractTextPlugin('[name].css'),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: '[name].js' }),
+    new ExtractTextPlugin('[name].[chunkhash].css'),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: '[name].[chunkhash].js' }),
     new HtmlWebpackPlugin({
       filename: '../index.ejs',
       template: './app/index.html',
