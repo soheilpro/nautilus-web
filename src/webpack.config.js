@@ -6,14 +6,14 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     app: './app/main.ts',
-    vendor: ['react', 'react-dom', 'react-router', 'axios', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5', 'classnames', 'uuid', 'jquery', 'jquery-sticky']
+    vendor: ['react', 'react-dom', 'react-router', 'axios', 'underscore', 'wolfy87-eventemitter', 'blueimp-md5', 'classnames', 'uuid', 'jquery', 'jquery-sticky'],
   },
   output: {
-    path: './out',
-    filename: '[name].js'
+    path: './out/assets',
+    filename: '[name].js',
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
   },
   module: {
     loaders: [
@@ -22,11 +22,11 @@ module.exports = {
       { test: /\.ttf(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.svg(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.woff2?(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
-      { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' }
+      { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
     ],
     preLoaders: [
-      { test: /\.js$/, loader: "source-map-loader" }
-    ]
+      { test: /\.js$/, loader: "source-map-loader" },
+    ],
   },
   plugins: [
     failPlugin,
@@ -36,18 +36,19 @@ module.exports = {
     new ExtractTextPlugin('[name].css'),
     new webpack.optimize.CommonsChunkPlugin('vendor', '[name].js'),
     new HtmlWebpackPlugin({
-      template: './app/index.ejs'
-    })
+      filename: '../index.html',
+      template: './app/index.ejs',
+    }),
   ],
-  devtool: 'source-map'
+  devtool: 'source-map',
 };
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
-      }
+        warnings: false,
+      },
     })
   );
 }
