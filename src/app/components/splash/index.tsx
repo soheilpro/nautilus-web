@@ -7,7 +7,7 @@ export default function Splash() {
   return (
     <div className="splash-component">
       <div className="container">
-        <img className="logo" src={require('../../assets/images/logo.svg') as string} />
+        <img className="logo" src={`/assets/${require('../../assets/images/logo.svg')}`} />
       </div>
     </div>
   );

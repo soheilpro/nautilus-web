@@ -22,16 +22,16 @@ export class SessionService extends ServiceBase<ISession, ISessionFilter, ISessi
     return undefined;
   }
 
-  create(username: string, password: string): Promise<ISession> {
-    const options = {
+  async create(username: string, password: string) {
+    const invokeOptions = {
       method: 'POST',
       path: this.basePath(),
-      params: {
+      data: {
         username: username,
         password: password,
       },
     };
 
-    return this.invoke(options);
+    return (await this.invoke(invokeOptions)).data.data;
   }
 }
