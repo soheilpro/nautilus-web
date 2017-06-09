@@ -6,7 +6,7 @@ COPY . /usr/app
 WORKDIR /usr/app
 
 RUN ./run.sh install
-RUN ./run.sh build
+RUN ./run.sh release
 
 ENTRYPOINT ["/usr/app/run.sh"]
 CMD ["start"]
