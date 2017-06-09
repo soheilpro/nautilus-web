@@ -39,17 +39,19 @@ export default class AddEditMilestoneWindow extends React.PureComponent<IAddEdit
     this.handleProjectSelectChange = this.handleProjectSelectChange.bind(this);
     this.handleStateInputChange = this.handleStateInputChange.bind(this);
 
-    this.state = {
+    const state: IAddEditMilestoneWindowState = {
       projects: [],
       itemStates: [],
     };
 
     if (props.milestone) {
-      this.state.title = props.milestone.title;
-      this.state.description = props.milestone.description;
-      this.state.project = props.milestone.project;
-      this.state.state = props.milestone.state;
+      state.title = props.milestone.title;
+      state.description = props.milestone.description;
+      state.project = props.milestone.project;
+      state.state = props.milestone.state;
     }
+
+    this.state = state;
   }
 
   componentDidMount() {

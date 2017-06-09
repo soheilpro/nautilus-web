@@ -57,7 +57,7 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     this.handleAssignedToInputChange = this.handleAssignedToInputChange.bind(this);
     this.handleMilestoneInputChange = this.handleMilestoneInputChange.bind(this);
 
-    this.state = {
+    const state: IAddEditIssueWindowState = {
       projects: [],
       itemTypes: [],
       itemPriorities: [],
@@ -67,15 +67,17 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     };
 
     if (props.issue) {
-      this.state.title = props.issue.title;
-      this.state.description = props.issue.description;
-      this.state.project = props.issue.project;
-      this.state.type = props.issue.type;
-      this.state.priority = props.issue.priority;
-      this.state.state = props.issue.state;
-      this.state.assignedTo = props.issue.assignedTo;
-      this.state.milestone = props.issue.milestone;
-    }
+      state.title = props.issue.title;
+      state.description = props.issue.description;
+      state.project = props.issue.project;
+      state.type = props.issue.type;
+      state.priority = props.issue.priority;
+      state.state = props.issue.state;
+      state.assignedTo = props.issue.assignedTo;
+      state.milestone = props.issue.milestone;
+    };
+
+    this.state = state;
   }
 
   componentDidMount() {

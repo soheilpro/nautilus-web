@@ -57,7 +57,7 @@ export default class MilestonesPage extends React.Component<IMilestonesPageProps
   }
 
   async componentDidMount() {
-    $(this.milestoneDetailContainerElement).sticky({
+    ($(this.milestoneDetailContainerElement) as any).sticky({
       topSpacing: 10,
     });
 

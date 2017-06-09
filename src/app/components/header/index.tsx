@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IndexLink } from 'react-router';
+import { Link } from 'react-router-dom';
 import { ServiceManager } from '../../services';
 import Avatar from '../avatar';
 
@@ -22,7 +22,7 @@ export default class Header extends React.PureComponent<IHeaderProps, IHeaderSta
       <div className="header-component">
         <div className="row">
           <div className="main">
-            <IndexLink className="title" to="/">nautilus</IndexLink>
+            <Link className="title" to="/">nautilus</Link>
           </div>
           <div className="profile">
             <Avatar user={user} size={30} />

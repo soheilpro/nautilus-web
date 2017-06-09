@@ -1,8 +1,12 @@
-import { browserHistory } from 'react-router';
+import { History } from 'history'
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 
 export default class GoToIssuesCommand extends BaseCommand {
+  constructor(private history: History) {
+    super();
+  }
+
   get id() {
     return 'go-to-issues';
   }
@@ -19,6 +23,6 @@ export default class GoToIssuesCommand extends BaseCommand {
   }
 
   execute() {
-    browserHistory.push('/');
+    this.history.push('/');
   }
 }

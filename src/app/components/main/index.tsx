@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import { BrowserRouter, Route } from 'react-router-dom'
+import { History } from 'history'
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import CommandController from '../command-controller';
@@ -24,6 +25,7 @@ interface IMainState {
 
 export default class Main extends React.PureComponent<IMainProps, IMainState> implements ICommandProvider {
   private commandManager = ServiceManager.Instance.getCommandManager();
+  private browserRouterComponent: BrowserRouter;
 
   componentWillMount() {
     this.commandManager.registerCommandProvider(this);
@@ -34,10 +36,12 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
   }
 
   getCommands() {
+    const history: History = (this.browserRouterComponent as any).history;
+
     return [
       new RefreshCommand(),
-      new GoToIssuesCommand(),
-      new GoToMilestonesCommand(),
+      new GoToIssuesCommand(history),
+      new GoToMilestonesCommand(history),
     ];
   }
 
@@ -52,10 +56,12 @@ export default class Main extends React.PureComponent<IMainProps, IMainState> im
         <SearchController />
         <IssueController />
         <MilestoneController />
-        <Router history={browserHistory}>
-          <Route path="/" component={IssuesPage}/>
-          <Route path="/milestones" component={MilestonesPage}/>
-        </Router>
+        <BrowserRouter ref={e => this.browserRouterComponent = e}>
+          <div>
+            <Route path="/" exact component={IssuesPage as any} />
+            <Route path="/milestones" component={MilestonesPage as any} />
+          </div>
+        </BrowserRouter>
       </div>
     );
   }

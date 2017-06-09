@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, IndexLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
@@ -14,8 +14,8 @@ export default class Navigation extends React.PureComponent<INavigationProps, IN
   render() {
     return (
       <div className="navigation-component">
-        <IndexLink to="/" activeClassName="active">Issues</IndexLink>
-        <Link to="/milestones" activeClassName="active">Milestones</Link>
+        <NavLink to="/" exact activeClassName="active">Issues</NavLink>
+        <NavLink to="/milestones" activeClassName="active">Milestones</NavLink>
       </div>
     );
   }

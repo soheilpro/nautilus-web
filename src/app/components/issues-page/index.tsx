@@ -62,7 +62,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   }
 
   async componentDidMount() {
-    $(this.issueDetailContainerElement).sticky({
+    ($(this.issueDetailContainerElement) as any).sticky({
       topSpacing: 10,
     });
 
