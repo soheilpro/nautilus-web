@@ -18,9 +18,16 @@ const config = nconf
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './out');
+
 app.use(morgan('dev'));
 app.use(compression());
+
 app.use('/assets', express.static(path.join(__dirname, './out/assets'), { maxAge: 365 * 24 * 60 * 60 * 1000 }));
+
+app.use('/assets', (request, response) => {
+  response.status(404).send("Not found.");
+});
+
 app.get('*', (request, response) => {
   const locals = {
     config: {
