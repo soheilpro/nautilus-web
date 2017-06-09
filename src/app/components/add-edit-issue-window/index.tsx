@@ -112,8 +112,8 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
 
       case 'edit':
         const issueChange: IIssueChange = {
-          title: (this.state.title !== this.props.issue.title ? this.state.title || null : undefined),
-          description: (this.state.description !== this.props.issue.description ? this.state.description || null : undefined),
+          title: (this.state.title !== this.props.issue.title ? this.state.title || '' : undefined),
+          description: (this.state.description !== this.props.issue.description ? this.state.description || '' : undefined),
           project: (this.state.project !== this.props.issue.project ? this.state.project || null : undefined),
           type: (this.state.type !== this.props.issue.type ? this.state.type || null : undefined),
           priority: (this.state.priority !== this.props.issue.priority ? this.state.priority || null : undefined),

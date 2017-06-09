@@ -78,8 +78,8 @@ export default class AddEditMilestoneWindow extends React.PureComponent<IAddEdit
 
       case 'edit':
         const milestoneChange: IMilestoneChange = {
-          title: (this.state.title !== this.props.milestone.title ? this.state.title || null : undefined),
-          description: (this.state.description !== this.props.milestone.description ? this.state.description || null : undefined),
+          title: (this.state.title !== this.props.milestone.title ? this.state.title || '' : undefined),
+          description: (this.state.description !== this.props.milestone.description ? this.state.description || '' : undefined),
           project: (this.state.project !== this.props.milestone.project ? this.state.project || null : undefined),
           state: (this.state.state !== this.props.milestone.state ? this.state.state || null : undefined),
         };
