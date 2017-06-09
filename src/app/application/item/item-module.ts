@@ -156,7 +156,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     this.issues[this.issues.indexOf(issue)] = updatedIssue;
     this.issuesMap[updatedIssue.id] = updatedIssue;
 
-    if (issue.milestone !== issueChange.milestone) {
+    if (issueChange.milestone !== undefined) {
       if (issue.milestone) {
         const relationship = _.find(this.relationship1Map[issue.id], relationship => relationship.type === 'milestone');
 
