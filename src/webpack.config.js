@@ -14,16 +14,16 @@ module.exports = {
     filename: '[name].[chunkhash].js',
   },
   resolve: {
-    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
     loaders: [
       { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
       { test: /\.less$/, loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!less-loader' }) },
-      { test: /\.ttf(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
-      { test: /\.svg(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
-      { test: /\.woff2?(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
-      { test: /\.eot(\?\S*)?$/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.ttf/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.svg/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.woff2?/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /\.eot/, loader: 'file-loader?name=[name].[ext]' },
       { test: /\.html$/, loader: 'html-loader' },
     ],
   },
