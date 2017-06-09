@@ -19,6 +19,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "jquery-sticky": "^1.0.4",
+    "morgan": "^1.8.2",
     "nconf": "^0.8.4",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",

@@ -3,6 +3,7 @@
 const path = require('path');
 const nconf = require('nconf');
 const express = require('express');
+const morgan = require('morgan');
 const compression = require('compression');
 const debug = require('debug')('nautilus-web');
 
@@ -17,6 +18,7 @@ const config = nconf
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './out');
+app.use(morgan('dev'));
 app.use(compression());
 app.use('/assets', express.static(path.join(__dirname, './out/assets'), { maxAge: 365 * 24 * 60 * 60 * 1000 }));
 app.get('*', (request, response) => {
