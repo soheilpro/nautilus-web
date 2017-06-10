@@ -113,10 +113,13 @@ export default class ListQueryBuilder extends React.PureComponent<IListQueryBuil
   }
 
   private handleSearchTextChange(value: string) {
+    this.setState({
+      searchText: value,
+    });
+
     value = value.trim();
 
     this.setState({
-      searchText: value,
       items: this.filterItems(this.props.items, value),
       activeItemIndex: value ? 0 : -1,
     });
