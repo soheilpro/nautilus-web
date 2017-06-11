@@ -72,8 +72,18 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
     const rightValue = this.visit(right, context);
     const operatorValue = this.javaScriptOperatorFromComparisonOperator(operator);
 
-    if (this.typeSystem.isOfType(commonReturnType, 'Entity'))
-      return `${leftValue} && ${rightValue} && (${leftValue}).id ${operatorValue} (${rightValue}).id`;
+    if (this.typeSystem.isOfType(commonReturnType, 'Entity')) {
+      switch (operator) {
+        case 'eq':
+          return `${leftValue} && ${rightValue} && (${leftValue}).id ${operatorValue} (${rightValue}).id`;
+
+        case 'neq':
+          return `!(${leftValue}) || !(${rightValue}) || (${leftValue}).id ${operatorValue} (${rightValue}).id`;
+
+        default:
+          throw new Error('Not supported.');
+      }
+    }
 
     return `${leftValue} ${operatorValue} ${rightValue}`;
   }
@@ -99,10 +109,10 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
 
     switch (operator) {
       case 'in':
-        return right.children.map(child => this.visitComparisonEquality(left, child, 'eq', context)).join(' || ');
+        return right.children.map(child => `(${this.visitComparisonEquality(left, child, 'eq', context)})`).join(' || ');
 
       case 'nin':
-        return right.children.map(child => this.visitComparisonEquality(left, child, 'neq', context)).join(' && ');
+        return right.children.map(child => `(${this.visitComparisonEquality(left, child, 'neq', context)})`).join(' && ');
 
       default:
         throw new Error('Not supported.');
@@ -114,7 +124,7 @@ export class ExpressionCompiler extends ExpressionVisitor<any, IContext> {
   }
 
   visitList(expression: ListExpression, context: IContext): string {
-    return `[${expression.children.map(e => this.visit(e, context))}]`;
+    return `[${expression.children.map(e => `(${this.visit(e, context)})`)}]`;
   }
 
   visitLocal(expression: LocalExpression, context: IContext): string {
