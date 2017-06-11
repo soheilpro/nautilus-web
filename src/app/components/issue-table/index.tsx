@@ -33,7 +33,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
     this.handleTableItemDelete = this.handleTableItemDelete.bind(this);
 
     this.state = {
-      issues: this.makeTree(props.issues),
+      issues: this.sortTreeList(props.issues),
       selectedIssue: props.selectedIssue,
     };
   }
@@ -41,7 +41,7 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
   componentWillReceiveProps(props: IIssueTableProps) {
     if (this.props.issues !== props.issues) {
       this.setState({
-        issues: this.makeTree(props.issues),
+        issues: this.sortTreeList(props.issues),
       });
     }
 
@@ -69,36 +69,34 @@ export default class IssueTable extends React.PureComponent<IIssueTableProps, II
     return this.issueController.deleteIssue(issue);
   }
 
-  private makeTree(issues: IIssue[]) {
-    interface IIssueWithChildren extends IIssue {
-      __children: IIssue[];
-    }
-
+  // This method reorders items in a sorted list so that child items appear
+  // beneath their parents (while still retaining their original order)
+  private sortTreeList(issues: IIssue[]) {
     issues = [...issues];
 
-    // First find all sub-issues and add them as children to their parents
+    const children: { [key: string]: IIssue[] } = {};
+
+    // First, turn the list into a tree
     const subIssues = issues.filter(issue => !!issue.parent);
 
     for (const subIssue of subIssues) {
-      const parent = subIssue.parent as IIssueWithChildren;
-      parent.__children = [...(parent.__children || []), subIssue];
+      const parent = subIssue.parent;
+      children[parent.id] = [...(children[parent.id] || []), subIssue];
 
       const subIssueIndex = issues.indexOf(subIssue);
       issues.splice(subIssueIndex, 1);
     }
 
-    // Now recursively turn that tree into a flat list
+    // Then, turn the tree back into a flat list
     function flatten(issues: IIssue[]) {
       let result: IIssue[] = [];
 
-      for (const issue of issues as IIssueWithChildren[]) {
+      for (const issue of issues) {
         result = [
           ...result,
           issue,
-          ...(issue.__children ? flatten(issue.__children) : []),
+          ...flatten(children[issue.id] || []),
         ];
-
-        issue.__children = undefined;
       }
 
       return result;
