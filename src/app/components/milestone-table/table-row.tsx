@@ -22,6 +22,13 @@ interface ITableRowState {
 }
 
 export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> implements ITableRow {
+  private static stateToStatus: { [key: string]: string } = {
+    'planned': 'pending',
+    'inprogress': 'inprogress',
+    'finished': 'finished',
+    'closed': 'closed',
+  };
+
   private componentElement: HTMLElement;
 
   constructor() {
@@ -55,7 +62,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
           <ProjectField project={this.props.item.project} />
         </td>
         <td className="table-cell title">
-          <TitleField title={this.props.item.title} state={this.props.item.state} />
+          <TitleField title={this.props.item.title} status={TableRow.stateToStatus[this.props.item.state ? this.props.item.state.key : null]} />
         </td>
         <td className="table-cell state">
           <ItemStateField itemState={this.props.item.state} />

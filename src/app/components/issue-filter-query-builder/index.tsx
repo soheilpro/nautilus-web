@@ -1,3 +1,4 @@
+import * as _ from 'underscore';
 import * as React from 'react';
 import * as NQL from '../../nql';
 import { IProject, IItemType, IItemPriority, IItemState, IUser, IMilestone } from '../../application';
@@ -42,13 +43,15 @@ export default class IssueFilterQueryBuilder extends React.PureComponent<IIssueF
   }
 
   componentDidMount() {
+    const closedMilestoneState = _.find(this.application.itemStates.getAll('milestone'), itemState => itemState.key === 'closed');
+
     this.setState({
       projects: this.application.projects.getAll(),
       itemTypes: this.application.itemTypes.getAll('issue'),
       itemPriorities: this.application.itemPriorities.getAll('issue'),
       itemStates: this.application.itemStates.getAll('issue'),
       users: this.application.users.getAll(),
-      milestones: this.application.items.getAllMilestones(null, [new NQL.SortExpression(new NQL.LocalExpression('fullTitle'))]),
+      milestones: this.application.items.getAllMilestones(new NQL.ComparisonExpression(new NQL.LocalExpression('state'), new NQL.ConstantExpression(closedMilestoneState, 'ItemState'), 'neq'), [new NQL.SortExpression(new NQL.LocalExpression('fullTitle'))]),
     });
   }
 

@@ -27,6 +27,13 @@ interface ITableRowState {
 }
 
 export default class TableRow extends React.PureComponent<ITableRowProps, ITableRowState> implements ITableRow {
+  private static stateToStatus: { [key: string]: string } = {
+    'todo': 'pending',
+    'doing': 'inprogress',
+    'done': 'finished',
+    'closed': 'closed',
+  };
+
   private componentElement: HTMLElement;
 
   constructor() {
@@ -80,7 +87,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
             indentationLevel > 0 &&
               <span className="arrow"></span>
           }
-          <TitleField title={this.props.item.title} state={this.props.item.state} />
+          <TitleField title={this.props.item.title} status={TableRow.stateToStatus[this.props.item.state ? this.props.item.state.key : null]} />
           {
             (!this.props.item.state || this.props.item.state.key !== 'closed') &&
               <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
