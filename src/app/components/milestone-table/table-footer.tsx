@@ -19,10 +19,6 @@ export default class TableFooter extends React.PureComponent<ITableFooterProps, 
         <td className="table-cell"></td>
         <td className="table-cell"></td>
         <td className="table-cell"></td>
-        <td className="table-cell"></td>
-        <td className="table-cell"></td>
-        <td className="table-cell"></td>
-        <td className="table-cell"></td>
       </tr>
     );
   }
