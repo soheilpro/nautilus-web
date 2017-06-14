@@ -5,7 +5,7 @@ export class BrowserStorage implements IStorage {
   }
 
   set(key: string, value: Object) {
-    this.storage.setItem(key, JSON.stringify(value))
+    this.storage.setItem(key, JSON.stringify(value));
 
     return Promise.resolve();
   }
@@ -18,7 +18,7 @@ export class BrowserStorage implements IStorage {
   }
 
   remove(key: string) {
-    this.storage.removeItem(key)
+    this.storage.removeItem(key);
 
     return Promise.resolve();
   }

@@ -1,4 +1,4 @@
-import { History } from 'history'
+import { History } from 'history';
 import { BaseCommand } from '../../commands';
 import { KeyCode } from '../../keyboard';
 

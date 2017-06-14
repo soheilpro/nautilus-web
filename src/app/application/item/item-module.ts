@@ -186,7 +186,7 @@ export class ItemModule extends BaseModule implements IItemModule {
     delete this.issuesMap[issue.id];
 
     for (const relationship of this.relationships.filter(relationship => relationship.item1.id === issue.id || relationship.item2.id === issue.id))
-      this.deleteRelationship(relationship)
+      this.deleteRelationship(relationship);
 
     this.emit('issue.delete', { issue });
   }

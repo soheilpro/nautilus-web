@@ -5,6 +5,7 @@
   "scripts": {
     "build": "buno webpack",
     "clean": "rm -rf ./out",
+    "lint": "tslint \"app/**/*.ts\"",
     "release": "buno -- webpack -p",
     "start": "node www.js",
     "watch": "webpack --watch"
