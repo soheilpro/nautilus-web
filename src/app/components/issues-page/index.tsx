@@ -6,6 +6,7 @@ import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
 import NewIssueCommand from '../../issues/new-issue-command';
 import NewSubIssueCommand from '../../issues/new-sub-issue-command';
+import DuplicateIssueCommand from '../../issues/duplicate-issue-command';
 import EditIssueCommand from '../../issues/edit-issue-command';
 import DeleteIssueCommand from '../../issues/delete-issue-command';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
@@ -93,6 +94,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
     return [
       new NewIssueCommand(),
       new NewSubIssueCommand(this.state.selectedIssue),
+      new DuplicateIssueCommand(this.state.selectedIssue),
       new EditIssueCommand(this.state.selectedIssue),
       new DeleteIssueCommand(this.state.selectedIssue),
     ];

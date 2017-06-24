@@ -22,7 +22,21 @@ export default class Shortcut extends React.PureComponent<IShortcutProps, IShort
           this.props.shortcut.map((keyCombination, index) => {
             return (
               <span key={index}>
-                <span className="key-combination">{KeyName[keyCombination.keyCode]}</span>
+                <span className="key-combination">
+                  {
+                    keyCombination.ctrlKey &&
+                      'ctrl+'
+                  }
+                  {
+                    keyCombination.shiftKey &&
+                      'shift+'
+                  }
+                  {
+                    keyCombination.altKey &&
+                      'alt+'
+                  }
+                  {KeyName[keyCombination.keyCode]}
+                </span>
                 {
                   index !== this.props.shortcut.length - 1 &&
                     <span className="separator">,</span>

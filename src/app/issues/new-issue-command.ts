@@ -18,6 +18,6 @@ export default class NewIssueCommand extends BaseCommand {
   }
 
   execute() {
-    this.issueController.addIssue();
+    this.issueController.addIssue({});
   }
 }

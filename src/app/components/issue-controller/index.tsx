@@ -35,7 +35,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
     ServiceManager.Instance.setIssueController(undefined);
   }
 
-  addIssue(parentIssue?: IIssue) {
+  addIssue(issue: IIssue, parentIssue?: IIssue) {
     const handleAddIssueWindowAdd = async (issue: IIssue) => {
       this.windowController.closeWindow(addIssueWindow);
 
@@ -55,7 +55,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
     };
 
     const addIssueWindow = {
-      content: <AddEditIssueWindow mode="add" parentIssue={parentIssue} onAdd={handleAddIssueWindowAdd} onClose={handleAddIssueWindowClose} />,
+      content: <AddEditIssueWindow mode="add" issue={issue} parentIssue={parentIssue} onAdd={handleAddIssueWindowAdd} onClose={handleAddIssueWindowClose} />,
       top: 120,
       width: 800,
       modal: true,

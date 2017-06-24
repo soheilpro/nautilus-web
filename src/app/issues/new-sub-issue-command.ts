@@ -27,6 +27,6 @@ export default class NewSubIssueCommand extends BaseCommand {
   }
 
   execute() {
-    this.issueController.addIssue(this.parentIssue);
+    this.issueController.addIssue({}, this.parentIssue);
   }
 }
