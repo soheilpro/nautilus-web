@@ -4,11 +4,12 @@ import { IIssue, entityComparer } from '../../application';
 import { ICommandProvider } from '../../commands';
 import { ServiceManager } from '../../services';
 import ArrayHelper from '../../utilities/array-helper';
-import NewIssueCommand from '../../issues/new-issue-command';
-import NewSubIssueCommand from '../../issues/new-sub-issue-command';
+import DeleteIssueCommand from '../../issues/delete-issue-command';
 import DuplicateIssueCommand from '../../issues/duplicate-issue-command';
 import EditIssueCommand from '../../issues/edit-issue-command';
-import DeleteIssueCommand from '../../issues/delete-issue-command';
+import NewIssueCommand from '../../issues/new-issue-command';
+import NewSubIssueCommand from '../../issues/new-sub-issue-command';
+import UpdateIssueCommand from '../../issues/update-issue-command';
 import IssueViewSettings, { IView, View } from '../issue-view-settings';
 import IssueDetail from '../issue-detail';
 import IssueTable from '../issue-table';
@@ -33,6 +34,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
   private localStorage = ServiceManager.Instance.getLocalStorage();
   private roamingStorage = ServiceManager.Instance.getRoamingStorage();
   private application = ServiceManager.Instance.getApplication();
+  private issueController = ServiceManager.Instance.getIssueController();
   private commandManager = ServiceManager.Instance.getCommandManager();
   private issueDetailContainerElement: HTMLElement;
 
@@ -97,6 +99,7 @@ export default class IssuesPage extends React.Component<IIssuesPageProps, IIssue
       new DuplicateIssueCommand(this.state.selectedIssue),
       new EditIssueCommand(this.state.selectedIssue),
       new DeleteIssueCommand(this.state.selectedIssue),
+      new UpdateIssueCommand(this.state.selectedIssue, this.issueController.getLastIssueChange()),
     ];
   }
 

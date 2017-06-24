@@ -20,6 +20,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
   private windowController = ServiceManager.Instance.getWindowController();
   private dialogController = ServiceManager.Instance.getDialogController();
   private notificationController = ServiceManager.Instance.getNotificationController();
+  private lastIssueChange: IIssueChange;
 
   constructor() {
     super();
@@ -75,6 +76,7 @@ export default class IssueController extends React.PureComponent<IIssueControlle
       this.notificationController.showNotification(notification);
 
       await this.actionManager.execute(new UpdateIssueAction(issue, issueChange, this.application));
+      this.lastIssueChange = issueChange;
 
       this.notificationController.hideNotification(notification);
     };
@@ -113,6 +115,10 @@ export default class IssueController extends React.PureComponent<IIssueControlle
       destructive: true,
       onConfirm: handleConfirm,
     });
+  }
+
+  getLastIssueChange() {
+    return this.lastIssueChange;
   }
 
   render() {
