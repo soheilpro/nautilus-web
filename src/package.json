@@ -8,7 +8,8 @@
     "lint": "tslint \"app/**/*.ts\"",
     "release": "buno -- webpack -p",
     "start": "node www.js",
-    "watch": "webpack --watch"
+    "watch:app": "webpack --watch",
+    "watch": "nodemon www.js"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -53,6 +54,7 @@
     "html-webpack-plugin": "^2.29.0",
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
+    "nodemon": "^1.11.0",
     "source-map-loader": "^0.1.6",
     "style-loader": "^0.13.2",
     "stylelint": "^7.11.1",
