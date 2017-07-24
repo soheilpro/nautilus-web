@@ -82,10 +82,13 @@ export default class ItemList extends React.PureComponent<ISelectItemListProps, 
   }
 
   private handleSearchTextChange(value: string) {
+    this.setState({
+      searchText: value,
+    });
+
     value = value.trim();
 
     this.setState({
-      searchText: value,
       items: [emptySelectItem, ...this.filterItems(this.props.items, value)],
       activeItemIndex: value ? 1 : -1,
     });
