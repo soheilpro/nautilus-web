@@ -43,7 +43,7 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
       path: this.basePath(),
       query: {
         ...(filter ? this.serializeFilter(filter) : {}),
-        ...{supplement},
+        supplement: supplement ? supplement.join(',') : undefined,
       },
     };
 
@@ -92,8 +92,8 @@ export abstract class ServiceBase<TEntity extends IEntity, TFilter extends IFilt
 
     if (this.client.session) {
       config.auth = {
-        username: this.client.session.accessToken,
-        password: '-',
+        username: this.client.session.user.id,
+        password: this.client.session.accessToken,
       };
     }
 
