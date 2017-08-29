@@ -11,7 +11,7 @@ const config = nconf
   .env()
   .file({ file: path.join(__dirname, '../config/app.json') })
   .defaults({
-    'NAUTILUS_WEB_PORT': 3100,
+    'NAUTILUS_WEB_PORT': '3100',
     'NAUTILUS_WEB_API_ADDRESS': 'http://localhost:3000',
   });
 
@@ -40,6 +40,6 @@ app.get('*', (request, response) => {
   response.render('index', locals);
 });
 
-const server = app.listen(config.get('NAUTILUS_WEB_PORT'), () => {
+const server = app.listen(Number(config.get('NAUTILUS_WEB_PORT')), () => {
   debug(`Nautilus web listening on port ${server.address().port}`);
 });
