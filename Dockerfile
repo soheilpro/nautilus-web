@@ -5,10 +5,10 @@ COPY . /usr/app
 
 WORKDIR /usr/app
 
-RUN ./run.sh client install
-RUN ./run.sh client release
-RUN ./run.sh server install
-RUN ./run.sh server build
+RUN ./run.sh client install && \
+    ./run.sh client release && \
+    ./run.sh server install && \
+    ./run.sh server build
 
 ENTRYPOINT ["/usr/app/run.sh"]
-CMD ["server start"]
+CMD ["server", "start"]

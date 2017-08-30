@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-MODULE=$1
-
-function run_client {
+run_client() {
   COMMAND=$1
 
   case "$COMMAND" in
@@ -42,7 +40,7 @@ function run_client {
   esac
 }
 
-function run_server {
+run_server() {
   COMMAND=$1
 
   case "$COMMAND" in
@@ -82,6 +80,8 @@ function run_server {
       exit 1
   esac
 }
+
+MODULE=$1
 
 case "$MODULE" in
   client)
