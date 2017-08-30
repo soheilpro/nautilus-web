@@ -1,19 +1,11 @@
 import * as path from 'path';
-import * as nconf from 'nconf';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as compression from 'compression';
 import * as debugModule from 'debug';
+import { settings } from './configuration';
 
 const debug = debugModule('nautilus-web');
-
-const config = nconf
-  .env()
-  .file({ file: path.join(__dirname, '../../config/app.json') })
-  .defaults({
-    'NAUTILUS_WEB_PORT': '3100',
-    'NAUTILUS_WEB_API_ADDRESS': 'http://localhost:3000',
-  });
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -32,7 +24,7 @@ app.get('*', (request, response) => {
   const locals = {
     config: {
       api: {
-        address: config.get('NAUTILUS_WEB_API_ADDRESS'),
+        address: settings.api.address,
       },
     },
   };
@@ -40,6 +32,6 @@ app.get('*', (request, response) => {
   response.render('index', locals);
 });
 
-const server = app.listen(Number(config.get('NAUTILUS_WEB_PORT')), () => {
+const server = app.listen(settings.port, () => {
   debug(`Nautilus web listening on port ${server.address().port}`);
 });
