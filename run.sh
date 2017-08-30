@@ -7,27 +7,27 @@ function run_client {
 
   case "$COMMAND" in
     build)
-      (cd ./src && npm run --silent build)
+      (cd ./src/client && npm run --silent build)
       ;;
 
     clean)
-      (cd ./src && npm run --silent clean)
+      (cd ./src/client && npm run --silent clean)
       ;;
 
     install)
-      (cd ./src && npm install)
+      (cd ./src/client && npm install)
       ;;
 
     release)
-      (cd ./src && npm run --silent release)
+      (cd ./src/client && npm run --silent release)
       ;;
 
     start)
-      (cd ./src && npm run --silent start)
+      (cd ./src/client && npm run --silent start)
       ;;
 
     watch)
-      (cd ./src && npm run --silent watch)
+      (cd ./src/client && npm run --silent watch)
       ;;
 
     *)
@@ -47,28 +47,28 @@ function run_server {
 
   case "$COMMAND" in
     build)
-      (cd ./src && npm run --silent build)
+      (cd ./src/server && npm run --silent build)
       ;;
 
     clean)
-      (cd ./src && npm run --silent clean)
+      (cd ./src/server && npm run --silent clean)
       ;;
 
     config)
       shift 1
-      (cd ./src && npm run --silent config "$@")
+      (cd ./src/server && npm run --silent config "$@")
       ;;
 
     install)
-      (cd ./src && npm install)
+      (cd ./src/server && npm install)
       ;;
 
     start)
-      (cd ./src && npm run --silent start)
+      (cd ./src/server && npm run --silent start)
       ;;
 
     watch)
-      (cd ./src && npm run --silent watch)
+      (cd ./src/server && npm run --silent watch)
       ;;
 
     *)

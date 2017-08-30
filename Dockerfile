@@ -11,4 +11,4 @@ RUN ./run.sh server install
 RUN ./run.sh server build
 
 ENTRYPOINT ["/usr/app/run.sh"]
-CMD ["start"]
+CMD ["server start"]
