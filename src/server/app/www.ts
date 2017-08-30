@@ -32,6 +32,6 @@ app.get('*', (request, response) => {
   response.render('index', locals);
 });
 
-const server = app.listen(settings.port, () => {
+const server = app.listen(settings.server.port, () => {
   debug(`Nautilus web listening on port ${server.address().port}`);
 });
