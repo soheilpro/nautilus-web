@@ -1,15 +1,15 @@
-#!/usr/bin/env node
+import * as path from 'path';
+import * as nconf from 'nconf';
+import * as express from 'express';
+import * as morgan from 'morgan';
+import * as compression from 'compression';
+import * as debugModule from 'debug';
 
-const path = require('path');
-const nconf = require('nconf');
-const express = require('express');
-const morgan = require('morgan');
-const compression = require('compression');
-const debug = require('debug')('nautilus-web');
+const debug = debugModule('nautilus-web');
 
 const config = nconf
   .env()
-  .file({ file: path.join(__dirname, '../config/app.json') })
+  .file({ file: path.join(__dirname, '../../config/app.json') })
   .defaults({
     'NAUTILUS_WEB_PORT': '3100',
     'NAUTILUS_WEB_API_ADDRESS': 'http://localhost:3000',
@@ -17,15 +17,15 @@ const config = nconf
 
 const app = express();
 app.set('view engine', 'ejs');
-app.set('views', './out');
+app.set('views', path.join(__dirname, '../../client/out'));
 
 app.use(morgan('dev'));
 app.use(compression());
 
-app.use('/assets', express.static(path.join(__dirname, './out/assets'), { maxAge: 365 * 24 * 60 * 60 * 1000 }));
+app.use('/assets', express.static(path.join(__dirname, '../../client/out/assets'), { maxAge: 365 * 24 * 60 * 60 * 1000 }));
 
 app.use('/assets', (request, response) => {
-  response.status(404).send("Not found.");
+  response.status(404).send('Not found.');
 });
 
 app.get('*', (request, response) => {
