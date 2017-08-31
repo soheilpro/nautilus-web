@@ -7,7 +7,7 @@ import { IItemRelationshipService } from './iitem-relationship-service';
 
 export class ItemRelationshipService extends ServiceBase<IItemRelationship, IItemRelationshipFilter, IItemRelationshipChange, IItemRelationshipGetResult> implements IItemRelationshipService {
   basePath(): string {
-    return '/itemrelationships';
+    return '/item-relationships';
   }
 
   serializeFilter(filter: IItemRelationshipFilter): Object {

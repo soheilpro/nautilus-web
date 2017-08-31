@@ -7,7 +7,7 @@ import { IItemTypeService } from './iitem-type-service';
 
 export class ItemTypeService extends ServiceBase<IItemType, IItemTypeFilter, IItemTypeChange, IItemTypeGetResult> implements IItemTypeService {
   basePath(): string {
-    return '/itemtypes';
+    return '/item-types';
   }
 
   serializeFilter(filter: IItemTypeFilter): Object {

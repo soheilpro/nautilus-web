@@ -7,7 +7,7 @@ import { IItemStateService } from './iitem-state-service';
 
 export class ItemStateService extends ServiceBase<IItemState, IItemStateFilter, IItemStateChange, IItemStateGetResult> implements IItemStateService {
   basePath(): string {
-    return '/itemstates';
+    return '/item-states';
   }
 
   serializeFilter(filter: IItemStateFilter): Object {

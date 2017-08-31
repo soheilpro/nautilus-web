@@ -7,7 +7,7 @@ import { IItemPriorityService } from './iitem-priority-service';
 
 export class ItemPriorityService extends ServiceBase<IItemPriority, IItemPriorityFilter, IItemPriorityChange, IItemPriorityGetResult> implements IItemPriorityService {
   basePath(): string {
-    return '/itempriorities';
+    return '/item-priorities';
   }
 
   serializeFilter(filter: IItemPriorityFilter): Object {
