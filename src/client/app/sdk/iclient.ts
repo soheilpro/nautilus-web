@@ -1,4 +1,3 @@
-import { IItemPriorityService } from './item-priority';
 import { IItemRelationshipService } from './item-relationship';
 import { IItemService } from './item';
 import { IItemStateService } from './item-state';
@@ -13,7 +12,6 @@ export interface IClient {
   users: IUserService;
   sessions: ISessionService;
   projects: IProjectService;
-  itemPriorities: IItemPriorityService;
   itemStates: IItemStateService;
   itemTypes: IItemTypeService;
   items: IItemService;

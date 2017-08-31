@@ -30,7 +30,6 @@ export default class DuplicateIssueCommand extends BaseCommand {
     const issue: IIssue = {
       type: this.templateIssue.type,
       state: this.templateIssue.state,
-      priority: this.templateIssue.priority,
       project: this.templateIssue.project,
       assignedTo: this.templateIssue.assignedTo,
       milestone: this.templateIssue.milestone,

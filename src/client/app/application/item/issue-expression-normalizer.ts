@@ -11,9 +11,6 @@ export default class ItemExpressionNormalizer extends NQL.ExpressionTransformer<
     if (['type'].some(name => name === expression.name))
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('item'), expression.name), 'ItemType');
 
-    if (['priority'].some(name => name === expression.name))
-      return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('item'), expression.name), 'ItemPriority');
-
     if (['state'].some(name => name === expression.name))
       return new NQL.CastExpression(new NQL.PropertyExpression(new NQL.LocalExpression('item'), expression.name), 'ItemState');
 

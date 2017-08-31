@@ -1,6 +1,5 @@
 import { ISession } from '../sdk';
 import { IItemModule } from './item';
-import { IItemPriorityModule } from './item-priority';
 import { IItemStateModule } from './item-state';
 import { IItemTypeModule } from './item-type';
 import { IProjectModule } from './project';
@@ -21,7 +20,6 @@ export interface IApplication extends EventEmitter {
   users: IUserModule;
   projects: IProjectModule;
   items: IItemModule;
-  itemPriorities: IItemPriorityModule;
   itemStates: IItemStateModule;
   itemTypes: IItemTypeModule;
 }

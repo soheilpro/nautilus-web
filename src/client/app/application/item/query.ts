@@ -2,7 +2,6 @@ import * as NQL from '../../nql';
 
 export default class Query {
   private types =  [
-    { name: 'ItemPriority', base: 'Entity' },
     { name: 'ItemState',    base: 'Entity' },
     { name: 'ItemType',     base: 'Entity' },
     { name: 'Milestone',    base: 'Entity' },

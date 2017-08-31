@@ -1,4 +1,4 @@
-import { IEntity, IItemType, IItemState, IItemPriority, IProject, IUser } from '../../sdk';
+import { IEntity, IItemType, IItemState, IProject, IUser } from '../../sdk';
 import { IMilestone } from './imilestone';
 import { IIssue } from './iissue';
 
@@ -8,7 +8,6 @@ export interface IIssue extends IEntity {
   title?: string;
   description?: string;
   state?: IItemState;
-  priority?: IItemPriority;
   tags?: string[];
   project?: IProject;
   assignedTo?: IUser;

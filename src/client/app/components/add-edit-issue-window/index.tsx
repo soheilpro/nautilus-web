@@ -1,11 +1,10 @@
 import * as React from 'react';
 import * as NQL from '../../nql';
-import { IProject, IItemPriority, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser, entityComparer } from '../../application';
+import { IProject, IItemState, IItemType, IIssue, IIssueChange, IMilestone, IUser, entityComparer } from '../../application';
 import { ServiceManager } from '../../services';
 import Window, { WindowHeader, WindowContent, WindowActionBar } from '../window';
 import Input from '../input';
 import ProjectSelect from '../project-select';
-import ItemPrioritySelect from '../item-priority-select';
 import ItemTypeSelect from '../item-type-select';
 import ItemStateSelect from '../item-state-select';
 import MilestoneSelect from '../milestone-select';
@@ -27,7 +26,6 @@ interface IAddEditIssueWindowProps {
 interface IAddEditIssueWindowState {
   projects?: IProject[];
   itemTypes?: IItemType[];
-  itemPriorities?: IItemPriority[];
   itemStates?: IItemState[];
   users?: IUser[];
   milestones?: IMilestone[];
@@ -35,7 +33,6 @@ interface IAddEditIssueWindowState {
   description?: string;
   project?: IProject;
   type?: IItemType;
-  priority?: IItemPriority;
   state?: IItemState;
   assignedTo?: IUser;
   milestone?: IMilestone;
@@ -52,7 +49,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     this.handleDescriptionInputChange = this.handleDescriptionInputChange.bind(this);
     this.handleProjectSelectChange = this.handleProjectSelectChange.bind(this);
     this.handleTypeInputChange = this.handleTypeInputChange.bind(this);
-    this.handlePriorityInputChange = this.handlePriorityInputChange.bind(this);
     this.handleStateInputChange = this.handleStateInputChange.bind(this);
     this.handleAssignedToInputChange = this.handleAssignedToInputChange.bind(this);
     this.handleMilestoneInputChange = this.handleMilestoneInputChange.bind(this);
@@ -60,7 +56,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
     const state: IAddEditIssueWindowState = {
       projects: [],
       itemTypes: [],
-      itemPriorities: [],
       itemStates: [],
       users: [],
       milestones: [],
@@ -71,7 +66,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
       state.description = props.issue.description;
       state.project = props.issue.project;
       state.type = props.issue.type;
-      state.priority = props.issue.priority;
       state.state = props.issue.state;
       state.assignedTo = props.issue.assignedTo;
       state.milestone = props.issue.milestone;
@@ -85,7 +79,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
       return {
         projects: this.application.projects.getAll(),
         itemTypes: this.application.itemTypes.getAll('issue'),
-        itemPriorities: this.application.itemPriorities.getAll('issue'),
         itemStates: this.application.itemStates.getAll('issue'),
         users: this.application.users.getAll(),
         milestones: this.getMilestones(state.project),
@@ -103,7 +96,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
           description: this.state.description || undefined,
           project: this.state.project || undefined,
           type: this.state.type || undefined,
-          priority: this.state.priority || undefined,
           state: this.state.state || undefined,
           assignedTo: this.state.assignedTo || undefined,
           milestone: this.state.milestone || undefined,
@@ -118,7 +110,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
           description: (this.state.description !== this.props.issue.description ? this.state.description || '' : undefined),
           project: (this.state.project !== this.props.issue.project ? this.state.project || null : undefined),
           type: (this.state.type !== this.props.issue.type ? this.state.type || null : undefined),
-          priority: (this.state.priority !== this.props.issue.priority ? this.state.priority || null : undefined),
           state: (this.state.state !== this.props.issue.state ? this.state.state || null : undefined),
           assignedTo: (this.state.assignedTo !== this.props.issue.assignedTo ? this.state.assignedTo || null : undefined),
           milestone: (this.state.milestone !== this.props.issue.milestone ? this.state.milestone || null : undefined),
@@ -151,12 +142,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
   private handleTypeInputChange(value: IItemType) {
     this.setState({
       type: value,
-    });
-  }
-
-  private handlePriorityInputChange(value: IItemPriority) {
-    this.setState({
-      priority: value,
     });
   }
 
@@ -245,14 +230,6 @@ export default class AddEditIssueWindow extends React.PureComponent<IAddEditIssu
               </div>
               <div className="value">
                 <ItemTypeSelect className="type" itemTypes={this.state.itemTypes} itemType={this.state.type} onChange={this.handleTypeInputChange} />
-              </div>
-            </div>
-            <div className="field">
-              <div className="label">
-                Priority:
-              </div>
-              <div className="value">
-                <ItemPrioritySelect className="priority" itemPriorities={this.state.itemPriorities} itemPriority={this.state.priority} onChange={this.handlePriorityInputChange} />
               </div>
             </div>
             <div className="field">

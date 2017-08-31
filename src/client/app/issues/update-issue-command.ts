@@ -35,7 +35,6 @@ export default class UpdateIssueCommand extends BaseCommand {
     const issueChange: IIssueChange = {
       type: this.issueChange.type,
       state: this.issueChange.state,
-      priority: this.issueChange.priority,
       tags: this.issueChange.tags,
       project: this.issueChange.project,
       milestone: this.issueChange.milestone,

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
-import { IItemPriority } from '../../application';
 import Icon from '../icon';
 
 require('../../assets/stylesheets/base.less');
 require('./index.less');
 
 interface IItemPriorityIndicatorProps {
-  itemPriority: IItemPriority;
+  itemPriority: any;
   className?: string;
 }
 

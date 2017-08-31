@@ -30,10 +30,6 @@ export default class Issue implements IIssue {
     return this.application.itemStates.get(this.item.state);
   }
 
-  get priority() {
-    return this.application.itemPriorities.get(this.item.priority);
-  }
-
   get tags() {
     return this.item.tags;
   }
@@ -70,7 +66,6 @@ export default class Issue implements IIssue {
       title: this.title,
       description: this.description,
       state: this.state,
-      priority: this.priority,
       tags: this.tags,
       project: this.project,
       assignedTo: this.assignedTo,

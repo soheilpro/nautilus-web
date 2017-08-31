@@ -15,7 +15,6 @@ import { View } from './view';
 import FilterByMilestoneCommand from './filter-by-milestone-command';
 import FilterByProjectCommand from './filter-by-project-command';
 import FilterByTypeCommand from './filter-by-type-command';
-import FilterByPriorityCommand from './filter-by-priority-command';
 import FilterByStateCommand from './filter-by-state-command';
 import FilterByAssignedToCommand from './filter-by-assigned-to-command';
 import FilterByCreatedByCommand from './filter-by-created-by-command';
@@ -97,7 +96,6 @@ export default class IssueViewSettings extends React.PureComponent<IIssueViewSet
       new FilterByMilestoneCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'milestone')),
       new FilterByProjectCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'project')),
       new FilterByTypeCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'type')),
-      new FilterByPriorityCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'priority')),
       new FilterByStateCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'state')),
       new FilterByAssignedToCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'assignedTo')),
       new FilterByCreatedByCommand(_.partial(this.handleOpenFilterCommandExecute, 'issue', 'createdBy')),

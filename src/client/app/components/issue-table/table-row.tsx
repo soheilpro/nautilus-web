@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import { IIssue } from '../../application';
 import { ITableRow } from '../table';
-import ItemPriorityField from '../item-priority-field';
 import ItemPriorityIndicator from '../item-priority-indicator';
 import ItemStateField from '../item-state-field';
 import ItemTypeField from '../item-type-field';
@@ -90,7 +89,7 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
           <TitleField title={this.props.item.title} status={TableRow.stateToStatus[this.props.item.state ? this.props.item.state.key : null]} />
           {
             (!this.props.item.state || this.props.item.state.key !== 'closed') &&
-              <ItemPriorityIndicator className="priority-indicator" itemPriority={this.props.item.priority} />
+              <ItemPriorityIndicator className="priority-indicator" itemPriority={null} />
           }
         </td>
         <td className="table-cell project">
@@ -98,9 +97,6 @@ export default class TableRow extends React.PureComponent<ITableRowProps, ITable
         </td>
         <td className="table-cell type">
           <ItemTypeField itemType={this.props.item.type} />
-        </td>
-        <td className="table-cell priority">
-          <ItemPriorityField itemPriority={this.props.item.priority} />
         </td>
         <td className="table-cell state">
           <ItemStateField itemState={this.props.item.state} />

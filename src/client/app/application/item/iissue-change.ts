@@ -5,7 +5,6 @@ export interface IIssueChange {
   title?: string;
   description?: string;
   state?: IEntity;
-  priority?: IEntity;
   tags?: string[];
   project?: IEntity;
   milestone?: IEntity;
